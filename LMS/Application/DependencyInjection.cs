@@ -1,13 +1,13 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Application.Files;
-using LMS.Application.Payment;
-using LMS.Application.Staff;
-using LMS.Application.User;
-using LMS.Infrastructure;
-using LMS.Infrastructure.EventDispatcher;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Files;
+using Flsurf.Application.Payment;
+using Flsurf.Application.Staff;
+using Flsurf.Application.User;
+using Flsurf.Infrastructure;
+using Flsurf.Infrastructure.EventDispatcher;
 using System.Reflection;
 
-namespace LMS.Application
+namespace Flsurf.Application
 {
     public static class DependencyInjection
     {

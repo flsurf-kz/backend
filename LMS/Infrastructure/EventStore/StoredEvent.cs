@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Infrastructure.EventStore
+namespace Flsurf.Infrastructure.EventStore
 {
     public class StoredEvent
     {

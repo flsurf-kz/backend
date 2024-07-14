@@ -1,7 +1,7 @@
-﻿using LMS.Application.Files.Interfaces;
-using LMS.Application.Files.UseCases;
+﻿using Flsurf.Application.Files.Interfaces;
+using Flsurf.Application.Files.UseCases;
 
-namespace LMS.Application.Files
+namespace Flsurf.Application.Files
 {
     public class FileService : IFileService
     {

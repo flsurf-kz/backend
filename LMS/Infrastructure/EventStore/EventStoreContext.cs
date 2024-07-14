@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Infrastructure.EventStore
+namespace Flsurf.Infrastructure.EventStore
 {
     public class EventStoreContext : DbContext, IEventStoreContext
     {

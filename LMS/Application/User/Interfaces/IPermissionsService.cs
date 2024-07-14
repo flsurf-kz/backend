@@ -1,4 +1,4 @@
-﻿namespace LMS.Application.User.Interfaces
+﻿namespace Flsurf.Application.User.Interfaces
 {
     public interface IPermissionsService
     {

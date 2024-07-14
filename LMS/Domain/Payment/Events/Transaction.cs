@@ -1,7 +1,7 @@
-﻿using LMS.Domain.Payment.Entities;
-using LMS.Infrastructure.EventDispatcher;
+﻿using Flsurf.Domain.Payment.Entities;
+using Flsurf.Infrastructure.EventDispatcher;
 
-namespace LMS.Domain.Payment.Events
+namespace Flsurf.Domain.Payment.Events
 {
     public class TransactionCreated(TransactionEntity transaction) : BaseEvent
     {

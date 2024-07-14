@@ -1,4 +1,4 @@
-﻿namespace LMS.Application.Common.Exceptions
+﻿namespace Flsurf.Application.Common.Exceptions
 {
     public class EntityAlreadyExists : Exception
     {

@@ -1,8 +1,8 @@
 ﻿
-using LMS.Infrastructure.Adapters.Payment;
-using LMS.Infrastructure.Adapters.Payment.Systems;
+using Flsurf.Infrastructure.Adapters.Payment;
+using Flsurf.Infrastructure.Adapters.Payment.Systems;
 
-namespace LMS.Application.Payment
+namespace Flsurf.Application.Payment
 {
     public class PaymentAdapterFactory
     {

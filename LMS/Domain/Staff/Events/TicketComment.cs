@@ -1,7 +1,7 @@
-﻿using LMS.Domain.Common;
-using LMS.Domain.Staff.Entities;
+﻿using Flsurf.Domain.Common;
+using Flsurf.Domain.Staff.Entities;
 
-namespace LMS.Domain.Staff.Events
+namespace Flsurf.Domain.Staff.Events
 {
     public class TicketCommentAdded(TicketCommentEntity comment, TicketEntity ticket) : DomainEvent
     {

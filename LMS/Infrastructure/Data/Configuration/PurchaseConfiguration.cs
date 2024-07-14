@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using LMS.Domain.Payment.Entities;
+using Flsurf.Domain.Payment.Entities;
 
-namespace LMS.Infrastructure.Data.Configuration
+namespace Flsurf.Infrastructure.Data.Configuration
 {
     public class PurchaseConfiguration : IEntityTypeConfiguration<PurchaseEntity>
     {

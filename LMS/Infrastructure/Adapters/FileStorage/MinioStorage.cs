@@ -3,7 +3,7 @@ using Minio.DataModel;
 using Minio.DataModel.Args;
 using System.Reactive.Linq;
 
-namespace LMS.Infrastructure.Adapters.FileStorage
+namespace Flsurf.Infrastructure.Adapters.FileStorage
 {
     public class MinioStorage : IFileStorageAdapter
     {

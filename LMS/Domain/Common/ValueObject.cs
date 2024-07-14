@@ -1,4 +1,4 @@
-﻿namespace LMS.Domain.Common
+﻿namespace Flsurf.Domain.Common
 {
     public abstract class ValueObject
     {

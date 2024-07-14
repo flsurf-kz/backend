@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Domain.Staff.Entities
+namespace Flsurf.Domain.Staff.Entities
 {
     public class TicketSubjectEntity : BaseAuditableEntity
     {

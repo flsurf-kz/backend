@@ -1,9 +1,9 @@
-﻿using LMS.Infrastructure.EventDispatcher;
+﻿using Flsurf.Infrastructure.EventDispatcher;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace LMS.Domain.Common
+namespace Flsurf.Domain.Common
 {
     public class BaseEntity
     {

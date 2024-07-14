@@ -1,4 +1,4 @@
-﻿namespace LMS.Application.User.Exceptions
+﻿namespace Flsurf.Application.User.Exceptions
 {
     public class Unauthorized : Exception
     {

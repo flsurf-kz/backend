@@ -1,7 +1,7 @@
-﻿using LMS.Application.Common.Interfaces;
+﻿using Flsurf.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Infrastructure.EventDispatcher
+namespace Flsurf.Infrastructure.EventDispatcher
 {
     public interface IEventSubscriber<TEvent> where TEvent : BaseEvent
     {

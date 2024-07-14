@@ -1,14 +1,14 @@
-﻿using LMS.Application.Staff.Dto;
-using LMS.Application.Staff.Interfaces;
-using LMS.Application.User.Dto;
-using LMS.Application.User.Interfaces;
-using LMS.Domain.Staff.Entities;
-using LMS.Presentation.Web.Schemas;
+﻿using Flsurf.Application.Staff.Dto;
+using Flsurf.Application.Staff.Interfaces;
+using Flsurf.Application.User.Dto;
+using Flsurf.Application.User.Interfaces;
+using Flsurf.Domain.Staff.Entities;
+using Flsurf.Presentation.Web.Schemas;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LMS.Presentation.Web.Controllers
+namespace Flsurf.Presentation.Web.Controllers
 {
     [Route("api/stuff/")]
     [ApiController]

@@ -1,1 +1,1 @@
-﻿global using LMS.Domain.Common;
+﻿global using Flsurf.Domain.Common;

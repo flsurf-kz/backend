@@ -1,7 +1,7 @@
-﻿using LMS.Domain.Common;
+﻿using Flsurf.Domain.Common;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LMS.Domain.User.Entities
+namespace Flsurf.Domain.User.Entities
 {
     public class WarningEntity : BaseAuditableEntity
     {

@@ -1,7 +1,7 @@
-﻿using LMS.Domain.User.Entities;
+﻿using Flsurf.Domain.User.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Infrastructure.Data.Queries
+namespace Flsurf.Infrastructure.Data.Queries
 {
     public static class UserQueries
     {

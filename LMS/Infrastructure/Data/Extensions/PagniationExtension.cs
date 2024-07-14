@@ -1,6 +1,6 @@
-﻿using LMS.Domain.Common;
+﻿using Flsurf.Domain.Common;
 
-namespace LMS.Infrastructure.Data.Extensions
+namespace Flsurf.Infrastructure.Data.Extensions
 {
     public static class PagniationExtension
     {

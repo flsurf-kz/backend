@@ -1,7 +1,7 @@
-﻿using LMS.Infrastructure.Data;
+﻿using Flsurf.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Infrastructure.EventStore
+namespace Flsurf.Infrastructure.EventStore
 {
     public static class InitialiserExtensions
     {

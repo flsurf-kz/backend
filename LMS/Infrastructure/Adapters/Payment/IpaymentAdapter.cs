@@ -1,4 +1,4 @@
-﻿namespace LMS.Infrastructure.Adapters.Payment
+﻿namespace Flsurf.Infrastructure.Adapters.Payment
 {
     public interface IPaymentAdapter
     {

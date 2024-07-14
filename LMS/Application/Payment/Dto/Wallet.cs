@@ -1,7 +1,7 @@
-﻿using LMS.Domain.Payment.ValueObjects;
+﻿using Flsurf.Domain.Payment.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Application.Payment.Dto
+namespace Flsurf.Application.Payment.Dto
 {
     public class BalanceOperationDto
     {

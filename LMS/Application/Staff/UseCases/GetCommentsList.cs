@@ -1,10 +1,10 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Application.Common.UseCases;
-using LMS.Application.Staff.Dto;
-using LMS.Domain.Staff.Entities;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Staff.Dto;
+using Flsurf.Domain.Staff.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Application.Staff.UseCases
+namespace Flsurf.Application.Staff.UseCases
 {
     public class GetCommentsList : BaseUseCase<GetCommentsDto, List<TicketCommentEntity>>
     {

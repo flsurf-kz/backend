@@ -1,9 +1,9 @@
-﻿using LMS.Application.Common.Models;
-using LMS.Application.Files.Dto;
-using LMS.Domain.User.Enums;
+﻿using Flsurf.Application.Common.Models;
+using Flsurf.Application.Files.Dto;
+using Flsurf.Domain.User.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Application.User.Dto
+namespace Flsurf.Application.User.Dto
 {
     public class GetNotificationsDto : InputPagination
     {

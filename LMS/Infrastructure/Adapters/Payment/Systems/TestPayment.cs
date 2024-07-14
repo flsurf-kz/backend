@@ -1,4 +1,4 @@
-﻿namespace LMS.Infrastructure.Adapters.Payment.Systems
+﻿namespace Flsurf.Infrastructure.Adapters.Payment.Systems
 {
     public class TestPaymentAdapter : IPaymentAdapter
     {

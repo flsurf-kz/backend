@@ -1,7 +1,7 @@
-﻿using LMS.Application.User.UseCases;
+﻿using Flsurf.Application.User.UseCases;
 using Microsoft.AspNetCore.Identity.Data;
 
-namespace LMS.Application.User.Interfaces
+namespace Flsurf.Application.User.Interfaces
 {
     public interface IUserService
     {

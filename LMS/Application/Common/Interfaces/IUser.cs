@@ -1,4 +1,4 @@
-﻿namespace LMS.Application.Common.Interfaces
+﻿namespace Flsurf.Application.Common.Interfaces
 {
     public interface IUser
     {

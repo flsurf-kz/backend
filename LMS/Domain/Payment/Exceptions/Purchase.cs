@@ -1,6 +1,6 @@
-﻿using LMS.Domain.Payment.Entities;
+﻿using Flsurf.Domain.Payment.Entities;
 
-namespace LMS.Domain.Payment.Exceptions
+namespace Flsurf.Domain.Payment.Exceptions
 {
     public class PurchaseIsAlreadyCompleted : Exception
     {

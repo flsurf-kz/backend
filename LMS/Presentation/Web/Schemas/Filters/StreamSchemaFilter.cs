@@ -1,7 +1,7 @@
 ﻿using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace LMS.Presentation.Web.Schemas.Filters
+namespace Flsurf.Presentation.Web.Schemas.Filters
 {
     public class StreamSchemaFilter : ISchemaFilter
     {

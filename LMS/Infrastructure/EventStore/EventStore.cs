@@ -1,10 +1,10 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Infrastructure.EventDispatcher;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Infrastructure.EventDispatcher;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace LMS.Infrastructure.EventStore
+namespace Flsurf.Infrastructure.EventStore
 {
     public class EventStore : IEventStore
     {

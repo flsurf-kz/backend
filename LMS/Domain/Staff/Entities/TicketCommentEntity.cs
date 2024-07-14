@@ -1,9 +1,9 @@
-﻿using LMS.Domain.Common;
-using LMS.Domain.Files.Entities;
-using LMS.Domain.User.Entities;
+﻿using Flsurf.Domain.Common;
+using Flsurf.Domain.Files.Entities;
+using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Domain.Staff.Entities
+namespace Flsurf.Domain.Staff.Entities
 {
     public class TicketCommentEntity : BaseAuditableEntity
     {

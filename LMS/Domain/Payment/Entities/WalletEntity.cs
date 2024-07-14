@@ -1,13 +1,13 @@
-﻿using LMS.Domain.Common;
-using LMS.Domain.Payment.Enums;
-using LMS.Domain.Payment.Events;
-using LMS.Domain.Payment.Exceptions;
-using LMS.Domain.Payment.ValueObjects;
-using LMS.Domain.User.Entities;
+﻿using Flsurf.Domain.Common;
+using Flsurf.Domain.Payment.Enums;
+using Flsurf.Domain.Payment.Events;
+using Flsurf.Domain.Payment.Exceptions;
+using Flsurf.Domain.Payment.ValueObjects;
+using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LMS.Domain.Payment.Entities
+namespace Flsurf.Domain.Payment.Entities
 {
     public class WalletEntity : BaseAuditableEntity
     {
@@ -26,6 +26,7 @@ namespace LMS.Domain.Payment.Entities
         public Money PendingIncome { get; set; } = new(0, CurrencyEnum.RussianRuble);
         [Required]
         public bool Blocked { get; set; } = false;
+        private object syncObject { get; set; }
 
         public static WalletEntity Create(UserEntity user)
         {
@@ -47,31 +48,39 @@ namespace LMS.Domain.Payment.Entities
 
         public void DecreaseBalance(Money money)
         {
-            if (Blocked)
-                throw new WalletIsBlocked(Id);
+            lock (syncObject) { 
+                if (Blocked)
+                    throw new WalletIsBlocked(Id);
 
-            if (AvailableBalance < money)
-                throw new NotEnoughMoneyException(Id);
+                if (AvailableBalance < money)
+                    throw new NotEnoughMoneyException(Id);
 
-            AvailableBalance -= money;
-            AddDomainEvent(new WalletBalanceDecreased(this, money));
+                AvailableBalance -= money;
+                AddDomainEvent(new WalletBalanceDecreased(this, money));
+            }
         }
 
         public void IncreaseBalance(Money money)
         {
-            if (Blocked)
-                throw new WalletIsBlocked(Id);
+            lock (syncObject)
+            {
+                if (Blocked)
+                    throw new WalletIsBlocked(Id);
 
-            AvailableBalance += money;
-            AddDomainEvent(new WalletBalanceIncreased(this, money));
+                AvailableBalance += money;
+                AddDomainEvent(new WalletBalanceIncreased(this, money));
+            } 
         }
 
         public void RollbackTransaction(TransactionEntity transaction)
         {
             VerifyTransaction(transaction, raiseErr: true);
 
-            if (transaction.Direction == TransactionDirection.In)
-                AvailableBalance += transaction.Amount;
+            lock (syncObject)
+            {
+                if (transaction.Direction == TransactionDirection.In)
+                    AvailableBalance += transaction.Amount;
+            } 
         }
 
         public void ConfirmTransaction(TransactionEntity transaction, WalletEntity fromWallet)
@@ -81,13 +90,13 @@ namespace LMS.Domain.Payment.Entities
             if (transaction.Direction == TransactionDirection.Out)
             {
                 if (fromWallet != null)
-                    fromWallet.AvailableBalance += transaction.Amount;
+                    fromWallet.IncreaseBalance(transaction.Amount);
                 DecreaseBalance(transaction.Amount);
             }
             else if (transaction.Direction == TransactionDirection.In)
             {
                 if (fromWallet != null)
-                    fromWallet.AvailableBalance -= transaction.Amount;
+                    fromWallet.DecreaseBalance(transaction.Amount);
                 IncreaseBalance(transaction.Amount);
             }
 
@@ -111,14 +120,17 @@ namespace LMS.Domain.Payment.Entities
 
         public void FreezeAmount(Money money)
         {
+            
             if (Blocked)
                 throw new WalletIsBlocked(Id);
 
             if (Currency != money.Currency)
                 throw new ArgumentException("Currency is not the same");
-
-            Frozen += money;
-            AddDomainEvent(new WalletAmountFrozen(this, money));
+            lock (syncObject)
+            {
+                Frozen += money;
+                AddDomainEvent(new WalletAmountFrozen(this, money));
+            }
         }
 
         public void UnfreezeAmount(Money money)
@@ -131,9 +143,10 @@ namespace LMS.Domain.Payment.Entities
 
             if (Frozen - money < new Money(0, currency: money.Currency))
                 throw new ArgumentException("Negative value amount");
-
-            Frozen -= money;
-            AddDomainEvent(new WalletUnfrozenAmount(this, money));
+            lock (syncObject ) { 
+                Frozen -= money;
+                AddDomainEvent(new WalletUnfrozenAmount(this, money));
+            }
         }
 
         public void Block(string reason)

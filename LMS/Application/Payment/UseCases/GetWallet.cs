@@ -1,12 +1,12 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Application.Common.UseCases;
-using LMS.Application.Payment.Dto;
-using LMS.Domain.Payment.Entities;
-using LMS.Domain.User.Enums;
-using LMS.Infrastructure.Data.Queries;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Payment.Dto;
+using Flsurf.Domain.Payment.Entities;
+using Flsurf.Domain.User.Enums;
+using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Application.Payment.UseCases
+namespace Flsurf.Application.Payment.UseCases
 {
     public class GetWallet : BaseUseCase<GetWalletDto, WalletEntity>
     {

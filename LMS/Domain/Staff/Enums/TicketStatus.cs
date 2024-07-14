@@ -1,4 +1,4 @@
-﻿namespace LMS.Domain.Staff.Enums
+﻿namespace Flsurf.Domain.Staff.Enums
 {
     public enum TicketStatus
     {

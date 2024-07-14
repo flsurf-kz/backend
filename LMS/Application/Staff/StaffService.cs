@@ -1,7 +1,7 @@
-﻿using LMS.Application.Staff.Interfaces;
-using LMS.Application.Staff.UseCases;
+﻿using Flsurf.Application.Staff.Interfaces;
+using Flsurf.Application.Staff.UseCases;
 
-namespace LMS.Application.Staff
+namespace Flsurf.Application.Staff
 {
     public class StaffService : IStaffService
     {

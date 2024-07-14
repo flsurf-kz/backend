@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace LMS.Infrastructure.Adapters.Payment
+namespace Flsurf.Infrastructure.Adapters.Payment
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum PaymentProviders

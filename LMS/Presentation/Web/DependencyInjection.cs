@@ -1,10 +1,10 @@
 ﻿using Hangfire;
 using Hangfire.PostgreSql;
-using LMS.Application.Common.Interfaces;
-using LMS.Domain.User.Entities;
-using LMS.Presentation.Web.ExceptionHandlers;
-using LMS.Presentation.Web.Schemas.Filters;
-using LMS.Presentation.Web.Services;
+using Flsurf.Application.Common.Interfaces;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Presentation.Web.ExceptionHandlers;
+using Flsurf.Presentation.Web.Schemas.Filters;
+using Flsurf.Presentation.Web.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -12,7 +12,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json;
 
-namespace LMS.Presentation.Web
+namespace Flsurf.Presentation.Web
 {
     public static class DependencyInjection
     {
@@ -29,7 +29,7 @@ namespace LMS.Presentation.Web
                             = JsonNamingPolicy.CamelCase);
             services.AddSwaggerGen(options =>
             {
-                var info = new OpenApiInfo { Title = "SpakOfMind LMS", Version = "v1" };
+                var info = new OpenApiInfo { Title = "SpakOfMind Flsurf", Version = "v1" };
                 options.SwaggerDoc(name: "v1", info: info);
                 options.EnableAnnotations();
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

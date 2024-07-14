@@ -1,7 +1,7 @@
-﻿using LMS.Infrastructure.EventDispatcher;
+﻿using Flsurf.Infrastructure.EventDispatcher;
 using System.Reflection;
 
-namespace LMS.Application
+namespace Flsurf.Application
 {
     public static class Configuration
     {

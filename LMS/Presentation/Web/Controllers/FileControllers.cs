@@ -1,12 +1,12 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Application.Files.Interfaces;
-using LMS.Domain.Files.Entities;
-using LMS.Infrastructure.Adapters.FileStorage;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Files.Interfaces;
+using Flsurf.Domain.Files.Entities;
+using Flsurf.Infrastructure.Adapters.FileStorage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 
-namespace LMS.Presentation.Web.Controllers
+namespace Flsurf.Presentation.Web.Controllers
 {
     [Route("api/files/")]
     [ApiController]

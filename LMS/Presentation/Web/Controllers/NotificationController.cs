@@ -1,12 +1,12 @@
-﻿using LMS.Application.Common.Models;
-using LMS.Application.User.Dto;
-using LMS.Application.User.Interfaces;
-using LMS.Domain.User.Entities;
+﻿using Flsurf.Application.Common.Models;
+using Flsurf.Application.User.Dto;
+using Flsurf.Application.User.Interfaces;
+using Flsurf.Domain.User.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace LMS.Presentation.Web.Controllers
+namespace Flsurf.Presentation.Web.Controllers
 {
     [Route("api/notification")]
     [ApiController]

@@ -1,8 +1,8 @@
-﻿using LMS.Application.Payment.Interfaces;
-using LMS.Application.Payment.Services;
-using LMS.Application.Payment.UseCases;
+﻿using Flsurf.Application.Payment.Interfaces;
+using Flsurf.Application.Payment.Services;
+using Flsurf.Application.Payment.UseCases;
 
-namespace LMS.Application.Payment
+namespace Flsurf.Application.Payment
 {
     public static class DependencyInjection
     {

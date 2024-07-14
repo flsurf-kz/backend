@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Application.Common.Models
+namespace Flsurf.Application.Common.Models
 {
     public class PaginatedList<T>
     {

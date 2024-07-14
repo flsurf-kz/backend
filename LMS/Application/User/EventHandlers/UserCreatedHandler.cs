@@ -1,11 +1,11 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Domain.Payment.Entities;
-using LMS.Domain.User.Entities;
-using LMS.Domain.User.Enums;
-using LMS.Domain.User.Events;
-using LMS.Infrastructure.EventDispatcher;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Domain.Payment.Entities;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Domain.User.Enums;
+using Flsurf.Domain.User.Events;
+using Flsurf.Infrastructure.EventDispatcher;
 
-namespace LMS.Application.User.EventHandlers
+namespace Flsurf.Application.User.EventHandlers
 {
     public class UserCreatedHandler : IEventSubscriber<UserCreated>
     {

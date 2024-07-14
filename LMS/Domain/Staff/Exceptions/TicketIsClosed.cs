@@ -1,4 +1,4 @@
-﻿namespace LMS.Domain.Staff.Exceptions
+﻿namespace Flsurf.Domain.Staff.Exceptions
 {
     public class TicketIsClosed : Exception
     {

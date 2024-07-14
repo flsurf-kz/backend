@@ -1,4 +1,4 @@
-﻿namespace LMS.Domain.Payment.Exceptions
+﻿namespace Flsurf.Domain.Payment.Exceptions
 {
     public class WalletIsBlocked : Exception
     {

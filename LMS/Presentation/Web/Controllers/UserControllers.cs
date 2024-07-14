@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authorization;
-using LMS.Presentation.Web.Schemas;
-using LMS.Application.Common.Interfaces;
-using LMS.Domain.User.Entities;
-using LMS.Application.User.Interfaces;
-using LMS.Application.User.Dto;
+using Flsurf.Presentation.Web.Schemas;
+using Flsurf.Application.Common.Interfaces;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Application.User.Interfaces;
+using Flsurf.Application.User.Dto;
 
-namespace LMS.Presentation.Web.Controllers
+namespace Flsurf.Presentation.Web.Controllers
 {
     [SwaggerTag("auth")]
     [Route("api/user/")]

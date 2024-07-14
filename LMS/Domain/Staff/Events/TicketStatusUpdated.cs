@@ -1,8 +1,8 @@
-﻿using LMS.Domain.Staff.Entities;
-using LMS.Domain.Staff.Enums;
-using LMS.Infrastructure.EventDispatcher;
+﻿using Flsurf.Domain.Staff.Entities;
+using Flsurf.Domain.Staff.Enums;
+using Flsurf.Infrastructure.EventDispatcher;
 
-namespace LMS.Domain.Staff.Events
+namespace Flsurf.Domain.Staff.Events
 {
     public class TicketStatusUpdated(TicketEntity ticket, TicketStatus status) : BaseEvent
     {

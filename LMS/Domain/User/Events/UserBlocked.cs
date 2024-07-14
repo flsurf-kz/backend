@@ -1,6 +1,6 @@
-﻿using LMS.Domain.User.Entities;
+﻿using Flsurf.Domain.User.Entities;
 
-namespace LMS.Domain.User.Events
+namespace Flsurf.Domain.User.Events
 {
     public class UserBlocked(UserEntity user) : DomainEvent
     {

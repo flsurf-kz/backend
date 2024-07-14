@@ -1,10 +1,10 @@
-﻿using LMS.Domain.Common;
-using LMS.Domain.User.Enums;
+﻿using Flsurf.Domain.Common;
+using Flsurf.Domain.User.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
 
-namespace LMS.Domain.User.Entities
+namespace Flsurf.Domain.User.Entities
 {
     public class NotificationEntity : BaseAuditableEntity
     {

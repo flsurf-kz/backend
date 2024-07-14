@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Domain.Common
+namespace Flsurf.Domain.Common
 {
     public class BaseAuditableEntity : BaseEntity
     {

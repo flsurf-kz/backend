@@ -1,12 +1,12 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Application.Common.UseCases;
-using LMS.Application.User.Dto;
-using LMS.Infrastructure.Adapters.Mailing;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.User.Dto;
+using Flsurf.Infrastructure.Adapters.Mailing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System.ComponentModel;
 
-namespace LMS.Application.User.UseCases
+namespace Flsurf.Application.User.UseCases
 {
     public class SendResetCode : BaseUseCase<SendResetCodeDto, bool>
     {

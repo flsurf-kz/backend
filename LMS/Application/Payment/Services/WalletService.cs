@@ -1,8 +1,8 @@
-﻿using LMS.Application.Payment.Interfaces;
-using LMS.Application.Payment.UseCases;
+﻿using Flsurf.Application.Payment.Interfaces;
+using Flsurf.Application.Payment.UseCases;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LMS.Application.Payment.Services
+namespace Flsurf.Application.Payment.Services
 {
     public class WalletService : IWalletService
     {

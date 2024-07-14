@@ -1,6 +1,6 @@
-﻿using LMS.Application.Payment.UseCases;
+﻿using Flsurf.Application.Payment.UseCases;
 
-namespace LMS.Application.Payment.Interfaces
+namespace Flsurf.Application.Payment.Interfaces
 {
     public interface ITransactionService
     {

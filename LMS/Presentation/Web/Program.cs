@@ -1,10 +1,10 @@
 using Hangfire;
-using LMS.Infrastructure;
-using LMS.Presentation.Web;
-using LMS.Domain;
-using LMS.Application;
-using LMS.Infrastructure.Data;
-using LMS.Infrastructure.EventStore;
+using Flsurf.Infrastructure;
+using Flsurf.Presentation.Web;
+using Flsurf.Domain;
+using Flsurf.Application;
+using Flsurf.Infrastructure.Data;
+using Flsurf.Infrastructure.EventStore;
 
 var builder = WebApplication.CreateBuilder(args);
 

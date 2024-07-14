@@ -1,11 +1,11 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Application.Common.UseCases;
-using LMS.Application.Payment.Dto;
-using LMS.Application.Payment.Exceptions;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Payment.Dto;
+using Flsurf.Application.Payment.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
-namespace LMS.Application.Payment.UseCases
+namespace Flsurf.Application.Payment.UseCases
 {
     public class HandleGatewayResult : BaseUseCase<GatewayResultDto, bool>
     {

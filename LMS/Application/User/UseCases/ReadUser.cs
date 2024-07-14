@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using LMS.Domain.User.Enums;
-using LMS.Infrastructure.Data.Queries;
-using LMS.Application.Common.Interfaces;
-using LMS.Application.Common.UseCases;
-using LMS.Domain.User.Entities;
-using LMS.Application.User.Dto;
+using Flsurf.Domain.User.Enums;
+using Flsurf.Infrastructure.Data.Queries;
+using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.UseCases;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Application.User.Dto;
 
-namespace LMS.Application.User.UseCases
+namespace Flsurf.Application.User.UseCases
 {
     public class GetUsersList : BaseUseCase<GetListUserDto, ICollection<UserEntity>>
     {

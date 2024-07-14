@@ -1,11 +1,11 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Application.Common.UseCases;
-using LMS.Application.Files.Dto;
-using LMS.Domain.Files.Entities;
-using LMS.Infrastructure.Adapters.FileStorage;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Files.Dto;
+using Flsurf.Domain.Files.Entities;
+using Flsurf.Infrastructure.Adapters.FileStorage;
 using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Application.Files.UseCases
+namespace Flsurf.Application.Files.UseCases
 {
     public class UploadFile : BaseUseCase<CreateFileDto, FileEntity>
     {

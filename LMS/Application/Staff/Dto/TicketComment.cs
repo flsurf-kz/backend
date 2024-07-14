@@ -1,7 +1,7 @@
-﻿using LMS.Application.Files.Dto;
+﻿using Flsurf.Application.Files.Dto;
 using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Application.Staff.Dto
+namespace Flsurf.Application.Staff.Dto
 {
     public class CreateCommentDto
     {

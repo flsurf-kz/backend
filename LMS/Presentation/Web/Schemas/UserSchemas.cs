@@ -1,8 +1,8 @@
 ﻿
-using LMS.Domain.User.Entities;
+using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Presentation.Web.Schemas
+namespace Flsurf.Presentation.Web.Schemas
 {
     public class UserScheme
     {

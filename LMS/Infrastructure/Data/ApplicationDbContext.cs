@@ -1,22 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using LMS.Domain.Files.Entities;
-using LMS.Domain.Payment.Entities;
-using LMS.Domain.Staff.Entities;
-using LMS.Domain.User.Entities;
-using LMS.Application.Common.Interfaces;
-using LMS.Infrastructure.EventDispatcher;
-using LMS.Domain.Study.Entities;
+using Flsurf.Domain.Files.Entities;
+using Flsurf.Domain.Payment.Entities;
+using Flsurf.Domain.Staff.Entities;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Application.Common.Interfaces;
+using Flsurf.Infrastructure.EventDispatcher;
 
-namespace LMS.Infrastructure.Data
+namespace Flsurf.Infrastructure.Data
 {
     public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         // User 
         public DbSet<UserEntity> Users { get; set; }
-        public DbSet<PermissionEntity> Permissions { get; set; }
-        public DbSet<GroupEntity> Groups { get; set; }
-        public DbSet<RoleEntity> Roles { get; set; }
         public DbSet<WarningEntity> UserWarnings { get; set; }
         public DbSet<NotificationEntity> Notifications { get; set; }
 
@@ -35,28 +31,6 @@ namespace LMS.Infrastructure.Data
         // Files 
         public DbSet<FileEntity> Files { get; set; }
 
-        // Study 
-        public DbSet<StudentEntity> Students { get; set; }
-        public DbSet<StudentCourseEntity> StudentCourses { get; set; }
-        public DbSet<InstitutionEntity> Institutions { get; set; }
-        public DbSet<AssignmentEntity> Assigments { get; set; }
-        public DbSet<AttendanceEntity> Attendance { get; set; }
-        public DbSet<BookEntity> Books { get; set; }
-        public DbSet<CategoryEntity> Categories { get; set; }
-        public DbSet<CourseGroupEntity> CourseGroups { get; set; }
-        public DbSet<DayLessonEntity> DayLessons { get; set; }
-        public DbSet<DayScheduleEntity> DaySchedules { get; set; }
-        public DbSet<ExaminationEntity> Examinations { get; set; }
-        public DbSet<GradeTypeEntity> GradeTypes { get; set; }
-        public DbSet<SubmissionEntity> Submissions { get; set; }
-        public DbSet<InstitutionEventEntity> InstitutionEvents { get; set; }
-        public DbSet<InstitutionMemberEntity> InstitutionMembers { get; set; }
-        public DbSet<InstitutionNewsEntity> InstitutionNews { get; set; }
-        public DbSet<InstitutionRolesEntity> InstitutionRoles { get; set; }
-        public DbSet<TeacherEntity> Teachers { get; set; }
-        public DbSet<CourseEntity> Courses { get; set; }
-        public DbSet<InvitationEntity> Invitations { get; set; }
-        public DbSet<BookRentEntity> BookRents { get; set; }
 
         private readonly IEventDispatcher _dispatcher;
 

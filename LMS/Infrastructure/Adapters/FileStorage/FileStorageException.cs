@@ -1,4 +1,4 @@
-﻿namespace LMS.Infrastructure.Adapters.FileStorage
+﻿namespace Flsurf.Infrastructure.Adapters.FileStorage
 {
 
     public class FileStorageException : Exception

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 
-namespace LMS.Infrastructure.Adapters.Mailing
+namespace Flsurf.Infrastructure.Adapters.Mailing
 {
     public static class DependencyInjection
     {

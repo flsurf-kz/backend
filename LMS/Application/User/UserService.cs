@@ -1,7 +1,7 @@
-﻿using LMS.Application.User.Interfaces;
-using LMS.Application.User.UseCases;
+﻿using Flsurf.Application.User.Interfaces;
+using Flsurf.Application.User.UseCases;
 
-namespace LMS.Application.User
+namespace Flsurf.Application.User
 {
     public class UserService : IUserService
     {

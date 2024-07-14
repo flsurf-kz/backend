@@ -1,8 +1,8 @@
-﻿using LMS.Application.Common.UseCases;
-using LMS.Application.Files.Dto;
-using LMS.Domain.Files.Entities;
+﻿using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Files.Dto;
+using Flsurf.Domain.Files.Entities;
 
-namespace LMS.Application.Files.UseCases
+namespace Flsurf.Application.Files.UseCases
 {
     public class UploadFiles : BaseUseCase<ICollection<CreateFileDto>, ICollection<FileEntity>>
     {

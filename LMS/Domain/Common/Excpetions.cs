@@ -1,4 +1,4 @@
-﻿namespace LMS.Domain.Common
+﻿namespace Flsurf.Domain.Common
 {
     public class AccessDenied : Exception
     {

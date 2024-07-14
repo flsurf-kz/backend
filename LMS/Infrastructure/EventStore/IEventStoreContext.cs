@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace LMS.Infrastructure.EventStore
+namespace Flsurf.Infrastructure.EventStore
 {
     public interface IEventStoreContext
     {

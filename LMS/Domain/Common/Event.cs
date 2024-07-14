@@ -1,6 +1,6 @@
-﻿using LMS.Infrastructure.EventDispatcher;
+﻿using Flsurf.Infrastructure.EventDispatcher;
 
-namespace LMS.Domain.Common
+namespace Flsurf.Domain.Common
 {
     public abstract class DomainEvent : BaseEvent
     {

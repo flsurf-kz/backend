@@ -1,7 +1,7 @@
-﻿using LMS.Application.User.Dto;
-using LMS.Application.User.Interfaces;
-using LMS.Domain.User.Entities;
-using LMS.Presentation.Web.Schemas;
+﻿using Flsurf.Application.User.Dto;
+using Flsurf.Application.User.Interfaces;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Presentation.Web.Schemas;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace LMS.Presentation.Web.Controllers
+namespace Flsurf.Presentation.Web.Controllers
 {
     [SwaggerTag("auth")]
     [Route("api/auth/")]

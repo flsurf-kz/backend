@@ -1,6 +1,6 @@
-﻿using LMS.Domain.Study.Entities;
+﻿using Flsurf.Domain.Study.Entities;
 
-namespace LMS.Infrastructure.Data.Queries
+namespace Flsurf.Infrastructure.Data.Queries
 {
     public static class BookQueries
     {

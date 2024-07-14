@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components;
-using LMS.Infrastructure.Data;
-using LMS.Domain.Common;
-using LMS.Infrastructure.EventDispatcher;
+using Flsurf.Infrastructure.Data;
+using Flsurf.Domain.Common;
+using Flsurf.Infrastructure.EventDispatcher;
 
-namespace LMS.Infrastructure.Data.Intercepters
+namespace Flsurf.Infrastructure.Data.Intercepters
 {
     public class EventDispatcherInterceptor : SaveChangesInterceptor
     {

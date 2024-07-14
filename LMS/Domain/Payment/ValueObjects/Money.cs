@@ -1,9 +1,9 @@
-﻿using LMS.Domain.Common;
-using LMS.Domain.Payment.Enums;
+﻿using Flsurf.Domain.Common;
+using Flsurf.Domain.Payment.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Domain.Payment.ValueObjects
+namespace Flsurf.Domain.Payment.ValueObjects
 {
     [Owned]
     public class Money : ValueObject

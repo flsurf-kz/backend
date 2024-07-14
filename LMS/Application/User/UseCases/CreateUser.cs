@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using LMS.Infrastructure;
-using LMS.Domain.User.Enums;
-using LMS.Application.Common.UseCases;
-using LMS.Application.Common.Interfaces;
-using LMS.Domain.User.Entities;
-using LMS.Application.User.Dto;
-using LMS.Application.Common.Exceptions;
+using Flsurf.Infrastructure;
+using Flsurf.Domain.User.Enums;
+using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Common.Interfaces;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Application.User.Dto;
+using Flsurf.Application.Common.Exceptions;
 
-namespace LMS.Application.User.UseCases
+namespace Flsurf.Application.User.UseCases
 {
     public class CreateUser : BaseUseCase<CreateUserDto, UserEntity>
     {

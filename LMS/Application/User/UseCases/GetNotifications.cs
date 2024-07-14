@@ -1,12 +1,12 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Application.Common.UseCases;
-using LMS.Application.User.Dto;
-using LMS.Domain.User.Entities;
-using LMS.Domain.User.Enums;
-using LMS.Infrastructure.Data.Extensions;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.User.Dto;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Domain.User.Enums;
+using Flsurf.Infrastructure.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Application.User.UseCases
+namespace Flsurf.Application.User.UseCases
 {
     public class GetNotifications : BaseUseCase<GetNotificationsDto, ICollection<NotificationEntity>>
     {

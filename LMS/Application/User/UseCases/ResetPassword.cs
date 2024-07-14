@@ -1,11 +1,11 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Application.Common.UseCases;
-using LMS.Application.User.Dto;
-using LMS.Infrastructure;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.User.Dto;
+using Flsurf.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace LMS.Application.User.UseCases
+namespace Flsurf.Application.User.UseCases
 {
     public class ResetPassword : BaseUseCase<ResetPasswordDto, bool>
     {

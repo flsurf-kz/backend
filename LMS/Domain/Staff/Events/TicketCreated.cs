@@ -1,7 +1,7 @@
-﻿using LMS.Domain.Staff.Entities;
-using LMS.Infrastructure.EventDispatcher;
+﻿using Flsurf.Domain.Staff.Entities;
+using Flsurf.Infrastructure.EventDispatcher;
 
-namespace LMS.Domain.Staff.Events
+namespace Flsurf.Domain.Staff.Events
 {
     public class TicketCreated(TicketEntity ticket) : BaseEvent
     {

@@ -1,15 +1,15 @@
-﻿using LMS.Application.Files.Interfaces;
-using LMS.Application.User.Dto;
-using LMS.Application.User.Interfaces;
-using LMS.Domain.Payment.Entities;
-using LMS.Domain.Staff.Entities;
-using LMS.Domain.Study.Entities;
-using LMS.Domain.User.Entities;
-using LMS.Domain.User.Enums;
-using LMS.Infrastructure.Adapters.Payment;
+﻿using Flsurf.Application.Files.Interfaces;
+using Flsurf.Application.User.Dto;
+using Flsurf.Application.User.Interfaces;
+using Flsurf.Domain.Payment.Entities;
+using Flsurf.Domain.Staff.Entities;
+using Flsurf.Domain.Study.Entities;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Domain.User.Enums;
+using Flsurf.Infrastructure.Adapters.Payment;
 using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Infrastructure.Data
+namespace Flsurf.Infrastructure.Data
 {
     public static class InitialiserExtensions
     {

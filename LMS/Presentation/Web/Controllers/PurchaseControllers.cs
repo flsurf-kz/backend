@@ -1,11 +1,11 @@
-﻿using LMS.Application.Payment.Dto;
-using LMS.Application.Payment.Interfaces;
-using LMS.Domain.Payment.Entities;
+﻿using Flsurf.Application.Payment.Dto;
+using Flsurf.Application.Payment.Interfaces;
+using Flsurf.Domain.Payment.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LMS.Presentation.Web.Controllers
+namespace Flsurf.Presentation.Web.Controllers
 {
     [Route("api/purchase/")]
     [ApiController]

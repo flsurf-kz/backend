@@ -1,6 +1,6 @@
-﻿using LMS.Infrastructure.EventDispatcher;
+﻿using Flsurf.Infrastructure.EventDispatcher;
 
-namespace LMS.Infrastructure.EventStore
+namespace Flsurf.Infrastructure.EventStore
 {
     public interface IEventStore
     {

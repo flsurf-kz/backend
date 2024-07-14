@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 
-namespace LMS.Presentation.Web.ExceptionHandlers
+namespace Flsurf.Presentation.Web.ExceptionHandlers
 {
     public class GuardClauseExceptionHandler : IExceptionHandler
     {
@@ -64,7 +64,7 @@ namespace LMS.Presentation.Web.ExceptionHandlers
             var stackTrace = exception.StackTrace?.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
             if (stackTrace != null && stackTrace.Any())
             {
-                var lastNamespaceMethod = stackTrace.FirstOrDefault(line => line.Contains("LMS"));
+                var lastNamespaceMethod = stackTrace.FirstOrDefault(line => line.Contains("Flsurf"));
                 if (!string.IsNullOrWhiteSpace(lastNamespaceMethod))
                 {
                     _logger.LogError(exception, $"Exception in your namespace: {exception.Message}. Last method in stack trace: {lastNamespaceMethod}");

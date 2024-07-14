@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LMS\LMS.csproj" />
+    <ProjectReference Include="..\LMS\Flsurf.csproj" />
   </ItemGroup>
 
   <ItemGroup>

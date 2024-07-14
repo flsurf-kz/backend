@@ -1,7 +1,7 @@
-﻿using LMS.Domain.User.Entities;
+﻿using Flsurf.Domain.User.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace LMS.Infrastructure
+namespace Flsurf.Infrastructure
 {
     public class PasswordService
     {

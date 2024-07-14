@@ -1,16 +1,16 @@
-﻿using LMS.Domain.Files.Entities;
-using LMS.Domain.User.Enums;
-using LMS.Domain.User.Events;
-using LMS.Domain.User.Interfaces;
-using LMS.Domain.User.ValueObjects;
-using LMS.Infrastructure;
+﻿using Flsurf.Domain.Files.Entities;
+using Flsurf.Domain.User.Enums;
+using Flsurf.Domain.User.Events;
+using Flsurf.Domain.User.Interfaces;
+using Flsurf.Domain.User.ValueObjects;
+using Flsurf.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Text.Json.Serialization;
 
-namespace LMS.Domain.User.Entities
+namespace Flsurf.Domain.User.Entities
 {
     public class UserEntity : BaseAuditableEntity, IAccessUser
     {

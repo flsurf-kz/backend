@@ -1,7 +1,7 @@
-﻿using LMS.Application.Common.Interfaces;
+﻿using Flsurf.Application.Common.Interfaces;
 using Newtonsoft.Json;
 
-namespace LMS.Infrastructure.EventDispatcher
+namespace Flsurf.Infrastructure.EventDispatcher
 {
     public class LoggingHandler<Event> : IEventSubscriber<Event> where Event : BaseEvent
     {

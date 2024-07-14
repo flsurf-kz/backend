@@ -1,4 +1,4 @@
-﻿namespace LMS.Infrastructure.Adapters.Mailing
+﻿namespace Flsurf.Infrastructure.Adapters.Mailing
 {
     public interface IEmailService
     {

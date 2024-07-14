@@ -1,17 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
-using LMS.Infrastructure.Data;
-using LMS.Infrastructure.Adapters.FileStorage;
-using LMS.Application.Common.Interfaces;
-using LMS.Domain.User.Entities;
-using LMS.Infrastructure.Adapters.Mailing;
-using LMS.Infrastructure.Caching;
-using LMS.Infrastructure.EventStore;
-using LMS.Infrastructure.Data.Intercepters;
-using LMS.Application.Study.Interfaces;
+using Flsurf.Infrastructure.Data;
+using Flsurf.Infrastructure.Adapters.FileStorage;
+using Flsurf.Application.Common.Interfaces;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Infrastructure.Adapters.Mailing;
+using Flsurf.Infrastructure.Caching;
+using Flsurf.Infrastructure.EventStore;
+using Flsurf.Infrastructure.Data.Intercepters;
+using Flsurf.Application.Study.Interfaces;
 
-namespace LMS.Infrastructure
+namespace Flsurf.Infrastructure
 {
     public static class DependencyInjection
     {
@@ -58,7 +58,6 @@ namespace LMS.Infrastructure
             services.AddScoped<IEventStore, EventStore.EventStore>();
             services.AddScoped<ApplicationDbContextInitialiser>();
             services.AddScoped<EventStoreContextInitialiser>();
-            services.AddScoped<IInstitutionAccessPolicy, InstitutionAccessPolicy>();
 
             services.AddSingleton(TimeProvider.System);
             //services.AddScoped<IEventSubscriber<BaseEvent>, LoggingHandler<BaseEvent>>(); 

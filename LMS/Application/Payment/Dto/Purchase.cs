@@ -1,8 +1,8 @@
-﻿using LMS.Application.Common.Models;
-using LMS.Domain.Payment.Enums;
+﻿using Flsurf.Application.Common.Models;
+using Flsurf.Domain.Payment.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Application.Payment.Dto
+namespace Flsurf.Application.Payment.Dto
 {
     public class ConfirmPurchaseDto
     {

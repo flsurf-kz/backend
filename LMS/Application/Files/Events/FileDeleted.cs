@@ -1,7 +1,7 @@
-﻿using LMS.Domain.Files.Entities;
-using LMS.Infrastructure.EventDispatcher;
+﻿using Flsurf.Domain.Files.Entities;
+using Flsurf.Infrastructure.EventDispatcher;
 
-namespace LMS.Application.Files.Events
+namespace Flsurf.Application.Files.Events
 {
     public class FileDeleted(FileEntity file) : BaseEvent
     {

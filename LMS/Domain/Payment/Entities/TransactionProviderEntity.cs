@@ -1,8 +1,8 @@
-﻿using LMS.Domain.Common;
-using LMS.Domain.Files.Entities;
+﻿using Flsurf.Domain.Common;
+using Flsurf.Domain.Files.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Domain.Payment.Entities
+namespace Flsurf.Domain.Payment.Entities
 {
     public class TransactionProviderEntity : BaseAuditableEntity
     {

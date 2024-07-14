@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using LMS.Domain.Common;
-using LMS.Domain.Payment.Enums;
-using LMS.Domain.Payment.ValueObjects;
-using LMS.Domain.User.Entities;
-using LMS.Domain.Payment.Events;
+using Flsurf.Domain.Common;
+using Flsurf.Domain.Payment.Enums;
+using Flsurf.Domain.Payment.ValueObjects;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Domain.Payment.Events;
 
-namespace LMS.Domain.Payment.Entities
+namespace Flsurf.Domain.Payment.Entities
 {
     public class TransactionEntity : BaseAuditableEntity
     {

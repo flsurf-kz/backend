@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Domain.Files.Entities
+namespace Flsurf.Domain.Files.Entities
 {
     public class FileEntity
     {

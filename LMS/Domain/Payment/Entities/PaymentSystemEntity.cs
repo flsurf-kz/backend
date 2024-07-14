@@ -1,8 +1,8 @@
-﻿using LMS.Domain.Common;
+﻿using Flsurf.Domain.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LMS.Domain.Payment.Entities
+namespace Flsurf.Domain.Payment.Entities
 {
     public class PaymentSystemEntity : BaseAuditableEntity
     {

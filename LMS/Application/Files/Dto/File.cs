@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace LMS.Application.Files.Dto
+namespace Flsurf.Application.Files.Dto
 {
     public class CreateFileDto
     {

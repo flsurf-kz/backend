@@ -1,4 +1,4 @@
-﻿namespace LMS.Infrastructure.EventDispatcher
+﻿namespace Flsurf.Infrastructure.EventDispatcher
 {
     public abstract class BaseEvent
     {

@@ -1,7 +1,7 @@
-﻿using LMS.Application.Common.Interfaces;
+﻿using Flsurf.Application.Common.Interfaces;
 using Microsoft.OpenApi.Any;
 
-namespace LMS.Infrastructure.EventDispatcher
+namespace Flsurf.Infrastructure.EventDispatcher
 {
     public interface IEventDispatcher
     {

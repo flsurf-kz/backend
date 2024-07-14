@@ -1,8 +1,8 @@
 ﻿using Microsoft.OpenApi.Any;
-using LMS.Domain.User.Entities;
-using LMS.Infrastructure.EventDispatcher;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Infrastructure.EventDispatcher;
 
-namespace LMS.Domain.User.Events
+namespace Flsurf.Domain.User.Events
 {
     public class UserUpdated(
         UserEntity user,

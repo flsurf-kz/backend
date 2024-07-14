@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using LMS.Domain.Common;
-using LMS.Domain.Payment.ValueObjects;
-using LMS.Domain.Payment.Enums;
-using LMS.Domain.Payment.Events;
-using LMS.Domain.Payment.Exceptions;
-using LMS.Domain.Study.Entities;
-using LMS.Domain.User.Entities;
+using Flsurf.Domain.Common;
+using Flsurf.Domain.Payment.ValueObjects;
+using Flsurf.Domain.Payment.Enums;
+using Flsurf.Domain.Payment.Events;
+using Flsurf.Domain.Payment.Exceptions;
+using Flsurf.Domain.Study.Entities;
+using Flsurf.Domain.User.Entities;
 
-namespace LMS.Domain.Payment.Entities
+namespace Flsurf.Domain.Payment.Entities
 {
     public class PurchaseEntity : BaseAuditableEntity
     {

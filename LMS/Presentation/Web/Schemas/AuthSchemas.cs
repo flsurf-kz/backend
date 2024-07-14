@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Presentation.Web.Schemas
+namespace Flsurf.Presentation.Web.Schemas
 {
     public class LoginResponseSchema
     {

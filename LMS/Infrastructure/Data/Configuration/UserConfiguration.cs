@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using LMS.Domain.User.Entities;
+using Flsurf.Domain.User.Entities;
 
 
-namespace LMS.Infrastructure.Data.Configuration
+namespace Flsurf.Infrastructure.Data.Configuration
 {
     public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
     {

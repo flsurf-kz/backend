@@ -1,10 +1,10 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Application.Common.UseCases;
-using LMS.Application.Payment.Dto;
-using LMS.Domain.Payment.Entities;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Payment.Dto;
+using Flsurf.Domain.Payment.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Application.Payment.UseCases
+namespace Flsurf.Application.Payment.UseCases
 {
     public class GetTransactionProviders
         : BaseUseCase<GetTransactionProvidersDto, ICollection<TransactionProviderEntity>>

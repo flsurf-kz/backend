@@ -1,10 +1,10 @@
-﻿using LMS.Domain.Payment.Events;
-using LMS.Domain.Study.Entities;
-using LMS.Domain.User.Entities;
+﻿using Flsurf.Domain.Payment.Events;
+using Flsurf.Domain.Study.Entities;
+using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LMS.Domain.Payment.Entities
+namespace Flsurf.Domain.Payment.Entities
 {
     public class ReviewEntity : BaseAuditableEntity 
     {

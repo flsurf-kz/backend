@@ -1,4 +1,4 @@
-﻿namespace LMS.Application.Common.UseCases
+﻿namespace Flsurf.Application.Common.UseCases
 {
     public interface BaseUseCase<InputDTO, OutputDTO>
     {

@@ -1,6 +1,6 @@
-﻿using LMS.Domain.Payment.Entities;
+﻿using Flsurf.Domain.Payment.Entities;
 
-namespace LMS.Domain.Payment.Events
+namespace Flsurf.Domain.Payment.Events
 {
     public class ReviewCreated(ReviewEntity review) : DomainEvent
     {

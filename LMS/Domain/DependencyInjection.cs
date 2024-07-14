@@ -1,4 +1,4 @@
-﻿namespace LMS.Domain
+﻿namespace Flsurf.Domain
 {
     public static class DependencyInjection
     {

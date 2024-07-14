@@ -1,7 +1,7 @@
-﻿using LMS.Application.Common.Interfaces;
+﻿using Flsurf.Application.Common.Interfaces;
 using System.Security.Claims;
 
-namespace LMS.Presentation.Web.Services
+namespace Flsurf.Presentation.Web.Services
 {
     public class CurrentUser : IUser
     {

@@ -1,7 +1,7 @@
-﻿using LMS.Application.Files.Dto;
+﻿using Flsurf.Application.Files.Dto;
 using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Presentation.Web.Schemas
+namespace Flsurf.Presentation.Web.Schemas
 {
     public class CreateCommentScheme
     {

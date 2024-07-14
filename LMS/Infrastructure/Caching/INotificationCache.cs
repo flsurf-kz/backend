@@ -1,6 +1,6 @@
-﻿using LMS.Domain.User.Entities;
+﻿using Flsurf.Domain.User.Entities;
 
-namespace LMS.Infrastructure.Caching
+namespace Flsurf.Infrastructure.Caching
 {
     public interface INotificationCache
     {

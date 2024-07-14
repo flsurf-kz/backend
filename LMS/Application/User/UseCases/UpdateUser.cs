@@ -1,13 +1,13 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Application.Common.UseCases;
-using LMS.Application.Files.Interfaces;
-using LMS.Application.User.Dto;
-using LMS.Domain.User.Entities;
-using LMS.Domain.User.Enums;
-using LMS.Infrastructure;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Files.Interfaces;
+using Flsurf.Application.User.Dto;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Domain.User.Enums;
+using Flsurf.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Application.User.UseCases
+namespace Flsurf.Application.User.UseCases
 {
     public class UpdateUser : BaseUseCase<UpdateUserDto, UserEntity>
     {

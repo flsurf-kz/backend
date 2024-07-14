@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using LMS.Domain.Common;
-using LMS.Application.Common.Interfaces;
+using Flsurf.Domain.Common;
+using Flsurf.Application.Common.Interfaces;
 
-namespace LMS.Infrastructure.Data.Intercepters
+namespace Flsurf.Infrastructure.Data.Intercepters
 {
 
     public class AuditableEntityInterceptor : SaveChangesInterceptor

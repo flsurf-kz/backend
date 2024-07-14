@@ -1,9 +1,9 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Infrastructure.EventStore;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Infrastructure.EventStore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace LMS.Infrastructure.EventDispatcher
+namespace Flsurf.Infrastructure.EventDispatcher
 {
     public class EventDispatcher : IEventDispatcher
     {

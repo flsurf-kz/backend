@@ -1,16 +1,16 @@
-﻿using LMS.Application.Common.Interfaces;
-using LMS.Application.Common.UseCases;
-using LMS.Application.Payment.Dto;
-using LMS.Application.Payment.Exceptions;
-using LMS.Domain.Payment.Entities;
-using LMS.Domain.Payment.Enums;
-using LMS.Infrastructure.Adapters.Payment;
-using LMS.Infrastructure.Data.Queries;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Payment.Dto;
+using Flsurf.Application.Payment.Exceptions;
+using Flsurf.Domain.Payment.Entities;
+using Flsurf.Domain.Payment.Enums;
+using Flsurf.Infrastructure.Adapters.Payment;
+using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace LMS.Application.Payment.UseCases
+namespace Flsurf.Application.Payment.UseCases
 {
     public class HandleTransaction : BaseUseCase<HandleTransactionDto, TransactionEntity>
     {

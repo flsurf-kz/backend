@@ -1,13 +1,13 @@
-﻿using LMS.Domain.Common;
-using LMS.Domain.Files.Entities;
-using LMS.Domain.Staff.Enums;
-using LMS.Domain.Staff.Events;
-using LMS.Domain.Staff.Exceptions;
-using LMS.Domain.User.Entities;
+﻿using Flsurf.Domain.Common;
+using Flsurf.Domain.Files.Entities;
+using Flsurf.Domain.Staff.Enums;
+using Flsurf.Domain.Staff.Events;
+using Flsurf.Domain.Staff.Exceptions;
+using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace LMS.Domain.Staff.Entities
+namespace Flsurf.Domain.Staff.Entities
 {
     public class TicketEntity : BaseAuditableEntity
     {

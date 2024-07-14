@@ -1,8 +1,8 @@
-﻿using LMS.Domain.Payment.Entities;
-using LMS.Domain.Study.Entities;
+﻿using Flsurf.Domain.Payment.Entities;
+using Flsurf.Domain.Study.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace LMS.Infrastructure.Data.Queries
+namespace Flsurf.Infrastructure.Data.Queries
 {
     public static class StudentQueries
     {

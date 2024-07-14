@@ -1,4 +1,4 @@
-﻿namespace LMS.Application.Payment.Exceptions
+﻿namespace Flsurf.Application.Payment.Exceptions
 {
     public class PendingGatewayResult : Exception
     {
