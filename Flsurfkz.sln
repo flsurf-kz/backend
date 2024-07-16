@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flsurf", "LMS\Flsurf.csproj", "{AA4861FD-CCF7-4BE5-8821-7BD5C42B2792}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flsurf", "Flsurf\Flsurf.csproj", "{AA4861FD-CCF7-4BE5-8821-7BD5C42B2792}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{A8354A74-6D8D-49C6-976C-03F5D6DFF1E0}"
 EndProject
