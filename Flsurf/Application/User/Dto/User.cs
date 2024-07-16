@@ -24,7 +24,6 @@ namespace Flsurf.Application.User.Dto
 
     public class GetListUserDto
     {
-        public UserRoles? Role { get; set; }
         public string? Fullname { get; set; }
     }
 

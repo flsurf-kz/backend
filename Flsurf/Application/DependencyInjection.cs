@@ -14,7 +14,6 @@ namespace Flsurf.Application
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddSingleton<IEventDispatcher, EventDispatcher>();
-            services.AddScoped<IAccessPolicy, AccessPolicy>();
             services.AddUserApplicationServices();
             services.AddPaymentApplicationServices();
             services.AddFilesApplicationServices();
