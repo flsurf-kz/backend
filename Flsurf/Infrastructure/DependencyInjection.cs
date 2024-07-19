@@ -10,6 +10,8 @@ using Flsurf.Infrastructure.Caching;
 using Flsurf.Infrastructure.EventStore;
 using Flsurf.Infrastructure.Data.Intercepters;
 using Flsurf.Application.Study.Interfaces;
+using Flsurf.Infrastructure.Adapters.Permissions;
+using SpiceDb;
 
 namespace Flsurf.Infrastructure
 {
@@ -44,6 +46,7 @@ namespace Flsurf.Infrastructure
                     o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
                 );
             });
+
             services.AddDbContext<EventStoreContext>((sp, options) =>
             {
                 options.EnableDetailedErrors(true);
@@ -112,6 +115,21 @@ namespace Flsurf.Infrastructure
                         bucketName: bucketName);
                 });
             }
+
+            services.AddScoped<IPermissionService, SpiceDbPermService>(provider =>
+            {
+                var serverAddress = configuration["SpiceDbServerAddress"];
+                var token = configuration["SpiceDbToken"]; 
+                if (string.IsNullOrEmpty(serverAddress) || string.IsNullOrEmpty(token))
+                {
+                    throw new ArgumentException("Spice db token or server address is not present"); 
+                }
+
+                var client = new SpiceDbClient(serverAddress, token, null); 
+
+                return new SpiceDbPermService(client); 
+            }); 
+
             services.AddAuthorizationBuilder();
 
             return services;
