@@ -8,7 +8,6 @@ namespace Flsurf.Application.User.Dto
     public class GetNotificationsDto : InputPagination
     {
         public Guid? UserId { get; set; }
-        public UserRoles? Role { get; set; }
     }
 
     public class CreateNotificationDto
