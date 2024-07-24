@@ -2,49 +2,50 @@
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Files.Interfaces;
 using Flsurf.Application.User.Dto;
+using Flsurf.Application.User.Permissions;
 using Flsurf.Domain.User.Entities;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure;
+using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.User.UseCases
 {
     public class UpdateUser : BaseUseCase<UpdateUserDto, UserEntity>
     {
-        private IApplicationDbContext Context;
-        private IAccessPolicy AccessPolicy;
-        private PasswordService PasswordService;
-        private IUser User;
+        private IApplicationDbContext _context;
+        private IPermissionService _permService;
+        private PasswordService _passwordService;
         private IFileService _fileService;
 
         public UpdateUser(
             IApplicationDbContext context,
-            IAccessPolicy accessPolicy,
+            IPermissionService permService,
             PasswordService passwordService,
             IUser user,
             IFileService fileService)
         {
             _fileService = fileService;
-            User = user;
-            PasswordService = passwordService;
-            Context = context;
-            AccessPolicy = accessPolicy;
+            _passwordService = passwordService;
+            _context = context;
+            _permService = permService;
         }
 
         public async Task<UserEntity> Execute(UpdateUserDto dto)
         {
-            var user = await Context.Users.FirstOrDefaultAsync(x => x.Id == dto.UserId);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == dto.UserId);
 
             Guard.Against.Null(user, message: "User does not exists");
 
-            var byUser = await Context.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
+            var byUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
 
             Guard.Against.Null(byUser, message: "User does not exists");
 
-            if (byUser.Id != user.Id && !await AccessPolicy.IsAllowed(PermissionEnum.edit, user, byUser))
-            {
-                throw new AccessDenied("User access denied"); 
-            }
+            // TODO
+            //if (byUser.Id != user.Id && !await _permService.IsAllowed(PermissionEnum.edit, user, byUser))
+            //{
+            //    throw new AccessDenied("User access denied"); 
+            //}
             if (dto.Email != null)
             {
                 user.Email = dto.Email;
@@ -66,30 +67,22 @@ namespace Flsurf.Application.User.UseCases
                 user.UpdatePassword(
                     oldPassword: dto.OldPassword,
                     newPassword: dto.NewPassword,
-                    passwordService: PasswordService);
+                    passwordService: _passwordService);
             }
             if (dto.Role != null)
             {
-                if (await AccessPolicy.IsAllowed(PermissionEnum.edit, user, byUser))
-                {
-                    var role = await Context.Roles.FirstOrDefaultAsync(x => x.Role == dto.Role);
+                await _permService.EnforceCheckPermission(
+                    ZedUser.WithId(byUser.Id).CanUpdateRole(ZedUser.WithId(user.Id))); 
 
-                    Guard.Against.Null(role, message: "Role does not exists"); 
-
-                    user.AddRole(role); 
-                }
-                else
-                {
-                    throw new AccessDenied(null);
-                }
+                user.SetRole((UserRoles)dto.Role);
             }
             if (dto.Avatar != null)
             {
                 user.Image = await _fileService.UploadFile().Execute(dto.Avatar);
             }
 
-            Context.Users.Update(user);
-            await Context.SaveChangesAsync();
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
 
             return user;
         }

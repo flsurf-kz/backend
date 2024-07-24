@@ -8,6 +8,7 @@ namespace Flsurf.Application.User.Dto
     public class GetNotificationsDto : InputPagination
     {
         public Guid? UserId { get; set; }
+        public UserRoles? Role { get; set; }
     }
 
     public class CreateNotificationDto
@@ -20,6 +21,7 @@ namespace Flsurf.Application.User.Dto
         public Dictionary<string, string> Data { get; set; } = new Dictionary<string, string>();
         public Guid? UserId { get; set; }
         public UserRoles? Role { get; set; }
+        public UserTypes? Type { get; set; }
     }
 
     public class NotificationCreatedDto

@@ -1,8 +1,10 @@
 ﻿using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.User.Dto;
+using Flsurf.Application.User.Permissions;
 using Flsurf.Domain.User.Entities;
 using Flsurf.Domain.User.Enums;
+using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.User.UseCases
@@ -10,18 +12,23 @@ namespace Flsurf.Application.User.UseCases
     public class CreateNotification : BaseUseCase<CreateNotificationDto, NotificationCreatedDto>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IAccessPolicy _accessPolicy;
+        private readonly IPermissionService _permService;
 
 
-        public CreateNotification(IApplicationDbContext dbContext, IAccessPolicy accessPolicy)
+        public CreateNotification(IApplicationDbContext dbContext, IPermissionService permService)
         {
             _context = dbContext;
-            _accessPolicy = accessPolicy;
+            _permService = permService;
         }
 
         public async Task<NotificationCreatedDto> Execute(CreateNotificationDto dto)
         {
             List<UserEntity> users = new List<UserEntity>();
+
+            await _permService.CheckPermission(
+                ZedUser
+                    .WithId((await _permService.GetCurrentUser()).Id)
+                    .CanCreateWarnings()); 
 
             if (dto.Role != null)
             {
@@ -32,14 +39,11 @@ namespace Flsurf.Application.User.UseCases
 
                 users = await _context.Users
                     .AsNoTracking()
-                    .Where(x => 
-                        x.Roles.Any(x => x.Role == dto.Role))
+                    .Where(x => x.Role == dto.Role) 
                     .ToListAsync();
             }
             else if (dto.UserId != null)
             {
-                await _accessPolicy.EnforceIsAllowed(PermissionEnum.write, _context.Notifications.EntityType); 
-
                 users = await _context.Users.AsNoTracking().Where(x => x.Id == dto.UserId).ToListAsync();
             }
 

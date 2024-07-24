@@ -5,18 +5,19 @@ using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Domain.User.Entities;
 using Flsurf.Application.User.Dto;
+using Flsurf.Infrastructure.Adapters.Permissions;
 
 namespace Flsurf.Application.User.UseCases
 {
     public class GetUsersList : BaseUseCase<GetListUserDto, ICollection<UserEntity>>
     {
         private IApplicationDbContext _context;
-        private IAccessPolicy _accessPolicy;
+        private IPermissionService _permService; 
 
-        public GetUsersList(IApplicationDbContext dbContext, IAccessPolicy accessPolicy)
+        public GetUsersList(IApplicationDbContext dbContext, IPermissionService permService)
         {
             _context = dbContext;
-            _accessPolicy = accessPolicy;
+            _permService = permService;
         }
 
         public async Task<ICollection<UserEntity>> Execute(GetListUserDto dto)
@@ -30,7 +31,7 @@ namespace Flsurf.Application.User.UseCases
             }
             if (dto.Role != null)
             {
-                query = query.Where(x => x.Roles.Any(x => x.Role == dto.Role));
+                query = query.Where(x => x.Role == dto.Role);
             }
             var result = await query.ToListAsync();
 

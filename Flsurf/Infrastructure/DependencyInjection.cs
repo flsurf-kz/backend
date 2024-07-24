@@ -116,19 +116,20 @@ namespace Flsurf.Infrastructure
                 });
             }
 
-            services.AddScoped<IPermissionService, SpiceDbPermService>(provider =>
+            services.AddScoped<ISpiceDbClient, SpiceDbClient>(provider =>
             {
                 var serverAddress = configuration["SpiceDbServerAddress"];
-                var token = configuration["SpiceDbToken"]; 
+                var token = configuration["SpiceDbToken"];
                 if (string.IsNullOrEmpty(serverAddress) || string.IsNullOrEmpty(token))
                 {
-                    throw new ArgumentException("Spice db token or server address is not present"); 
+                    throw new ArgumentException("Spice db token or server address is not present");
                 }
 
-                var client = new SpiceDbClient(serverAddress, token, null); 
+                var client = new SpiceDbClient(serverAddress, token, null);
 
-                return new SpiceDbPermService(client); 
-            }); 
+                return client; 
+            });
+            services.AddScoped<IPermissionService, SpiceDbPermService>(); 
 
             services.AddAuthorizationBuilder();
 

@@ -4,7 +4,6 @@ using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.Payment.Entities;
 using Flsurf.Domain.Staff.Entities;
 using Flsurf.Domain.User.Entities;
-using Flsurf.Domain.Study.Entities;
 
 namespace Flsurf.Application.Common.Interfaces
 {

@@ -1,8 +1,6 @@
 ﻿using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Domain.User.Events;
-using Flsurf.Domain.User.Interfaces;
-using Flsurf.Domain.User.ValueObjects;
 using Flsurf.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
@@ -12,7 +10,7 @@ using System.Text.Json.Serialization;
 
 namespace Flsurf.Domain.User.Entities
 {
-    public class UserEntity : BaseAuditableEntity, IAccessUser
+    public class UserEntity : BaseAuditableEntity
     {
         [Required]
         public string Name { get; set; } = null!;
@@ -43,11 +41,10 @@ namespace Flsurf.Domain.User.Entities
         }
         [Required, JsonIgnore]
         public string HashedPassword { get; set; } = null!;
+        public UserRoles Role { get; set; }
         [Required]
         [EmailAddress(ErrorMessage = "Email address is not correct")]
         public string Email { get; set; } = null!;
-        [Required]
-        public ICollection<RoleEntity> Roles { get; set; } = [];
         [Column(name: "TelegramId")]
         private string? _telegramId; // Закрытое поле для хранения значения
         public FileEntity? Image { get; set; }
@@ -56,8 +53,6 @@ namespace Flsurf.Domain.User.Entities
         [JsonIgnore]
         public ICollection<WarningEntity> Warnings { get; set; } = [];
         public bool IsSuperadmin { get; set; } = false;
-        public PermissionCollection Permissions { get; set; } = [];
-        public ICollection<GroupEntity> Groups { get; set; } = [];
         [Phone]
         public string? Phone { get; set; } 
 
@@ -103,11 +98,6 @@ namespace Flsurf.Domain.User.Entities
             return user;
         }
 
-        public ICollection<IRoleEntity> GetRoles()
-        {
-            return (ICollection<IRoleEntity>)Roles; 
-        }
-
         public void Block()
         {
             Blocked = true;
@@ -149,42 +139,11 @@ namespace Flsurf.Domain.User.Entities
             AddDomainEvent(new UserWarned(this, reason));
         }
 
-        public void AddRole(RoleEntity role)
+        public void SetRole(UserRoles role)
         {
-            if (Roles.Select(x => x.Role).Any(x => x == role.Role))
-            {
-                return; 
-            }
-            Roles.Add(role);
+            Role = role;
 
-            AddDomainEvent(
-                new UserUpdated(
-                    user: this,
-                    fieldName: "Role"
-                )
-             );
-        }
-
-        public void AddGroup(GroupEntity group)
-        {
-            Groups.Add(group);
-
-            AddDomainEvent(new GroupUserAdded(group, this));
-        }
-
-        public ICollection<IPermissionEntity> GetPermissions()
-        {
-            // is it cachable? intersting...
-            var permissions = new List<IPermissionEntity>();
-            if (Blocked)
-            {
-                return []; 
-            }
-            permissions.AddRange(Permissions);
-            foreach (var group in Groups) {
-                permissions.AddRange(group.Permissions); 
-            }
-            return permissions;
+            AddDomainEvent(new UserRoleUpdated(this, role)); 
         }
     }
 }

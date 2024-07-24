@@ -1,16 +1,24 @@
 ﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Presentation.Web.Services;
+using Microsoft.EntityFrameworkCore;
 using SpiceDb;
 using SpiceDb.Models;
+using System.Security.AccessControl;
 
 namespace Flsurf.Infrastructure.Adapters.Permissions
 {
-    public class SpiceDbPermService : IPermissionService
+    public class SpiceDbPermService : UserPolicy, IPermissionService
     {
         private ISpiceDbClient _client;
 
-        public SpiceDbPermService(ISpiceDbClient client)
+        public SpiceDbPermService(
+            ISpiceDbClient client, 
+            IApplicationDbContext dbContext, 
+            IUser currentUser
+        ) : base(dbContext, currentUser)
         {
-            _client = client; 
+            _client = client;
         }
 
         public async Task<bool> CheckPermission(string resource, string relation, string subject)
@@ -43,9 +51,27 @@ namespace Flsurf.Infrastructure.Adapters.Permissions
         {
             return await DeleteRelationship(new Relationship(resource, relation, subject));
         }
-        public async Task<List<string>> GetResourcePermissions(string resourceType, string realtion, ResourceReference subject)
+        public async Task<List<string>> GetResourcePermissions(string resourceType, string relation, ResourceReference subject)
         {
-            return await _client.GetResourcePermissionsAsync(resourceType, realtion, subject); 
+            return await _client.GetResourcePermissionsAsync(resourceType, relation, subject); 
+        }
+
+        public async Task<bool> EnforceCheckPermission(Permission perm)
+        {
+            if (!await CheckPermission(perm))
+            {
+                throw new AccessDenied($"permission: {perm}"); 
+            }
+            return true; 
+        }
+
+        public async Task<bool> EnforceCheckPermission(string resource, string relation, string subject)
+        {
+            if (!await CheckPermission(resource, relation, subject))
+            {
+                throw new AccessDenied($"permission: {resource}#{relation}:{subject}"); 
+            }
+            return true; 
         }
     }
 }
