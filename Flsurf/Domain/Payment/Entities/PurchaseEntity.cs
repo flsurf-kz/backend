@@ -5,7 +5,6 @@ using Flsurf.Domain.Payment.ValueObjects;
 using Flsurf.Domain.Payment.Enums;
 using Flsurf.Domain.Payment.Events;
 using Flsurf.Domain.Payment.Exceptions;
-using Flsurf.Domain.Study.Entities;
 using Flsurf.Domain.User.Entities;
 
 namespace Flsurf.Domain.Payment.Entities
