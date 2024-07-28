@@ -4,8 +4,10 @@ namespace Flsurf.Application.User.Permissions
 {
     public class ZedNotification : ResourceReference
     {
-        private ZedNotification(Guid notificationId) : base($"flsurf/notification:{notificationId}") { }
+        private ZedNotification(string notificationId) : base($"flsurf/notification:{notificationId}") { }
 
-        public static ZedNotification WithId(Guid userId) => new ZedNotification(userId);
+        public static ZedNotification WithId(Guid notificationId) => new ZedNotification(notificationId.ToString());
+
+        public static ZedNotification WithWildcard() => new ZedNotification("*");
     }
 }

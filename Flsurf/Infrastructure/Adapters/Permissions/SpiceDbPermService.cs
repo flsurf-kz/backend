@@ -42,11 +42,27 @@ namespace Flsurf.Infrastructure.Adapters.Permissions
         {
             return await AddRelationship(new Relationship(resource, relation, subject));
         }
+
+        public async Task<bool> AddRelationships(params Relationship[] relationships)
+        {
+            await _client.AddRelationshipsAsync(relationships.ToList());
+
+            return true; 
+        }
+
+        public async Task<bool> AddRelationships(List<Relationship> relationships)
+        {
+            await _client.AddRelationshipsAsync(relationships);
+
+            return true;
+        }
+
         public async Task<bool> DeleteRelationship(Relationship rel)
         {
             await _client.DeleteRelationshipAsync(rel);
             return true; 
         }
+
         public async Task<bool> DeleteRelationship(string resource, string relation, string subject)
         {
             return await DeleteRelationship(new Relationship(resource, relation, subject));

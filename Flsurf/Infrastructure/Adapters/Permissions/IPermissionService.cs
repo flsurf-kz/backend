@@ -10,6 +10,8 @@ namespace Flsurf.Infrastructure.Adapters.Permissions
         public Task<bool> EnforceCheckPermission(Permission perm);
         public Task<bool> EnforceCheckPermission(string resource, string relation, string subject);
         public Task<bool> AddRelationship(Relationship fullperm);
+        public Task<bool> AddRelationships(params Relationship[] relationships);
+        public Task<bool> AddRelationships(List<Relationship> relationships);
         public Task<bool> AddRelationship(string resource, string relation, string subject); 
         public Task<bool> DeleteRelationship(Relationship fullperm);
         public Task<bool> DeleteRelationship(string resource, string relation, string subject);
