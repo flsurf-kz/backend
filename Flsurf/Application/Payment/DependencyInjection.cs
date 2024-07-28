@@ -1,6 +1,5 @@
 ﻿using Flsurf.Application.Payment.Interfaces;
 using Flsurf.Application.Payment.Services;
-using Flsurf.Application.Payment.UseCases;
 
 namespace Flsurf.Application.Payment
 {

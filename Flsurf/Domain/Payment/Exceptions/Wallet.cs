@@ -19,6 +19,4 @@
             WalletId = walletId;
         }
     }
-
-
 }
