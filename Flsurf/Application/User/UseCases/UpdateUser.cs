@@ -3,15 +3,14 @@ using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Files.Interfaces;
 using Flsurf.Application.User.Dto;
 using Flsurf.Application.User.Permissions;
-using Flsurf.Domain.User.Entities;
-using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.User.UseCases
 {
-    public class UpdateUser : BaseUseCase<UpdateUserDto, UserEntity>
+    public class UpdateUser : BaseUseCase<UpdateUserDto, bool>
     {
         private IApplicationDbContext _context;
         private IPermissionService _permService;
@@ -31,9 +30,11 @@ namespace Flsurf.Application.User.UseCases
             _permService = permService;
         }
 
-        public async Task<UserEntity> Execute(UpdateUserDto dto)
+        public async Task<bool> Execute(UpdateUserDto dto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == dto.UserId);
+            var user = await _context.Users
+                .IncludeStandard()
+                .FirstOrDefaultAsync(x => x.Id == dto.UserId);
 
             Guard.Against.Null(user, message: "User does not exists");
 
@@ -41,11 +42,10 @@ namespace Flsurf.Application.User.UseCases
 
             Guard.Against.Null(byUser, message: "User does not exists");
 
-            // TODO
-            //if (byUser.Id != user.Id && !await _permService.IsAllowed(PermissionEnum.edit, user, byUser))
-            //{
-            //    throw new AccessDenied("User access denied"); 
-            //}
+            if (byUser.Id != user.Id)
+            {
+                throw new AccessDenied("You are not user");
+            }
             if (dto.Email != null)
             {
                 user.Email = dto.Email;
@@ -69,22 +69,50 @@ namespace Flsurf.Application.User.UseCases
                     newPassword: dto.NewPassword,
                     passwordService: _passwordService);
             }
-            if (dto.Role != null)
-            {
-                await _permService.EnforceCheckPermission(
-                    ZedUser.WithId(byUser.Id).CanUpdateRole(ZedUser.WithId(user.Id))); 
-
-                user.SetRole((UserRoles)dto.Role);
-            }
             if (dto.Avatar != null)
             {
                 user.Image = await _fileService.UploadFile().Execute(dto.Avatar);
             }
 
-            _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
-            return user;
+            return true;
+        }
+    }
+
+    public class UpdateUserRole : BaseUseCase<UpdateUserRoleDto, bool>
+    {
+        private IApplicationDbContext _context;
+        private IPermissionService _permService;
+
+        public UpdateUserRole(
+            IApplicationDbContext context,
+            IPermissionService permService)
+        {
+            _context = context;
+            _permService = permService;
+        }
+
+        public async Task<bool> Execute(UpdateUserRoleDto dto)
+        {
+            var user = await _context.Users
+                .IncludeStandard()
+                .FirstOrDefaultAsync(x => x.Id == dto.UserId);
+
+            Guard.Against.NotFound(dto.UserId, user);
+
+            var byUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
+
+            Guard.Against.NotFound(user.Id, byUser);
+
+            await _permService.EnforceCheckPermission(
+                ZedUser.WithId(byUser.Id).CanUpdateRole(ZedUser.WithId(user.Id)));
+
+            user.SetRole(dto.Role);
+
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

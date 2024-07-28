@@ -19,6 +19,8 @@ namespace Flsurf.Application.User.Permissions
 
         public Permission CanDeleteWarning(ZedWarning warning) => new(warning, "delete", this);
 
-        public Permission CanUpdateRole(ZedUser user) => new(user, "can_update_role", this); 
+        public Permission CanUpdateRole(ZedUser user) => new(user, "update_role", this);
+
+        public Permission CanDeactivateUser(ZedUser user) => new(this, "deactivate", user); 
     }
 }

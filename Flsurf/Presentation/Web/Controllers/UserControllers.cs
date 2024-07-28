@@ -67,7 +67,7 @@ namespace Flsurf.Presentation.Web.Controllers
         {
             var result = await UserService
                 .Delete()
-                .Execute(new DeleteUserDto() { UserId = userId });
+                .Execute(new BlockUserDto() { UserId = userId });
 
             return Ok(result);
         }

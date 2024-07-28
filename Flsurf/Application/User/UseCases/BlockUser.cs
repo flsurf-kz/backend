@@ -10,32 +10,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.User.UseCases
 {
-    public class WarnUser : BaseUseCase<WarnUserDto, UserEntity>
+    public class BlockUser : BaseUseCase<BlockUserDto, UserEntity>
     {
         private IApplicationDbContext _context { get; set; }
         private IPermissionService _permService { get; set; }
 
-        public WarnUser(
-            IApplicationDbContext dbContext,
+        public BlockUser(IApplicationDbContext dbContext,
             IPermissionService permService)
         {
             _context = dbContext;
             _permService = permService;
         }
 
-        public async Task<UserEntity> Execute(WarnUserDto dto)
+        public async Task<UserEntity> Execute(BlockUserDto dto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == dto.UserId);
-
-            Guard.Against.NotFound(dto.UserId, user); 
-
-            await _permService.EnforceCheckPermission(
+            await _permService.CheckPermission(
                 ZedUser
                     .WithId((await _permService.GetCurrentUser()).Id)
-                    .CanCreateWarnings()
-            ); 
+                    .CanDeactivateUser(ZedUser.WithId(dto.UserId)); 
 
-            user.Warn(dto.Reason, await _permService.GetCurrentUser());
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == dto.UserId);
+            if (user == null)
+                throw new EntityDoesNotExists(nameof(UserEntity), "");
+
+            user.Block(); 
             await _context.SaveChangesAsync();
 
             return user;

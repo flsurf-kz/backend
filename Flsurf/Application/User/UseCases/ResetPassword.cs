@@ -27,11 +27,11 @@ namespace Flsurf.Application.User.UseCases
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == dto.Email);
 
-            Guard.Against.Null(user, message: "User does not exists");
+            Guard.Against.NotFound(dto.Email, user);
 
             var rawCode = _cacheService.Get(user.Email + dto.Code);
 
-            Guard.Against.Null(rawCode, message: "Reset password code is empty");
+            Guard.Against.NotFound(user.Email, rawCode);
 
             try
             {
@@ -44,7 +44,6 @@ namespace Flsurf.Application.User.UseCases
 
             user.UpdatePassword(dto.NewPassword, _passwordService);
 
-            _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
             return true;

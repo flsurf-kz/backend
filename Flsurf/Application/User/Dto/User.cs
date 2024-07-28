@@ -42,6 +42,14 @@ namespace Flsurf.Application.User.Dto
         public string Password { get; set; } = null!;
     }
 
+    public class UpdateUserRoleDto
+    {
+        [Required]
+        public UserRoles Role { get; set; }
+        [Required]
+        public Guid UserId { get; set; }
+    }
+
     public class UpdateUserDto
     {
         [Required]
@@ -58,7 +66,7 @@ namespace Flsurf.Application.User.Dto
         public bool? Blocked { get; set; }
     }
 
-    public class DeleteUserDto
+    public class BlockUserDto
     {
         [Required]
         public Guid UserId { get; set; }

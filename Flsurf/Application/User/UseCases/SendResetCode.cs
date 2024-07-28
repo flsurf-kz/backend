@@ -25,7 +25,7 @@ namespace Flsurf.Application.User.UseCases
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == dto.Email);
 
-            Guard.Against.Null(user, message: "User does not exists");
+            Guard.Against.NotFound(dto.Email, user);
 
             Random rnd = new Random();
 

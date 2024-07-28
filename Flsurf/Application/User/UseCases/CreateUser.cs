@@ -38,7 +38,7 @@ namespace Flsurf.Application.User.UseCases
             );
 
             _context.Users.Add(newUser);
-            newUser.Permissions.AddPermissionWithCode(newUser, PermissionEnum.all); 
+
             await _context.SaveChangesAsync();
 
             return newUser;
