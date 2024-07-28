@@ -1,7 +1,7 @@
 ﻿using System.Data.Common;
-using LMS.Application.Common.Interfaces;
-using LMS.Infrastructure.Data;
-using LMS.Infrastructure.EventStore;
+using Flsurf.Application.Common.Interfaces;
+using Flsurf.Infrastructure.Data;
+using Flsurf.Infrastructure.EventStore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;

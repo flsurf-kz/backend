@@ -1,8 +1,8 @@
-﻿using LMS.Application.User;
-using LMS.Application.User.Dto;
-using LMS.Domain.User.Entities;
-using LMS.Domain.User.Enums;
-using LMS.Infrastructure.Data;
+﻿using Flsurf.Application.User;
+using Flsurf.Application.User.Dto;
+using Flsurf.Domain.User.Entities;
+using Flsurf.Domain.User.Enums;
+using Flsurf.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,15 +33,15 @@ namespace Tests.Application.IntegrationTests
 
         public static async Task<Guid> RunAsDefaultUserAsync()
         {
-            return await RunAsUserAsync("test@local", "Testing1234!", null);
+            return await RunAsUserAsync("test@local", "omfg", "Testing1234!", null);
         }
 
         public static async Task<Guid> RunAsAdministratorAsync()
         {
-            return await RunAsUserAsync("administrator@local", "Administrator1234!", UserRoles.SuperAdmin);
+            return await RunAsUserAsync("administrator@local", "omfg", "Administrator1234!", UserRoles.Admin);
         }
 
-        public static async Task<Guid> RunAsUserAsync(string userName, string password, UserRoles? role)
+        public static async Task<Guid> RunAsUserAsync(string userName, string surname, string password, UserRoles? role)
         {
             using var scope = _scopeFactory.CreateScope();
 
@@ -50,7 +50,8 @@ namespace Tests.Application.IntegrationTests
                 .Create()
                 .Execute(new CreateUserDto()
                 {
-                    UserName = userName,
+                    Name = userName,
+                    Surname = surname, 
                     Password = password, 
                     Role = role, 
                 });

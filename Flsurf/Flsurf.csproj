@@ -39,6 +39,7 @@
     <Folder Include="Application\Messaging\Dto\" />
     <Folder Include="Application\Messaging\UseCases\Chat\" />
     <Folder Include="Application\Messaging\UseCases\Messages\" />
+    <Folder Include="Application\Payment\Permissions\" />
   </ItemGroup>
 
 </Project>

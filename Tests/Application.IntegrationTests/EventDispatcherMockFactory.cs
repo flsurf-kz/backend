@@ -1,6 +1,6 @@
 ﻿
-using LMS.Application.Common.Interfaces;
-using LMS.Infrastructure.EventDispatcher;
+using Flsurf.Application.Common.Interfaces;
+using Flsurf.Infrastructure.EventDispatcher;
 
 namespace Tests.Application.IntegrationTests
 {
