@@ -1,0 +1,25 @@
+﻿using Flsurf.Domain.Freelance.Enums;
+using Flsurf.Domain.Payment.Enums;
+using Flsurf.Domain.User.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Flsurf.Domain.Freelance.Entities
+{
+    public class ContractEntity : BaseAuditableEntity
+    {
+        [ForeignKey("Job")]
+        public Guid JobId { get; set; }
+        public JobEntity Job { get; set; }
+        [ForeignKey("Freelancer")]
+        public Guid FreelancerId { get; set; }
+        public UserEntity Freelancer { get; set; }
+        [ForeignKey("Employer")]
+        public Guid EmployerId { get; set; }
+        public UserEntity Employer { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public decimal ContractAmount { get; set; }
+        public CurrencyEnum ContractCurrency { get; set; }
+        public ContractStatus Status { get; set; }
+    }
+}
