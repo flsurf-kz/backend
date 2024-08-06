@@ -1,7 +1,17 @@
-﻿namespace Flsurf.Domain.Messanging.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace Flsurf.Domain.Messanging.Entities
 {
-    public class UserToChatEntity
+    public class UserToChatEntity : BaseAuditableEntity
     {
-        // stores images, archived flags, hidden flag, pinned chat and etc. 
+        [Key, Column(Order = 1)]
+        [ForeignKey("User")]
+        public Guid UserId { get; set; }
+        [Key, Column(Order = 2)]
+        [ForeignKey("Chat")]
+        public Guid ChatId { get; set; }
+        public ChatEntity Chat { get; set; } = null!;
+        public bool NotificationsDisabled { get; set; }
     }
 }

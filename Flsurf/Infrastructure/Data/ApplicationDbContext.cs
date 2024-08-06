@@ -6,6 +6,8 @@ using Flsurf.Domain.Staff.Entities;
 using Flsurf.Domain.User.Entities;
 using Flsurf.Application.Common.Interfaces;
 using Flsurf.Infrastructure.EventDispatcher;
+using Flsurf.Domain.Freelance.Entities;
+using Flsurf.Domain.Messanging.Entities;
 
 namespace Flsurf.Infrastructure.Data
 {
@@ -30,6 +32,30 @@ namespace Flsurf.Infrastructure.Data
 
         // Files 
         public DbSet<FileEntity> Files { get; set; }
+
+        // Freelance 
+        public DbSet<BookmarkedJobEntity> BookmarkedJobs { get; set; }
+        public DbSet<CategoryEntity> Categories { get; set; }
+        public DbSet<ClientProfileEntity> ClientProfiles { get; set; }
+        public DbSet<ContestEntryEntity> ContestEntries { get; set; }
+        public DbSet<ContestEntity> Contests { get; set; }
+        public DbSet<ContractEntity> Contracts { get; set; }
+        public DbSet<FreelancerProfileEntity> FreelancerProfiles { get; set; }
+        public DbSet<FreelancerTeamEntity> FreelancerTeams { get; set; }
+        public DbSet<JobEntity> Jobs { get; set; }
+        public DbSet<PortfolioProjectEntity> PortfolioProjects { get; set; }
+        public DbSet<ProposalEntity> Proposals { get; set; }
+        public DbSet<JobReviewEntity> Reviews { get; set; }
+        public DbSet<SkillEntity> Skills { get; set; }
+        public DbSet<TaskEntity> Tasks { get; set; }
+        public DbSet<WorkSnapshotEntity> WorkSnapshots { get; set; }
+
+        // messaging 
+        public DbSet<ChatEntity> Chats { get; set; }
+        public DbSet<InvitationEntity> Invitations { get; set; }
+        public DbSet<MessageEntity> Messages { get; set; }
+        public DbSet<MessageReadEntity> MessageReads { get; set; }
+        public DbSet<UserToChatEntity> UserToChats { get; set; }
 
 
         private readonly IEventDispatcher _dispatcher;

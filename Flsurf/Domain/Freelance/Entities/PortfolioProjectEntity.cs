@@ -2,7 +2,7 @@
 
 namespace Flsurf.Domain.Freelance.Entities
 {
-    public class PortfolioJobEntity : BaseAuditableEntity
+    public class PortfolioProjectEntity : BaseAuditableEntity
     {
         public string Name { get; set; }
         public string UserRole { get; set; }

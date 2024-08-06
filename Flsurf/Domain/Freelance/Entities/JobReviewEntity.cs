@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Flsurf.Domain.Freelance.Entities
 {
-    public class ReviewEntity : BaseAuditableEntity
+    public class JobReviewEntity : BaseAuditableEntity
     {
         [ForeignKey("Reviewer")]
         public Guid ReviewerId { get; set; }

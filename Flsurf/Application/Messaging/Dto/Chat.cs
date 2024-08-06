@@ -1,6 +1,7 @@
 ﻿namespace Flsurf.Application.Messaging.Dto
 {
-    public class Chat
+    public record BookmarkChatDTO
     {
+        public Guid ChatId;
     }
 }
