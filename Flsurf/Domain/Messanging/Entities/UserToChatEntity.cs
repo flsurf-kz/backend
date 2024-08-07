@@ -12,6 +12,14 @@ namespace Flsurf.Domain.Messanging.Entities
         [ForeignKey("Chat")]
         public Guid ChatId { get; set; }
         public ChatEntity Chat { get; set; } = null!;
-        public bool NotificationsDisabled { get; set; }
+        public bool NotificationsDisabled { get; set; } = false; 
+        public bool Bookmarked { get; set; } = false; 
+
+        public void Bookmark()
+        {
+            Bookmarked = true; 
+
+            AddDomainEvent(new ChatBookmarked(this)); 
+        }
     }
 }

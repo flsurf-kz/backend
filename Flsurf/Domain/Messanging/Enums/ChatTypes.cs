@@ -2,5 +2,8 @@
 {
     public enum ChatTypes
     {
+        Group, 
+        Direct, 
+        Support
     }
 }

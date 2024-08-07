@@ -2,6 +2,7 @@
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Messaging.Dto;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Messaging.UseCases
 {
@@ -20,6 +21,13 @@ namespace Flsurf.Application.Messaging.UseCases
 
         public async Task<bool> Execute(BookmarkChatDTO dto)
         {
+            var user = await _permService.GetCurrentUser();
+            var userToChat = await _context.UserToChats.FirstOrDefaultAsync(x => x.ChatId == dto.ChatId && x.UserId == user.Id);
+
+            Guard.Against.NotFound(user.Id, userToChat);
+
+            userToChat.Bookmark();
+            await _context.SaveChangesAsync(); 
 
             return true;
         }
