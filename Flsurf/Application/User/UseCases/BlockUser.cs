@@ -27,7 +27,7 @@ namespace Flsurf.Application.User.UseCases
             await _permService.CheckPermission(
                 ZedUser
                     .WithId((await _permService.GetCurrentUser()).Id)
-                    .CanDeactivateUser(ZedUser.WithId(dto.UserId)); 
+                    .CanDeactivateUser(ZedUser.WithId(dto.UserId))); 
 
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == dto.UserId);
             if (user == null)
