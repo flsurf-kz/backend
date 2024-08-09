@@ -1,14 +1,15 @@
 ﻿using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Messaging.Dto;
 
 namespace Flsurf.Application.Messaging.UseCases
 {
-    public class UpdateMessage : BaseUseCase<InputDTO, OutputDTO>
+    public class UpdateMessage : BaseUseCase<UpdateMessageDto, bool>
     {
         public UpdateMessage() { }
 
-        public async Task<OutputDTO> Execute(InputDTO dto)
+        public async Task<bool> Execute(UpdateMessageDto dto)
         {
-            return;
+            return true;
         }
     }
 }

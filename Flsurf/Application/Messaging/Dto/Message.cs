@@ -1,6 +1,8 @@
 ﻿namespace Flsurf.Application.Messaging.Dto
 {
-    public class Message
-    {
-    }
+    public record UpdateMessageDto {  }
+    public record SendMessageDto { }
+    public record PinMessageDto { }
+    public record UnpinMessageDto { }
+    public record GetMessagesListDto { }
 }

@@ -22,4 +22,18 @@ namespace Flsurf.Application.Messaging.Dto
     {
         public Guid? UserId { get; set; }
     }
+
+    public record UpdateChatDto { }
+
+    public record GetUserChats { }
+
+    public record MarkAsReadDto { }
+
+    public record KickMemberDto { }
+
+    public record InviteMemberDto { }
+
+    public record GetUserChatsDto { }
+
+    public record DeleteMessageDto { }
 }
