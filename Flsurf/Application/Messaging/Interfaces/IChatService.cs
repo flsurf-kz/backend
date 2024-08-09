@@ -8,7 +8,7 @@ namespace Flsurf.Application.Messaging.Interfaces
         GetChatsList GetChats();
         GetUserChats GetUserChats();
         CreateChat Create();
-        DeleteChat Delete();
+        CloseChat Close();
         BookmarkChat Bookmark();
         UpdateChat Update();
         MarkAsRead MarkAsRead();

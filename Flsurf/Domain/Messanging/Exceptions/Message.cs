@@ -1,4 +1,5 @@
-﻿using Flsurf.Domain.Messanging.Enums;
+﻿using Flsurf.Domain.Freelance.Entities;
+using Flsurf.Domain.Messanging.Enums;
 using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

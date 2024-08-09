@@ -27,9 +27,9 @@ namespace Flsurf.Application.Messaging.Services
             return _serviceProvider.GetRequiredService<CreateChat>();
         }
 
-        public DeleteChat Delete()
+        public CloseChat Close()
         {
-            return _serviceProvider.GetRequiredService<DeleteChat>();
+            return _serviceProvider.GetRequiredService<CloseChat>();
         }
 
         public BookmarkChat Bookmark()

@@ -1,17 +1,18 @@
 ﻿using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Messaging.Dto;
+using Flsurf.Application.Messaging.Permissions;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Messaging.UseCases
 {
-    public class BookmarkChat : BaseUseCase<BookmarkChatDto, bool>
+    public class CloseChat : BaseUseCase<CloseChatDto, bool>
     {
         private IApplicationDbContext _context { get; set; }
         private IPermissionService _permService { get; set; }
 
-        public BookmarkChat(
+        public CloseChat(
             IApplicationDbContext dbContext,
             IPermissionService permService)
         {
@@ -19,14 +20,19 @@ namespace Flsurf.Application.Messaging.UseCases
             _permService = permService;
         }
 
-        public async Task<bool> Execute(BookmarkChatDto dto)
+        public async Task<bool> Execute(CloseChatDto dto)
         {
-            var user = await _permService.GetCurrentUser();
-            var userToChat = await _context.UserToChats.FirstOrDefaultAsync(x => x.ChatId == dto.ChatId && x.UserId == user.Id);
+            var owner = await _permService.GetCurrentUser(); 
+            await _permService.EnforceCheckPermission(
+                ZedMessangerUser
+                    .WithId(owner.Id)
+                    .CanCloseChat(ZedChat.WithId(dto.ChatId)));
 
-            Guard.Against.NotFound(user.Id, userToChat);
+            var chat = await _context.Chats.FirstOrDefaultAsync(x => x.Id == dto.ChatId);
 
-            userToChat.Bookmark();
+            Guard.Against.NotFound(dto.ChatId, chat); 
+
+            _context.Chats.Remove(chat);
             await _context.SaveChangesAsync(); 
 
             return true;

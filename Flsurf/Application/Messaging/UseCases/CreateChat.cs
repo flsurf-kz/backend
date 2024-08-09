@@ -11,7 +11,7 @@ using SpiceDb.Models;
 
 namespace Flsurf.Application.Messaging.UseCases
 {
-    public class CreateChat : BaseUseCase<CreateChatDTO, Guid>
+    public class CreateChat : BaseUseCase<CreateChatDto, Guid>
     {
         private IApplicationDbContext _context { get; set; }
         private IPermissionService _permService { get; set; }
@@ -24,7 +24,7 @@ namespace Flsurf.Application.Messaging.UseCases
             _permService = permService;
         }
 
-        public async Task<Guid> Execute(CreateChatDTO dto)
+        public async Task<Guid> Execute(CreateChatDto dto)
         {
             var owner = await _permService.GetCurrentUser(); 
 
