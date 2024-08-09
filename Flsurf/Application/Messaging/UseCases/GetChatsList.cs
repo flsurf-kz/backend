@@ -1,8 +1,11 @@
 ﻿using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Messaging.Dto;
+using Flsurf.Application.Messaging.Permissions;
 using Flsurf.Domain.Messanging.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Microsoft.EntityFrameworkCore;
+using SpiceDb.Models;
 
 namespace Flsurf.Application.Messaging.UseCases
 {
@@ -23,9 +26,18 @@ namespace Flsurf.Application.Messaging.UseCases
         {
             var user = await _permService.GetCurrentUser();
             if (dto.UserId != null && dto.UserId != user.Id)
-                throw new AccessDenied("User id is not equal to chat ids"); 
+                throw new AccessDenied("User id is not equal to chat ids");
 
-            _permService.GetResourcePermissions()
+            var perms = _permService.LookupSubjects(
+                new ResourceReference("user", user.Id.ToString()), 
+                "read", 
+                "chat");
+
+            List<Guid> chatIds = [];
+            
+
+            var chats = await _context.Chats.Where(
+                x => chatIds.Contains(x.Id)).ToListAsync(); 
 
             return [];
         }

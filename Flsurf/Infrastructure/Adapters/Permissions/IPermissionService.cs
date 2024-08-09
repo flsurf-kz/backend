@@ -16,7 +16,7 @@ namespace Flsurf.Infrastructure.Adapters.Permissions
         public Task<bool> DeleteRelationship(Relationship fullperm);
         public Task<bool> DeleteRelationship(string resource, string relation, string subject);
         public Task<List<string>> GetResourcePermissions(string resource, string realtion, ResourceReference subject);
-        public Task<List<Permission>> LookupSubjects(ResourceReference resource, string relation, string subjectType); 
+        public IAsyncEnumerable<LookupSubjectsResponse> LookupSubjects(ResourceReference resource, string relation, string subjectType); 
         // Fuck me!! 
         public Task<UserEntity> GetCurrentUser(); 
     }

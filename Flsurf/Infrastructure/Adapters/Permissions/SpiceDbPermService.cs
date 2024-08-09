@@ -81,13 +81,9 @@ namespace Flsurf.Infrastructure.Adapters.Permissions
             return true; 
         }
 
-        public async Task<List<Permission>> LookupSubjects(ResourceReference resource, string relation, string subjectType)
+        public IAsyncEnumerable<LookupSubjectsResponse> LookupSubjects(ResourceReference resource, string relation, string subjectType)
         {
-            var resp = _client.LookupSubjects(resource, relation, subjectType);
-            await foreach (var r in resp)
-            {
-                
-            }
+            return _client.LookupSubjects(resource, relation, subjectType); 
         }
 
         public async Task<bool> EnforceCheckPermission(string resource, string relation, string subject)
