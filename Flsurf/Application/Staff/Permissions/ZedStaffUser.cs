@@ -16,6 +16,8 @@ namespace Flsurf.Application.Staff.Perms
 
         public Permission CanReadTicket(ZedTicket ticket) => new(this, "read", ticket);
 
-        public Permission CanUpdateTicket(ZedTicket ticket) => new(this, "update", ticket); 
+        public Permission CanUpdateTicket(ZedTicket ticket) => new(this, "update", ticket);
+
+        public Permission CanAddComment(ZedTicket ticket) => new(this, "add_comment", ticket);  
     }
 }

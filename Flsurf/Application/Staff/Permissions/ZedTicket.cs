@@ -4,8 +4,8 @@ namespace Flsurf.Application.Staff.Perms
 {
     public class ZedTicket : ResourceReference
     {
-        private ZedTicket(string notificationId) : base($"flsurf/ticket:{notificationId}") { }
+        private ZedTicket(string ticketId) : base($"flsurf/ticket:{ticketId}") { }
 
-        public static ZedTicket WithId(Guid notificationId) => new ZedTicket(notificationId.ToString()); 
+        public static ZedTicket WithId(Guid ticketId) => new ZedTicket(ticketId.ToString()); 
     }
 }
