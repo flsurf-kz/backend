@@ -3,6 +3,7 @@ using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Payment.Dto;
 using Flsurf.Domain.Payment.Entities;
 using Flsurf.Domain.User.Enums;
+using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.Data.Extensions;
 using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +13,12 @@ namespace Flsurf.Application.Payment.UseCases
     public class GetPurchasesList : BaseUseCase<GetPurchasesListDto, ICollection<PurchaseEntity>>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IAccessPolicy _accessPolicy;
+        private readonly IPermissionService _permService;
 
-        public GetPurchasesList(IApplicationDbContext dbContext, IAccessPolicy accessPolicy)
+        public GetPurchasesList(IApplicationDbContext dbContext, IPermissionService permService)
         {
             _context = dbContext;
-            _accessPolicy = accessPolicy;
+            _permService = permService;
         }
 
         public async Task<ICollection<PurchaseEntity>> Execute(GetPurchasesListDto dto)
@@ -26,7 +27,7 @@ namespace Flsurf.Application.Payment.UseCases
                 .IncludeStandard()
                 .AsQueryable();
 
-            if (!await _accessPolicy.IsAllowed(PermissionEnum.read, "*") && dto.UserId != null)
+            if (!await _permService.CheckPermission(PermissionEnum.read, "*") && dto.UserId != null)
             {
                 throw new AccessDenied(null);
             }

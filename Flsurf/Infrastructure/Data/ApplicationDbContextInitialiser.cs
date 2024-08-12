@@ -86,24 +86,24 @@ namespace Flsurf.Infrastructure.Data
             //    });
             //}
 
-            if (!_context.Roles.Any())
-            {
-                var adminRole = GroupEntity.Create(
-                    UserRoles.Admin.ToString(),
-                    PermissionEntity.Create(nameof(TicketEntity), "*", PermissionEnum.all),
-                    PermissionEntity.Create(nameof(TicketCommentEntity), "*", PermissionEnum.all),
-                    PermissionEntity.Create(nameof(PurchaseEntity), "*", PermissionEnum.read),
-                    PermissionEntity.Create(nameof(GroupEntity), "*", PermissionEnum.read),
-                    PermissionEntity.Create(nameof(TransactionEntity), "*", PermissionEnum.read), 
-                    PermissionEntity.Create(nameof(CategoryEntity), "*", PermissionEnum.all), 
-                    PermissionEntity.Create(nameof(CourseEntity), "*", PermissionEnum.delete), 
-                    PermissionEntity.Create(nameof(NotificationEntity), "*", PermissionEnum.all));
+            //if (!_context.Roles.Any())
+            //{
+            //    var adminRole = GroupEntity.Create(
+            //        UserRoles.Admin.ToString(),
+            //        PermissionEntity.Create(nameof(TicketEntity), "*", PermissionEnum.all),
+            //        PermissionEntity.Create(nameof(TicketCommentEntity), "*", PermissionEnum.all),
+            //        PermissionEntity.Create(nameof(PurchaseEntity), "*", PermissionEnum.read),
+            //        PermissionEntity.Create(nameof(GroupEntity), "*", PermissionEnum.read),
+            //        PermissionEntity.Create(nameof(TransactionEntity), "*", PermissionEnum.read), 
+            //        PermissionEntity.Create(nameof(CategoryEntity), "*", PermissionEnum.all), 
+            //        PermissionEntity.Create(nameof(CourseEntity), "*", PermissionEnum.delete), 
+            //        PermissionEntity.Create(nameof(NotificationEntity), "*", PermissionEnum.all));
 
-                List<GroupEntity> groups = [
-                    adminRole,
-                ];
-                _context.Groups.AddRange(groups); 
-            }
+            //    List<GroupEntity> groups = [
+            //        adminRole,
+            //    ];
+            //    _context.Groups.AddRange(groups); 
+            //}
 
             // Default data
             // Seed, if necessary

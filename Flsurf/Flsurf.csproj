@@ -41,7 +41,6 @@
     <Folder Include="Application\Freelance\UseCases\" />
     <Folder Include="Application\Freelance\Services\" />
     <Folder Include="Application\Freelance\Permissions\" />
-    <Folder Include="Application\Payment\Permissions\" />
   </ItemGroup>
 
 </Project>

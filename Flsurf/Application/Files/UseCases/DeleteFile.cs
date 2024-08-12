@@ -2,8 +2,10 @@
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Files.Dto;
 using Flsurf.Application.Files.Events;
+using Flsurf.Application.Files.Permissions;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.FileStorage;
+using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.EventDispatcher;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,18 +15,18 @@ namespace Flsurf.Application.Files.UseCases
     {
         private readonly IApplicationDbContext _context;
         private readonly IFileStorageAdapter _fileStorageAdapter;
-        private readonly IAccessPolicy _accessPolicy;
+        private readonly IPermissionService _permService;
         private readonly IEventDispatcher _eventDispatcher;
 
         public DeleteFile(
             IApplicationDbContext dbContext,
             IFileStorageAdapter storageAdapter,
-            IAccessPolicy accessPolicy,
+            IPermissionService permService,
             IEventDispatcher eventDispatcher)
         {
             _context = dbContext;
             _eventDispatcher = eventDispatcher;
-            _accessPolicy = accessPolicy;
+            _permService = permService;
             _fileStorageAdapter = storageAdapter;
         }
 
@@ -32,7 +34,13 @@ namespace Flsurf.Application.Files.UseCases
         {
             if (!dto.Directly)
             {
-                if (!await _accessPolicy.Role(UserRoles.Admin))
+                var owner = await _permService.GetCurrentUser();
+
+                if (!await _permService.CheckPermission(
+                        ZedFileUser
+                            .WithId(owner.Id)
+                            .CanDeleteFile(ZedFile.WithId(dto.FileId)))
+                    ) 
                 {
                     return false;
                 }

@@ -1,5 +1,5 @@
-﻿using Flsurf.Domain.Payment.Events;
-using Flsurf.Domain.Study.Entities;
+﻿using Flsurf.Domain.Freelance.Entities;
+using Flsurf.Domain.Payment.Events;
 using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,16 +22,16 @@ namespace Flsurf.Domain.Payment.Entities
         public string Text { get; set; } = null!;
         [ForeignKey(nameof(UserEntity))]
         public Guid UserId { get; set; }
-        [ForeignKey(nameof(CourseEntity))]
-        public Guid CourseId { get; set; }
+        [ForeignKey(nameof(ContractEntity))]
+        public Guid ContractId { get; set; }
 
-        public static ReviewEntity Create(Guid purchaseId, Guid userId, Guid courseId, int rating, string text)
+        public static ReviewEntity Create(Guid purchaseId, Guid userId, Guid contractId, int rating, string text)
         {
             var review = new ReviewEntity
             {
                 PurchaseId = purchaseId,
                 UserId = userId,
-                CourseId = courseId,
+                ContractId = contractId,
                 Rating = rating,
                 Text = text
             };
