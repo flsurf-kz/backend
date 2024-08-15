@@ -1,6 +1,7 @@
 ﻿using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Payment.Dto;
+using Flsurf.Application.Payment.Permissions;
 using Flsurf.Domain.Payment.Entities;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
@@ -26,11 +27,9 @@ namespace Flsurf.Application.Payment.UseCases
             var query = _context.Purchases
                 .IncludeStandard()
                 .AsQueryable();
+            var owner = await _permService.GetCurrentUser(); 
 
-            if (!await _permService.CheckPermission(PermissionEnum.read, "*") && dto.UserId != null)
-            {
-                throw new AccessDenied(null);
-            }
+            await _permService.EnforceCheckPermission(ZedPaymentUser.WithId(owner.Id).CanReadPurchases()); 
             if (dto.UserId != null)
             {
                 query = query.Where(x => x.Transaction.CreatedByUser.Id == dto.UserId);
@@ -67,7 +66,6 @@ namespace Flsurf.Application.Payment.UseCases
             query = query.Paginate(dto.Start, dto.Ends);
 
             return await query
-                .AsNoTracking()
                 .ToListAsync();
         }
     }

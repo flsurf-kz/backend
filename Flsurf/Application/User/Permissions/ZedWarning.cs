@@ -4,9 +4,9 @@ namespace Flsurf.Application.User.Permissions
 {
     public class ZedWarning : ResourceReference
     {
-        private ZedWarning(string notificationId) : base($"flsurf/warning:{notificationId}") { }
+        private ZedWarning(string warnId) : base($"flsurf/warning:{warnId}") { }
 
-        public static ZedWarning WithId(Guid userId) => new ZedWarning(userId.ToString());
+        public static ZedWarning WithId(Guid warnId) => new ZedWarning(warnId.ToString());
 
         public static ZedWarning WithWildcard() => new ZedWarning("*"); 
     }

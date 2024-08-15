@@ -1,7 +1,9 @@
 ﻿using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Staff.Perms;
 using Flsurf.Domain.Staff.Entities;
 using Flsurf.Domain.User.Enums;
+using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Staff.UseCases
@@ -9,20 +11,22 @@ namespace Flsurf.Application.Staff.UseCases
     public class DeleteTicket : BaseUseCase<Guid, TicketEntity>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IAccessPolicy _accessPolicy;
+        private readonly IPermissionService _permService;
 
-        public DeleteTicket(IApplicationDbContext dbContext, IAccessPolicy accessPolicy)
+        public DeleteTicket(IApplicationDbContext dbContext, IPermissionService permService)
         {
             _context = dbContext;
-            _accessPolicy = accessPolicy;
+            _permService = permService;
         }
 
         public async Task<TicketEntity> Execute(Guid ticketId)
         {
             Guard.Against.Null(ticketId, nameof(ticketId));
 
+            var owner = await _permService.GetCurrentUser(); 
+
             // Perform access check for admin role
-            await _accessPolicy.EnforceRole(UserRoles.Admin);
+            await _permService.EnforceCheckPermission(ZedStaffUser.WithId(owner.Id).CanCloseTicket(ZedTicket.WithId(ticketId))); 
 
             var ticket = await _context.Tickets
                 .Include(x => x.Comments)

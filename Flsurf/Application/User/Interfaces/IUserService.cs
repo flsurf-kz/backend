@@ -8,7 +8,6 @@ namespace Flsurf.Application.User.Interfaces
         public abstract CreateUser Create();
 
         public abstract UpdateUser Update();
-        public abstract DeleteUser Delete();
         public abstract GetUser Get();
         public abstract WarnUser WarnUser();
         public abstract GetUsersList GetList();

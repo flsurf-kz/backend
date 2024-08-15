@@ -4,6 +4,7 @@ using Flsurf.Application.Files.Interfaces;
 using Flsurf.Application.Staff.Dto;
 using Flsurf.Domain.Staff.Entities;
 using Flsurf.Domain.User.Enums;
+using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Staff.UseCases
@@ -11,14 +12,14 @@ namespace Flsurf.Application.Staff.UseCases
     public class UpdateTicket : BaseUseCase<UpdateTicketDto, TicketEntity>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IAccessPolicy _accessPolicy;
+        private readonly IPermissionService _permService;
         private readonly IFileService _fileService;
 
-        public UpdateTicket(IApplicationDbContext dbContext, IAccessPolicy accessPolicy, IFileService fileService)
+        public UpdateTicket(IApplicationDbContext dbContext, IPermissionService permService, IFileService fileService)
         {
             _context = dbContext;
             _fileService = fileService;
-            _accessPolicy = accessPolicy;
+            _permService = permService;
         }
 
         public async Task<TicketEntity> Execute(UpdateTicketDto dto)
@@ -32,7 +33,7 @@ namespace Flsurf.Application.Staff.UseCases
 
             Guard.Against.Null(ticket, $"Ticket with ID {dto.TicketId} does not exist.");
 
-            var currentUser = await _accessPolicy.GetCurrentUser();
+            var currentUser = await _permService.GetCurrentUser();
 
             // Ensure only the creator of the ticket can edit subject, text, and files
             if (ticket.CreatedBy.Id != currentUser.Id)
@@ -57,7 +58,7 @@ namespace Flsurf.Application.Staff.UseCases
             }
 
             // Ensure only moderators can assign users
-            if (await _accessPolicy.Role(UserRoles.Admin) && dto.AssignUserId != null)
+            if ((currentUser.Role == UserRoles.Admin) && dto.AssignUserId != null)
             {
                 var userToAssign = await _context.Users.FirstOrDefaultAsync(u => u.Id == dto.AssignUserId);
 

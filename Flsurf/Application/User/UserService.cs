@@ -24,10 +24,6 @@ namespace Flsurf.Application.User
             return ServiceProvider.GetRequiredService<UpdateUser>();
         }
 
-        public DeleteUser Delete()
-        {
-            return ServiceProvider.GetRequiredService<DeleteUser>();
-        }
         public GetUser Get()
         {
             return ServiceProvider.GetRequiredService<GetUser>();

@@ -14,6 +14,8 @@ namespace Flsurf.Application.Payment.Permissions
         
         public Permission CanBlockWallet(ZedWallet wallet) => new(this, "block", wallet);
 
-        public Permission CanReadWallet(ZedWallet wallet) => new(this, "read", wallet); 
+        public Permission CanReadWallet(ZedWallet wallet) => new(this, "read", wallet);
+
+        public Permission CanReadPurchases() => new(this, "read", ZedPurchase.WithWildcard()); 
     }
 }

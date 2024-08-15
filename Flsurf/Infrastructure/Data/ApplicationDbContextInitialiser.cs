@@ -2,10 +2,6 @@
 using Flsurf.Application.User.Dto;
 using Flsurf.Application.User.Interfaces;
 using Flsurf.Domain.Payment.Entities;
-using Flsurf.Domain.Staff.Entities;
-using Flsurf.Domain.Study.Entities;
-using Flsurf.Domain.User.Entities;
-using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.Payment;
 using Microsoft.EntityFrameworkCore;
 
