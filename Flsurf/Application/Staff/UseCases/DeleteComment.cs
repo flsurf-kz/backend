@@ -2,19 +2,14 @@
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Domain.Staff.Entities;
 using Flsurf.Domain.User.Enums;
+using Flsurf.Infrastructure.Adapters.Permissions;
 
 namespace Flsurf.Application.Staff.UseCases
 {
-    public class DeleteComment : BaseUseCase<Guid, TicketCommentEntity>
+    public class DeleteComment(IApplicationDbContext dbContext, IPermissionService permService) : BaseUseCase<Guid, TicketCommentEntity>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IAccessPolicy _accessPolicy;
-
-        public DeleteComment(IApplicationDbContext dbContext, IAccessPolicy accessPolicy)
-        {
-            _accessPolicy = accessPolicy;
-            _context = dbContext;
-        }
+        private readonly IApplicationDbContext _context = dbContext;
+        private readonly IPermissionService _permService = permService;
 
         public async Task<TicketCommentEntity> Execute(Guid commentId)
         {
@@ -23,8 +18,7 @@ namespace Flsurf.Application.Staff.UseCases
             var comment = await _context.TicketComments.FindAsync(commentId);
 
             Guard.Against.Null(comment, $"Comment with ID {commentId} does not exist.");
-
-            await _accessPolicy.EnforceIsAllowed(PermissionEnum.delete, comment);
+ 
 
             _context.TicketComments.Remove(comment);
             await _context.SaveChangesAsync();

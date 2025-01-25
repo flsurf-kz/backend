@@ -2,23 +2,21 @@
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Files.Interfaces;
 using Flsurf.Application.Staff.Dto;
+using Flsurf.Application.Staff.Perms;
+using Flsurf.Application.User.Interfaces;
 using Flsurf.Domain.Staff.Entities;
+using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Staff.UseCases
 {
-    public class CreateComment : BaseUseCase<CreateCommentDto, TicketCommentEntity>
+    public class CreateComment(
+        IApplicationDbContext dbContext, IPermissionService permService, IFileService fileService
+    ) : BaseUseCase<CreateCommentDto, TicketCommentEntity>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IAccessPolicy _accessPolicy;
-        private readonly IFileService _fileService;
-
-        public CreateComment(IApplicationDbContext dbContext, IAccessPolicy accessPolicy, IFileService fileService)
-        {
-            _context = dbContext;
-            _fileService = fileService;
-            _accessPolicy = accessPolicy;
-        }
+        private readonly IApplicationDbContext _context = dbContext;
+        private readonly IPermissionService _permService = permService;
+        private readonly IFileService _fileService = fileService;
 
         public async Task<TicketCommentEntity> Execute(CreateCommentDto dto)
         {
@@ -28,13 +26,12 @@ namespace Flsurf.Application.Staff.UseCases
 
             Guard.Against.Null(ticket, message: "Ticket does not exists");
 
-            var byUser = await _accessPolicy.GetCurrentUser();
+            var byUser = await _permService.GetCurrentUser();
+            await _permService.EnforceCheckPermission(
+                ZedStaffUser
+                    .WithId(byUser.Id)
+                    .CanCreateComment(ZedTicket.WithId(ticket.Id))); 
 
-            if (!await _accessPolicy.IsAllowed(Domain.User.Enums.PermissionEnum.extend, ticket) 
-                && ticket.CreatedBy.Id != byUser.Id)
-            {
-                throw new AccessDenied("ticket is not created by you");
-            }
             var newFiles = await _fileService.UploadFiles().Execute(dto.Files);
 
             TicketCommentEntity comment;

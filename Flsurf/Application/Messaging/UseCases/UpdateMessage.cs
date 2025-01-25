@@ -22,7 +22,7 @@ namespace Flsurf.Application.Messaging.UseCases
         public async Task<bool> Execute(UpdateMessageDto dto)
         {
             var owner = await _permService.GetCurrentUser();
-            _permService.EnforceCheckPermission(
+            await _permService.EnforceCheckPermission(
                 ZedMessangerUser.WithId(owner.Id).CanUpdateMessage(ZedMessage.WithId(dto.MessageId))); 
 
             return true;

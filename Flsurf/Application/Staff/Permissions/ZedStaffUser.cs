@@ -10,7 +10,9 @@ namespace Flsurf.Application.Staff.Perms
         // reason behind this decision is isolation between modules, and not relevant permissions in User/ZedUser
         private ZedStaffUser(Guid userId) : base($"flsurf/user:{userId}") { }
 
-        public static ZedStaffUser WithId(Guid userId) => new(userId); 
+        public static ZedStaffUser WithId(Guid userId) => new(userId);
+
+        public Permission CanCreateComment(ZedTicket ticket) => new(this, "create", ticket); 
 
         public Permission CanCloseTicket(ZedTicket ticket) => new(this, "close", ticket);
 

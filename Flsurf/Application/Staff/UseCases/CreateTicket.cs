@@ -38,12 +38,9 @@ namespace Flsurf.Application.Staff.UseCases
             await _context.Tickets.AddAsync(ticket);
 
             var staffUser = ZedStaffUser.WithId(byUser.Id);
-            var zedTicket = ZedTicket.WithId(ticket.Id); 
+            var zedTicket = ZedTicket.WithId(ticket.Id);
 
-            await _permService.AddRelationships(
-                staffUser.CanReadTicket(zedTicket),
-                staffUser.CanUpdateTicket(zedTicket),
-                staffUser.CanCloseTicket(zedTicket)); 
+            await _permService.AddRelationships(zedTicket.Owner(staffUser)); 
             await _context.SaveChangesAsync();
 
             return ticket;

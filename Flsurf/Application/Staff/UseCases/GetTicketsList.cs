@@ -1,52 +1,65 @@
 ﻿using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Staff.Dto;
+using Flsurf.Application.Staff.Perms;
 using Flsurf.Domain.Staff.Entities;
 using Flsurf.Domain.User.Enums;
+using Flsurf.Infrastructure.Adapters.Permissions;
+using Flsurf.Infrastructure.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Staff.UseCases
 {
-    public class GetTicketsList : BaseUseCase<GetTicketsDto, List<TicketEntity>>
+    public class GetTicketsList : BaseUseCase<GetTicketsDto, ICollection<TicketEntity>>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IAccessPolicy _accessPolicy;
+        private readonly IPermissionService _permService;
 
-        public GetTicketsList(IApplicationDbContext dbContext, IAccessPolicy accessPolicy)
+        public GetTicketsList(IApplicationDbContext dbContext, IPermissionService permService)
         {
             _context = dbContext;
-            _accessPolicy = accessPolicy;
+            _permService = permService;
         }
 
-        public async Task<List<TicketEntity>> Execute(GetTicketsDto dto)
+        public async Task<ICollection<TicketEntity>> Execute(GetTicketsDto dto)
         {
-            IQueryable<TicketEntity> query = _context.Tickets;
-            var currentUser = await _accessPolicy.GetCurrentUser();
+            // Формируем базовый запрос
+            var query = _context.Tickets.AsQueryable();
 
-            if (dto.UserId != currentUser.Id 
-                && !await _accessPolicy.IsAllowed(PermissionEnum.read, _context.Tickets.EntityType))
+            var currentUser = await _permService.GetCurrentUser();
+
+            // Проверка: пользователь может читать тикеты
+            if (!await _permService.CheckPermission(
+                ZedStaffUser.WithId(currentUser.Id).CanReadTicket(ZedTicket.WithWildcard())
+            ))
             {
-                throw new AccessDenied("You are not ticket owner, or something like that");
+                throw new AccessDenied("You do not have permission to view tickets.");
             }
 
+            // Фильтрация по владельцу тикета (UserId)
             if (dto.UserId != null)
             {
-                query = query.Where(x => x.CreatedBy.Id == dto.UserId);
+                query = query.Where(ticket => ticket.CreatedBy.Id == dto.UserId);
             }
 
+            // Фильтрация по теме тикета (SubjectId)
             if (dto.SubjectId != null)
             {
-                query = query.Where(x => x.Subject.Id == dto.SubjectId);
+                query = query.Where(ticket => ticket.Subject.Id == dto.SubjectId);
             }
 
+            // Фильтрация по назначенному пользователю (IsAssignedToMe)
             if (dto.IsAssignedToMe == true)
             {
-                query = query.Where(x => x.AssignedUser.Id == currentUser.Id);
+                query = query.Where(ticket => ticket.AssignedUser.Id == currentUser.Id);
             }
 
-            var tickets = await query.ToListAsync();
+            // Пагинация
+            query = query.Paginate(dto.Start, dto.Ends);
 
-            return tickets;
+            // Возвращаем результат
+            return await query.AsNoTracking().ToListAsync();
         }
     }
+
 }

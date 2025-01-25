@@ -15,6 +15,7 @@ namespace Flsurf.Application.Messaging.Permissions
         public Permission CanCloseChat(ZedChat chat) => new(chat, "close_chat", this);
 
         public Permission CanReadChat(ZedChat chat) => new(chat, "read", this);
+        public Permission CanDeleteMessage(ZedMessage message) => new(message, "delete", this);
 
         public Permission CanUpdateMessage(ZedMessage message) => new(message, "update", this);  
     }

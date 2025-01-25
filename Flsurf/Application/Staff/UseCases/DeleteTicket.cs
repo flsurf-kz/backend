@@ -9,12 +9,10 @@ namespace Flsurf.Application.Staff.UseCases
     public class DeleteTicket : BaseUseCase<Guid, TicketEntity>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IAccessPolicy _accessPolicy;
 
-        public DeleteTicket(IApplicationDbContext dbContext, IAccessPolicy accessPolicy)
+        public DeleteTicket(IApplicationDbContext dbContext)
         {
             _context = dbContext;
-            _accessPolicy = accessPolicy;
         }
 
         public async Task<TicketEntity> Execute(Guid ticketId)
@@ -22,7 +20,7 @@ namespace Flsurf.Application.Staff.UseCases
             Guard.Against.Null(ticketId, nameof(ticketId));
 
             // Perform access check for admin role
-            await _accessPolicy.EnforceRole(UserRoles.Admin);
+            //await _accessPolicy.EnforceRole(UserRoles.Admin);
 
             var ticket = await _context.Tickets
                 .Include(x => x.Comments)

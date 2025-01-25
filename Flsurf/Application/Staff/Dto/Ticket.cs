@@ -1,4 +1,5 @@
-﻿using Flsurf.Application.Files.Dto;
+﻿using Flsurf.Application.Common.Models;
+using Flsurf.Application.Files.Dto;
 using System.ComponentModel.DataAnnotations;
 
 namespace Flsurf.Application.Staff.Dto
@@ -11,7 +12,7 @@ namespace Flsurf.Application.Staff.Dto
         public string Text { get; set; } = string.Empty;
         public ICollection<CreateFileDto> Files { get; set; } = [];
     }
-    public class GetTicketsDto
+    public class GetTicketsDto : InputPagination
     {
         public Guid? UserId { get; set; }
         public Guid? SubjectId { get; set; } = null!;

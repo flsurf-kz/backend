@@ -35,5 +35,7 @@ namespace Flsurf.Application.Messaging.Dto
 
     public record GetUserChatsDto { }
 
-    public record DeleteMessageDto { }
+    public record DeleteMessageDto { 
+        public Guid MessgeId { get; set; }
+    }
 }
