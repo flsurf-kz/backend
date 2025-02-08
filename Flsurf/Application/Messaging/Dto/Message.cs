@@ -1,4 +1,5 @@
 ﻿using Flsurf.Application.Files.Dto;
+using System.ComponentModel.DataAnnotations;
 
 namespace Flsurf.Application.Messaging.Dto
 {
@@ -10,5 +11,11 @@ namespace Flsurf.Application.Messaging.Dto
     public record SendMessageDto { }
     public record PinMessageDto { }
     public record UnpinMessageDto { }
-    public record GetMessagesListDto { }
+    public record GetMessagesListDto {
+        [Required]
+        public Guid ChatId;
+        public int starts = 0;
+        // override 
+        public int ends = 20;
+    }
 }

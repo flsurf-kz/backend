@@ -10,5 +10,7 @@ namespace Flsurf.Application.Staff.Perms
         private ZedComment(Guid commentId) : base($"flsurf/comment:{commentId}") { }
 
         public static ZedComment WithId(Guid commentId) => new(commentId);
+
+        public Relationship Owner(ZedStaffUser user) => new(user, "owner", this); 
     }
 }

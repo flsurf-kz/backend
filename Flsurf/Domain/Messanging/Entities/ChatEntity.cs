@@ -18,7 +18,8 @@ namespace Flsurf.Domain.Messanging.Entities
         public bool IsArchived { get; set; } = false; 
         public bool IsTextingAllowed { get; set; }
         public DateTime? FinishedAt { get; set; }
-        public ICollection<ContractEntity> Contracts { get; set; } = []; 
+        public ICollection<ContractEntity> Contracts { get; set; } = [];
+        public ICollection<MessageReadEntity> ReadRecords { get; set; } = []; 
 
         public static ChatEntity Create(string name, UserEntity owner, List<UserEntity> participants, bool isTextingAllowed, ChatTypes type)
         {
