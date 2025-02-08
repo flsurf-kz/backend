@@ -6,6 +6,7 @@ using Flsurf.Domain.Payment.Enums;
 using Flsurf.Domain.Payment.Events;
 using Flsurf.Domain.Payment.Exceptions;
 using Flsurf.Domain.User.Entities;
+using Flsurf.Domain.Freelance.Entities;
 
 namespace Flsurf.Domain.Payment.Entities
 {
@@ -30,8 +31,8 @@ namespace Flsurf.Domain.Payment.Entities
         public Guid? ReviewId { get; private set; }
 
         [Required]
-        [ForeignKey(nameof(CourseEntity))]
-        public Guid CourseId { get; init; } 
+        [ForeignKey(nameof(ContractEntity))]
+        public Guid ContractId { get; init; } 
 
         [Required]
         public TransactionEntity Transaction { get; private set; } = null!;
@@ -44,14 +45,14 @@ namespace Flsurf.Domain.Payment.Entities
         [Required]
         public UserEntity CreatedBy { get; set; } = null!; 
 
-        public static PurchaseEntity Create(WalletEntity wallet, TransactionEntity transaction, CourseEntity course)
+        public static PurchaseEntity Create(WalletEntity wallet, TransactionEntity transaction, ContractEntity contract)
         {
             if (wallet.User == null)
                 throw new ArgumentException("Wallet entity does not have user value, load it!"); 
             var purchase = new PurchaseEntity
             {
                 Wallet = wallet,
-                CourseId = course.Id,
+                ContractId = contract.Id,
                 Amount = transaction.Amount,
                 Currency = transaction.Amount.Currency,
                 Transaction = transaction,

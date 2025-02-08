@@ -1,8 +1,11 @@
 ﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Payment.Permissions;
+using Flsurf.Application.User.Permissions;
 using Flsurf.Domain.Payment.Entities;
 using Flsurf.Domain.User.Entities;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Domain.User.Events;
+using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.EventDispatcher;
 
 namespace Flsurf.Application.User.EventHandlers
@@ -10,13 +13,15 @@ namespace Flsurf.Application.User.EventHandlers
     public class UserCreatedHandler : IEventSubscriber<UserCreated>
     {
         private ILogger _logger;
+        private IPermissionService _permService; 
 
-        public UserCreatedHandler(ILogger<UserCreatedHandler> logger)
+        public UserCreatedHandler(ILogger<UserCreatedHandler> logger, IPermissionService permService)
         {
             _logger = logger;
+            _permService = permService;
         }
 
-        public Task HandleEvent(UserCreated eventValue, IApplicationDbContext _context)
+        public async Task HandleEvent(UserCreated eventValue, IApplicationDbContext _context)
         {
             var wallet = WalletEntity.Create(eventValue.User);
 
@@ -24,9 +29,10 @@ namespace Flsurf.Application.User.EventHandlers
 
             _logger.LogInformation($"User created with id: {eventValue.User.Id}");
 
-            eventValue.User.Permissions.AddPermissionWithCode(wallet, PermissionEnum.all); 
+            await _permService.AddRelationship(
+                ZedWallet.WithId(wallet.Id).Owner(ZedPaymentUser.WithId(eventValue.User.Id)));
 
-            return Task.CompletedTask;
+            return; 
         }
     }
 }

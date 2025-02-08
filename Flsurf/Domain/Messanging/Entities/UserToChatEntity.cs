@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Flsurf.Domain.Messanging.Events;
 
 namespace Flsurf.Domain.Messanging.Entities
 {

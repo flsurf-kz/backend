@@ -3,7 +3,6 @@ using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Staff.Dto;
 using Flsurf.Application.Staff.Perms;
 using Flsurf.Domain.Staff.Entities;
-using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -23,18 +22,9 @@ namespace Flsurf.Application.Staff.UseCases
 
         public async Task<ICollection<TicketEntity>> Execute(GetTicketsDto dto)
         {
-            // Формируем базовый запрос
-            var query = _context.Tickets.AsQueryable();
-
+            IQueryable<TicketEntity> query = _context.Tickets;
             var currentUser = await _permService.GetCurrentUser();
-
-            // Проверка: пользователь может читать тикеты
-            if (!await _permService.CheckPermission(
-                ZedStaffUser.WithId(currentUser.Id).CanReadTicket(ZedTicket.WithWildcard())
-            ))
-            {
-                throw new AccessDenied("You do not have permission to view tickets.");
-            }
+            var perm = ZedStaffUser.WithId(currentUser.Id).CanReadTicket(ZedTicket.WithWildcard());
 
             // Фильтрация по владельцу тикета (UserId)
             if (dto.UserId != null)
@@ -45,13 +35,15 @@ namespace Flsurf.Application.Staff.UseCases
             // Фильтрация по теме тикета (SubjectId)
             if (dto.SubjectId != null)
             {
-                query = query.Where(ticket => ticket.Subject.Id == dto.SubjectId);
+                await _permService.EnforceCheckPermission(perm);
+                query = query.Where(x => x.Subject.Id == dto.SubjectId);
             }
 
             // Фильтрация по назначенному пользователю (IsAssignedToMe)
             if (dto.IsAssignedToMe == true)
             {
-                query = query.Where(ticket => ticket.AssignedUser.Id == currentUser.Id);
+                await _permService.EnforceCheckPermission(perm);
+                query = query.Where(x => x.AssignedUser.Id == currentUser.Id);
             }
 
             // Пагинация

@@ -30,7 +30,7 @@ namespace Flsurf.Application.Staff.UseCases
             await _permService.EnforceCheckPermission(
                 ZedStaffUser
                     .WithId(byUser.Id)
-                    .CanCreateComment(ZedTicket.WithId(ticket.Id))); 
+                    .CanAddComment(ZedTicket.WithId(ticket.Id))); 
 
             var newFiles = await _fileService.UploadFiles().Execute(dto.Files);
 

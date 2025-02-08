@@ -12,12 +12,12 @@ namespace Flsurf.Application.Staff.Perms
 
         public static ZedStaffUser WithId(Guid userId) => new(userId);
 
-        public Permission CanCreateComment(ZedTicket ticket) => new(this, "create", ticket); 
-
         public Permission CanCloseTicket(ZedTicket ticket) => new(this, "close", ticket);
 
         public Permission CanReadTicket(ZedTicket ticket) => new(this, "read", ticket);
 
-        public Permission CanUpdateTicket(ZedTicket ticket) => new(this, "update", ticket); 
+        public Permission CanUpdateTicket(ZedTicket ticket) => new(this, "update", ticket);
+
+        public Permission CanAddComment(ZedTicket ticket) => new(this, "add_comment", ticket);  
     }
 }

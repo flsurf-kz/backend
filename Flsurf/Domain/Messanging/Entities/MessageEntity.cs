@@ -8,7 +8,7 @@ namespace Flsurf.Domain.Messanging.Entities
         [ForeignKey("Sender")]
         public Guid SenderId { get; set; }
         public UserEntity Sender { get; set; } = null!;
-        public string MessageContent { get; set; } = null!;
+        public string Text { get; set; } = null!;
         [ForeignKey("Chat")]
         public Guid ChatId { get; set; }
         public ChatEntity Chat { get; set; } = null!;

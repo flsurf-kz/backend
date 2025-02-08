@@ -23,7 +23,9 @@ namespace Flsurf.Application.Messaging.Dto
         public Guid? UserId { get; set; }
     }
 
-    public record UpdateChatDto { }
+    public record UpdateChatDto {
+        public Guid ChatId { get; set; }
+    }
 
     public record GetUserChats { }
 

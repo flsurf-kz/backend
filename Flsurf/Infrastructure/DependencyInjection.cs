@@ -9,7 +9,6 @@ using Flsurf.Infrastructure.Adapters.Mailing;
 using Flsurf.Infrastructure.Caching;
 using Flsurf.Infrastructure.EventStore;
 using Flsurf.Infrastructure.Data.Intercepters;
-using Flsurf.Application.Study.Interfaces;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using SpiceDb;
 

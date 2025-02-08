@@ -25,22 +25,22 @@ namespace Flsurf.Presentation.Web.Controllers
 
         [HttpPatch("{userId}")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<ActionResult<UserScheme>> UpdateUser(Guid userId, [FromBody] UpdateUserDto model)
+        public async Task<ActionResult<bool>> UpdateUser(Guid userId, [FromBody] UpdateUserDto model)
         {
             var result = await UserService
                 .Update()
                 .Execute(model);
-            return UserScheme.FromEntity(result);
+            return true; 
         }
 
         [HttpPatch("me")]
         [Authorize(AuthenticationSchemes = "Bearer")]
-        public async Task<ActionResult<UserScheme>> UpdateMe([FromBody] UpdateUserDto model)
+        public async Task<ActionResult<bool>> UpdateMe([FromBody] UpdateUserDto model)
         {
             var result = await UserService
                 .Update()
                 .Execute(model);
-            return UserScheme.FromEntity(result);
+            return true;
         }
 
         [HttpGet("me")]
@@ -60,16 +60,6 @@ namespace Flsurf.Presentation.Web.Controllers
                 .Get().Execute(new GetUserDto() { UserId = userId });
 
             return result;
-        }
-
-        [HttpDelete("{userId}")]
-        public async Task<ActionResult<UserScheme>> DeleteUserById(Guid userId)
-        {
-            var result = await UserService
-                .Delete()
-                .Execute(new BlockUserDto() { UserId = userId });
-
-            return Ok(result);
         }
     }
 }

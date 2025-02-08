@@ -3,6 +3,7 @@ using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Messaging.Dto;
 using Flsurf.Application.Messaging.Permissions;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Messaging.UseCases
 {
@@ -23,7 +24,21 @@ namespace Flsurf.Application.Messaging.UseCases
         {
             var owner = await _permService.GetCurrentUser();
             await _permService.EnforceCheckPermission(
-                ZedMessangerUser.WithId(owner.Id).CanUpdateMessage(ZedMessage.WithId(dto.MessageId))); 
+                ZedMessangerUser.WithId(owner.Id).CanUpdateMessage(ZedMessage.WithId(dto.MessageId)));
+
+            var message = await _context.Messages.FirstOrDefaultAsync(x => x.Id == dto.MessageId);
+
+            Guard.Against.NotFound(dto.MessageId, message); 
+
+            if (dto.Text != null)
+            {
+                message.Text = dto.Text; 
+            }
+
+            // IGNORE PHOTOS! 
+
+            _context.Messages.Update(message); 
+            await _context.SaveChangesAsync(); 
 
             return true;
         }

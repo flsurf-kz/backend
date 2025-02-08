@@ -1,9 +1,11 @@
 ﻿using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Staff.Dto;
+using Flsurf.Application.Staff.Perms;
 using Flsurf.Domain.Staff.Entities;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Staff.UseCases
@@ -22,16 +24,12 @@ namespace Flsurf.Application.Staff.UseCases
 
             // Ensure only the creator of the ticket or higher role can access the ticket
             var ticket = await _context.Tickets
-                .Include(x => x.Comments)
-                .AsNoTracking()
+                .IncludeStandard()
                 .FirstOrDefaultAsync(x => x.Id == dto.TicketId);
             Guard.Against.Null(ticket, $"Ticket with ID {dto.TicketId} not found.");
 
-
-            //if (ticket.CreatedBy.Id != currentUser.Id && !await _accessPolicy.IsAllowed(PermissionEnum.read, ticket))
-            //{
-            //    throw new AccessDenied("You are not authorized to access this ticket.");
-            //}
+            var perm = ZedStaffUser.WithId(currentUser.Id).CanReadTicket(ZedTicket.WithId(ticket.Id));
+            await _permService.EnforceCheckPermission(perm);
 
             return ticket;
         }

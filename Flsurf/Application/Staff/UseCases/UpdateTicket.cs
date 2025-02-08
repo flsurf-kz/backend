@@ -58,14 +58,14 @@ namespace Flsurf.Application.Staff.UseCases
                 ticket.Files.AddRange(newFiles);
             }
 
-            // Назначение пользователя (только для администраторов)
-            if (dto.AssignUserId.HasValue)
-            {
-                var userToAssign = await _context.Users.FirstOrDefaultAsync(u => u.Id == dto.AssignUserId.Value);
-                Guard.Against.Null(userToAssign, message: "User to assign does not exist.");
+            if (dto.AssignUserId.HasValue) 
+                if ((currentUser.Role == UserRoles.Admin) && dto.AssignUserId != null)
+                {
+                    var userToAssign = await _context.Users.FirstOrDefaultAsync(u => u.Id == dto.AssignUserId.Value);
+                    Guard.Against.Null(userToAssign, message: "User to assign does not exist.");
 
-                ticket.Accept(userToAssign);
-            }
+                    ticket.Accept(userToAssign);
+                }
 
             // Сохраняем изменения
             await _context.SaveChangesAsync();
