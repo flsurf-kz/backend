@@ -40,7 +40,6 @@
     <Folder Include="Application\Freelance\Interfaces\" />
     <Folder Include="Application\Freelance\Services\" />
     <Folder Include="Application\Freelance\Permissions\" />
-    <Folder Include="Application\Freelance\Queries\" />
     <Folder Include="Application\Freelance\Commands\" />
   </ItemGroup>
 
