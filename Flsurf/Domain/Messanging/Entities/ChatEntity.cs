@@ -9,8 +9,8 @@ namespace Flsurf.Domain.Messanging.Entities
 {
     public class ChatEntity : BaseAuditableEntity
     {
-        [ForeignKey("Owner")]
         public Guid OwnerId { get; private set; }
+        [ForeignKey("OwnerId")]
         public UserEntity Owner { get; private set; } = null!;
         public ICollection<UserEntity> Participants { get; set; } = [];
         public string Name { get; set; } = null!; 
@@ -39,7 +39,7 @@ namespace Flsurf.Domain.Messanging.Entities
             return chat; 
         }
 
-        public void AddParticipant(UserEntity user, InvitationEntity invitation)
+        public void AddParticipant(UserEntity user, ChatInvitationEntity invitation)
         {
             // you can add to support any number of participants 
             if (Type != ChatTypes.Group && Type != ChatTypes.Support)
@@ -48,7 +48,7 @@ namespace Flsurf.Domain.Messanging.Entities
                 throw new InvitiationIsIncorrect(invitation.Id, invitation.ChatId); 
             Participants.Add(user);
 
-            invitation.Used = true; 
+            invitation.React(ChatInvitationStatus.Accepted);
 
             AddDomainEvent(new ChatAddedParticipant(this)); 
         }

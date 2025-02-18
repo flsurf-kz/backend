@@ -52,7 +52,7 @@ namespace Flsurf.Infrastructure.Data
 
         // messaging 
         public DbSet<ChatEntity> Chats { get; set; }
-        public DbSet<InvitationEntity> Invitations { get; set; }
+        public DbSet<ChatInvitationEntity> Invitations { get; set; }
         public DbSet<MessageEntity> Messages { get; set; }
         public DbSet<MessageReadEntity> MessageReads { get; set; }
         public DbSet<UserToChatEntity> UserToChats { get; set; }

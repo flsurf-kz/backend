@@ -31,9 +31,15 @@ namespace Flsurf.Application.Messaging.Dto
 
     public record MarkAsReadDto { }
 
-    public record KickMemberDto { }
+    public record KickMemberDto {
+        public Guid ChatId;
+        public Guid UserId;
+    }
 
-    public record InviteMemberDto { }
+    public record InviteMemberDto {
+        public Guid ChatId;
+        public Guid UserId; 
+    }
 
     public record GetUserChatsDto { }
 

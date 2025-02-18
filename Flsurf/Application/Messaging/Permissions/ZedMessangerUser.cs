@@ -19,6 +19,9 @@ namespace Flsurf.Application.Messaging.Permissions
 
         public Permission CanUpdateMessage(ZedMessage message) => new(message, "update", this);
 
-        public Permission CanUpdateChat(ZedChat chat) => new(chat, "update", this); 
+        public Permission CanUpdateChat(ZedChat chat) => new(chat, "update", this);
+
+        public Permission CanInviteChatMembers(ZedChat chat) => new(chat, "invite", this);
+        public Permission CanKickChatMembers(ZedChat chat) => new(chat, "kick_from_chat", this); 
     }
 }
