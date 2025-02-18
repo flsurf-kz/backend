@@ -2,6 +2,7 @@
 using Flsurf.Domain.Messanging.Events;
 using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
 
 namespace Flsurf.Domain.Messanging.Entities
 {
@@ -17,6 +18,7 @@ namespace Flsurf.Domain.Messanging.Entities
         public ChatEntity Chat { get; set; } = null!;
         public DateTime SentDate { get; set; }
         public string Status { get; set; } = null!;
+        public bool IsPinned { get; set; } = false; 
         public ICollection<FileEntity> Files { get; set; } = []; 
 
         public static MessageEntity Create(string text, UserEntity sender, ICollection<FileEntity> files)
@@ -24,6 +26,12 @@ namespace Flsurf.Domain.Messanging.Entities
             var message = new MessageEntity { Text = text, SenderId = sender.Id, Sender = sender, Files = files };
             message.AddDomainEvent(new MessageCreated(message));
             return message;
+        }
+
+        public void PinOrUnpin()
+        {
+            IsPinned = !IsPinned;
+            AddDomainEvent(new MessagePinned(this));
         }
     }
 }

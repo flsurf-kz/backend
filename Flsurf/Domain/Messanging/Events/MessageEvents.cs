@@ -7,4 +7,14 @@ namespace Flsurf.Domain.Messanging.Events
     {
         public MessageEntity Message { get; set; } = message; 
     }
+
+    public class MessagePinned(MessageEntity message) : BaseEvent
+    {
+        public MessageEntity Message { get; set; } = message;
+    }
+
+    public class MessageUnpinned(MessageEntity message) : BaseEvent
+    {
+        public MessageEntity Message { get; set; } = message;
+    }
 }

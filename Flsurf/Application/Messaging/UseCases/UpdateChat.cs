@@ -3,6 +3,8 @@ using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Messaging.Dto;
 using Flsurf.Application.Messaging.Permissions;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Flsurf.Infrastructure.Data.Queries;
+using Microsoft.EntityFrameworkCore;
 using System.Runtime.InteropServices;
 
 namespace Flsurf.Application.Messaging.UseCases
@@ -14,12 +16,20 @@ namespace Flsurf.Application.Messaging.UseCases
 
         public async Task<bool> Execute(UpdateChatDto dto)
         {
-            var owner = await _permissionService.GetCurrentUser();
+            var user = await _permissionService.GetCurrentUser();
 
             await _permissionService.EnforceCheckPermission(
-                ZedMessangerUser.WithId(owner.Id).CanUpdateChat(ZedChat.WithId(dto.ChatId))); 
+                ZedMessangerUser.WithId(user.Id).CanUpdateChat(ZedChat.WithId(dto.ChatId)));
+
+            var chat = await _context.Chats.IncludeStandard().FirstOrDefaultAsync(x => x.Id == dto.ChatId);
+            Guard.Against.NotFound(dto.ChatId, chat);
+
+            chat.UpdateChat(dto.Name, dto.IsTextingAllowed, dto.IsArchived);
+
+            await _context.SaveChangesAsync();
 
             return true;
         }
     }
+
 }

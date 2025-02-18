@@ -40,13 +40,28 @@ namespace Flsurf.Application.Messaging.UseCases
                     .WithId(chat.Id)
                     .Owner(ZedMessangerUser.WithId(owner.Id)));
 
-            List<Relationship> zedMembers = []; 
-            foreach (var user in users)
+            List<Relationship> zedMembers = [];
+            if (dto.type == ChatTypes.Group)
             {
-                zedMembers.Add(
-                    ZedChat
-                        .WithId(chat.Id)
-                        .Member(ZedMessangerUser.WithId(user.Id))); 
+                foreach (var user in users)
+                {
+                    zedMembers.Add(
+                        ZedChat
+                            .WithId(chat.Id)
+                            .Member(ZedMessangerUser.WithId(user.Id)));
+                }
+            } if (dto.type == ChatTypes.Direct || dto.type == ChatTypes.Support)  // support chat is same as direct
+            {
+                if (users.Count > 1)
+                {
+                    throw new Exception("More than two users in private chat"); 
+                }
+
+                var perm = ZedChat
+                    .WithId(chat.Id)
+                    .Member(ZedMessangerUser.WithId(users[0].Id));
+
+                await _permService.AddRelationship(perm);
             }
 
             await _permService.AddRelationships(zedMembers);

@@ -14,7 +14,11 @@ namespace Flsurf.Application.Messaging.Dto
         public string? Text;
         public ICollection<CreateFileDto>? Files;
     }
-    public record PinMessageDto { }
+    public class PinMessageDto
+    {
+        public Guid MessageId { get; set; }
+    }
+
     public record UnpinMessageDto { }
     public record GetMessagesListDto {
         [Required]

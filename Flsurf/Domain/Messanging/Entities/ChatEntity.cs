@@ -4,6 +4,7 @@ using Flsurf.Domain.Messanging.Events;
 using Flsurf.Domain.Messanging.Exceptions;
 using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Flsurf.Domain.Messanging.Entities
 {
@@ -18,7 +19,10 @@ namespace Flsurf.Domain.Messanging.Entities
         public bool IsArchived { get; set; } = false; 
         public bool IsTextingAllowed { get; set; }
         public DateTime? FinishedAt { get; set; }
+        public ICollection<UserEntity> Inspectors { get; set; } = []; 
+        
         public ICollection<ContractEntity> Contracts { get; set; } = [];
+        [JsonIgnore]
         public ICollection<MessageReadEntity> ReadRecords { get; set; } = []; 
 
         public static ChatEntity Create(string name, UserEntity owner, List<UserEntity> participants, bool isTextingAllowed, ChatTypes type)
@@ -39,6 +43,26 @@ namespace Flsurf.Domain.Messanging.Entities
             return chat; 
         }
 
+        public void UpdateChat(string? name, bool? isTextingAllowed, bool? isArchived)
+        {
+            if (!string.IsNullOrWhiteSpace(name))
+                Name = name;
+
+            if (isTextingAllowed.HasValue)
+            {
+                if (isTextingAllowed.Value && Type != ChatTypes.Group)
+                    throw new TextingNotAllowedDisabled(Type);
+
+                IsTextingAllowed = isTextingAllowed.Value;
+            }
+
+            if (isArchived.HasValue && isArchived.Value)
+                Archive(); // Используем существующий метод Archive()
+
+            AddDomainEvent(new ChatUpdated(this));
+        }
+
+
         public void AddParticipant(UserEntity user, ChatInvitationEntity invitation)
         {
             // you can add to support any number of participants 
@@ -52,6 +76,20 @@ namespace Flsurf.Domain.Messanging.Entities
 
             AddDomainEvent(new ChatAddedParticipant(this)); 
         }
+
+        public void KickMember(UserEntity user, UserEntity kickedBy)
+        {
+            if (Type != ChatTypes.Group)
+                throw new ParticipantsNotAllowed(Type);
+
+            if (!Participants.Contains(user))
+                throw new InvalidOperationException("User is not a participant of this chat.");
+
+            Participants.Remove(user);
+
+            AddDomainEvent(new ChatRemovedParticipant(this, user, kickedBy));
+        }
+
 
         public void Archive()
         {

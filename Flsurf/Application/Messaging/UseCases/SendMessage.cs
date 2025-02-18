@@ -1,4 +1,5 @@
-﻿using Flsurf.Application.Common.Interfaces;
+﻿using Flsurf.Application.Common.Exceptions;
+using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Files.UseCases;
 using Flsurf.Application.Messaging.Dto;
@@ -6,6 +7,7 @@ using Flsurf.Application.Messaging.Permissions;
 using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.Messanging.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Messaging.UseCases
 {
@@ -24,7 +26,14 @@ namespace Flsurf.Application.Messaging.UseCases
 
             if (string.IsNullOrEmpty(dto.Text) || dto.Files != null)
             {
-                throw new Exception("Неправильный формат"); 
+                throw new DomainException("Неправильный формат"); 
+            }
+
+            var chat = await _dbContext.Chats.FirstOrDefaultAsync(x => x.Id == dto.ChatId);
+
+            Guard.Against.NotFound(dto.ChatId, chat); 
+            if (chat.IsArchived || !chat.IsTextingAllowed) {
+                throw new DomainException("Чат архиирован или нельзя отправлять сообщения"); 
             }
 
             ICollection<FileEntity> files = []; 

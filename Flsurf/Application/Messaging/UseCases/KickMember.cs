@@ -29,9 +29,7 @@ namespace Flsurf.Application.Messaging.UseCases
             if (!chat.Participants.Contains(user))
                 throw new InvalidOperationException("User is not a participant of this chat.");
 
-            chat.Participants.Remove(user);
-
-            chat.AddDomainEvent(new ChatRemovedParticipant(chat, user));
+            chat.KickMember(user, currentUser);
 
             await _dbContext.SaveChangesAsync();
 
