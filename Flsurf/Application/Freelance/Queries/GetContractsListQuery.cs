@@ -1,6 +1,6 @@
 ﻿namespace Flsurf.Application.Freelance.Queries
 {
-    public class GetFreelancerList
+    public class GetContractsListQuery
     {
     }
 }

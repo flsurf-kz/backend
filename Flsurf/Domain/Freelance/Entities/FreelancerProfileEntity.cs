@@ -13,7 +13,7 @@ namespace Flsurf.Domain.Freelance.Entities
         public string Experience { get; set; }
         public string Portfolio { get; set; }
         public string Resume { get; set; }
-        public float HourlyRate { get; set; }
+        public float CostPerHour { get; set; }
         public string Availability { get; set; }
         public float Rating { get; set; }
         public string Certificates { get; set; }
