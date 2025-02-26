@@ -19,7 +19,6 @@ namespace Flsurf.Application.Freelance.Queries
         {
             // 🔐 Получаем текущего пользователя
             var user = await _permService.GetCurrentUser();
-            if (user == null) throw new AccessDenied("User not authenticated");
 
             // 🔎 Проверяем, может ли пользователь читать снэпшоты работы
             var hasPermission = await _permService.CheckPermission(
