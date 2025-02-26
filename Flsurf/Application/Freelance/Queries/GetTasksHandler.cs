@@ -30,10 +30,9 @@ namespace Flsurf.Application.Freelance.Queries
             // 🔥 Получаем задачи контракта
             var tasksQuery = _dbContext.Tasks
                 .Where(t => t.ContractId == query.ContractId) // Фильтр по контракту
-                .OrderBy(t => t.Priority) // Сортировка по приоритету
-                .ThenBy(t => t.CreatedAt); // Вторичная сортировка по дате создания
+                .OrderBy(t => t.Priority) 
+                .ThenBy(t => t.CreatedAt);
 
-            // 🔥 Пагинация
             var tasks = await tasksQuery
                 .Paginate(query.Start, query.Ends)
                 .ToListAsync();
