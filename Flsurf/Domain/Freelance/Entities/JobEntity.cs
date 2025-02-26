@@ -8,17 +8,21 @@ namespace Flsurf.Domain.Freelance.Entities
     {
         [ForeignKey("User")]
         public Guid EmployerId { get; set; }
-        public UserEntity Employer { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string RequiredSkills { get; set; }
-        public float Budget { get; set; }
-        public DateTime Deadline { get; set; }
-        public string Status { get; set; }
-        public int NumberOfProposals { get; set; }
+        public UserEntity Employer { get; set; } = null!; 
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public ICollection<SkillEntity> RequiredSkills { get; set; } = [];  // many to many? 
+        public CategoryEntity Category { get; set; } = null!;
+        public decimal? Budget { get; set; } 
+        public decimal? HourlyRate { get; set; }
+        public DateTime? ExpirationDate { get; set; } 
+        public int? Duration { get; set; }
+        public JobStatus Status { get; set; } = JobStatus.Draft;
+        public ICollection<ProposalEntity> Proposals { get; set; } = []; 
         public JobLevel Level { get; set; }
+        public BudgetType BudgetType { get; set; }
         public Guid? SelectedFreelancerId { get; set; }
-        public DateTime PublicationDate { get; set; }
-        public bool PaymentVerified { get; set; }
+        public DateTime? PublicationDate { get; set; } // when job status is public 
+        public bool PaymentVerified { get; set; } = false; 
     }
 }

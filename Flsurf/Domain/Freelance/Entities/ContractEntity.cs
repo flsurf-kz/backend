@@ -9,13 +9,13 @@ namespace Flsurf.Domain.Freelance.Entities
     {
         [ForeignKey("Job")]
         public Guid JobId { get; set; }
-        public JobEntity Job { get; set; }
+        public JobEntity Job { get; set; } = null!;
         [ForeignKey("Freelancer")]
         public Guid FreelancerId { get; set; }
-        public UserEntity Freelancer { get; set; }
+        public UserEntity Freelancer { get; set; } = null!;
         [ForeignKey("Employer")]
         public Guid EmployerId { get; set; }
-        public UserEntity Employer { get; set; }
+        public UserEntity Employer { get; set; } = null!; 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public decimal ContractAmount { get; set; }

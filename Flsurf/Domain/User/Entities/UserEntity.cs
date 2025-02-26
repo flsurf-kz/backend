@@ -1,4 +1,5 @@
 ﻿using Flsurf.Domain.Files.Entities;
+using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Domain.User.Events;
 using Flsurf.Infrastructure;
@@ -47,7 +48,7 @@ namespace Flsurf.Domain.User.Entities
         public string Email { get; set; } = null!;
         [Column(name: "TelegramId")]
         private string? _telegramId; // Закрытое поле для хранения значения
-        public FileEntity? Image { get; set; }
+        public FileEntity? Avatar { get; set; }
         [Required]
         public bool IsOnline { get; set; } = false;
         [JsonIgnore]
@@ -77,6 +78,7 @@ namespace Flsurf.Domain.User.Entities
             }
         }
         public bool Blocked { get; set; } = false;
+        public Countries Location { get; set; }
 
         public static UserEntity Create(
             string fullname,

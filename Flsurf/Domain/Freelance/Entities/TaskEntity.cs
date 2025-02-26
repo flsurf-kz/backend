@@ -10,6 +10,7 @@ namespace Flsurf.Domain.Freelance.Entities
         public string TaskTitle { get; set; }
         public string TaskDescription { get; set; }
         public string Status { get; set; }
+        public int Priority { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime? CompletionDate { get; set; }
     }

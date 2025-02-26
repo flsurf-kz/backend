@@ -2,8 +2,8 @@
 
 namespace Flsurf.Application.Freelance.Queries
 {
-    public class GetClientInfoQuery : BaseQuery
+    public class GetJobQuery : BaseQuery
     {
-        public Guid UserId { get; set; }
+        public Guid JobId { get; set; }
     }
 }

@@ -8,13 +8,24 @@ namespace Flsurf.Domain.Freelance.Entities
     {
         [Key, ForeignKey("User")]
         public Guid UserId { get; set; }
-        public UserEntity User { get; set; }
-        public string CompanyName { get; set; }
-        public string CompanyDescription { get; set; }
-        public string CompanyWebsite { get; set; }
-        public float Rating { get; set; }
-        public string Location { get; set; }
-        public string CompanyLogo { get; set; }
-        public string EmployerType { get; set; }
+        public UserEntity User { get; set; } = null!; 
+        public string CompanyName { get; set; } = string.Empty;
+        public string CompanyDescription { get; set; } = string.Empty;
+        public string CompanyWebsite { get; set; } = string.Empty;
+        public float Rating { get; set; } = 0; 
+        public string Location { get; set; } = string.Empty;
+        public string CompanyLogo { get; set; } = string.Empty;
+        public string EmployerType { get; set; } = string.Empty;
+        
+        // Номер 
+        public bool IsPhoneVerified { get; set; } = false; 
+        public string PhoneNumber { get; set; } = string.Empty;
+
+        // Работы 
+        public ICollection<JobEntity> Jobs { get; set; } = []; 
+        public ICollection<ContractEntity> Contracts { get; set; } = [];
+
+        // Последняя активность
+        public DateTime? LastActiveAt { get; set; }
     }
 }

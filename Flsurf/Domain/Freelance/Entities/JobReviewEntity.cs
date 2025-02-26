@@ -13,9 +13,9 @@ namespace Flsurf.Domain.Freelance.Entities
         public UserEntity Target { get; set; }
         [ForeignKey("Job")]
         public Guid JobId { get; set; }
-        public JobEntity Job { get; set; }
+        public JobEntity Job { get; set; } = new JobEntity();
         public float Rating { get; set; }
-        public string Comment { get; set; }
+        public string Comment { get; set; } = string.Empty;
         public DateTime ReviewDate { get; set; }
     }
 }

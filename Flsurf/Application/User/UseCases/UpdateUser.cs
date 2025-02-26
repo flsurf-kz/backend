@@ -71,7 +71,7 @@ namespace Flsurf.Application.User.UseCases
             }
             if (dto.Avatar != null)
             {
-                user.Image = await _fileService.UploadFile().Execute(dto.Avatar);
+                user.Avatar = await _fileService.UploadFile().Execute(dto.Avatar);
             }
 
             await _context.SaveChangesAsync();

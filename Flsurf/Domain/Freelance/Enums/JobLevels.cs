@@ -2,5 +2,8 @@
 {
     public enum JobLevel
     {
+        Beginner, 
+        Intermediate, 
+        Expert, 
     }
 }
