@@ -17,7 +17,6 @@ namespace Flsurf.Domain.Messanging.Entities
         public Guid ChatId { get; set; }
         public ChatEntity Chat { get; set; } = null!;
         public DateTime SentDate { get; set; }
-        public string Status { get; set; } = null!;
         public bool IsPinned { get; set; } = false; 
         public ICollection<FileEntity> Files { get; set; } = []; 
 

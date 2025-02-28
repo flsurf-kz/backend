@@ -14,6 +14,8 @@ namespace Flsurf.Application.User.Dto
         public string Password { get; set; } = null!;
         [Required]
         public string EmailAddress { get; set; } = null!;
+        [Required]
+        public UserTypes UserType { get; set; }
         public UserRoles? Role { get; set; }
     }
     public class GetUserDto

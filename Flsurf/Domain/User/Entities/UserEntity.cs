@@ -43,6 +43,7 @@ namespace Flsurf.Domain.User.Entities
         [Required, JsonIgnore]
         public string HashedPassword { get; set; } = null!;
         public UserRoles Role { get; set; }
+        public UserTypes Type { get; set; } = UserTypes.NonUser; 
         [Required]
         [EmailAddress(ErrorMessage = "Email address is not correct")]
         public string Email { get; set; } = null!;
@@ -84,6 +85,7 @@ namespace Flsurf.Domain.User.Entities
             string fullname,
             string email,
             string password,
+            UserTypes userType, 
             PasswordService passwordService)
         {
             var user = new UserEntity()

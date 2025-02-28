@@ -34,11 +34,12 @@ namespace Flsurf.Application.User.UseCases
                 fullname: dto.Surname + " " + dto.Name,
                 email: dto.EmailAddress,
                 password: dto.Password,
+                userType: dto.UserType, 
                 passwordService: passwordService
             );
 
             _context.Users.Add(newUser);
-
+            // sends event to freelance module to crete freelancer or client for this user
             await _context.SaveChangesAsync();
 
             return newUser;

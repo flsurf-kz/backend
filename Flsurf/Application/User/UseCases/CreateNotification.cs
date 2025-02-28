@@ -52,7 +52,7 @@ namespace Flsurf.Application.User.UseCases
             foreach (var user in users)
             {
                 var notification = NotificationEntity.CreateFromSystem(
-                    dto.Title, dto.Text, user.Id, dto.Data);
+                    dto.Title, dto.Text, user.Id, dto.Data, null);
 
                 _context.Notifications.Add(notification);
             }

@@ -1,4 +1,5 @@
 ﻿using Flsurf.Domain.Common;
+using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.User.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,9 +21,10 @@ namespace Flsurf.Domain.User.Entities
         public NotificationTypes Type { get; set; } = NotificationTypes.Other;
         [Column(TypeName = "jsonb")]
         public string? Data { get; set; } = string.Empty;
+        public FileEntity? Icon { get; set; } = null!; 
 
         public static NotificationEntity CreateFromSystem(
-            string Title, string Text, Guid toUserId, Dictionary<string, string> data)
+            string Title, string Text, Guid toUserId, Dictionary<string, string> data, FileEntity? icon)
         {
             var notification = new NotificationEntity();
 
@@ -36,7 +38,7 @@ namespace Flsurf.Domain.User.Entities
         }
 
         public static NotificationEntity CreateFromUser(
-            string Title, string Text, Guid toUserId, Guid fromUserId, Dictionary<string, string> data)
+            string Title, string Text, Guid toUserId, Guid fromUserId, Dictionary<string, string> data, FileEntity? icon)
         {
             var notification = new NotificationEntity();
 

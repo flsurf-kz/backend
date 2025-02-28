@@ -1,10 +1,10 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
-using Flsurf.Application.Freelance.Commands.BookmarkJob;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Microsoft.EntityFrameworkCore;
 
-namespace Flsurf.Application.Freelance.Commands
+namespace Flsurf.Application.Freelance.Commands.Job.BookmarkJob
 {
     // unbookmark is too similar, so unbookmark was merged to this handler 
     public class BookmarkJobHandler(IApplicationDbContext dbContext, IPermissionService permService) : ICommandHandler<BookmarkJobCommand>
