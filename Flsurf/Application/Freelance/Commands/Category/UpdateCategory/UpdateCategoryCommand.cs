@@ -2,8 +2,9 @@
 
 namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
 {
-    public class StubCommand : BaseCommand
+    public class UpdateCategoryCommand : BaseCommand
     {
-        public Guid Id { get; }
+        public Guid CategoryId { get; }
+        public string? Name { get; }
     }
 }
