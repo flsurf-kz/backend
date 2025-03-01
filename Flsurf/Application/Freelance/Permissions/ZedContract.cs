@@ -12,7 +12,7 @@ namespace Flsurf.Application.Freelance.Permissions
 
         public Relationship Freelancer(ZedFreelanceUser user) => new(user, "freelancer", this);
 
-        public Relationship FreelancerGroup(ZedFreelancerGroup group) => new(group, "freelancer", this);
+        public Relationship FreelancerGroup(ZedFreelancerTeam group) => new(group, "freelancer", this);
 
         public Relationship Overwatcher(ZedFreelanceUser user) => new(user, "overwatcher", this);
     }

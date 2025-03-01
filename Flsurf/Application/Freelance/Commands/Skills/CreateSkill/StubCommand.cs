@@ -2,7 +2,7 @@
 
 namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
 {
-    public class StubCommand : BaseCommand
+    public class CreateFreelancerTeamCommand : BaseCommand
     {
         public Guid Id { get; }
     }

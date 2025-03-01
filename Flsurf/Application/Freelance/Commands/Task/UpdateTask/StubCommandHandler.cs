@@ -4,18 +4,18 @@ using Flsurf.Infrastructure.Adapters.Permissions;
 
 namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
 {
-    public class StubCommandHandler : ICommandHandler<StubCommand>
+    public class CreateFreelancerTeamHandler : ICommandHandler<CreateFreelancerTeamCommand>
     {
         private readonly IApplicationDbContext _context;
         private readonly IPermissionService _permService;
 
-        public StubCommandHandler(IApplicationDbContext context, IPermissionService permService)
+        public CreateFreelancerTeamHandler(IApplicationDbContext context, IPermissionService permService)
         {
             _context = context;
             _permService = permService;
         }
 
-        public async Task<CommandResult> Handle(StubCommand command)
+        public async Task<CommandResult> Handle(CreateFreelancerTeamCommand command)
         {
             // Заглушка: ничего не делаем, просто имитируем асинхронную операцию
             await Task.CompletedTask;

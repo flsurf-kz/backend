@@ -15,5 +15,7 @@ namespace Flsurf.Application.Freelance.Permissions
 
         public Permission CanDeleteCategory(ZedCategory category) => new(category, "delete", this);
         public Permission CanUpdateCategory(ZedCategory category) => new(category, "update", this);
+        public Permission CanInviteMembers(ZedFreelancerTeam team) => new(team, "invite", this);
+        public Permission CanKickMembers(ZedFreelancerTeam team) => new(team, "kick", this);
     }
 }

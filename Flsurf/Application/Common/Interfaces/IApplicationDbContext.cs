@@ -41,6 +41,7 @@ namespace Flsurf.Application.Common.Interfaces
         public DbSet<ContractEntity> Contracts { get; set; }
         public DbSet<FreelancerProfileEntity> FreelancerProfiles { get; set; }
         public DbSet<FreelancerTeamEntity> FreelancerTeams { get; set; }
+        public DbSet<FreelancerTeamInvitation> FreelancerTeamInvitations { get; set; }
         public DbSet<JobEntity> Jobs { get; set; }
         public DbSet<PortfolioProjectEntity> PortfolioProjects { get; set; }
         public DbSet<ProposalEntity> Proposals { get; set; }
