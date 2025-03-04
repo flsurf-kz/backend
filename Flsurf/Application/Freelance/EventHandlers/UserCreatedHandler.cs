@@ -1,4 +1,6 @@
-﻿using Flsurf.Application.Common.Interfaces;
+﻿using Flsurf.Application.Common.Exceptions;
+using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Freelance.Commands.Category.UpdateCategory;
 using Flsurf.Application.Payment.Permissions;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Payment.Entities;
@@ -21,11 +23,7 @@ namespace Flsurf.Application.Freelance.EventHandlers
 
         public async Task HandleEvent(UserCreated eventValue, IApplicationDbContext _context)
         {
-            if (eventValue.User.Type == Domain.User.Enums.UserTypes.Freelancer)
-            {
-                var freelancer = FreelancerProfileEntity
-            }
-
+            // TODO? 
             _logger.LogInformation($"Creating freelancer or client account: {eventValue.User.Id}");
 
 

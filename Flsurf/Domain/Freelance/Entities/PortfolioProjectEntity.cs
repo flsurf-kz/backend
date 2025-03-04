@@ -16,6 +16,25 @@ namespace Flsurf.Domain.Freelance.Entities
         public Guid UserId { get; set; }
 
         [ForeignKey("UserId")]
-        public UserEntity User { get; set; } = null!;  
+        public UserEntity User { get; set; } = null!;
+        public static PortfolioProjectEntity Create(
+            string name,
+            string userRole,
+            ICollection<SkillEntity> skills,
+            string description,
+            ICollection<FileEntity> images,
+            Guid userId)
+        {
+            return new PortfolioProjectEntity
+            {
+                Name = name,
+                UserRole = userRole,
+                Skills = skills,
+                Description = description,
+                Images = images,
+                UserId = userId,
+                Hidden = true // По умолчанию проекты скрытые
+            };
+        }
     }
 }
