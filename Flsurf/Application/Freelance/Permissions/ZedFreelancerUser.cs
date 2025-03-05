@@ -2,11 +2,11 @@
 
 namespace Flsurf.Application.Freelance.Permissions
 {
-    public class ZedFreelanceUser : ResourceReference
+    public class ZedFreelancerUser : ResourceReference
     {
-        private ZedFreelanceUser(Guid userId) : base($"freelance/user:{userId}") { }
+        private ZedFreelancerUser(Guid userId) : base($"freelance/user:{userId}") { }
 
-        public static ZedFreelanceUser WithId(Guid userId) => new(userId);
+        public static ZedFreelancerUser WithId(Guid userId) => new(userId);
 
         public Permission CanReadContract(ZedContract contract) => new(contract, "read", this);
 
@@ -17,6 +17,6 @@ namespace Flsurf.Application.Freelance.Permissions
         public Permission CanUpdateCategory(ZedCategory category) => new(category, "update", this);
         public Permission CanInviteMembers(ZedFreelancerTeam team) => new(team, "invite", this);
         public Permission CanKickMembers(ZedFreelancerTeam team) => new(team, "kick", this);
-        public Permission CanAddGlobalSkills() => new(ZedSkill.WithWildcard(), "add", this)
+        public Permission CanAddGlobalSkills() => new(ZedSkill.WithWildcard(), "add", this); 
     }
 }

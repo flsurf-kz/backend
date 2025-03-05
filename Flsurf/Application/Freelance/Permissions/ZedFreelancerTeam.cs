@@ -8,8 +8,8 @@ namespace Flsurf.Application.Freelance.Permissions
 
         public static ZedFreelancerTeam WithId(Guid groupId) => new(groupId);
 
-        public Relationship Member(ZedFreelanceUser user) => new(user, "member", this);
+        public Relationship Member(ZedFreelancerUser user) => new(user, "member", this);
 
-        public Relationship Owner(ZedFreelanceUser user) => new(user, "owner", this);
+        public Relationship Owner(ZedFreelancerUser user) => new(user, "owner", this);
     }
 }

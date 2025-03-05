@@ -23,7 +23,7 @@ namespace Flsurf.Application.Freelance.Queries
 
             // 🔎 Проверяем, может ли пользователь читать задачи в этом контракте
             var hasPermission = await _permService.CheckPermission(
-                ZedFreelanceUser.WithId(user.Id).CanReadContract(ZedContract.WithId(query.ContractId)));
+                ZedFreelancerUser.WithId(user.Id).CanReadContract(ZedContract.WithId(query.ContractId)));
 
             if (!hasPermission) throw new UnauthorizedAccessException("User has no access to contract tasks");
 

@@ -22,7 +22,7 @@ namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
         {
             var user = await _permService.GetCurrentUser();
             await _permService.CheckPermission(
-                ZedFreelanceUser.WithId(user.Id).CanInviteMembers(ZedFreelancerTeam.WithId(command.FreelanceGroupId))); 
+                ZedFreelancerUser.WithId(user.Id).CanInviteMembers(ZedFreelancerTeam.WithId(command.FreelanceGroupId))); 
 
             var group = await _context.FreelancerTeams
                 .Include(x => x.Participants)

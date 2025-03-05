@@ -29,7 +29,7 @@ namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
             var user = await _permService.GetCurrentUser();
 
             bool ok = await _permService.CheckPermission(
-                ZedFreelanceUser.WithId(user.Id).CanUpdateCategory(ZedCategory.WithId(command.CategoryId))); 
+                ZedFreelancerUser.WithId(user.Id).CanUpdateCategory(ZedCategory.WithId(command.CategoryId))); 
 
             if (!ok)
             {

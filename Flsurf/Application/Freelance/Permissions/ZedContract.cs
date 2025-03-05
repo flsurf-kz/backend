@@ -8,12 +8,12 @@ namespace Flsurf.Application.Freelance.Permissions
 
         public static ZedContract WithId(Guid contractId) => new(contractId);
 
-        public Relationship Client(ZedFreelanceUser user) => new(user, "client", this);
+        public Relationship Client(ZedFreelancerUser user) => new(user, "client", this);
 
-        public Relationship Freelancer(ZedFreelanceUser user) => new(user, "freelancer", this);
+        public Relationship Freelancer(ZedFreelancerUser user) => new(user, "freelancer", this);
 
         public Relationship FreelancerGroup(ZedFreelancerTeam group) => new(group, "freelancer", this);
 
-        public Relationship Overwatcher(ZedFreelanceUser user) => new(user, "overwatcher", this);
+        public Relationship Overwatcher(ZedFreelancerUser user) => new(user, "overwatcher", this);
     }
 }

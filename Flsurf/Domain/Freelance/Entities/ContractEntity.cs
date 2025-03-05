@@ -18,8 +18,9 @@ namespace Flsurf.Domain.Freelance.Entities
         public UserEntity Employer { get; set; } = null!; 
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public decimal ContractAmount { get; set; }
-        public CurrencyEnum ContractCurrency { get; set; }
-        public ContractStatus Status { get; set; }
+        public decimal? ContractMoney { get; set; }
+        public ContractStatus Status { get; set; } = ContractStatus.Active;
+        public decimal? CostPerHour { get; set; }
+        public BudgetType BudgetType { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
         {
             var user = await _permService.GetCurrentUser();
 
-            if (!await _permService.CheckPermission(ZedFreelanceUser.WithId(user.Id).CanAddGlobalSkills()))
+            if (!await _permService.CheckPermission(ZedFreelancerUser.WithId(user.Id).CanAddGlobalSkills()))
             {
                 return CommandResult.Forbidden("Недостаточно прав");
             }
@@ -51,7 +51,7 @@ namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
 
             if (!skillsToDelete.Any())
             {
-                return CommandResult.NotFound("Навыки не найдены");
+                return CommandResult.NotFound("Навыки не найдены", Guid.Empty);
             }
 
             _dbContext.Skills.RemoveRange(skillsToDelete);

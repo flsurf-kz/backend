@@ -37,7 +37,7 @@ namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
 
             // 🔒 Проверяем, является ли `owner` владельцем команды
             bool isOwner = await _permService.CheckPermission(
-                ZedFreelanceUser.WithId(owner.Id).CanKickMembers(ZedFreelancerTeam.WithId(command.TeamId))
+                ZedFreelancerUser.WithId(owner.Id).CanKickMembers(ZedFreelancerTeam.WithId(command.TeamId))
             );
 
             if (!isOwner)
@@ -70,7 +70,7 @@ namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
 
             // ❌ Удаляем `Member` через `DeleteRelationship()`
             await _permService.DeleteRelationship(
-                ZedFreelancerTeam.WithId(team.Id).Member(ZedFreelanceUser.WithId(freelancer.Id))
+                ZedFreelancerTeam.WithId(team.Id).Member(ZedFreelancerUser.WithId(freelancer.Id))
             );
 
             return CommandResult.Success(freelancer.Id);

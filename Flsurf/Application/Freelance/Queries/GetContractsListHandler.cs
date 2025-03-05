@@ -20,7 +20,7 @@ namespace Flsurf.Application.Freelance.Queries
 
             // 🔥 Получаем контракты, к которым пользователь имеет доступ
             var perms = _permService.LookupSubjects(
-                ZedFreelanceUser.WithId(userId),
+                ZedFreelancerUser.WithId(userId),
                 "read",
                 "contract");
 

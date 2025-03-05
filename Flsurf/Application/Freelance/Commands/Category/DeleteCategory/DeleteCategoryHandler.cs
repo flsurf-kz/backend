@@ -30,7 +30,7 @@ namespace Flsurf.Application.Freelance.Commands.Category.DeleteCategory
 
             // Проверка прав на удаление категории
             bool hasPermission = await _permService.CheckPermission(
-                ZedFreelanceUser.WithId(user.Id).CanDeleteCategory(ZedCategory.WithId(command.CategoryId))
+                ZedFreelancerUser.WithId(user.Id).CanDeleteCategory(ZedCategory.WithId(command.CategoryId))
             );
 
             if (!hasPermission)

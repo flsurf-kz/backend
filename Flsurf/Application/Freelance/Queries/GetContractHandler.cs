@@ -16,7 +16,7 @@ namespace Flsurf.Application.Freelance.Queries
         public async Task<ContractEntity?> Handle(GetContractQuery query)
         {
             var userId = (await permissionService.GetCurrentUser()).Id;
-            var rel = ZedFreelanceUser.WithId(userId).CanReadContract(ZedContract.WithId(query.ContractId)); 
+            var rel = ZedFreelancerUser.WithId(userId).CanReadContract(ZedContract.WithId(query.ContractId)); 
             await permissionService.EnforceCheckPermission(rel);
 
             var contract = await _dbContext.Contracts
