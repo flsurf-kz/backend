@@ -2,7 +2,8 @@
 {
     public enum WorkSessionStatus
     {
-        InProgress, 
-        Completed, 
+        Pending, 
+        Approved,
+        Rejected 
     }
 }

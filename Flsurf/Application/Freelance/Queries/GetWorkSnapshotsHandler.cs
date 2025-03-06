@@ -10,12 +10,12 @@ using SpiceDb.Models;
 namespace Flsurf.Application.Freelance.Queries
 {
     public class GetWorkSnapshotsHandler(IPermissionService permService, IApplicationDbContext dbContext)
-        : IQueryHandler<GetWorkSnapshotsQuery, List<WorkSnapshotEntity>>
+        : IQueryHandler<GetWorkSnapshotsQuery, List<WorkSessionEntity>>
     {
         private readonly IPermissionService _permService = permService;
         private readonly IApplicationDbContext _dbContext = dbContext;
 
-        public async Task<List<WorkSnapshotEntity>> Handle(GetWorkSnapshotsQuery query)
+        public async Task<List<WorkSessionEntity>> Handle(GetWorkSnapshotsQuery query)
         {
             // 🔐 Получаем текущего пользователя
             var user = await _permService.GetCurrentUser();
@@ -27,7 +27,7 @@ namespace Flsurf.Application.Freelance.Queries
             if (!hasPermission) throw new AccessDenied("User has no access to work snapshots");
 
             // 🔥 Получаем снэпшоты работы
-            var snapshotsQuery = _dbContext.WorkSnapshots
+            var snapshotsQuery = _dbContext.WorkSessions
                 .Where(ws => ws.ContractId == query.ContractId) // Фильтр по контракту
                 .OrderByDescending(ws => ws.CreatedAt); // Сортировка по дате создания (новые сначала)
 

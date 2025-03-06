@@ -48,7 +48,7 @@ namespace Flsurf.Application.Common.Interfaces
         public DbSet<JobReviewEntity> Reviews { get; set; }
         public DbSet<SkillEntity> Skills { get; set; }
         public DbSet<TaskEntity> Tasks { get; set; }
-        public DbSet<WorkSnapshotEntity> WorkSnapshots { get; set; }
+        public DbSet<WorkSessionEntity> WorkSessions { get; set; }
 
         // messaging 
         public DbSet<ChatEntity> Chats { get; set; }
