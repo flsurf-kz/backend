@@ -19,6 +19,8 @@ namespace Flsurf.Application.Freelance.Permissions
         public Permission CanKickMembers(ZedFreelancerTeam team) => new(team, "kick", this);
         public Permission CanAddGlobalSkills() => new(ZedSkill.WithWildcard(), "add", this);
         public Permission CanWorkOnContract(ZedContract contract) => new(contract, "work", this);
-        public Permission CanCreateCategories() => new(ZedCategory.WithWildcard(), "create", this); 
+        public Permission CanCreateCategories() => new(ZedCategory.WithWildcard(), "create", this);
+        public Permission CanDeleteJob(ZedJob job) => new(job, "delete", this);
+        public Permission CanUpdateJob(ZedJob job) => new(job, "update", this);
     }
 }

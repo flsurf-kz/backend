@@ -6,6 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Freelance.Commands.Job.BookmarkJob
 {
+    public class BookmarkJobCommand : BaseCommand
+    {
+        public Guid JobId { get; set; }
+    }
+
     // unbookmark is too similar, so unbookmark was merged to this handler 
     public class BookmarkJobHandler(IApplicationDbContext dbContext, IPermissionService permService) : ICommandHandler<BookmarkJobCommand>
     {

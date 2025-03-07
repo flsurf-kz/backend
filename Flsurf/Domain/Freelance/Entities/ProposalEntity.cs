@@ -13,13 +13,9 @@ namespace Flsurf.Domain.Freelance.Entities
         [ForeignKey("User")]
         public Guid FreelancerId { get; set; }
         public UserEntity Freelancer { get; set; }
-        public decimal Amount { get; set; }
-        public CurrencyEnum Currency { get; set; }
-        public string ConvertLetter { get; set; }
-        public WorkTypes Type { get; set; }
-        public string Status { get; set; }
+        public decimal ProposedRate { get; set; }
+        public string CoverLetter { get; set; }
+        public ProposalStatus Status { get; set; }
         public Guid? Files { get; set; }
-        public DateTime Date { get; set; }
     }
-
 }
