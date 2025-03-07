@@ -7,7 +7,7 @@ using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
+namespace Flsurf.Application.Freelance.Commands.Job
 {
     public class SubmitProposalCommand : BaseCommand
     {
@@ -15,7 +15,7 @@ namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
         public string CoverLetter { get; set; } = string.Empty;
         public decimal? ProposedRate { get; set; }
     }
-    
+
     // TODO FIX THIS
     public class SubmitProposalHandler(IApplicationDbContext dbContext, IPermissionService permService) : ICommandHandler<SubmitProposalCommand>
     {

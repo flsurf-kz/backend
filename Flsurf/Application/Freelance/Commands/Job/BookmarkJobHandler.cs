@@ -4,7 +4,7 @@ using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Flsurf.Application.Freelance.Commands.Job.BookmarkJob
+namespace Flsurf.Application.Freelance.Commands.Job
 {
     public class BookmarkJobCommand : BaseCommand
     {

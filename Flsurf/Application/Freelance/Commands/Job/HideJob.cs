@@ -1,8 +1,9 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Freelance.Commands.Category.UpdateCategory;
 using Flsurf.Infrastructure.Adapters.Permissions;
 
-namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
+namespace Flsurf.Application.Freelance.Commands.Job
 {
     public class CreateFreelancerTeamHandler : ICommandHandler<CreateFreelancerTeamCommand>
     {

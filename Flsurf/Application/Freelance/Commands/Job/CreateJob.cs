@@ -10,7 +10,7 @@ using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
+namespace Flsurf.Application.Freelance.Commands.Job
 {
     public class CreateJobCommand : BaseCommand
     {
@@ -31,13 +31,13 @@ namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
     public class CreateJobHandler(IApplicationDbContext dbContext, IPermissionService permService, UploadFiles uploadFiles) : ICommandHandler<CreateJobCommand>
     {
         private readonly IApplicationDbContext _dbContext = dbContext;
-        private readonly UploadFiles _uploadFiles = uploadFiles; 
+        private readonly UploadFiles _uploadFiles = uploadFiles;
         private readonly IPermissionService _permService = permService;
 
         public async Task<CommandResult> Handle(CreateJobCommand command)
         {
             var user = await _permService.GetCurrentUser();
-            
+
 
             if (user.Type != UserTypes.Client)
             {
@@ -50,14 +50,14 @@ namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
                 .ToListAsync();
 
             var category = await _dbContext.Categories
-                .FirstOrDefaultAsync(c => c.Id == command.CategoryId); 
+                .FirstOrDefaultAsync(c => c.Id == command.CategoryId);
 
             if (category == null)
             {
-                return CommandResult.NotFound("", command.CategoryId); 
+                return CommandResult.NotFound("", command.CategoryId);
             }
 
-            var files = await _uploadFiles.Execute(command.Files); 
+            var files = await _uploadFiles.Execute(command.Files);
 
             // Создаём вакансию
             JobEntity job = command.BudgetType == BudgetType.Fixed

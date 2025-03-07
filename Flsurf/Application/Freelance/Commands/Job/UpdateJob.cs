@@ -6,7 +6,7 @@ using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Flsurf.Application.Freelance.Commands.Category.UpdateCategory
+namespace Flsurf.Application.Freelance.Commands.Job
 {
     public class UpdateJobCommand : BaseCommand
     {
