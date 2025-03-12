@@ -74,6 +74,8 @@ namespace Flsurf.Application.Freelance.Commands.Job
                 ZedJob.WithId(job.Id).Owner(ZedUser.WithId(user.Id))
             );
 
+            // Job is responsible for only Public view, and Contract is about after job 
+
             return CommandResult.Success(job.Id);
         }
     }

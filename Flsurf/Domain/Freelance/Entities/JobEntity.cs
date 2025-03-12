@@ -4,11 +4,12 @@ using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.Freelance.Events;
 using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Flsurf.Domain.Freelance.Entities
 {
-    // ContractEntity -> JobEntity JobEntity owns Contract, basicly Aggregate for Jobs 
-    // TODO! Fix this mess, split up, and refactor!! 
+    // Job is resonsible for public view, and everything before contract sign. 
+    // then all tasks, resign, rejects and etc are COntract resposnibilities 
     public class JobEntity : BaseAuditableEntity
     {
         [ForeignKey("User")]
@@ -28,9 +29,11 @@ namespace Flsurf.Domain.Freelance.Entities
         public BudgetType BudgetType { get; set; }
         public DateTime? PublicationDate { get; set; } // when job status is public 
         public bool PaymentVerified { get; set; } = false;
-        public ContractEntity Contract { get; set; } = null!;
+        [JsonIgnore]
+        public ContractEntity? Contract { get; set; } 
+        [JsonIgnore]
         [ForeignKey("Contract")]
-        public Guid ContractId { get; private set; }
+        public Guid? ContractId { get; private set; }
         public ICollection<FileEntity> Files { get; private set; } = []; 
 
         public static JobEntity CreateFixed(
@@ -56,6 +59,7 @@ namespace Flsurf.Domain.Freelance.Entities
                 EmployerId = employer.Id,
                 BudgetType = BudgetType.Fixed,
                 Category = category,
+                Files = files, 
             }; 
         }
 
@@ -77,6 +81,7 @@ namespace Flsurf.Domain.Freelance.Entities
                 Description = description,
                 PaymentVerified = paymentVerified,
                 Level = level,
+                Files = files, 
                 RequiredSkills = skills,
                 Employer = employer,
                 EmployerId = employer.Id,
