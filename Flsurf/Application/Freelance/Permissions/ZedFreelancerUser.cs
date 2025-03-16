@@ -22,5 +22,6 @@ namespace Flsurf.Application.Freelance.Permissions
         public Permission CanCreateCategories() => new(ZedCategory.WithWildcard(), "create", this);
         public Permission CanDeleteJob(ZedJob job) => new(job, "delete", this);
         public Permission CanUpdateJob(ZedJob job) => new(job, "update", this);
+        public Permission CanSuspendClientProfile(ZedClientProfile profile) => new(profile, "suspend", this); 
     }
 }

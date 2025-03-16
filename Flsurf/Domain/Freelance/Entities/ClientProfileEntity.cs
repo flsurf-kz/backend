@@ -27,5 +27,7 @@ namespace Flsurf.Domain.Freelance.Entities
 
         // Последняя активность
         public DateTime? LastActiveAt { get; set; }
+
+        public bool Suspended { get; set; } = false;
     }
 }
