@@ -18,7 +18,7 @@ namespace Flsurf.Domain.Freelance.Entities
             return new SkillEntity
             {
                 Name = name,
-            }
+            }; 
         }
     }
 }

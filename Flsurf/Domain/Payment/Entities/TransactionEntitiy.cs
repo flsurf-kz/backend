@@ -9,10 +9,11 @@ namespace Flsurf.Domain.Payment.Entities
     {
         [ForeignKey(nameof(WalletEntity))]
         public Guid WalletId { get; private set; }
+        public Guid? AntoganistTransactionId { get; set; }
         public Money RawAmount { get; private set; }
         public Money NetAmount { get; private set; }
         public Money AppliedFee { get; private set; }
-        public TransactionStatus Status { get; private set; }
+        public TransactionStatus Status { get; private set; } = TransactionStatus.Pending; 
         public TransactionType Type { get; private set; }
         public TransactionFlow Flow { get; private set; }  // 🔥 Новое поле
         public TransactionPropsEntity? Props { get; private set; } = null!;

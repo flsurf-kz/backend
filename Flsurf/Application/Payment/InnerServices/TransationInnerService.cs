@@ -1,14 +1,15 @@
 ﻿using Flsurf.Application.Common.cqrs;
+using Flsurf.Application.Common.Exceptions;
 using Flsurf.Application.Common.Interfaces;
-using Flsurf.Domain.Payment.Entities;
 using Flsurf.Domain.Payment.Enums;
 using Flsurf.Domain.Payment.Policies;
 using Flsurf.Domain.Payment.ValueObjects;
-using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Payment.InnerServices
 {
+
+
     public class TransactionInnerService(IApplicationDbContext dbContext)
     {
         private IApplicationDbContext _dbContext = dbContext; 
@@ -41,10 +42,57 @@ namespace Flsurf.Application.Payment.InnerServices
             return CommandResult.Success(); 
         }
 
-        public async Task<CommandResult> Rollback(Guid transactionId)
+        public async Task<CommandResult> Refund(Guid transactionId)
         {
+            var transaction = await _dbContext.Transactions.FirstOrDefaultAsync(x => x.Id == transactionId);
 
+            if (transaction == null)
+                return CommandResult.NotFound("Не найдена транзакция", transactionId);
+
+            if (transaction.AntoganistTransactionId == null)
+            {
+                // то есть возврат средств на какие то фентифлющки по типу випки
+                // но такое не допускается так что нет! 
+                throw new NotImplementedException("Подожди");
+            } if (transaction.AntoganistTransactionId == transactionId)
+            {
+                throw new DomainException("Что то пошло очень не так, коррупция данных про транзакции");
+            }
+
+            var antoganistTx = await _dbContext.Transactions.FirstOrDefaultAsync(y => y.Id == transaction.AntoganistTransactionId);
+
+            if (antoganistTx == null)
+                return CommandResult.NotFound("Че бля", (Guid)transaction.AntoganistTransactionId);
+
+            var returnToWallet = await _dbContext.Wallets
+                .Include(x => x.Transactions)
+                .FirstOrDefaultAsync(x => x.Id == antoganistTx.WalletId);
+            var fromWallet = await _dbContext.Wallets
+                .Include(x => x.Transactions)
+                .FirstOrDefaultAsync(x => x.Id == transaction.WalletId);
+
+            if (returnToWallet == null || fromWallet == null)
+                return CommandResult.NotFound("Кошёлек не найден", antoganistTx.WalletId);
+
+            // может просто упасть и все
+            fromWallet.RefundTransaction(transaction, returnToWallet);
+
+            return CommandResult.Success(fromWallet.Id); 
+        }
+
+        public async Task<CommandResult> BalanceOperation(Money amount, Guid walletId, BalanceOperationType operation)
+        {
+            // просто добавляет или убавляет деньги через транзакцию 
+            var wallet = await _dbContext.Wallets
+                .Include(x => x.Transactions)
+                .FirstOrDefaultAsync(x => x.Id == walletId);
+
+            if (wallet == null)
+                return CommandResult.NotFound("Кошёлек не найден", walletId);
+
+            wallet.BalanceOperation(amount, operation); 
+
+            return CommandResult.Success(walletId);
         }
     }
-
 }

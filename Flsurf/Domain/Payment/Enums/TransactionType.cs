@@ -13,7 +13,6 @@ namespace Flsurf.Domain.Payment.Enums
         SystemAdjustment,   // Системное изменение баланса (административное действие)
         Bonus,              // Начисление бонусов или промо-акций
         Penalty,            // Штраф (например, за отмену контракта)
-        Rollback
     }
 
 }

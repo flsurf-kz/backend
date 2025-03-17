@@ -42,7 +42,6 @@ namespace Flsurf.Domain.Payment.Entities
         [JsonIgnore]
         public ICollection<TransactionEntity> Transactions { get; private set; } = new List<TransactionEntity>();
 
-        private const int MaxTransactionsToTrack = 10; // Ограничение для избежания перегрузки коллекции
 
         public static WalletEntity Create(UserEntity user)
         {
@@ -84,6 +83,9 @@ namespace Flsurf.Domain.Payment.Entities
 
         public void AcceptTransaction(TransactionEntity transaction)
         {
+            if (transaction.WalletId != Id)
+                throw new DomainException("Эта транзакция не для вашего кошелёка"); 
+
             EnsureNotBlocked(); 
 
             if (transaction.Flow == TransactionFlow.Outgoing)
@@ -115,20 +117,53 @@ namespace Flsurf.Domain.Payment.Entities
         {
             EnsureNotBlocked();
 
-            AcceptTransaction(TransactionEntity.Create(
+            var thisWalletTx = TransactionEntity.Create(
                 Id,
                 transferMoney,
-                feePolicy ?? new NoPolicy(), 
+                feePolicy ?? new NoFeePolicy(),
                 TransactionType.Transfer,
-                TransactionFlow.Outgoing));
+                TransactionFlow.Outgoing);
 
-            recieverWallet.AcceptTransaction(TransactionEntity.CreateFrozen(
-                recieverWallet.Id, 
-                transferMoney, 
-                feePolicy ?? new NoPolicy(), 
-                TransactionType.Transfer, 
+            var recieverTx = TransactionEntity.CreateFrozen(
+                recieverWallet.Id,
+                transferMoney,
+                feePolicy ?? new NoFeePolicy(),
+                TransactionType.Transfer,
                 TransactionFlow.Incoming,
-                freezeFundsDays ?? 2)); 
+                freezeFundsDays ?? 2); 
+
+            // reciever rolls back!! 
+            recieverTx.AntoganistTransactionId = thisWalletTx.Id;
+            thisWalletTx.AntoganistTransactionId = recieverTx.Id;
+
+            AcceptTransaction(thisWalletTx);
+
+            recieverWallet.AcceptTransaction(recieverTx); 
+        }
+
+        public void BalanceOperation(Money amount, BalanceOperationType type)
+        {
+            EnsureNotBlocked();
+
+            if (type == BalanceOperationType.Froze)
+            {
+                FreezeAmount(amount, DateTime.UtcNow.AddDays(2)); // потому что 
+            } if (type == BalanceOperationType.Unfreeze)
+            {
+                UnfreezeAmount(amount); 
+            } if (type == BalanceOperationType.PendingIncome)
+            {
+                PendingIncome += amount; 
+            } else 
+            { 
+                // admin balance change! 
+                AcceptTransaction(TransactionEntity.Create(
+                    Id,
+                    amount,
+                    new NoFeePolicy(),
+                    TransactionType.Transfer,
+                    type == BalanceOperationType.Deposit ? TransactionFlow.Incoming : TransactionFlow.Outgoing));
+            }
         }
 
         // ✅ Пополнение счета
@@ -208,29 +243,36 @@ namespace Flsurf.Domain.Payment.Entities
         }
 
         // ❌ Откат транзакции создает еще одну двух сторонную транзакцию которая берет деньги из другого кошелка и сует в другой 
-        public void RollbackTransaction(TransactionEntity transaction, WalletEntity returnTo)
+        public void RefundTransaction(TransactionEntity transaction, WalletEntity returnTo)
         {
             EnsureNotBlocked();
 
-            AcceptTransaction(new TransactionEntity(
+            var outgoingTx = new TransactionEntity(
                 Id,
                 transaction.NetAmount,
-                new NoPolicy(),
-                TransactionType.Rollback,
+                new NoFeePolicy(),
+                TransactionType.Refund,
                 TransactionFlow.Outgoing,
                 null,
                 null,
-                "Отказ транзакции"));
+                "Отказ транзакции");
 
-            returnTo.AcceptTransaction(new TransactionEntity(
+            var incomingTx = new TransactionEntity(
                 returnTo.Id,
-                transaction.NetAmount, 
-                new NoPolicy(),  // TODO!! 
-                TransactionType.Rollback, 
-                TransactionFlow.Incoming, 
-                null, 
-                null, 
-                "Отказ транзакции"));
+                transaction.NetAmount,
+                new NoFeePolicy(),  // TODO!! 
+                TransactionType.Refund,
+                TransactionFlow.Incoming,
+                null,
+                null,
+                "Возврат средств"); 
+
+            incomingTx.AntoganistTransactionId = outgoingTx.Id;
+            outgoingTx.AntoganistTransactionId = incomingTx.Id;
+
+            AcceptTransaction(outgoingTx);
+
+            returnTo.AcceptTransaction(incomingTx);
 
             AddDomainEvent(new TransactionRolledBack(this, transaction));
         }

@@ -7,8 +7,9 @@ namespace Flsurf.Infrastructure.Data.Queries
     {
         public static IQueryable<WalletEntity> IncludeStandard(this IQueryable<WalletEntity> query)
         {
-            return query.
-                Include(x => x.User);
+            return query
+                .Include(x => x.User)
+                .Include(x => x.Transactions);
         }
     }
 }

@@ -3,9 +3,9 @@ using Flsurf.Domain.Payment.ValueObjects;
 
 namespace Flsurf.Domain.Payment.Policies
 {
-    public class NoPolicy : IFeePolicy
+    public class NoFeePolicy : IFeePolicy
     {
-        public NoPolicy() { }
+        public NoFeePolicy() { }
 
         public Money CalculateFee(Money amount, TransactionType transactionType, FeeContext? context)
         {
