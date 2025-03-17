@@ -26,5 +26,12 @@ namespace Flsurf.Domain.Payment.Entities
                 FeeContext = feeContext
             };
         }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return PaymentUrl;
+            yield return SuccessUrl;
+            yield return PaymentGateway;
+        }
     }
 }

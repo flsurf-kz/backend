@@ -1,11 +1,14 @@
-﻿using Flsurf.Domain.Common;
+﻿using Flsurf.Application.Common.Exceptions;
+using Flsurf.Domain.Common;
 using Flsurf.Domain.Payment.Enums;
 using Flsurf.Domain.Payment.Events;
 using Flsurf.Domain.Payment.Exceptions;
+using Flsurf.Domain.Payment.Policies;
 using Flsurf.Domain.Payment.ValueObjects;
 using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Flsurf.Domain.Payment.Entities
 {
@@ -35,7 +38,8 @@ namespace Flsurf.Domain.Payment.Entities
 
         public WalletBlockReason BlockReason { get; private set; } = WalletBlockReason.None;
 
-        // 🔥 Коллекция связанных транзакций
+        // Загрузка всей коллекции идет только при операциях с кошёлкем 
+        [JsonIgnore]
         public ICollection<TransactionEntity> Transactions { get; private set; } = new List<TransactionEntity>();
 
         private const int MaxTransactionsToTrack = 10; // Ограничение для избежания перегрузки коллекции
@@ -60,61 +64,75 @@ namespace Flsurf.Domain.Payment.Entities
             return wallet;
         }
 
-        // 🔁 Перевод между кошельками
-        public void TransferTo(WalletEntity recipientWallet, Money amount)
-        {
-            if (AvailableBalance < amount)
-                throw new InvalidOperationException("Недостаточно средств для перевода.");
-
-            this.Withdraw(amount);
-            recipientWallet.Deposit(amount);
-
-            AddDomainEvent(new FundsTransferredEvent(this, recipientWallet, amount)); 
-        }
-
         // ✅ Переопределение добавления транзакций (безопасный способ)
-        public void AddTransaction(TransactionEntity transaction)
+        private void AddTransaction(TransactionEntity transaction)
         {
+            if (Transactions == null)
+            {
+                throw new NullReferenceException("Не загрузил транзакции пидр");
+            }
+
             if (transaction == null)
                 throw new ArgumentNullException(nameof(transaction));
 
             if (Transactions.Any(t => t.Id == transaction.Id))
-                throw new InvalidOperationException("Транзакция уже добавлена!");
-
-            if (Transactions.Count >= MaxTransactionsToTrack)
-                Transactions.Remove(Transactions.First()); // Удаляем самую старую транзакцию
+                return;  // игнорировтаь 
 
             Transactions.Add(transaction);
             AddDomainEvent(new TransactionAddedEvent(transaction));
         }
 
+        public void AcceptTransaction(TransactionEntity transaction)
+        {
+            EnsureNotBlocked(); 
+
+            if (transaction.Flow == TransactionFlow.Outgoing)
+                Withdraw(transaction.NetAmount);
+
+            if (transaction.Flow == TransactionFlow.Incoming)
+            {
+                if (transaction.FrozenUntil != null)
+                {
+                    FreezeAmount(transaction.NetAmount, (DateTime)transaction.FrozenUntil);
+                } else
+                {
+                    // депозит и передача денег контрактом это другие вещи 
+                    Deposit(transaction.NetAmount); 
+                }
+            }
+
+            transaction.Complete(); 
+
+            AddTransaction(transaction); 
+        }
+
         // ✅ Подтверждение двухсторонней транзакции
-        public void ConfirmTransaction(TransactionEntity transaction, WalletEntity fromWallet)
+        public void Transfer(
+            Money transferMoney, 
+            WalletEntity recieverWallet,
+            IFeePolicy? feePolicy, 
+            int? freezeFundsDays)
         {
             EnsureNotBlocked();
 
-            VerifyTransaction(transaction, true);
+            AcceptTransaction(TransactionEntity.Create(
+                Id,
+                transferMoney,
+                feePolicy ?? new NoPolicy(), 
+                TransactionType.Transfer,
+                TransactionFlow.Outgoing));
 
-            if (transaction.Flow == TransactionFlow.Outgoing)
-            {
-                fromWallet.Deposit(transaction.Amount);
-                this.Withdraw(transaction.Amount);
-            }
-            else if (transaction.Flow == TransactionFlow.Incoming)
-            {
-                fromWallet.Withdraw(transaction.Amount);
-                this.Deposit(transaction.Amount);
-            }
-
-            AddTransaction(transaction);  // Сохраняем в коллекции у обеих сторон
-            fromWallet.AddTransaction(transaction);
-
-            AddDomainEvent(new ConfirmedTransaction(this, transaction, fromWallet));
-            transaction.Complete(); 
+            recieverWallet.AcceptTransaction(TransactionEntity.CreateFrozen(
+                recieverWallet.Id, 
+                transferMoney, 
+                feePolicy ?? new NoPolicy(), 
+                TransactionType.Transfer, 
+                TransactionFlow.Incoming,
+                freezeFundsDays ?? 2)); 
         }
 
         // ✅ Пополнение счета
-        public void Deposit(Money amount)
+        private void Deposit(Money amount)
         {
             EnsureNotBlocked();
             AvailableBalance += amount;
@@ -122,7 +140,7 @@ namespace Flsurf.Domain.Payment.Entities
         }
 
         // ✅ Списание средств
-        public void Withdraw(Money amount)
+        private void Withdraw(Money amount)
         {
             EnsureNotBlocked();
             if (AvailableBalance < amount)
@@ -133,7 +151,7 @@ namespace Flsurf.Domain.Payment.Entities
         }
 
         // 🔒 Заморозка средств
-        public void FreezeAmount(Money amount)
+        private void FreezeAmount(Money amount, DateTime frozenUntil)
         {
             EnsureNotBlocked();
             if (AvailableBalance < amount)
@@ -141,19 +159,41 @@ namespace Flsurf.Domain.Payment.Entities
 
             Frozen += amount;
             AvailableBalance -= amount;
-            AddDomainEvent(new WalletAmountFrozen(this, amount));
+            // добавить потом таску которая размараживает деньги 
+            AddDomainEvent(new WalletAmountFrozen(this, amount, frozenUntil));
         }
 
-        // ❄️ Размораживание средств
-        public void UnfreezeAmount(Money amount)
+        // ❄️ Размораживание средств без контекста 
+        private void UnfreezeAmount(Money amount) 
         {
             EnsureNotBlocked();
+
             if (Frozen < amount)
                 throw new ArgumentException("Нельзя разморозить больше средств, чем было заморожено");
 
             Frozen -= amount;
             AvailableBalance += amount;
             AddDomainEvent(new WalletUnfrozenAmount(this, amount));
+        }
+
+        public void UnfreezeByTransaction(TransactionEntity transaction, bool adminOverride = false)
+        {
+            EnsureNotBlocked();
+
+            if (Transactions == null)
+                throw new NullReferenceException("Загрузи транзакции пидр"); 
+
+            if (!Transactions.Contains(transaction))
+            {
+                throw new DomainException("Нету такой транзакции"); 
+            }
+
+            if (DateTime.UtcNow > transaction.FrozenUntil && !adminOverride)
+            {
+                throw new DomainException("Эти средства все еще заморожены"); 
+            }
+
+            UnfreezeAmount(transaction.RawAmount); 
         }
 
         // ❗️ Блокировка кошелька с указанием причины
@@ -167,16 +207,30 @@ namespace Flsurf.Domain.Payment.Entities
             AddDomainEvent(new WalletBlocked(this, reason.ToString()));
         }
 
-        // ❌ Откат транзакции
-        public void RollbackTransaction(TransactionEntity transaction)
+        // ❌ Откат транзакции создает еще одну двух сторонную транзакцию которая берет деньги из другого кошелка и сует в другой 
+        public void RollbackTransaction(TransactionEntity transaction, WalletEntity returnTo)
         {
             EnsureNotBlocked();
-            VerifyTransaction(transaction, true);
 
-            if (transaction.Flow == TransactionFlow.Incoming)
-                AvailableBalance -= transaction.Amount;
-            else if (transaction.Flow == TransactionFlow.Outgoing)
-                AvailableBalance += transaction.Amount;
+            AcceptTransaction(new TransactionEntity(
+                Id,
+                transaction.NetAmount,
+                new NoPolicy(),
+                TransactionType.Rollback,
+                TransactionFlow.Outgoing,
+                null,
+                null,
+                "Отказ транзакции"));
+
+            returnTo.AcceptTransaction(new TransactionEntity(
+                returnTo.Id,
+                transaction.NetAmount, 
+                new NoPolicy(),  // TODO!! 
+                TransactionType.Rollback, 
+                TransactionFlow.Incoming, 
+                null, 
+                null, 
+                "Отказ транзакции"));
 
             AddDomainEvent(new TransactionRolledBack(this, transaction));
         }

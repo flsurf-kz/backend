@@ -5,6 +5,6 @@ namespace Flsurf.Domain.Payment.Policies
 {
     public interface IFeePolicy
     {
-        Money CalculateFee(Money amount, TransactionType transactionType, FeeContext context);
+        Money CalculateFee(Money amount, TransactionType transactionType, FeeContext? context);
     }
 }

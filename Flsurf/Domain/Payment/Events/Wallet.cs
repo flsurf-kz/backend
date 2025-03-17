@@ -20,10 +20,11 @@ namespace Flsurf.Domain.Payment.Events
         public WalletEntity Wallet { get; set; } = wallet;
     }
 
-    public class WalletAmountFrozen(WalletEntity wallet, Money frozen) : DomainEvent
+    public class WalletAmountFrozen(WalletEntity wallet, Money frozen, DateTime frozenUntil) : DomainEvent
     {
         public Money Frozen { get; set; } = frozen;
         public WalletEntity Wallet { get; set; } = wallet;
+        public DateTime FrozenUntil { get; set; } = frozenUntil; 
     }
 
     public class WalletUnfrozenAmount(WalletEntity wallet, Money unfrozen) : DomainEvent

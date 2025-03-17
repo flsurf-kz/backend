@@ -1,4 +1,5 @@
-﻿using Flsurf.Domain.Payment.Policies;
+﻿using Flsurf.Domain.Payment.Enums;
+using Flsurf.Domain.Payment.Policies;
 using Flsurf.Infrastructure;
 using Microsoft.Extensions.Options;
 

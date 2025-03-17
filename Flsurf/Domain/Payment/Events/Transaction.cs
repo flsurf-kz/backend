@@ -28,7 +28,7 @@ namespace Flsurf.Domain.Payment.Events
         {
             WalletId = wallet.Id;
             TransactionId = transaction.Id;
-            Amount = transaction.Amount;
+            Amount = transaction.RawAmount;
             Flow = transaction.Flow;
             OccurredOn = DateTime.UtcNow;
         }
@@ -49,7 +49,7 @@ namespace Flsurf.Domain.Payment.Events
         {
             WalletId = transaction.WalletId;
             TransactionId = transaction.Id;
-            Amount = transaction.Amount;
+            Amount = transaction.RawAmount;
             Flow = transaction.Flow;
             OccurredOn = DateTime.UtcNow;
         }
