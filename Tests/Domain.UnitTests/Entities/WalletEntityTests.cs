@@ -1,183 +1,243 @@
-﻿using LMS.Domain.Payment.Entities;
-using LMS.Domain.Payment.Enums;
-using LMS.Domain.Payment.Exceptions;
-using LMS.Domain.Payment.ValueObjects;
-using LMS.Domain.User.Entities;
-using System;
-
+﻿
 namespace Tests.Domain.UnitTests.Entities
 {
+    using Flsurf.Domain.Payment.Entities;
+    using Flsurf.Domain.Payment.Enums;
+    using Flsurf.Domain.Payment.Exceptions;
+    using Flsurf.Domain.Payment.ValueObjects;
+    using Flsurf.Domain.User.Entities;
+    using NUnit.Framework;
+    using System;
 
-    [TestFixture]
-    public class WalletEntityTests
+    namespace WalletTests
     {
-        [Test]
-        public void WalletEntity_Create_Should_Set_Default_Values_Correctly()
+        [TestFixture]
+        public class WalletEntityTests
         {
-            // Arrange
-            var user = new UserEntity();
+            private WalletEntity _wallet;
+            private WalletEntity _receiverWallet;
+            private UserEntity _user;
 
-            // Act
-            var wallet = WalletEntity.Create(user);
-
-            // Assert
-            Assert.That(wallet, Is.Not.Null);
-            Assert.That(wallet.User, Is.EqualTo(user));
-            Assert.That(wallet.Currency, Is.EqualTo(CurrencyEnum.RussianRuble));
-            Assert.That(wallet.Frozen.Amount, Is.EqualTo(0));
-            Assert.That(wallet.AvailableBalance.Amount, Is.EqualTo(1000));
-            Assert.That(wallet.PendingIncome.Amount, Is.EqualTo(0));
-            Assert.That(wallet.Blocked, Is.False);
-        }
-
-        [Test]
-        public void WalletEntity_AddBalance_Should_Increase_AvailableBalance_Correctly()
-        {
-            // Arrange
-            var wallet = new WalletEntity();
-            var initialBalance = wallet.AvailableBalance.Amount;
-            var amountToAdd = new Money(100, CurrencyEnum.RussianRuble);
-
-            // Act
-            wallet.AddBalance(amountToAdd);
-
-            // Assert
-            Assert.That(wallet.AvailableBalance.Amount, Is.EqualTo(initialBalance + amountToAdd.Amount));
-        }
-
-        [Test]
-        public void WalletEntity_DecreaseBalance_Should_Decrease_AvailableBalance_Correctly()
-        {
-            // Arrange
-            var wallet = new WalletEntity();
-            wallet.AddBalance(new Money(500, CurrencyEnum.RussianRuble));
-            var initialBalance = wallet.AvailableBalance.Amount;
-            var amountToDecrease = new Money(200, CurrencyEnum.RussianRuble);
-
-            // Act
-            wallet.DecreaseBalance(amountToDecrease);
-
-            // Assert
-            Assert.That(wallet.AvailableBalance.Amount, Is.EqualTo(initialBalance - amountToDecrease.Amount));
-        }
-
-        [Test]
-        public void WalletEntity_DecreaseBalance_Should_Throw_Exception_When_Balance_Is_Not_Enough()
-        {
-            // Arrange
-            var wallet = new WalletEntity()
+            [SetUp]
+            public void SetUp()
             {
-                AvailableBalance = new Money(100, CurrencyEnum.RussianRuble)
-            };
-            var amountToDecrease = new Money(1000, CurrencyEnum.RussianRuble); // Greater than available balance
+                _user = new UserEntity();
+                _wallet = WalletEntity.Create(_user);
+                _receiverWallet = WalletEntity.Create(new UserEntity());
+            }
 
-            // Act & Assert
-            Assert.Throws<NotEnoughMoneyException>(() => wallet.DecreaseBalance(amountToDecrease));
-        }
+            #region ✅ Создание кошелька
 
-        [Test]
-        public void WalletEntity_IncreaseBalance_Should_Increase_AvailableBalance_Correctly()
-        {
-            // Arrange
-            var wallet = new WalletEntity();
-            var initialBalance = wallet.AvailableBalance.Amount;
-            var amountToIncrease = new Money(200, CurrencyEnum.RussianRuble);
+            [Test]
+            public void WalletEntity_Create_Should_Set_Default_Values_Correctly()
+            {
+                Assert.That(_wallet, Is.Not.Null);
+                Assert.That(_wallet.User, Is.EqualTo(_user));
+                Assert.That(_wallet.Currency, Is.EqualTo(CurrencyEnum.RussianRuble));
+                Assert.That(_wallet.Frozen.Amount, Is.EqualTo(0));
+                Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(1000));
+                Assert.That(_wallet.PendingIncome.Amount, Is.EqualTo(0));
+                Assert.That(_wallet.Blocked, Is.False);
+            }
 
-            // Act
-            wallet.IncreaseBalance(amountToIncrease);
+            #endregion
 
-            // Assert
-            Assert.That(wallet.AvailableBalance.Amount, Is.EqualTo(initialBalance + amountToIncrease.Amount));
-        }
+            #region ✅ Пополнение средств
 
-        [Test]
-        public void WalletEntity_RollbackTransaction_Should_Increase_AvailableBalance_When_TransactionDirection_Is_In()
-        {
-            // Arrange
-            var wallet = new WalletEntity();
-            var createdBy = new UserEntity(); 
-            var initialBalance = wallet.AvailableBalance.Amount;
-            var transaction = new TransactionEntity { Amount = new Money(300, CurrencyEnum.RussianRuble), Direction = TransactionDirection.In, CreatedByUser = createdBy };
+            [Test]
+            public void Deposit_ShouldIncreaseAvailableBalance()
+            {
+                // Act
+                _wallet.Deposit(new Money(500, CurrencyEnum.RussianRuble));
 
-            // Act
-            wallet.RollbackTransaction(transaction);
+                // Assert
+                Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(1500));
+            }
 
-            // Assert
-            Assert.That(wallet.AvailableBalance.Amount, Is.EqualTo(initialBalance + transaction.Amount.Amount));
-        }
+            [Test]
+            public void Deposit_WhenWalletBlocked_ShouldThrowException()
+            {
+                // Arrange
+                _wallet.Block(WalletBlockReason.FraudSuspicion);
 
-        [Test]
-        public void WalletEntity_ConfirmTransaction_Should_Decrease_AvailableBalance_When_TransactionDirection_Is_Out()
-        {
-            // Arrange
-            var wallet = new WalletEntity();
-            var createdBy = new UserEntity();
-            wallet.AddBalance(new Money(500, CurrencyEnum.RussianRuble));
-            var initialBalance = wallet.AvailableBalance.Amount;
-            var transaction = new TransactionEntity { Amount = new Money(200, CurrencyEnum.RussianRuble), Direction = TransactionDirection.Out, CreatedByUser = createdBy };
-            var otherWallet = new WalletEntity() { AvailableBalance = new Money(400, CurrencyEnum.RussianRuble) };
+                // Act & Assert
+                Assert.Throws<WalletIsBlocked>(() =>
+                    _wallet.Deposit(new Money(500, CurrencyEnum.RussianRuble)));
+            }
 
-            // Act
-            wallet.ConfirmTransaction(transaction, otherWallet);
+            #endregion
 
-            // Assert
-            Assert.That(wallet.AvailableBalance.Amount, Is.EqualTo(initialBalance - transaction.Amount.Amount));
-        }
+            #region ✅ Списание средств
 
-        [Test]
-        public void WalletEntity_FreezeAmount_Should_Increase_Frozen_Balance()
-        {
-            // Arrange
-            var wallet = new WalletEntity();
-            var initialFrozenAmount = wallet.Frozen.Amount;
-            var amountToFreeze = new Money(100, CurrencyEnum.RussianRuble);
+            [Test]
+            public void Withdraw_ShouldDecreaseAvailableBalance()
+            {
+                // Act
+                _wallet.Withdraw(new Money(300, CurrencyEnum.RussianRuble));
 
-            // Act
-            wallet.FreezeAmount(amountToFreeze);
+                // Assert
+                Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(700));
+            }
 
-            // Assert
-            Assert.That(wallet.Frozen.Amount, Is.EqualTo(initialFrozenAmount + amountToFreeze.Amount));
-        }
+            [Test]
+            public void Withdraw_WhenInsufficientFunds_ShouldThrowException()
+            {
+                // Act & Assert
+                Assert.Throws<NotEnoughMoneyException>(() =>
+                    _wallet.Withdraw(new Money(2000, CurrencyEnum.RussianRuble)));
+            }
 
-        [Test]
-        public void WalletEntity_UnfreezeAmount_Should_Decrease_Frozen_Balance()
-        {
-            // Arrange
-            var wallet = new WalletEntity();
-            wallet.FreezeAmount(new Money(200, CurrencyEnum.RussianRuble));
-            var initialFrozenAmount = wallet.Frozen.Amount;
-            var amountToUnfreeze = new Money(100, CurrencyEnum.RussianRuble);
+            [Test]
+            public void Withdraw_WhenWalletBlocked_ShouldThrowException()
+            {
+                // Arrange
+                _wallet.Block(WalletBlockReason.LegalIssue);
 
-            // Act
-            wallet.UnfreezeAmount(amountToUnfreeze);
+                // Act & Assert
+                Assert.Throws<WalletIsBlocked>(() =>
+                    _wallet.Withdraw(new Money(200, CurrencyEnum.RussianRuble)));
+            }
 
-            // Assert
-            Assert.That(wallet.Frozen.Amount, Is.EqualTo(initialFrozenAmount - amountToUnfreeze.Amount));
-        }
+            #endregion
 
-        [Test]
-        public void WalletEntity_UnfreezeAmount_Should_Throw_Exception_When_Unfreezing_More_Than_Frozen_Balance()
-        {
-            // Arrange
-            var wallet = new WalletEntity();
-            var amountToUnfreeze = new Money(100, CurrencyEnum.RussianRuble); // Greater than frozen balance
+            #region 🔄 Перевод средств
 
-            // Act & Assert
-            Assert.Throws<ArgumentException>(() => wallet.UnfreezeAmount(amountToUnfreeze));
-        }
+            [Test]
+            public void Transfer_ShouldMoveFundsBetweenWallets()
+            {
+                // Act
+                _wallet.TransferTo(_receiverWallet, new Money(300, CurrencyEnum.RussianRuble));
 
-        [Test]
-        public void WalletEntity_Block_Should_Set_Blocked_Flag()
-        {
-            // Arrange
-            var wallet = new WalletEntity();
-            var reason = "Blocked for testing";
+                // Assert
+                Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(700));
+                Assert.That(_receiverWallet.AvailableBalance.Amount, Is.EqualTo(1300));
+            }
 
-            // Act
-            wallet.Block(reason);
+            [Test]
+            public void Transfer_WhenSenderBlocked_ShouldThrowException()
+            {
+                // Arrange
+                _wallet.Block(WalletBlockReason.LegalIssue);
 
-            // Assert
-            Assert.That(wallet.Blocked, Is.True);
+                // Act & Assert
+                Assert.Throws<WalletIsBlocked>(() =>
+                    _wallet.TransferTo(_receiverWallet, new Money(300, CurrencyEnum.RussianRuble)));
+            }
+
+            [Test]
+            public void Transfer_WhenInsufficientFunds_ShouldThrowException()
+            {
+                // Arrange
+                _wallet.Withdraw(new Money(900, CurrencyEnum.RussianRuble)); // Остаток 100 RUB
+
+                // Act & Assert
+                Assert.Throws<NotEnoughMoneyException>(() =>
+                    _wallet.TransferTo(_receiverWallet, new Money(300, CurrencyEnum.RussianRuble)));
+            }
+
+            #endregion
+
+            #region 🔒 Заморозка и разморозка средств
+
+            [Test]
+            public void FreezeAmount_ShouldReduceAvailableBalanceAndIncreaseFrozen()
+            {
+                // Act
+                _wallet.FreezeAmount(new Money(200, CurrencyEnum.RussianRuble));
+
+                // Assert
+                Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(800));
+                Assert.That(_wallet.Frozen.Amount, Is.EqualTo(200));
+            }
+
+            [Test]
+            public void UnfreezeAmount_ShouldReduceFrozenAndIncreaseAvailableBalance()
+            {
+                // Arrange
+                _wallet.FreezeAmount(new Money(200, CurrencyEnum.RussianRuble));
+
+                // Act
+                _wallet.UnfreezeAmount(new Money(200, CurrencyEnum.RussianRuble));
+
+                // Assert
+                Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(1000));
+                Assert.That(_wallet.Frozen.Amount, Is.EqualTo(0));
+            }
+
+            [Test]
+            public void FreezeAmount_WhenInsufficientFunds_ShouldThrowException()
+            {
+                // Act & Assert
+                Assert.Throws<NotEnoughMoneyException>(() =>
+                    _wallet.FreezeAmount(new Money(2000, CurrencyEnum.RussianRuble)));
+            }
+
+            #endregion
+
+            #region ❌ Откат транзакции
+
+            [Test]
+            public void RollbackTransaction_ShouldRestoreBalanceForOutgoingTransaction()
+            {
+                // Arrange
+                var transaction = new TransactionEntity(
+                    _wallet.Id,
+                    new Money(300, CurrencyEnum.RussianRuble),
+                    TransactionFlow.Outgoing
+                );
+
+                // Act
+                _wallet.RollbackTransaction(transaction);
+
+                // Assert
+                Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(1300));
+            }
+
+            [Test]
+            public void RollbackTransaction_ShouldReduceBalanceForIncomingTransaction()
+            {
+                // Arrange
+                var transaction = new TransactionEntity(
+                    _wallet.Id,
+                    new Money(200, CurrencyEnum.RussianRuble),
+                    TransactionFlow.Incoming
+                );
+
+                // Act
+                _wallet.RollbackTransaction(transaction);
+
+                // Assert
+                Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(800));
+            }
+
+            #endregion
+
+            #region 🚨 Блокировка кошелька
+
+            [Test]
+            public void Block_ShouldSetBlockedStatusAndReason()
+            {
+                // Act
+                _wallet.Block(WalletBlockReason.FraudSuspicion);
+
+                // Assert
+                Assert.That(_wallet.Blocked, Is.True);
+                Assert.That(_wallet.BlockReason, Is.EqualTo(WalletBlockReason.FraudSuspicion));
+            }
+
+            [Test]
+            public void Block_WhenWalletAlreadyBlocked_ShouldThrowException()
+            {
+                // Arrange
+                _wallet.Block(WalletBlockReason.FraudSuspicion);
+
+                // Act & Assert
+                Assert.Throws<WalletIsBlocked>(() =>
+                    _wallet.Block(WalletBlockReason.LegalIssue));
+            }
+
+            #endregion
         }
     }
+
 }

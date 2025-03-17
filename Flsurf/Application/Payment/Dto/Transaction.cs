@@ -18,7 +18,7 @@ namespace Flsurf.Application.Payment.Dto
     {
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
-        public TransactionOperations? Operation { get; set; }
+        public TransactionType? Operation { get; set; }
         public string? TransactionProvider { get; set; }
     }
 

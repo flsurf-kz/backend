@@ -5,81 +5,109 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Flsurf.Domain.Payment.ValueObjects
 {
+
     [Owned]
     public class Money : ValueObject
     {
         [Required]
-        public decimal Amount { get; set; }
+        public decimal Amount { get; private set; }
+
         [Required]
-        public CurrencyEnum Currency { get; set; }
+        public CurrencyEnum Currency { get; private set; }
 
         public Money(decimal amount, CurrencyEnum currency = CurrencyEnum.RussianRuble)
         {
-            Amount = amount;
+            if (amount < 0)
+                throw new ArgumentException("Amount cannot be negative.");
+
+            Amount = Math.Round(amount, 2); // Округляем до копеек (2 знака после запятой)
             Currency = currency;
         }
 
-        protected override IEnumerable<object> GetEqualityComponents()
+        // ✅ Проверка валюты (упрощенный вариант)
+        private static void EnsureSameCurrency(Money lhs, Money rhs)
         {
-            yield return Amount;
-            yield return Currency;
-        }
-
-        public static void VerifyCurrency(Money lhs, Money rhs)
-        {
-            if (ReferenceEquals(lhs, null) || ReferenceEquals(rhs, null))
-            {
-                throw new ArgumentNullException("One or both Money objects are null");
-            }
-
             if (lhs.Currency != rhs.Currency)
-            {
                 throw new ArgumentException("Currencies are not equal");
-            }
         }
 
+        // ✅ Операторы сравнения
         public static bool operator >(Money lhs, Money rhs)
         {
-            VerifyCurrency(lhs, rhs);
+            EnsureSameCurrency(lhs, rhs);
             return lhs.Amount > rhs.Amount;
         }
 
         public static bool operator <(Money lhs, Money rhs)
         {
-            VerifyCurrency(lhs, rhs);
+            EnsureSameCurrency(lhs, rhs);
             return lhs.Amount < rhs.Amount;
+        }
+
+        public static bool operator >=(Money lhs, Money rhs)
+        {
+            EnsureSameCurrency(lhs, rhs);
+            return lhs.Amount >= rhs.Amount;
+        }
+
+        public static bool operator <=(Money lhs, Money rhs)
+        {
+            EnsureSameCurrency(lhs, rhs);
+            return lhs.Amount <= rhs.Amount;
         }
 
         public static bool operator ==(Money lhs, Money rhs)
         {
-            VerifyCurrency(lhs, rhs);
+            EnsureSameCurrency(lhs, rhs);
             return lhs.Amount == rhs.Amount;
         }
 
         public static bool operator !=(Money lhs, Money rhs)
         {
-            VerifyCurrency(lhs, rhs);
+            EnsureSameCurrency(lhs, rhs);
             return lhs.Amount != rhs.Amount;
+        }
+
+        // ✅ Операторы сложения и вычитания
+        public static Money operator +(Money lhs, Money rhs)
+        {
+            EnsureSameCurrency(lhs, rhs);
+            return new Money(lhs.Amount + rhs.Amount, lhs.Currency);
         }
 
         public static Money operator -(Money lhs, Money rhs)
         {
-            VerifyCurrency(lhs, rhs);
+            EnsureSameCurrency(lhs, rhs);
+            if (lhs.Amount < rhs.Amount)
+                throw new InvalidOperationException("Resulting amount cannot be negative.");
+
             return new Money(lhs.Amount - rhs.Amount, lhs.Currency);
         }
 
-        public static Money operator +(Money lhs, Money rhs)
+        // ✅ Умножение и деление (для работы с комиссиями или конвертацией)
+        public static Money operator *(Money lhs, decimal multiplier)
         {
-            VerifyCurrency(lhs, rhs);
-            return new Money(lhs.Amount + rhs.Amount, lhs.Currency);
+            if (multiplier < 0)
+                throw new ArgumentException("Multiplier cannot be negative.");
+
+            return new Money(lhs.Amount * multiplier, lhs.Currency);
         }
+
+        public static Money operator /(Money lhs, decimal divisor)
+        {
+            if (divisor <= 0)
+                throw new ArgumentException("Divisor must be greater than zero.");
+
+            return new Money(lhs.Amount / divisor, lhs.Currency);
+        }
+
+        // ✅ Методы для проверки нуля
+        public bool IsZero() => Amount == 0;
 
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType())
-            {
                 return false;
-            }
 
             Money other = (Money)obj;
             return Amount == other.Amount && Currency == other.Currency;
@@ -89,5 +117,12 @@ namespace Flsurf.Domain.Payment.ValueObjects
         {
             return HashCode.Combine(Amount, Currency);
         }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Amount;
+            yield return Currency;
+        }
     }
+
 }

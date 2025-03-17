@@ -10,12 +10,11 @@ namespace Flsurf.Infrastructure.Data.Queries
         {
             return query
                 .Include(x => x.CreatedByUser)
-                .Include(x => x.Provider)
-                .Include(x => x.Props);
+                .Include(x => x.Provider); 
         }
 
         public static IQueryable<TransactionEntity> FilterByParams(this IQueryable<TransactionEntity> query,
-            DateTime? fromDate, DateTime? toDate, TransactionOperations? operation, string? providerName)
+            DateTime? fromDate, DateTime? toDate, TransactionType? operation, string? providerName)
         {
             if (fromDate != null && toDate != null)
             {

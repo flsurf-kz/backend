@@ -1,12 +1,16 @@
-﻿namespace Flsurf.Domain.Payment.Exceptions
+﻿using Flsurf.Domain.Payment.Enums;
+
+namespace Flsurf.Domain.Payment.Exceptions
 {
     public class WalletIsBlocked : Exception
     {
         public Guid WalletId { get; set; }
+        public WalletBlockReason WalletBlockReason { get; set; }
 
-        public WalletIsBlocked(Guid walletId) : base("Wallet is blocked")
+        public WalletIsBlocked(Guid walletId, WalletBlockReason reason) : base("Wallet is blocked")
         {
             WalletId = walletId;
+            WalletBlockReason = reason; 
         }
     }
 

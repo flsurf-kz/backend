@@ -11,11 +11,11 @@ namespace Flsurf.Application
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, ConfigurationManager config)
         {
             services.AddSingleton<IEventDispatcher, EventDispatcher>();
             services.AddUserApplicationServices();
-            services.AddPaymentApplicationServices();
+            services.AddPaymentApplicationServices(config);
             services.AddFilesApplicationServices();
             services.AddStaffApplicationServices();
 

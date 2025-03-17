@@ -8,6 +8,16 @@ namespace Flsurf.Domain.Payment.Entities
     {
         [Required]
         public string Name { get; set; } = null!;
+
         public bool IsActive { get; set; } = true;
+
+        public PaymentSystemEntity(string name)
+        {
+            Name = name;
+            IsActive = true;
+        }
+
+        public void Activate() => IsActive = true;
+        public void Deactivate() => IsActive = false;
     }
 }

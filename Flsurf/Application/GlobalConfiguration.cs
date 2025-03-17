@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Flsurf.Application
 {
-    public static class Configuration
+    public static class GlobalConfiguration
     {
         public static IApplicationBuilder UseEventDispatcher(this IApplicationBuilder app)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Flsurf.Application.Payment.InnerServices
 {
-    public class PaymentService
+    public class TransationInnerService
     {
     }
 }

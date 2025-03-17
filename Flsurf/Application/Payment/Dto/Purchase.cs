@@ -33,9 +33,9 @@ namespace Flsurf.Application.Payment.Dto
     public class GetPurchasesListDto : InputPagination
     {
         public PurchaseStatus? Status { get; set; }
-        public TransactionDirection? Direction { get; set; }
-        public TransactionOperations? Operation { get; set; }
-        public TransactionStatusEnum? TransactionSatus { get; set; }
+        public TransactionFlow? Direction { get; set; }
+        public TransactionType? Operation { get; set; }
+        public TransactionStatus? TransactionSatus { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public Guid? UserId { get; set; }

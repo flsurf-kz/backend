@@ -6,6 +6,7 @@
         Expired, 
         Closed, 
         Accepted, 
-        Draft
+        Draft, 
+        Completed, 
     }
 }

@@ -9,7 +9,6 @@ namespace Flsurf.Infrastructure.Data.Queries
         {
             return query
                 .Include(x => x.Transaction)
-                    .ThenInclude(x => x.Props)
                 .Include(x => x.Transaction)
                 //.Include(x => x.Product)
                 //    .ThenInclude(x => x.Images)

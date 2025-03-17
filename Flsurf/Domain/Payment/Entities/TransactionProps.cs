@@ -1,28 +1,30 @@
 ﻿using Flsurf.Domain.Common;
+using Flsurf.Domain.Payment.Policies;
 
 namespace Flsurf.Domain.Payment.Entities
 {
-    public class TransactionPropsEntity : BaseAuditableEntity
+    public class TransactionPropsEntity : ValueObject
     {
-        public Guid? CreatorId { get; set; }
-        public bool? PaidFromPendingIncome { get; set; }
-        public string PaymentUrl { get; set; } = string.Empty;
-        public string SuccessUrl { get; set; } = string.Empty;
-        public string PaymentGateway { get; set; } = string.Empty;
+        public string PaymentUrl { get; private set; }
+        public string SuccessUrl { get; private set; }
+        public string PaymentGateway { get; private set; }
+        public FeeContext FeeContext { get; private set; }
+
+        private TransactionPropsEntity() { }
 
         public static TransactionPropsEntity CreateGatewayProps(
             string paymentUrl,
             string successUrl,
-            string paymentGateway)
+            string paymentGateway,
+            FeeContext feeContext)
         {
-            var props = new TransactionPropsEntity
+            return new TransactionPropsEntity
             {
                 PaymentUrl = paymentUrl,
                 SuccessUrl = successUrl,
-                PaymentGateway = paymentGateway
+                PaymentGateway = paymentGateway,
+                FeeContext = feeContext
             };
-
-            return props;
         }
     }
 }

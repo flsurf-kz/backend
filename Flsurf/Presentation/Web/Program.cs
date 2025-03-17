@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices(builder.Configuration, builder.Environment, builder.Logging); 
 builder.Services.AddDomainServices();
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services.AddControllers();
 

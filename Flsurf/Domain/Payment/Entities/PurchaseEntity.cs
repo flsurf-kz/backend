@@ -12,82 +12,86 @@ namespace Flsurf.Domain.Payment.Entities
 {
     public class PurchaseEntity : BaseAuditableEntity
     {
-        // Assuming there's an enum for Currency that was not included in the initial schema
         [Required]
-        public CurrencyEnum Currency { get; set; }
+        public PurchaseType Type { get; private set; }
 
         [Required]
-        public Money Amount { get; init; } = new(0);
+        public PurchaseStatus Status { get; private set; } = PurchaseStatus.Pending;
 
         [Required]
-        public WalletEntity Wallet { get; init; } = null!;
+        public Money Amount { get; private set; }
 
         [Required]
-        public bool Completed { get; private set; } = false;
+        public Guid WalletId { get; private set; } // ID кошелька, с которого списываются средства
 
-        [Required]
-        public PurchaseStatus Status { get; set; }
-        [ForeignKey(nameof(ReviewEntity))]
-        public Guid? ReviewId { get; private set; }
+        // Дополнительные данные для конкретных типов покупок:
 
-        [Required]
-        [ForeignKey(nameof(ContractEntity))]
-        public Guid ContractId { get; init; } 
+        // Для повышения заказа: ID заказа, который продвигается
+        public Guid? RelatedOrderId { get; private set; }
 
-        [Required]
-        public TransactionEntity Transaction { get; private set; } = null!;
-        [Required]
-        // required for two step confirmation
-        public bool Confirmed { get; private set; } = false; 
+        // Для премиум подписки: дата окончания подписки
+        public DateTime? SubscriptionValidUntil { get; private set; }
 
-        [MaxLength(256)]
-        public string? StatusDescription { get; set; } = null!;
-        [Required]
-        public UserEntity CreatedBy { get; set; } = null!; 
+        public string? Description { get; private set; }
 
-        public static PurchaseEntity Create(WalletEntity wallet, TransactionEntity transaction, ContractEntity contract)
+        // Фабричный конструктор скрыт, используем статические методы для создания
+        private PurchaseEntity(PurchaseType type, Money amount, Guid walletId, string? description = null)
         {
-            if (wallet.User == null)
-                throw new ArgumentException("Wallet entity does not have user value, load it!"); 
-            var purchase = new PurchaseEntity
-            {
-                Wallet = wallet,
-                ContractId = contract.Id,
-                Amount = transaction.Amount,
-                Currency = transaction.Amount.Currency,
-                Transaction = transaction,
-                Status = PurchaseStatus.Processing, 
-                CreatedBy = wallet.User, 
-            };
+            Id = Guid.NewGuid();
+            Type = type;
+            Amount = amount;
+            WalletId = walletId;
+            Description = description;
+            Status = PurchaseStatus.Pending;
+        }
 
-            purchase.AddDomainEvent(new PurchaseCreated(purchase));
-
+        // Фабричный метод для создания покупки повышения заказа
+        public static PurchaseEntity CreateOrderPromotion(Money amount, Guid walletId, Guid relatedOrderId, string? description = null)
+        {
+            var purchase = new PurchaseEntity(PurchaseType.OrderPromotion, amount, walletId, description);
+            purchase.RelatedOrderId = relatedOrderId;
             return purchase;
         }
 
-        public void Problem(string description)
+        // Фабричный метод для создания покупки премиум подписки
+        public static PurchaseEntity CreatePremiumSubscription(Money amount, Guid walletId, DateTime subscriptionValidUntil, string? description = null)
         {
-            Status = PurchaseStatus.Rejected;
-            StatusDescription = description;
+            var purchase = new PurchaseEntity(PurchaseType.PremiumSubscription, amount, walletId, description);
+            purchase.SubscriptionValidUntil = subscriptionValidUntil;
+            return purchase;
         }
 
-        public void Complete(ReviewEntity review)
+        // Метод для завершения покупки
+        public void Complete(Guid transactionId)
         {
-            if (Status == PurchaseStatus.Success || Completed)
-                throw new PurchaseIsAlreadyCompleted(this);
+            if (Status != PurchaseStatus.Pending)
+                throw new InvalidOperationException("Покупка уже завершена или отменена.");
 
-            Completed = true;
-            ReviewId = review.Id;
-            Status = PurchaseStatus.Success;
+            Status = PurchaseStatus.Completed;
+            // Здесь можно сохранить идентификатор связанной транзакции, если требуется
+            AddDomainEvent(new PurchaseCompletedEvent(this, transactionId));
         }
 
-        public void Confirm()
+        // Метод для пометки покупки как неудачной с указанием причины
+        public void Fail(string reason)
         {
-            if (Status != PurchaseStatus.Success)
+            if (Status != PurchaseStatus.Pending)
+                throw new InvalidOperationException("Покупка уже завершена или отменена.");
 
-            Confirmed = true;
+            Status = PurchaseStatus.Failed;
+            Description = reason;
+            AddDomainEvent(new PurchaseFailedEvent(this, reason));
+        }
 
-            AddDomainEvent(new PurchaseConfirmed(this)); 
+        // Метод для отмены покупки с указанием причины
+        public void Cancel(string reason)
+        {
+            if (Status != PurchaseStatus.Pending)
+                throw new InvalidOperationException("Покупка уже завершена или отменена.");
+
+            Status = PurchaseStatus.Canceled;
+            Description = reason;
+            AddDomainEvent(new PurchaseCanceledEvent(this, reason));
         }
     }
 }

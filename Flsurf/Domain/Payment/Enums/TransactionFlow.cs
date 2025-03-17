@@ -4,11 +4,13 @@ using System.Text.Json.Serialization;
 namespace Flsurf.Domain.Payment.Enums
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum TransactionDirection
+    public enum TransactionFlow
     {
         [Display(Name = "IN")]
-        In,
+        Incoming,
         [Display(Name = "OUT")]
-        Out,
+        Outgoing,
+        [Display(Name = "INTERNAL")]
+        Internal, 
     }
 }

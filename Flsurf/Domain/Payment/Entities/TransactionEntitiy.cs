@@ -1,74 +1,59 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using Flsurf.Domain.Common;
-using Flsurf.Domain.Payment.Enums;
+﻿using Flsurf.Domain.Payment.Enums;
+using Flsurf.Domain.Payment.Policies;
 using Flsurf.Domain.Payment.ValueObjects;
-using Flsurf.Domain.User.Entities;
-using Flsurf.Domain.Payment.Events;
 
 namespace Flsurf.Domain.Payment.Entities
 {
     public class TransactionEntity : BaseAuditableEntity
     {
+        public Guid WalletId { get; private set; }
+        public Money Amount { get; private set; }
+        public Money NetAmount { get; private set; }
+        public Money AppliedFee { get; private set; }
+        public TransactionStatus Status { get; private set; }
+        public TransactionType Type { get; private set; }
+        public TransactionFlow Flow { get; private set; }  // 🔥 Новое поле
+        public TransactionPropsEntity Props { get; private set; } = null!;
 
-        [Required]
-        public Money Amount { get; set; } = null!;
-        [Required]
-        public TransactionOperations Operation { get; set; }
-
-        [Required]
-        public TransactionDirection Direction { get; set; }
-
-        [Required]
-        public TransactionStatusEnum Status { get; set; }
-
-        [Required]
-        public UserEntity CreatedByUser { get; set; } = null!;
-
-        public DateTime? CompletedAt { get; set; }
-
-        [Required]
-        public Money Fee { get; set; } = null!;
-
-        [Required]
-        public TransactionProviderEntity Provider { get; set; } = null!;
-        public TransactionPropsEntity? Props { get; set; }
-
-        public static TransactionEntity Create(
-            Money value,
-            Money fee,
-            TransactionOperations operation,
-            TransactionDirection direction,
-            TransactionProviderEntity provider,
-            UserEntity user)
+        public TransactionEntity(
+            Guid walletId,
+            Money amount,
+            IFeePolicy feePolicy,
+            TransactionType type,
+            TransactionFlow flow,  // -> Новое поле
+            TransactionPropsEntity props)
         {
-            var transaction = new TransactionEntity
-            {
-                Id = Guid.NewGuid(),
-                CreatedByUser = user,
-                Fee = fee,
-                Amount = value,
-                Status = TransactionStatusEnum.Pending,
-                Provider = provider,
-                Direction = direction,
-                Operation = operation
-            };
-            transaction.AddDomainEvent(new TransactionCreated(transaction));
+            WalletId = walletId;
+            Amount = amount;
 
-            return transaction;
+            AppliedFee = feePolicy.CalculateFee(amount, type, props.FeeContext);
+            NetAmount = Amount - AppliedFee;
+
+            Type = type;
+            Flow = flow;  // ➔ Указание направления денег
+            Status = Enums.TransactionStatus.Pending;
+
+            Props = props ?? throw new ArgumentNullException(nameof(props));
         }
 
-        public void Confirm()
+        public bool IsIncoming() => Flow == TransactionFlow.Incoming;
+        public bool IsOutgoing() => Flow == TransactionFlow.Outgoing;
+        public bool IsInternal() => Flow == TransactionFlow.Internal;
+
+        public void Complete()
         {
-            CompletedAt = DateTime.Now;
-            Status = TransactionStatusEnum.Confirmed;
-            AddDomainEvent(new TransactionConfirmed(this));
+            if (Status != TransactionStatus.Pending)
+                throw new InvalidOperationException("Transaction is not in a valid state to complete.");
+
+            Status = TransactionStatus.Completed;
         }
 
-        public void Complete(TransactionStatusEnum status)
+        public void Cancel()
         {
-            CompletedAt = DateTime.Now;
-            Status = status;
+            if (Status != TransactionStatus.Pending)
+                throw new InvalidOperationException("Transaction is not in a valid state to cancel.");
+
+            Status = TransactionStatus.Cancelled;
         }
     }
 }
