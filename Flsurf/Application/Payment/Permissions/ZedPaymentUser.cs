@@ -1,6 +1,4 @@
-﻿using Flsurf.Application.Files.Permissions;
-using Flsurf.Domain.Payment.Entities;
-using SpiceDb.Models;
+﻿using SpiceDb.Models;
 
 namespace Flsurf.Application.Payment.Permissions
 {
@@ -16,6 +14,7 @@ namespace Flsurf.Application.Payment.Permissions
 
         public Permission CanReadWallet(ZedWallet wallet) => new(this, "read", wallet);
 
-        public Permission CanReadPurchases() => new(this, "read", ZedPurchase.WithWildcard()); 
+        public Permission CanReadPurchases() => new(this, "read", ZedPurchase.WithWildcard());
+        public Permission CanRefundTransaction(ZedTransaction tx) => new(this, "refund", tx); 
     }
 }

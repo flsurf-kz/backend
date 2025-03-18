@@ -94,5 +94,34 @@ namespace Flsurf.Application.Payment.InnerServices
 
             return CommandResult.Success(walletId);
         }
+
+        // used to confirm gateway transaction deposit 
+        public async Task<CommandResult> ConfirmTransaction(Guid txId)
+        {
+            var transaction = await _dbContext.Transactions
+                .Include(x => x.Props)
+                .FirstOrDefaultAsync(x => x.Id == txId);
+
+            if (transaction == null)
+                return CommandResult.NotFound("Транзакция не найдена", txId);
+
+            if (transaction.Status != TransactionStatus.Pending)
+                return CommandResult.UnprocessableEntity("Транзакция уже подтверждена или отменена.");
+
+            var wallet = await _dbContext.Wallets
+                .Include(x => x.Transactions)
+                .FirstOrDefaultAsync(x => x.Id == transaction.WalletId);
+
+            Guard.Against.Null(wallet, message: "Кошелек не найден.");
+
+            // Применяем транзакцию к кошельку
+            wallet.AcceptTransaction(transaction);
+
+            // Меняем статус транзакции
+            transaction.Complete();
+
+            return CommandResult.Success(transaction.Id);
+        }
+
     }
 }

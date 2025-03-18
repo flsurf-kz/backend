@@ -1,15 +1,30 @@
-﻿using Flsurf.Application.Common.Interfaces;
+﻿using Flsurf.Application.Common.cqrs;
+using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Payment.Dto;
 using Flsurf.Application.Payment.Permissions;
 using Flsurf.Domain.Payment.Entities;
+using Flsurf.Domain.Payment.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
-namespace Flsurf.Application.Payment.UseCases
+namespace Flsurf.Application.Payment.Queries
 {
-    public class GetTransactionsList : BaseUseCase<GetTransactionsListDto, ICollection<TransactionEntity>>
+    public class GetTransactionsListDto : BaseQuery
+    {
+        public int Start { get; set; } = 0;
+        public int Ends { get; set; } = 10;
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+        public TransactionType? Operation { get; set; }
+        public string? TransactionProvider { get; set; }
+        [Required]
+        public Guid WalletId { get; set; }
+    }
+
+    public class GetTransactionsList : IQueryHandler<GetTransactionsListDto, ICollection<TransactionEntity>>
     {
         private IApplicationDbContext _context;
         private IUser _user;
@@ -22,7 +37,7 @@ namespace Flsurf.Application.Payment.UseCases
             _permService = permService;
         }
 
-        public async Task<ICollection<TransactionEntity>> Execute(GetTransactionsListDto dto)
+        public async Task<ICollection<TransactionEntity>> Handle(GetTransactionsListDto dto)
         {
             var wallet = await _context.Wallets
                 .Include(x => x.User)
@@ -30,7 +45,7 @@ namespace Flsurf.Application.Payment.UseCases
 
             Guard.Against.Null(wallet, message: "Wallet does not exists");
 
-            var owner = await _permService.GetCurrentUser(); 
+            var owner = await _permService.GetCurrentUser();
 
             await _permService.EnforceCheckPermission(
                 ZedPaymentUser

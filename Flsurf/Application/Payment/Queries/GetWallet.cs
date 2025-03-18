@@ -1,6 +1,6 @@
-﻿using Flsurf.Application.Common.Interfaces;
+﻿using Flsurf.Application.Common.cqrs;
+using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
-using Flsurf.Application.Payment.Dto;
 using Flsurf.Application.Payment.Permissions;
 using Flsurf.Domain.Payment.Entities;
 using Flsurf.Domain.User.Enums;
@@ -8,9 +8,15 @@ using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
-namespace Flsurf.Application.Payment.UseCases
+namespace Flsurf.Application.Payment.Queries
 {
-    public class GetWallet : BaseUseCase<GetWalletDto, WalletEntity>
+    public class GetWalletQuery : BaseQuery
+    {
+        public Guid? WalletId { get; set; }
+        public Guid? UserId { get; set; }
+    }
+
+    public class GetWallet : IQueryHandler<GetWalletQuery, WalletEntity>
     {
         private readonly IApplicationDbContext _context;
         private readonly IPermissionService _permService;
@@ -21,7 +27,7 @@ namespace Flsurf.Application.Payment.UseCases
             _permService = permService;
         }
 
-        public async Task<WalletEntity> Execute(GetWalletDto dto)
+        public async Task<WalletEntity> Handle(GetWalletQuery dto)
         {
             var wallet = await _context.Wallets
                 .IncludeStandard()

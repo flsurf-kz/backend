@@ -116,11 +116,7 @@ namespace Flsurf.Infrastructure.Data
                     new()
                     {
                         Name = nameof(PaymentProviders.BankCardRu),
-                        Systems = [new PaymentSystemEntity() { Name = "paypalych" }]
-                    },
-                    new() {
-                        Name = nameof(PaymentProviders.Balance),
-                        Systems = [],
+                        Systems = [new PaymentSystemEntity( "paypalych")]
                     },
                     new() {
                         Name = nameof(PaymentProviders.Test),

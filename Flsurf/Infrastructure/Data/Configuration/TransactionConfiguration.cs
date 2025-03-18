@@ -12,10 +12,10 @@ namespace Flsurf.Infrastructure.Data.Configuration
                 .Property(e => e.Status)
                 .HasConversion<string>();
             builder
-                .Property(e => e.Direction)
+                .Property(e => e.Flow)
                 .HasConversion<string>();
             builder
-                .Property(e => e.Operation)
+                .Property(e => e.Type)
                 .HasConversion<string>();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Flsurf.Application.Payment.Interfaces;
+using Flsurf.Application.Payment.Queries;
 using Flsurf.Application.Payment.UseCases;
 using Microsoft.Extensions.DependencyInjection;
 

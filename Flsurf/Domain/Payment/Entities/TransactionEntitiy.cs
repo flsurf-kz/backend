@@ -1,4 +1,5 @@
-﻿using Flsurf.Domain.Payment.Enums;
+﻿using Flsurf.Application.Common.Exceptions;
+using Flsurf.Domain.Payment.Enums;
 using Flsurf.Domain.Payment.Policies;
 using Flsurf.Domain.Payment.ValueObjects;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -86,6 +87,14 @@ namespace Flsurf.Domain.Payment.Entities
                 throw new InvalidOperationException("Transaction is not in a valid state to cancel.");
 
             Status = TransactionStatus.Cancelled;
+        }
+
+        // breaks ofc but i dont care 
+        public void ConfirmFromGateway()
+        {
+            if (Props == null)
+                throw new DomainException("Не та транзакция для потверждения");
+            Complete(); 
         }
     }
 }

@@ -1,13 +1,24 @@
-﻿using Flsurf.Application.Common.Interfaces;
+﻿using Flsurf.Application.Common.cqrs;
+using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Payment.Dto;
 using Flsurf.Application.Payment.Permissions;
+using Flsurf.Domain.Payment.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Flsurf.Application.Payment.UseCases
 {
-    public class BlockWallet : BaseUseCase<BlockWalletDto, bool>
+    public class BlockWalletCommand : BaseCommand
+    {
+        [Required]
+        public Guid WalletId { get; set; }
+        [Required]
+        public WalletBlockReason Reason { get; set; } 
+    }
+
+    public class BlockWallet : ICommandHandler<BlockWalletCommand>
     {
         private IApplicationDbContext _context;
         private readonly IPermissionService _permService;
@@ -18,7 +29,7 @@ namespace Flsurf.Application.Payment.UseCases
             _permService = permService;
         }
 
-        public async Task<bool> Execute(BlockWalletDto dto)
+        public async Task<CommandResult> Handle(BlockWalletCommand dto)
         {
             var owner = await _permService.GetCurrentUser();
             await _permService.EnforceCheckPermission(
@@ -35,7 +46,7 @@ namespace Flsurf.Application.Payment.UseCases
             _context.Wallets.Add(wallet);
             await _context.SaveChangesAsync();
 
-            return true;
+            return CommandResult.Success(wallet.Id);
         }
     }
 }
