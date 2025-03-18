@@ -22,7 +22,6 @@ namespace Flsurf.Application.Payment.Services
         {
             return _serviceProvider.GetRequiredService<GetWallet>();
         }
-
         public BlockWallet BlockWallet()
         {
             return _serviceProvider.GetRequiredService<BlockWallet>();

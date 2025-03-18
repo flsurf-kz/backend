@@ -70,7 +70,7 @@ namespace Flsurf.Presentation.Web.Controllers
         public async Task<ActionResult<bool>> HandlePaypalychResult([FromBody] GatewayResultDto model)
         {
             return Ok(await _transactionService
-                .HandleGatewayResult()
+                .HandleDepositGatewayResult()
                 .Execute(model));
         }
 

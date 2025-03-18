@@ -3,7 +3,7 @@
     // admin only!! 
     public enum BalanceOperationType
     {
-        Froze,
+        Freeze,
         Unfreeze,
         PendingIncome, 
         Deposit, 

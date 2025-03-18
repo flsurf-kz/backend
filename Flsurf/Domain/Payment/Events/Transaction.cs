@@ -57,4 +57,25 @@ namespace Flsurf.Domain.Payment.Events
         public override string ToString() =>
             $"[TransactionAddedEvent] WalletId: {WalletId}, TransactionId: {TransactionId}, Amount: {Amount.Amount}, Flow: {Flow}, Date: {OccurredOn}";
     }
+
+    public class TransactionRefundedWithoutReceiver : DomainEvent
+    {
+        public Guid WalletId { get; }
+        public Guid TransactionId { get; }
+        public Money Amount { get; }
+        public DateTime OccurredOn { get; }
+
+        public TransactionRefundedWithoutReceiver(WalletEntity wallet, TransactionEntity refundTransaction)
+        {
+            WalletId = wallet.Id;
+            TransactionId = refundTransaction.Id;
+            Amount = refundTransaction.RawAmount;
+            OccurredOn = DateTime.UtcNow;
+        }
+
+        public override string ToString() =>
+            $"[TransactionRefundedWithoutReceiver] WalletId: {WalletId}, " +
+            $"TransactionId: {TransactionId}, Amount: {Amount.Amount}, Date: {OccurredOn}";
+    }
+
 }

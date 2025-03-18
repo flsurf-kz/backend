@@ -1,4 +1,5 @@
-﻿using Flsurf.Application.Payment.Queries;
+﻿using Flsurf.Application.Payment.Commands;
+using Flsurf.Application.Payment.Queries;
 using Flsurf.Application.Payment.UseCases;
 
 namespace Flsurf.Application.Payment.Interfaces
@@ -8,6 +9,8 @@ namespace Flsurf.Application.Payment.Interfaces
         HandleTransaction HandleTransaction();
         GetTransactionsList GetTransactionsList();
         GetTransactionProviders GetTransactionProviders();
-        HandleGatewayResult HandleGatewayResult();
+        HandleDepositGatewayResult HandleDepositGatewayResult();
+        RefundTransaction RefundTransaction(); 
+        HandleWithdrawalGatewayResult HandleWithdrawlGatewayResult();
     }
 }

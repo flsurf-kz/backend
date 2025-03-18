@@ -123,5 +123,15 @@ namespace Flsurf.Application.Payment.InnerServices
             return CommandResult.Success(transaction.Id);
         }
 
+        public async Task<CommandResult> UnfreezeAmount(Money amount, Guid walletId)
+        {
+            return await BalanceOperation(amount, walletId, BalanceOperationType.Unfreeze); 
+        }
+
+
+        public async Task<CommandResult> FreezeAmount(Money amount, Guid walletId, int frozenTime)
+        {
+            return await BalanceOperation(amount, walletId, BalanceOperationType.Freeze);
+        }
     }
 }

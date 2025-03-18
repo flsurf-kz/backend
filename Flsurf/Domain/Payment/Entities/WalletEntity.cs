@@ -145,7 +145,7 @@ namespace Flsurf.Domain.Payment.Entities
         {
             EnsureNotBlocked();
 
-            if (type == BalanceOperationType.Froze)
+            if (type == BalanceOperationType.Freeze)
             {
                 FreezeAmount(amount, DateTime.UtcNow.AddDays(2)); // потому что 
             } if (type == BalanceOperationType.Unfreeze)
@@ -276,6 +276,29 @@ namespace Flsurf.Domain.Payment.Entities
 
             AddDomainEvent(new TransactionRolledBack(this, transaction));
         }
+
+        public void RefundTransactionWithoutReceiver(TransactionEntity transaction, IFeePolicy feePolicy)
+        {
+            EnsureNotBlocked();
+
+            // Создаем транзакцию возврата (outgoing), без receiving wallet
+            var refundTx = new TransactionEntity(
+                Id,
+                transaction.NetAmount,
+                feePolicy,
+                TransactionType.Refund,
+                TransactionFlow.Outgoing,
+                null,
+                null,
+                "Возврат средств (без получателя)");
+
+            refundTx.AntoganistTransactionId = transaction.Id;
+
+            AcceptTransaction(refundTx);
+
+            AddDomainEvent(new TransactionRefundedWithoutReceiver(this, refundTx));
+        }
+
 
         // ✅ Проверка корректности транзакции
         public bool VerifyTransaction(TransactionEntity transaction, bool raiseErr = false)

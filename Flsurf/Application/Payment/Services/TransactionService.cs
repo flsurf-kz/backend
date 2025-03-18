@@ -27,14 +27,19 @@ namespace Flsurf.Application.Payment.Services
             return _serviceProvider.GetRequiredService<GetTransactionProviders>();
         }
 
-        public HandleGatewayResult HandleGatewayResult()
+        public HandleDepositGatewayResult HandleDepositGatewayResult()
         {
-            return _serviceProvider.GetRequiredService<HandleGatewayResult>();
+            return _serviceProvider.GetRequiredService<HandleDepositGatewayResult>();
         }
 
         public RefundTransaction RefundTransaction()
         {
             return _serviceProvider.GetRequiredService<RefundTransaction>();
+        }
+
+        public HandleWithdrawalGatewayResult HandleWithdrawlGatewayResult()
+        {
+            return _serviceProvider.GetRequiredService<HandleWithdrawalGatewayResult>();
         }
     }
 }
