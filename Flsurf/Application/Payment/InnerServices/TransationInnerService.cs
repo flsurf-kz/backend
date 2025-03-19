@@ -8,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Payment.InnerServices
 {
-
-
     public class TransactionInnerService(IApplicationDbContext dbContext)
     {
         private IApplicationDbContext _dbContext = dbContext; 

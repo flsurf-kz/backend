@@ -6,7 +6,9 @@
         Expired, 
         Closed, 
         Accepted, 
+        InContract, 
         Draft, 
-        Completed, 
+        Completed,
+        WaitingFreelancerApproval
     }
 }
