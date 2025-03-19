@@ -39,4 +39,19 @@ namespace Flsurf.Domain.Freelance.Events
             FreelancerId = freelancerId;
         }
     }
+
+    public class ContractForceCancelledEvent : DomainEvent
+    {
+        public Guid ContractId { get; }
+        public Guid CancelledByUserId { get; }
+        public string Reason { get; }
+
+        public ContractForceCancelledEvent(Guid contractId, Guid cancelledByUserId, string reason)
+        {
+            ContractId = contractId;
+            CancelledByUserId = cancelledByUserId;
+            Reason = reason;
+        }
+    }
+
 }

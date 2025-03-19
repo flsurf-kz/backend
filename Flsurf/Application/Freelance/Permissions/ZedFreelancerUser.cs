@@ -1,4 +1,5 @@
-﻿using SpiceDb.Models;
+﻿using Flsurf.Domain.Freelance.Entities;
+using SpiceDb.Models;
 
 namespace Flsurf.Application.Freelance.Permissions
 {
@@ -22,6 +23,7 @@ namespace Flsurf.Application.Freelance.Permissions
         public Permission CanCreateCategories() => new(ZedCategory.WithWildcard(), "create", this);
         public Permission CanDeleteJob(ZedJob job) => new(job, "delete", this);
         public Permission CanUpdateJob(ZedJob job) => new(job, "update", this);
-        public Permission CanSuspendClientProfile(ZedClientProfile profile) => new(profile, "suspend", this); 
+        public Permission CanSuspendClientProfile(ZedClientProfile profile) => new(profile, "suspend", this);
+        public Permission CanCancelContract(ZedContract contract) => new(contract, "cancel", this); 
     }
 }
