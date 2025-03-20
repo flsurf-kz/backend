@@ -3,6 +3,9 @@ using Flsurf.Domain.Freelance.Events;
 using Flsurf.Domain.Payment.Enums;
 using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Diagnostics.Contracts;
+using Flsurf.Application.Common.Exceptions;
 
 namespace Flsurf.Domain.Freelance.Entities
 {
@@ -68,6 +71,16 @@ namespace Flsurf.Domain.Freelance.Entities
             IsPaused = false;
             PauseReason = null;
             AddDomainEvent(new ContractResumed(this));
+        }
+
+        public void CancelContract()
+        {
+            if (Status == ContractStatus.Cancelled)
+                throw new DomainException("Контракт уже отменен");
+            Status = ContractStatus.Cancelled;
+            EndDate = DateTime.UtcNow;
+            PauseReason = command.Reason;
+            IsPaused = false;
         }
     }
 
