@@ -127,7 +127,7 @@ namespace Flsurf.Application.Payment.InnerServices
         }
 
 
-        public async Task<CommandResult> FreezeAmount(Money amount, Guid walletId, int frozenTime)
+        public async Task<CommandResult> FreezeAmount(Money amount, Guid walletId, int? frozenTimeInDays)
         {
             return await BalanceOperation(amount, walletId, BalanceOperationType.Freeze);
         }

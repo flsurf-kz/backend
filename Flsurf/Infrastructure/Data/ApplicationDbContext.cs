@@ -50,6 +50,7 @@ namespace Flsurf.Infrastructure.Data
         public DbSet<TaskEntity> Tasks { get; set; }
         public DbSet<FreelancerTeamInvitation> FreelancerTeamInvitations { get; set; }
         public DbSet<WorkSessionEntity> WorkSessions { get; set; }
+        public DbSet<DisputeEntity> Disputes { get; set; }
 
         // messaging 
         public DbSet<ChatEntity> Chats { get; set; }

@@ -2,11 +2,8 @@
 {
     public enum DisputeStatus
     {
-        None = 0,         // Спора нет
-        Opened,           // Спор открыт
-        UnderReview,      // Спор рассматривается
-        Resolved,         // Спор решен
-        EscalatedToAdmin, // Спор передан администратору
-        Closed            // Спор закрыт
+        Pending,       // Ожидает принятия модератором
+        InReview,      // Находится в процессе рассмотрения
+        Resolved       // Завершён
     }
 }

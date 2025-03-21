@@ -29,11 +29,8 @@ namespace Flsurf.Application.Staff.UseCases
             var byUser = await _permService.GetCurrentUser();
 
             var newFiles = await _fileService.UploadFiles().Execute(dto.Files);
-            var subject = await _context.TicketSubjects.FirstOrDefaultAsync(x => x.Id == dto.SubjectId);
 
-            Guard.Against.Null(subject, message: "Subject does not exists"); 
-
-            var ticket = TicketEntity.Create(dto.Text, subject, byUser, (List<FileEntity>)newFiles);
+            var ticket = TicketEntity.Create(dto.Text, dto.Subject, byUser, (List<FileEntity>)newFiles);
 
             await _context.Tickets.AddAsync(ticket);
 

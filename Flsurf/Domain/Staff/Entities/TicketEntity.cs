@@ -14,7 +14,7 @@ namespace Flsurf.Domain.Staff.Entities
         [Required]
         public string Text { get; set; } = string.Empty;
         [Required]
-        public TicketSubjectEntity Subject { get; set; } = null!;
+        public string Subject { get; set; } = null!;
         public List<FileEntity> Files { get; set; } = [];
         public Guid? AnsweredCommentId { get; set; }
         [Required]
@@ -34,7 +34,7 @@ namespace Flsurf.Domain.Staff.Entities
         }
 
         public static TicketEntity Create(
-            string text, TicketSubjectEntity subject, UserEntity createdBy, List<FileEntity> files)
+            string text, string subject, UserEntity createdBy, List<FileEntity> files)
         {
             var ticket = new TicketEntity()
             {

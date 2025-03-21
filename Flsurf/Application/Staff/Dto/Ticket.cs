@@ -7,10 +7,13 @@ namespace Flsurf.Application.Staff.Dto
     public class CreateTicketDto
     {
         [Required]
-        public Guid SubjectId { get; set; }
+        public string Subject { get; set; } = string.Empty; 
         [Required]
         public string Text { get; set; } = string.Empty;
         public ICollection<CreateFileDto> Files { get; set; } = [];
+        public double PriorityScore { get; set; }
+        public Guid? LinkedDisputeId { get; set; } 
+        public string Title { get; set; }
     }
     public class GetTicketsDto : InputPagination
     {

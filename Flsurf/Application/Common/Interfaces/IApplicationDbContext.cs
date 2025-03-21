@@ -19,14 +19,11 @@ namespace Flsurf.Application.Common.Interfaces
         // payment 
         DbSet<TransactionProviderEntity> TransactionProviders { get; set; }
         DbSet<PaymentSystemEntity> PaymentSystems { get; set; }
-        DbSet<PurchaseEntity> Purchases { get; set; }
         DbSet<TransactionEntity> Transactions { get; set; }
         DbSet<WalletEntity> Wallets { get; set; }
 
         // Staff 
-        DbSet<TicketSubjectEntity> TicketSubjects { get; set; }
         DbSet<TicketEntity> Tickets { get; set; }
-        DbSet<TicketCommentEntity> TicketComments { get; set; }
 
         // Files 
         DbSet<FileEntity> Files { get; set; }
@@ -49,6 +46,7 @@ namespace Flsurf.Application.Common.Interfaces
         public DbSet<SkillEntity> Skills { get; set; }
         public DbSet<TaskEntity> Tasks { get; set; }
         public DbSet<WorkSessionEntity> WorkSessions { get; set; }
+        public DbSet<DisputeEntity> Disputes { get; set; }
 
         // messaging 
         public DbSet<ChatEntity> Chats { get; set; }

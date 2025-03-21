@@ -41,11 +41,12 @@ namespace Flsurf.Domain.Freelance.Entities
             : null;
 
         public PaymentScheduleType PaymentSchedule { get; set; }
-        public DisputeStatus? DisputeStatus { get; set; }
         public bool IsPaused { get; set; } = false;
         public string? PauseReason { get; set; }
         public string ContractTerms { get; set; } = string.Empty;
         public decimal? Bonus { get; set; }
+        [ForeignKey(nameof(DisputeEntity))]
+        public Guid? DisputeId { get; set; }
 
         public void ChangeDeadline(DateTime endTime)
         {
@@ -73,13 +74,21 @@ namespace Flsurf.Domain.Freelance.Entities
             AddDomainEvent(new ContractResumed(this));
         }
 
+        public void StartDispute()
+        {
+            IsPaused = true;
+            PauseReason = "Конфликт интересов";
+            Status = ContractStatus.Paused;
+
+        }
+
         public void CancelContract()
         {
             if (Status == ContractStatus.Cancelled)
                 throw new DomainException("Контракт уже отменен");
             Status = ContractStatus.Cancelled;
             EndDate = DateTime.UtcNow;
-            PauseReason = command.Reason;
+            PauseReason = "Контракт отменен";
             IsPaused = false;
         }
     }
