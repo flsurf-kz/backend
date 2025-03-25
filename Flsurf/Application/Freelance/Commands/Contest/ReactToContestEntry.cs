@@ -1,13 +1,15 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
+using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Freelance.Commands.Contest
 {
     public class ReactToContestEntryCommand : BaseCommand
     {
         public Guid ContestEntryId { get; set; }
-        public string Reaction { get; set; } = string.Empty;
+        public ContestEntryReaction Reaction { get; set; }
     }
 
     public class ReactToContestEntryHandler : ICommandHandler<ReactToContestEntryCommand>
@@ -29,35 +31,13 @@ namespace Flsurf.Application.Freelance.Commands.Contest
             // Проверяем, существует ли заявка конкурса
             var contestEntry = await _context.ContestEntries
                 .FirstOrDefaultAsync(e => e.Id == command.ContestEntryId);
+
             if (contestEntry == null)
             {
                 return CommandResult.NotFound("Заявка на конкурс не найдена.", command.ContestEntryId);
             }
 
-            // Ищем существующую реакцию от текущего пользователя на эту заявку
-            var existingReaction = await _context.ContestEntryReactions
-                .FirstOrDefaultAsync(r => r.ContestEntryId == command.ContestEntryId && r.UserId == currentUser.Id);
-
-            if (existingReaction != null)
-            {
-                // Если реакция уже существует, обновляем её
-                existingReaction.Reaction = command.Reaction;
-                existingReaction.ReactedAt = DateTime.UtcNow;
-            }
-            else
-            {
-                // Если реакции нет, создаём новую сущность реакции
-                var reactionEntity = new ContestEntryReactionEntity
-                {
-                    Id = Guid.NewGuid(),
-                    ContestEntryId = command.ContestEntryId,
-                    UserId = currentUser.Id,
-                    Reaction = command.Reaction,
-                    ReactedAt = DateTime.UtcNow
-                };
-
-                _context.ContestEntryReactions.Add(reactionEntity);
-            }
+            contestEntry.Reaction = command.Reaction; 
 
             await _context.SaveChangesAsync();
 

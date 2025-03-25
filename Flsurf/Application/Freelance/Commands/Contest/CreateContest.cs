@@ -16,7 +16,7 @@ namespace Flsurf.Application.Freelance.Commands.Contest
         [Required]
         public string Description { get; set; } = null!;
         [Required]
-        public decimal PrizePool { get; set; } = null!;
+        public decimal PrizePool { get; set; }
         public bool IsResultPublic { get; set; } = false; 
     }
 

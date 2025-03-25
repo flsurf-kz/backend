@@ -108,6 +108,22 @@ namespace Flsurf.Domain.Payment.ValueObjects
             return new Money(lhs.Amount / divisor, lhs.Currency);
         }
 
+        public static Money operator *(Money lhs, double multiplier)
+        {
+            if (multiplier <= 0)
+                throw new ArgumentException("Mulitplier must be greater than zero.");
+
+            return new Money(lhs.Amount * (decimal)multiplier, lhs.Currency);
+        }
+
+        public static Money operator /(Money lhs, double divisor)
+        {
+            if (divisor <= 0)
+                throw new ArgumentException("Divisor must be greater than zero.");
+
+            return new Money(lhs.Amount / (decimal)divisor, lhs.Currency);
+        }
+
         // ✅ Методы для проверки нуля
         public bool IsZero() => Amount == 0;
 
