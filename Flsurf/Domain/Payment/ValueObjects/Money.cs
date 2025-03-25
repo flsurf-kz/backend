@@ -24,6 +24,13 @@ namespace Flsurf.Domain.Payment.ValueObjects
             Currency = currency;
         }
 
+        // huinay
+        public Money(Money money)
+        {
+            Amount = money.Amount; 
+            Currency = money.Currency;
+        }
+
         // ✅ Проверка валюты (упрощенный вариант)
         private static void EnsureSameCurrency(Money lhs, Money rhs)
         {

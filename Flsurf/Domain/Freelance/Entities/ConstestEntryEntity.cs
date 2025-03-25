@@ -1,4 +1,6 @@
-﻿using Flsurf.Domain.User.Entities;
+﻿using Flsurf.Domain.Files.Entities;
+using Flsurf.Domain.Freelance.Enums;
+using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Flsurf.Domain.Freelance.Entities
@@ -7,13 +9,13 @@ namespace Flsurf.Domain.Freelance.Entities
     {
         [ForeignKey("Contest")]
         public Guid ContestId { get; set; }
-        public ContestEntity Contest { get; set; }
+        public ContestEntity Contest { get; set; } = null!;
         [ForeignKey("Freelancer")]
         public Guid FreelancerId { get; set; }
-        public UserEntity Freelancer { get; set; }
-        public string EntrySubmission { get; set; }
-        public DateTime EntryDate { get; set; }
-        public string Status { get; set; }
-        public bool Denied { get; set; }
+        public UserEntity Freelancer { get; set; } = null!; 
+        public string Description { get; set; } = null!;
+        public ContestEntryReaction Reaction { get; set; } = ContestEntryReaction.None;
+        public bool Hidden { get; set; }
+        public ICollection<FileEntity> Files { get; set; } = []; 
     }
 }

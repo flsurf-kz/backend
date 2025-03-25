@@ -1,6 +1,7 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Exceptions;
 using Flsurf.Application.Common.Interfaces;
+using Flsurf.Domain.Payment.Entities;
 using Flsurf.Domain.Payment.Enums;
 using Flsurf.Domain.Payment.Policies;
 using Flsurf.Domain.Payment.ValueObjects;
@@ -38,6 +39,23 @@ namespace Flsurf.Application.Payment.InnerServices
             senderWallet.Transfer(transferAmount, recieverWallet, feePolicy, freezeForDays); 
 
             return CommandResult.Success(); 
+        }
+
+        public async Task<CommandResult> Transfer(
+             Money transferAmount,
+             WalletEntity recieverWallet,
+             WalletEntity senderWallet,
+             IFeePolicy? feePolicy,
+             int? freezeForDays)
+        {
+            if (recieverWallet == null || senderWallet == null)
+            {
+                return CommandResult.NotFound("Не найден кошелек получателя или начальный кошелёк", Guid.Empty);
+            }
+
+            senderWallet.Transfer(transferAmount, recieverWallet, feePolicy, freezeForDays);
+
+            return CommandResult.Success();
         }
 
         public async Task<CommandResult> Refund(Guid transactionId)

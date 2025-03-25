@@ -1,6 +1,12 @@
 ﻿namespace Flsurf.Domain.Freelance.Enums
 {
-    public class ContestStatus
+    public enum ContestStatus
     {
+        Draft,
+        Moderation,
+        Approved,
+        Open,
+        Ended,
+        WinnerSelected
     }
 }
