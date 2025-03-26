@@ -8,21 +8,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Freelance.Commands.Contract
 {
-    public class EmployerRejectContractCompletionCommand : BaseCommand
+    public class ClientRejectContractCompletionCommand : BaseCommand
     {
         public Guid ContractId { get; set; }
         public string Reason { get; set; } = string.Empty;
     }
 
-    public class EmployerRejectContractCompletionHandler(
+    public class ClientRejectContractCompletionHandler(
         IApplicationDbContext dbContext,
         IPermissionService permService)
-        : ICommandHandler<EmployerRejectContractCompletionCommand>
+        : ICommandHandler<ClientRejectContractCompletionCommand>
     {
         private readonly IApplicationDbContext _dbContext = dbContext;
         private readonly IPermissionService _permService = permService;
 
-        public async Task<CommandResult> Handle(EmployerRejectContractCompletionCommand command)
+        public async Task<CommandResult> Handle(ClientRejectContractCompletionCommand command)
         {
             var employer = await _permService.GetCurrentUser();
 

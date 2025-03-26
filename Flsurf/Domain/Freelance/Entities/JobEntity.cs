@@ -2,6 +2,7 @@
 using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.Freelance.Events;
+using Flsurf.Domain.Payment.ValueObjects;
 using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -19,8 +20,9 @@ namespace Flsurf.Domain.Freelance.Entities
         public string Description { get; set; } = string.Empty;
         public ICollection<SkillEntity> RequiredSkills { get; set; } = [];  // many to many? 
         public CategoryEntity Category { get; set; } = null!;
-        public decimal? Budget { get; set; } 
-        public decimal? HourlyRate { get; set; }
+        public Guid CategoryId { get; set; } 
+        public Money? Budget { get; set; } 
+        public Money? HourlyRate { get; set; }
         public DateTime? ExpirationDate { get; set; } 
         public int? Duration { get; set; }
         public JobStatus Status { get; set; } = JobStatus.Draft;
@@ -34,13 +36,14 @@ namespace Flsurf.Domain.Freelance.Entities
         [JsonIgnore]
         [ForeignKey("Contract")]
         public Guid? ContractId { get; private set; }
-        public ICollection<FileEntity> Files { get; private set; } = []; 
+        public ICollection<FileEntity> Files { get; private set; } = [];
+        public bool IsHidden { get; set; } = false; 
 
         public static JobEntity CreateFixed(
             UserEntity employer,
             string title,
             string description,
-            decimal budget,
+            Money budget,
             bool paymentVerified, 
             JobLevel level,
             ICollection<SkillEntity> skills, 
@@ -67,7 +70,7 @@ namespace Flsurf.Domain.Freelance.Entities
             UserEntity employer,
             string title,
             string description,
-            decimal horlyRate,
+            Money horlyRate,
             bool paymentVerified,
             JobLevel level,
             ICollection<SkillEntity> skills,
@@ -90,36 +93,28 @@ namespace Flsurf.Domain.Freelance.Entities
             };
         }
 
-        public void CreateContractWithFreelancer(UserEntity user, ProposalEntity proposal, DateTime? endDate, decimal? budget)
+        public void SetFiles(ICollection<FileEntity> files)
         {
-            if (Status != JobStatus.Open)
-                throw new DomainException("Работы не активна");
-            if (!Proposals.Contains(proposal))
-                throw new DomainException("Ставка не действительна"); 
+            Files = files; 
+        }
 
-            var newContract = new ContractEntity()
-            {
-                Freelancer = user,
-                FreelancerId = user.Id,
-                Employer = Employer,
-                EmployerId = EmployerId,
-                StartDate = DateTime.Now,
-                EndDate = endDate,
-                Status = ContractStatus.Active,
-                BudgetType = BudgetType,
-            }; 
+        // decimal bc you cant change currency
+        public void UpdateBudget(decimal amount)
+        {
+            if (amount == 0)
+                return;  
+            if (BudgetType != BudgetType.Fixed)
+                throw new DomainException("не правильный тип бюджета");
+            Budget = new Money(amount);
+        }
 
-            if (BudgetType == BudgetType.Hourly)
-            {
-                newContract.CostPerHour = HourlyRate;
-            } else
-            {
-                newContract.Budget = budget ?? Budget;
-            }
-
-            Contract = newContract;
-
-            AddDomainEvent(new ContractWasCreated(newContract, this));
+        public void UpdateHourlyRate(decimal amount)  
+        {
+            if (amount == 0)
+                return;
+            if (BudgetType != BudgetType.Hourly)
+                throw new DomainException("не правильный тип бюджета");
+            HourlyRate = new Money(amount);
         }
     }
 }

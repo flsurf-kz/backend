@@ -4,9 +4,9 @@ namespace Flsurf.Application.Freelance.Permissions
 {
     public class ZedFreelancerTeam : ResourceReference
     {
-        private ZedFreelancerTeam(Guid groupId) : base($"freelance/group:{groupId}") { }
+        private ZedFreelancerTeam(Guid teamId) : base($"flsurf/team:{teamId}") { }
 
-        public static ZedFreelancerTeam WithId(Guid groupId) => new(groupId);
+        public static ZedFreelancerTeam WithId(Guid teamId) => new(teamId);
 
         public Relationship Member(ZedFreelancerUser user) => new(user, "member", this);
 

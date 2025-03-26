@@ -5,7 +5,7 @@ namespace Flsurf.Application.Freelance.Permissions
 {
     public class ZedFreelancerUser : ResourceReference
     {
-        private ZedFreelancerUser(Guid userId) : base($"freelance/user:{userId}") { }
+        private ZedFreelancerUser(Guid userId) : base($"flsurf/user:{userId}") { }
 
         public static ZedFreelancerUser WithId(Guid userId) => new(userId);
 

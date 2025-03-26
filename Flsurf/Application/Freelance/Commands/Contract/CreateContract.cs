@@ -56,6 +56,9 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             if (job.Contract != null)
                 return CommandResult.BadRequest("У этой вакансии уже есть контракт.");
 
+            if (job.Status != JobStatus.Open)
+                return CommandResult.BadRequest("Работа не открыта"); 
+
             ContractEntity contract;
 
             if (command.BudgetType == BudgetType.Fixed)
@@ -98,7 +101,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             job.Status = JobStatus.WaitingFreelancerApproval;
 
             // 3. Отправляем контракт на подтверждение фрилансеру
-            contract.AddDomainEvent(new ContractSentToFreelancer(contract.Id, freelancer.Id));
+            contract.AddDomainEvent(new ContractWasCreated(contract, job));
 
             await _dbContext.SaveChangesAsync();
 

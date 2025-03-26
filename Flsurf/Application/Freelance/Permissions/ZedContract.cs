@@ -4,7 +4,7 @@ namespace Flsurf.Application.Freelance.Permissions
 {
     public class ZedContract : ResourceReference
     {
-        private ZedContract(Guid contractId) : base($"freelance/contract:{contractId}") { }
+        private ZedContract(Guid contractId) : base($"flsurf/contract:{contractId}") { }
 
         public static ZedContract WithId(Guid contractId) => new(contractId);
 

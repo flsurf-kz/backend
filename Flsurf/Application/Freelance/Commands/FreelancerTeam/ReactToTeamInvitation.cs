@@ -1,5 +1,6 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Freelance.Permissions;
 using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.Data.Queries;
@@ -47,6 +48,11 @@ namespace Flsurf.Application.Freelance.Commands.FreelancerTeam
                 return CommandResult.Forbidden("");
 
             team.AddMember(user, invitation);
+
+            await _permService.AddRelationship(
+                ZedFreelancerTeam
+                    .WithId(team.Id)
+                    .Member(ZedFreelancerUser.WithId(user.Id))); 
 
             await _context.SaveChangesAsync(); 
 

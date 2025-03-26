@@ -1,5 +1,6 @@
 ﻿using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.Payment.Enums;
+using Flsurf.Domain.Payment.ValueObjects;
 
 namespace Flsurf.Application.Freelance.Queries.Responses
 {
@@ -9,7 +10,7 @@ namespace Flsurf.Application.Freelance.Queries.Responses
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public JobStatus Status { get; set; }
-        public decimal Budget { get; set; }
+        public Money Budget { get; set; } = null!; 
         public CurrencyEnum Currency { get; set; }
 
         public CategoryModel Category { get; set; } = null!; 

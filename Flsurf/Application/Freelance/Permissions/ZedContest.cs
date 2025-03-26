@@ -5,7 +5,7 @@ namespace Flsurf.Application.Freelance.Permissions
     public class ZedContest : ResourceReference
     {
         private ZedContest(string contestId)
-            : base($"freelance/contest:{contestId}") { }
+            : base($"flsurf/contest:{contestId}") { }
 
         public static ZedContest WithId(Guid contestId) => new ZedContest(contestId.ToString());
 

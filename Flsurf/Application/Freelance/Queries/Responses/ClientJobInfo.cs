@@ -2,7 +2,7 @@
 
 namespace Flsurf.Application.Freelance.Queries.Responses
 {
-    public class ClientOrderInfo
+    public class ClientJobInfo
     {
         public Guid UserId { get; set; }
         public string Name { get; set; } = string.Empty;

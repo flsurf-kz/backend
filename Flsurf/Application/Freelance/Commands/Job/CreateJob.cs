@@ -6,6 +6,7 @@ using Flsurf.Application.Freelance.Permissions;
 using Flsurf.Application.User.Permissions;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Freelance.Enums;
+using Flsurf.Domain.Payment.ValueObjects;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
@@ -62,9 +63,9 @@ namespace Flsurf.Application.Freelance.Commands.Job
             // Создаём вакансию
             JobEntity job = command.BudgetType == BudgetType.Fixed
                 ? JobEntity.CreateFixed(
-                    user, command.Title, command.Description, command.Budget ?? 0, false, command.Level, skills, files, category)
+                    user, command.Title, command.Description, new Money(command.Budget ?? 0), false, command.Level, skills, files, category)
                 : JobEntity.CreateHourly(
-                    user, command.Title, command.Description, command.HourlyRate ?? 0, false, command.Level, skills, files, category);
+                    user, command.Title, command.Description, new Money(command.HourlyRate ?? 0), false, command.Level, skills, files, category);
 
             _dbContext.Jobs.Add(job);
             await _dbContext.SaveChangesAsync();

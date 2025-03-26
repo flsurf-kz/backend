@@ -30,7 +30,7 @@ namespace Flsurf.Application.Freelance.Queries
             // 🔥 Фильтр по категории
             if (query.CategoryId.HasValue)
             {
-                jobsQuery = jobsQuery.Where(j => j.RequiredSkills.Any(s => s.CategoryId == query.CategoryId));
+                jobsQuery = jobsQuery.Where(j => j.CategoryId == query.CategoryId);
             }
 
             // 🔥 Фильтр по уровню опыта
@@ -47,20 +47,20 @@ namespace Flsurf.Application.Freelance.Queries
                     jobsQuery = jobsQuery.Where(j => j.BudgetType == BudgetType.Hourly);
 
                     if (query.MinHourlyRate.HasValue)
-                        jobsQuery = jobsQuery.Where(j => j.HourlyRate >= query.MinHourlyRate);
+                        jobsQuery = jobsQuery.Where(j => j.HourlyRate.Amount >= query.MinHourlyRate);
 
                     if (query.MaxHourlyRate.HasValue)
-                        jobsQuery = jobsQuery.Where(j => j.HourlyRate <= query.MaxHourlyRate);
+                        jobsQuery = jobsQuery.Where(j => j.HourlyRate.Amount <= query.MaxHourlyRate);
                 }
                 else
                 {
                     jobsQuery = jobsQuery.Where(j => j.BudgetType == BudgetType.Fixed);
 
                     if (query.MinBudget.HasValue)
-                        jobsQuery = jobsQuery.Where(j => j.Budget >= query.MinBudget);
+                        jobsQuery = jobsQuery.Where(j => j.Budget.Amount >= query.MinBudget);
 
                     if (query.MaxBudget.HasValue)
-                        jobsQuery = jobsQuery.Where(j => j.Budget <= query.MaxBudget);
+                        jobsQuery = jobsQuery.Where(j => j.Budget.Amount <= query.MaxBudget);
                 }
             }
 

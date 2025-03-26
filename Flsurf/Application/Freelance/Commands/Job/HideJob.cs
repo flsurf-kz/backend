@@ -2,26 +2,40 @@
 using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Freelance.Commands.Category.UpdateCategory;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Freelance.Commands.Job
 {
-    public class CreateFreelancerTeamHandler : ICommandHandler<CreateFreelancerTeamCommand>
+    public class HideJobCommand : BaseCommand
+    {
+        public Guid JobId { get; set; }
+    }
+
+    public class HideJobHandler : ICommandHandler<HideJobCommand>
     {
         private readonly IApplicationDbContext _context;
         private readonly IPermissionService _permService;
 
-        public CreateFreelancerTeamHandler(IApplicationDbContext context, IPermissionService permService)
+        public HideJobHandler(IApplicationDbContext context, IPermissionService permService)
         {
             _context = context;
             _permService = permService;
         }
 
-        public async Task<CommandResult> Handle(CreateFreelancerTeamCommand command)
+        public async Task<CommandResult> Handle(HideJobCommand command)
         {
-            // Заглушка: ничего не делаем, просто имитируем асинхронную операцию
-            await Task.CompletedTask;
+            var currentUser = await _permService.GetCurrentUser();
+            var job = await _context.Jobs.FirstOrDefaultAsync(j => j.Id == command.JobId);
+            if (job == null)
+                return CommandResult.NotFound("Вакансия не найдена.", command.JobId);
 
-            return CommandResult.Success(); // Возвращает успешный результат без данных
+            // Проверка: скрывать вакансию может только её владелец (клиент)
+            if (job.EmployerId != currentUser.Id)
+                return CommandResult.Forbidden("Нет прав для скрытия этой вакансии.");
+
+            job.IsHidden = true; // Предполагается, что в JobEntity есть свойство IsHidden
+            await _context.SaveChangesAsync();
+            return CommandResult.Success(job.Id);
         }
     }
 }

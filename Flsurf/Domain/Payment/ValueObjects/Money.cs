@@ -10,10 +10,10 @@ namespace Flsurf.Domain.Payment.ValueObjects
     public class Money : ValueObject
     {
         [Required]
-        public decimal Amount { get; private set; }
+        public decimal Amount { get; init; }
 
         [Required]
-        public CurrencyEnum Currency { get; private set; }
+        public CurrencyEnum Currency { get; init; }
 
         public Money(decimal amount, CurrencyEnum currency = CurrencyEnum.RussianRuble)
         {
@@ -27,6 +27,9 @@ namespace Flsurf.Domain.Payment.ValueObjects
         // huinay
         public Money(Money money)
         {
+            if (money.Amount < 0)
+                throw new ArgumentException("Amount cannot be negative.");
+
             Amount = money.Amount; 
             Currency = money.Currency;
         }

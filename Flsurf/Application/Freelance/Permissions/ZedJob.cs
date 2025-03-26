@@ -5,7 +5,7 @@ namespace Flsurf.Application.Freelance.Permissions
 {
     public class ZedJob : ResourceReference
     {
-        private ZedJob(string jobId) : base($"freelance/job:{jobId}") { }
+        private ZedJob(string jobId) : base($"flsurf/job:{jobId}") { }
 
         public static ZedJob WithId(Guid id) => new(id.ToString());
 

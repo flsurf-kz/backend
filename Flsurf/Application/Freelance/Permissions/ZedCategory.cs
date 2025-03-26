@@ -5,7 +5,7 @@ namespace Flsurf.Application.Freelance.Permissions
 {
     public class ZedCategory : ResourceReference
     {
-        private ZedCategory(string categoryId) : base($"freelance/freelance_category:{categoryId}") { }
+        private ZedCategory(string categoryId) : base($"flsurf/freelance_category:{categoryId}") { }
 
         public static ZedCategory WithWildcard() => new("*"); 
 

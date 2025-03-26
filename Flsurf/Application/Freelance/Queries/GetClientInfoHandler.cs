@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore;
 namespace Flsurf.Application.Freelance.Queries
 {
     public class GetClientOrderInfoHandler(IApplicationDbContext dbContext)
-        : IQueryHandler<GetClientInfoQuery, ClientOrderInfo?>
+        : IQueryHandler<GetClientInfoQuery, ClientJobInfo?>
     {
         private readonly IApplicationDbContext _dbContext = dbContext;
 
-        public async Task<ClientOrderInfo?> Handle(GetClientInfoQuery query)
+        public async Task<ClientJobInfo?> Handle(GetClientInfoQuery query)
         {
             var client = await _dbContext.ClientProfiles
                 .Include(c => c.User) // Загружаем пользователя
@@ -19,7 +19,7 @@ namespace Flsurf.Application.Freelance.Queries
                 .Include(c => c.Jobs) // Загружаем все опубликованные заказы
                 .Include(c => c.Contracts) // Загружаем все контракты клиента
                 .Where(c => c.UserId == query.UserId)
-                .Select(c => new ClientOrderInfo
+                .Select(c => new ClientJobInfo
                 {
                     UserId = c.UserId,
                     Name = c.User.Fullname,
