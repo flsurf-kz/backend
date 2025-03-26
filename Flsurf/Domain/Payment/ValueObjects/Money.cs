@@ -65,14 +65,18 @@ namespace Flsurf.Domain.Payment.ValueObjects
 
         public static bool operator ==(Money lhs, Money rhs)
         {
+            if (ReferenceEquals(lhs, rhs))
+                return true;
+            if (lhs is null || rhs is null)
+                return false;
+
             EnsureSameCurrency(lhs, rhs);
             return lhs.Amount == rhs.Amount;
         }
 
         public static bool operator !=(Money lhs, Money rhs)
         {
-            EnsureSameCurrency(lhs, rhs);
-            return lhs.Amount != rhs.Amount;
+            return !(lhs == rhs);
         }
 
         // ✅ Операторы сложения и вычитания
@@ -91,8 +95,25 @@ namespace Flsurf.Domain.Payment.ValueObjects
             return new Money(lhs.Amount - rhs.Amount, lhs.Currency);
         }
 
+        public static Money operator -(Money lhs, decimal rhs)
+        {
+            if (lhs.Amount < rhs)
+                throw new InvalidOperationException("Resulting amount cannot be negative.");
+
+            return new Money(lhs.Amount - rhs, lhs.Currency);
+        }
+
+
         // ✅ Умножение и деление (для работы с комиссиями или конвертацией)
         public static Money operator *(Money lhs, decimal multiplier)
+        {
+            if (multiplier < 0)
+                throw new ArgumentException("Multiplier cannot be negative.");
+
+            return new Money(lhs.Amount * multiplier, lhs.Currency);
+        }
+
+        public static Money operator *(Money lhs, int multiplier)
         {
             if (multiplier < 0)
                 throw new ArgumentException("Multiplier cannot be negative.");

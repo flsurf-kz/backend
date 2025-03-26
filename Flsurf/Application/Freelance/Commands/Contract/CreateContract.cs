@@ -5,9 +5,11 @@ using Flsurf.Application.User.Permissions;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.Freelance.Events;
+using Flsurf.Domain.Payment.ValueObjects;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Contracts;
 
 namespace Flsurf.Application.Freelance.Commands.Contract
 {
@@ -54,20 +56,40 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             if (job.Contract != null)
                 return CommandResult.BadRequest("У этой вакансии уже есть контракт.");
 
-            // 1. Подготовка ContractEntity
-            var contract = new ContractEntity
+            ContractEntity contract;
+
+            if (command.BudgetType == BudgetType.Fixed)
             {
-                EmployerId = employer.Id,
-                FreelancerId = freelancer.Id,
-                Budget = command.Budget,
-                CostPerHour = command.CostPerHour,
-                BudgetType = command.BudgetType,
-                PaymentSchedule = command.PaymentSchedule,
-                ContractTerms = command.ContractTerms,
-                StartDate = DateTime.UtcNow,
-                EndDate = command.EndDate,
-                Status = ContractStatus.PendingApproval
-            };
+                if (command.Budget is null)
+                    return CommandResult.BadRequest("Не указан бюджет для фиксированного контракта.");
+
+                contract = ContractEntity.CreateFixed(
+                    employerId: employer.Id,
+                    freelancerId: freelancer.Id,
+                    budget: command.Budget,
+                    paymentSchedule: command.PaymentSchedule,
+                    contractTerms: command.ContractTerms,
+                    endDate: command.EndDate
+                );
+            }
+            else if (command.BudgetType == BudgetType.Hourly)
+            {
+                if (command.CostPerHour is null)
+                    return CommandResult.BadRequest("Не указана ставка для почасового контракта.");
+
+                contract = ContractEntity.CreateHourly(
+                    employerId: employer.Id,
+                    freelancerId: freelancer.Id,
+                    costPerHour: command.CostPerHour,
+                    paymentSchedule: command.PaymentSchedule,
+                    contractTerms: command.ContractTerms,
+                    endDate: command.EndDate
+                );
+            }
+            else
+            {
+                return CommandResult.BadRequest("Неизвестный тип бюджета.");
+            }
 
             _dbContext.Contracts.Add(contract);
 

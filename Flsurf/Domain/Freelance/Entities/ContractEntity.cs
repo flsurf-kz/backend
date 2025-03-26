@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Diagnostics.Contracts;
 using Flsurf.Application.Common.Exceptions;
+using Flsurf.Domain.Payment.ValueObjects;
 
 namespace Flsurf.Domain.Freelance.Entities
 {
@@ -21,9 +22,9 @@ namespace Flsurf.Domain.Freelance.Entities
 
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public decimal? Budget { get; set; }
+        public Money? Budget { get; set; }
         public ContractStatus Status { get; set; } = ContractStatus.Active;
-        public decimal? CostPerHour { get; set; }
+        public Money? CostPerHour { get; set; }
         public BudgetType BudgetType { get; set; }
 
         public ICollection<TaskEntity> Tasks { get; set; } = [];
@@ -36,8 +37,8 @@ namespace Flsurf.Domain.Freelance.Entities
             .Where(ws => ws.EndDate.HasValue)
             .Sum(ws => (decimal)(ws.EndDate.Value - ws.StartDate).TotalHours) ?? 0;
 
-        public decimal? RemainingBudget => Budget.HasValue && CostPerHour.HasValue
-            ? Budget - (TotalHoursWorked * CostPerHour)
+        public Money? RemainingBudget => Budget != null && CostPerHour != null
+            ? Budget - (CostPerHour * TotalHoursWorked)
             : null;
 
         public PaymentScheduleType PaymentSchedule { get; set; }
@@ -47,6 +48,58 @@ namespace Flsurf.Domain.Freelance.Entities
         public decimal? Bonus { get; set; }
         [ForeignKey(nameof(DisputeEntity))]
         public Guid? DisputeId { get; set; }
+
+        public static ContractEntity CreateFixed(
+            Guid employerId,
+            Guid freelancerId,
+            decimal? budget,
+            PaymentScheduleType paymentSchedule,
+            string contractTerms,
+            DateTime? endDate)
+        {
+            if (budget == null)
+                throw new ArgumentException("Для фиксированного контракта необходимо указать бюджет.");
+
+            return new ContractEntity
+            {
+                EmployerId = employerId,
+                FreelancerId = freelancerId,
+                Budget = new Money(budget ?? 0),
+                CostPerHour = null,
+                BudgetType = BudgetType.Fixed,
+                PaymentSchedule = paymentSchedule,
+                ContractTerms = contractTerms,
+                StartDate = DateTime.UtcNow,
+                EndDate = endDate,
+                Status = ContractStatus.PendingApproval
+            };
+        }
+
+        public static ContractEntity CreateHourly(
+            Guid employerId,
+            Guid freelancerId,
+            decimal? costPerHour,
+            PaymentScheduleType paymentSchedule,
+            string contractTerms,
+            DateTime? endDate)
+        {
+            if (costPerHour == null)
+                throw new ArgumentException("Для почасового контракта необходимо указать ставку.");
+
+            return new ContractEntity
+            {
+                EmployerId = employerId,
+                FreelancerId = freelancerId,
+                Budget = null,
+                CostPerHour = new Money(costPerHour ?? 0),
+                BudgetType = BudgetType.Hourly,
+                PaymentSchedule = paymentSchedule,
+                ContractTerms = contractTerms,
+                StartDate = DateTime.UtcNow,
+                EndDate = endDate,
+                Status = ContractStatus.PendingApproval
+            };
+        }
 
         public void ChangeDeadline(DateTime endTime)
         {
@@ -90,6 +143,18 @@ namespace Flsurf.Domain.Freelance.Entities
             EndDate = DateTime.UtcNow;
             PauseReason = "Контракт отменен";
             IsPaused = false;
+        }
+
+        public void Finish()
+        {
+            if (Status != ContractStatus.PendingFinishApproval)
+                throw new DomainException("Контракт не в активном состоянии");
+            Status = ContractStatus.Completed; 
+            EndDate = DateTime.UtcNow;
+            IsPaused = true;
+            PauseReason = "Контракт завершен";
+
+            AddDomainEvent(new ContractFinished(this)); 
         }
     }
 

@@ -16,10 +16,10 @@ namespace Flsurf.Application.Freelance.Commands.Contract
     }
 
     public class ClientCloseContractHandler(
-        IApplicationDbContext dbContext,
-        IPermissionService permService,
-        TransactionInnerService transactionService)
-        : ICommandHandler<ClientCloseContractCommand>
+    IApplicationDbContext dbContext,
+    IPermissionService permService,
+    TransactionInnerService transactionService)
+    : ICommandHandler<ClientCloseContractCommand>
     {
         private readonly IApplicationDbContext _dbContext = dbContext;
         private readonly IPermissionService _permService = permService;
@@ -38,7 +38,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             if (contract == null)
                 return CommandResult.NotFound("Контракт не найден или вам недоступен.", command.ContractId);
 
-            if (contract.Status == ContractStatus.Completed || contract.Status == ContractStatus.Cancelled)
+            if (contract.Status is ContractStatus.Completed or ContractStatus.Cancelled)
                 return CommandResult.BadRequest("Контракт уже завершён или отменён.");
 
             var freelancerWallet = await _dbContext.Wallets.FirstOrDefaultAsync(w => w.UserId == contract.FreelancerId);
@@ -51,21 +51,24 @@ namespace Flsurf.Application.Freelance.Commands.Contract
 
             if (contract.BudgetType == BudgetType.Fixed)
             {
-                refundableAmount = new Money(contract.Budget ?? 0, freelancerWallet.Currency);
+                refundableAmount = contract.Budget ?? new Money(0);
             }
             else if (contract.BudgetType == BudgetType.Hourly)
             {
+                if (contract.CostPerHour is null)
+                    return CommandResult.BadRequest("Не указана почасовая ставка.");
+
                 var totalWorkedHours = contract.TotalHoursWorked;
-                var prepaidHours = 2;
+                var prepaidHours = 2m;
 
                 var remainingHours = prepaidHours - totalWorkedHours;
                 if (remainingHours <= 0)
                 {
-                    refundableAmount = new Money(0, freelancerWallet.Currency);
+                    refundableAmount = new Money(0, contract.CostPerHour.Currency);
                 }
                 else
                 {
-                    refundableAmount = new Money((contract.CostPerHour ?? 0) * remainingHours, freelancerWallet.Currency);
+                    refundableAmount = contract.CostPerHour * remainingHours;
                 }
             }
             else
@@ -73,33 +76,31 @@ namespace Flsurf.Application.Freelance.Commands.Contract
                 return CommandResult.BadRequest("Неизвестный тип бюджета.");
             }
 
-            if (refundableAmount.Amount > 0)
+            if (!refundableAmount.IsZero())
             {
                 // Штраф 10% остаётся у фрилансера
-                var penaltyAmount = refundableAmount.Amount * ClientPenaltyRate;
-                var amountAfterPenalty = refundableAmount.Amount - penaltyAmount;
-
-                var refundWithPenalty = new Money(amountAfterPenalty, freelancerWallet.Currency);
+                var penaltyAmount = refundableAmount * ClientPenaltyRate;
+                var amountAfterPenalty = refundableAmount - penaltyAmount;
 
                 // 1. Размораживаем всю сумму на кошельке фрилансера
                 var unfreezeResult = await _transactionService.UnfreezeAmount(refundableAmount, freelancerWallet.Id);
                 if (!unfreezeResult.IsSuccess)
                     return CommandResult.BadRequest("Не удалось разморозить средства фрилансера.");
 
-                // 2. Переводим сумму после штрафа обратно клиенту
+                // 2. Переводим сумму после удержания обратно клиенту
                 var refundResult = await _transactionService.Transfer(
-                    refundWithPenalty,
+                    amountAfterPenalty,
                     recieverWalletId: clientWallet.Id,
                     senderWalletId: freelancerWallet.Id,
                     feePolicy: null,
-                    freezeForDays: null);
+                    freezeForDays: null
+                );
 
                 if (!refundResult.IsSuccess)
                     return CommandResult.BadRequest("Не удалось перевести возврат клиенту.");
             }
 
-            contract.CancelContract(); 
-
+            contract.CancelContract();
             contract.AddDomainEvent(new ContractCancelledByClientEvent(contract.Id, user.Id, command.Reason));
 
             await _dbContext.SaveChangesAsync();
@@ -107,6 +108,4 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             return CommandResult.Success(contract.Id);
         }
     }
-
-
 }

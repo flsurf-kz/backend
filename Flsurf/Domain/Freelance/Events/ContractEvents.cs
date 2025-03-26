@@ -67,4 +67,45 @@ namespace Flsurf.Domain.Freelance.Events
             Reason = reason;
         }
     }
+
+    public class FreelancerFinishedContract : DomainEvent
+    {
+        public Guid ContractId { get; }
+        public Guid InitiatorId { get; }
+
+        public FreelancerFinishedContract(Guid contractId, Guid initiatorId)
+        {
+            ContractId = contractId;
+            InitiatorId = initiatorId;
+        }
+    }
+
+    public class ContractFinishRejected : DomainEvent
+    {
+        public Guid ContractId { get; }
+        public Guid EmployerId { get; }
+        public string Reason { get; }
+
+        public ContractFinishRejected(Guid contractId, Guid employerId, string reason)
+        {
+            ContractId = contractId;
+            EmployerId = employerId;
+            Reason = reason;
+        }
+    }
+
+    public class ContractFinished(ContractEntity _contract) : DomainEvent {
+        public ContractEntity Contract { get; } = _contract; 
+    }
+
+    public class ContractResumed(ContractEntity _contract) : DomainEvent
+    {
+        public ContractEntity Contract { get; } = _contract;
+    }
+
+    public class ContractPaused(ContractEntity _contract, string reason) : DomainEvent
+    {
+        public ContractEntity Contract { get; } = _contract;
+        public string Reason { get; } = reason; 
+    }
 }

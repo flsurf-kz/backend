@@ -56,18 +56,18 @@ namespace Flsurf.Application.Freelance.Commands.Contract
 
             if (contract.BudgetType == BudgetType.Fixed)
             {
-                if (!contract.Budget.HasValue)
+                if (contract.Budget is null)
                     return CommandResult.BadRequest("Не указана сумма фиксированного бюджета.");
 
-                transferAmount = new Money(contract.Budget.Value);
+                transferAmount = new Money(contract.Budget);
                 freezeDays = null; // бессрочно до завершения контракта
             }
             else if (contract.BudgetType == BudgetType.Hourly)
             {
-                if (!contract.CostPerHour.HasValue)
+                if (contract.CostPerHour is null)
                     return CommandResult.BadRequest("Не указана почасовая ставка.");
 
-                transferAmount = new Money(contract.CostPerHour.Value * 2);
+                transferAmount = new Money(contract.CostPerHour * 2);
                 freezeDays = 14; // замораживаем на 14 дней
             }
             else
