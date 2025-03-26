@@ -24,6 +24,15 @@ namespace Flsurf.Domain.Payment.ValueObjects
             Currency = currency;
         }
 
+        private Money(decimal amount, CurrencyEnum currency, bool bypassValidation)
+        {
+
+            Amount = amount;
+            Currency = currency;
+        }
+
+        public static Money Null() => new Money(-1, CurrencyEnum.RussianRuble, true);
+
         // huinay
         public Money(Money money)
         {

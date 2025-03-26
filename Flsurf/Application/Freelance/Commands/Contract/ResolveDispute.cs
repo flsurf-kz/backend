@@ -30,18 +30,19 @@ namespace Flsurf.Application.Freelance.Commands.Contract
         public DateTime? BlockUntil { get; set; } // Срок блокировки
     }
 
+    // TODO 
     public class ResolveDisputeHandler(
-    IApplicationDbContext dbContext,
-    IPermissionService permService,
-    TransactionInnerService transactionService,
-    IFreelanceService freelanceService,
-    IMessageService messengerService)
+        IApplicationDbContext dbContext,
+        IPermissionService permService,
+        TransactionInnerService transactionService,
+        //IFreelanceService freelanceService,
+        IMessageService messengerService)
     : ICommandHandler<ResolveDisputeCommand>
     {
         private readonly IApplicationDbContext _dbContext = dbContext;
         private readonly IPermissionService _permService = permService;
         private readonly TransactionInnerService _transactionService = transactionService;
-        private readonly IFreelanceService _freelanceService = freelanceService;
+        //private readonly IFreelanceService _freelanceService = freelanceService;
         private readonly IMessageService _messengerService = messengerService;
 
         public async Task<CommandResult> Handle(ResolveDisputeCommand command)
@@ -69,8 +70,8 @@ namespace Flsurf.Application.Freelance.Commands.Contract
 
             var amount = contract.BudgetType switch
             {
-                BudgetType.Fixed => new Money(contract.Budget ?? 0, freelancerWallet.Currency),
-                BudgetType.Hourly => new Money((contract.CostPerHour ?? 0) * contract.TotalHoursWorked, freelancerWallet.Currency),
+                BudgetType.Fixed => contract.Budget,
+                BudgetType.Hourly => contract.CostPerHour * contract.TotalHoursWorked,
                 _ => throw new DomainException("Неизвестный тип бюджета")
             };
 
@@ -94,23 +95,23 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             }
 
             // Применение ограничений
-            if (command.BlockFreelancerWallet && command.BlockUntil.HasValue)
-            {
-                await _freelanceService.ApplyUserRestrictionAsync(
-                    contract.FreelancerId, RestrictionType.WalletBlocked, command.BlockUntil.Value, "Решение AMC по спору");
-            }
+            //if (command.BlockFreelancerWallet && command.BlockUntil.HasValue)
+            //{
+            //    await _freelanceService.ApplyUserRestrictionAsync(
+            //        contract.FreelancerId, RestrictionType.WalletBlocked, command.BlockUntil.Value, "Решение AMC по спору");
+            //}
 
-            if (command.BlockClientWallet && command.BlockUntil.HasValue)
-            {
-                await _freelanceService.ApplyUserRestrictionAsync(
-                    contract.EmployerId, RestrictionType.WalletBlocked, command.BlockUntil.Value, "Решение AMC по спору");
-            }
+            //if (command.BlockClientWallet && command.BlockUntil.HasValue)
+            //{
+            //    await _freelanceService.ApplyUserRestrictionAsync(
+            //        contract.EmployerId, RestrictionType.WalletBlocked, command.BlockUntil.Value, "Решение AMC по спору");
+            //}
 
-            if (command.BlockFreelancerOrders && command.BlockUntil.HasValue)
-            {
-                await _freelanceService.ApplyUserRestrictionAsync(
-                    contract.FreelancerId, RestrictionType.OrdersBlocked, command.BlockUntil.Value, "Решение AMC по спору");
-            }
+            //if (command.BlockFreelancerOrders && command.BlockUntil.HasValue)
+            //{
+            //    await _freelanceService.ApplyUserRestrictionAsync(
+            //        contract.FreelancerId, RestrictionType.OrdersBlocked, command.BlockUntil.Value, "Решение AMC по спору");
+            //}
 
             // Меняем статус спора
             dispute.Status = DisputeStatus.Resolved;

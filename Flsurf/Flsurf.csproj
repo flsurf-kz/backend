@@ -35,4 +35,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Application\Freelance\Commands\Task\CompleteTask\" />
+    <Folder Include="Application\Freelance\Commands\Task\CreateTask\" />
+    <Folder Include="Application\Freelance\Commands\Task\DeleteTask\" />
+    <Folder Include="Application\Freelance\Commands\Task\ReactToTask\" />
+    <Folder Include="Application\Freelance\Commands\Task\UpdateTask\" />
+  </ItemGroup>
+
 </Project>

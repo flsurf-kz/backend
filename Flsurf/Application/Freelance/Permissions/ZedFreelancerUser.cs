@@ -24,7 +24,7 @@ namespace Flsurf.Application.Freelance.Permissions
         public Permission CanDeleteJob(ZedJob job) => new(job, "delete", this);
         public Permission CanUpdateJob(ZedJob job) => new(job, "update", this);
         public Permission CanSuspendClientProfile(ZedClientProfile profile) => new(profile, "suspend", this);
-        public Permission CanCancelContract(ZedContract contract) => new(contract, "cancel", this); 
-        public Permission CanApproveContests() => new(ZedContest)
+        public Permission CanCancelContract(ZedContract contract) => new(contract, "cancel", this);
+        public Permission CanApproveContests() => new(ZedContest.WithWildcard(), "approve", this); 
     }
 }

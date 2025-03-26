@@ -1,4 +1,5 @@
 ﻿using Flsurf.Application.Freelance.Commands.Category.UpdateCategory;
+using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 
 namespace Flsurf.Application.Freelance.Services

@@ -20,7 +20,7 @@ namespace Flsurf.Application.Freelance.Queries
             _context = context;
         }
 
-        public async Task<IEnumerable<ContestEntity>> Handle(GetContestListQuery query)
+        public async Task<ICollection<ContestEntity>> Handle(GetContestListQuery query)
         {
             int count = query.End - query.Start;
             return await _context.Contests

@@ -22,9 +22,9 @@ namespace Flsurf.Domain.Freelance.Entities
 
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public Money? Budget { get; set; }
+        public Money Budget { get; set; } = Money.Null(); // костыль 
         public ContractStatus Status { get; set; } = ContractStatus.Active;
-        public Money? CostPerHour { get; set; }
+        public Money CostPerHour { get; set; } = Money.Null(); // костыль  
         public BudgetType BudgetType { get; set; }
 
         public ICollection<TaskEntity> Tasks { get; set; } = [];

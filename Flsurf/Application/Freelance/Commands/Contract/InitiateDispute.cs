@@ -2,6 +2,7 @@
 using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Staff.Interfaces;
 using Flsurf.Application.Staff.UseCases;
+using Flsurf.Domain.Freelance;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.Freelance.Events;

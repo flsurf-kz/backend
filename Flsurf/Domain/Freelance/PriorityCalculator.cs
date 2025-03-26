@@ -1,4 +1,4 @@
-﻿namespace Flsurf.Application.Freelance
+﻿namespace Flsurf.Domain.Freelance
 {
     public static class PriorityCalculator
     {
