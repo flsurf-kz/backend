@@ -5,8 +5,8 @@ namespace Flsurf.Application.Common.cqrs
     public class CommandResult
     {
         public string Message { get; }
-        public string Id { get; }
-        public List<string> Ids { get; }
+        public string? Id { get; }
+        public List<string>? Ids { get; }
         public HttpStatusCode Status { get; }
 
         public bool IsSuccess => Status == HttpStatusCode.OK;
