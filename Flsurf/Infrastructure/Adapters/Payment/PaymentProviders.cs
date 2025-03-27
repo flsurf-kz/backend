@@ -6,7 +6,6 @@ namespace Flsurf.Infrastructure.Adapters.Payment
     public enum PaymentProviders
     {
         BankCardRu,
-        Balance,
         Test
     }
 }

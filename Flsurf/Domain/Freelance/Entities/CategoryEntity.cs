@@ -7,7 +7,7 @@ namespace Flsurf.Domain.Freelance.Entities
         public string Name { get; set; } = string.Empty;
         public string Slug { get; set; } = string.Empty;
         public Guid? ParentCategoryId { get; set; }
-        public CategoryEntity ParentCategory { get; set; } = null!;
+        public CategoryEntity? ParentCategory { get; set; } = null!;
         public ICollection<CategoryEntity> SubCategories { get; set; } = []; 
 
         public void ChangeName(string name)

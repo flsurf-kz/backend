@@ -2,6 +2,7 @@
 using Flsurf.Application.Common.Interfaces;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Infrastructure.Data.Extensions;
+using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Freelance.Queries

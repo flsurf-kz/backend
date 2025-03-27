@@ -6,14 +6,11 @@ namespace Flsurf.Application.Common.Extensions
 {
     public static class CommandResultExtensions
     {
-        public static ActionResult<T> MapResult<T>(this CommandResult result, ControllerBase controller)
+        public static ActionResult MapResult(this CommandResult result, ControllerBase controller)
         {
             return result.Status switch
             {
-                HttpStatusCode.OK => controller.Ok(
-                    result.Id is null
-                        ? (T)Convert.ChangeType(result.Ids, typeof(T))
-                        : (T)Convert.ChangeType(result.Id, typeof(T))),
+                HttpStatusCode.OK => controller.Ok(result), 
                 HttpStatusCode.BadRequest => controller.BadRequest(result.Message),
                 HttpStatusCode.NotFound => controller.NotFound(result.Message),
                 HttpStatusCode.Forbidden => controller.StatusCode((int)HttpStatusCode.Forbidden, result.Message),

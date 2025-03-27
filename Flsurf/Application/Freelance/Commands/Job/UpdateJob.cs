@@ -75,8 +75,11 @@ namespace Flsurf.Application.Freelance.Commands.Job
             job.Duration = command.Duration ?? job.Duration;
 
             // Обновляем навыки
-            var skills = await _dbContext.Skills.Where(s => command.RequiredSkillIds.Contains(s.Id)).ToListAsync();
-            job.RequiredSkills = skills;
+            if (command.RequiredSkillIds != null)
+            {
+                var skills = await _dbContext.Skills.Where(s => command.RequiredSkillIds.Contains(s.Id)).ToListAsync();
+                job.RequiredSkills = skills;
+            }
 
             // Обновляем категорию
             var category = await _dbContext.Categories.FindAsync(command.CategoryId);

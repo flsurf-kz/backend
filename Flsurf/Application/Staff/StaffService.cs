@@ -13,17 +13,9 @@ namespace Flsurf.Application.Staff
             _serviceProvider = serviceProvider;
         }
 
-        public CreateComment CreateComment()
-        {
-            return _serviceProvider.GetRequiredService<CreateComment>();
-        }
         public CreateTicket CreateTicket()
         {
             return _serviceProvider.GetRequiredService<CreateTicket>();
-        }
-        public DeleteComment DeleteComment()
-        {
-            return _serviceProvider.GetRequiredService<DeleteComment>();
         }
         public DeleteTicket DeleteTicket()
         {
@@ -41,10 +33,6 @@ namespace Flsurf.Application.Staff
         public GetTicketsList GetTicketsList()
         {
             return _serviceProvider.GetRequiredService<GetTicketsList>();
-        }
-        public GetCommentsList GetCommentsList()
-        {
-            return _serviceProvider.GetRequiredService<GetCommentsList>();
         }
     }
 }

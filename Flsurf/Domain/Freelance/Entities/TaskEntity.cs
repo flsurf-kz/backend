@@ -6,12 +6,12 @@ namespace Flsurf.Domain.Freelance.Entities
     {
         [ForeignKey("Contract")]
         public Guid ContractId { get; set; }
-        public ContractEntity Contract { get; set; }
-        public string TaskTitle { get; set; }
-        public string TaskDescription { get; set; }
-        public string Status { get; set; }
+        public ContractEntity Contract { get; set; } = null!;
+        public string TaskTitle { get; set; } = null!;
+        public string TaskDescription { get; set; } = null!;
+        public string Status { get; set; } = null!;
         public int Priority { get; set; }
         public DateTime CreationDate { get; set; }
-        public DateTime? CompletionDate { get; set; }
+        public DateTime? CompletionDate { get; set; } = null!;  
     }
 }

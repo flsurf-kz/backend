@@ -19,7 +19,9 @@ namespace Flsurf.Domain.Staff.Entities
         public Guid? AnsweredCommentId { get; set; }
         [Required]
         public TicketStatus Status { get; private set; } = TicketStatus.Open;
-        public UserEntity? AssignedUser { get; private set; } = null!;
+        [ForeignKey("AssignedUserId")]
+        public UserEntity? AssignedUser { get; private set; }
+        public Guid? AssignedUserId { get; private set; }
         public ICollection<TicketCommentEntity> Comments { get; private set; } = [];
         [ForeignKey(nameof(UserEntity))]
         public Guid? ClosedById { get; private set; }

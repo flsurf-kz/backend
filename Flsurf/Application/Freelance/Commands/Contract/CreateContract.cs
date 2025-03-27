@@ -63,7 +63,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
 
             if (command.BudgetType == BudgetType.Fixed)
             {
-                if (command.Budget is null)
+                if (command.Budget == null)
                     return CommandResult.BadRequest("Не указан бюджет для фиксированного контракта.");
 
                 contract = ContractEntity.CreateFixed(
@@ -77,13 +77,13 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             }
             else if (command.BudgetType == BudgetType.Hourly)
             {
-                if (command.CostPerHour is null)
+                if (command.CostPerHour == null)
                     return CommandResult.BadRequest("Не указана ставка для почасового контракта.");
 
                 contract = ContractEntity.CreateHourly(
                     employerId: employer.Id,
                     freelancerId: freelancer.Id,
-                    costPerHour: command.CostPerHour,
+                    costPerHour: (decimal)command.CostPerHour,
                     paymentSchedule: command.PaymentSchedule,
                     contractTerms: command.ContractTerms,
                     endDate: command.EndDate

@@ -13,7 +13,7 @@
         {
             var fullPath = Path.Combine(_baseDirectory, path);
             var directory = Path.GetDirectoryName(fullPath);
-            if (!Directory.Exists(directory))
+            if (!Directory.Exists(directory) && !string.IsNullOrEmpty(directory))
             {
                 Directory.CreateDirectory(directory);
             }
@@ -22,10 +22,10 @@
             await fileStream.CopyToAsync(file);
         }
 
-        public async Task<Stream> DownloadFileAsync(string path)
+        public Task<Stream> DownloadFileAsync(string path)
         {
             var fullPath = Path.Combine(_baseDirectory, path);
-            return new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+            return Task.FromResult<Stream>(new FileStream(fullPath, FileMode.Open, FileAccess.Read));
         }
 
         public Task DeleteFileAsync(string path)

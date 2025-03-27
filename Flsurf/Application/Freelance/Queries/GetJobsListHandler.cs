@@ -47,20 +47,20 @@ namespace Flsurf.Application.Freelance.Queries
                     jobsQuery = jobsQuery.Where(j => j.BudgetType == BudgetType.Hourly);
 
                     if (query.MinHourlyRate.HasValue)
-                        jobsQuery = jobsQuery.Where(j => j.HourlyRate.Amount >= query.MinHourlyRate);
+                        jobsQuery = jobsQuery.Where(j => j.Payout.Amount >= query.MinHourlyRate);
 
                     if (query.MaxHourlyRate.HasValue)
-                        jobsQuery = jobsQuery.Where(j => j.HourlyRate.Amount <= query.MaxHourlyRate);
+                        jobsQuery = jobsQuery.Where(j => j.Payout.Amount <= query.MaxHourlyRate);
                 }
                 else
                 {
                     jobsQuery = jobsQuery.Where(j => j.BudgetType == BudgetType.Fixed);
 
                     if (query.MinBudget.HasValue)
-                        jobsQuery = jobsQuery.Where(j => j.Budget.Amount >= query.MinBudget);
+                        jobsQuery = jobsQuery.Where(j => j.Payout.Amount >= query.MinBudget);
 
                     if (query.MaxBudget.HasValue)
-                        jobsQuery = jobsQuery.Where(j => j.Budget.Amount <= query.MaxBudget);
+                        jobsQuery = jobsQuery.Where(j => j.Payout.Amount <= query.MaxBudget);
                 }
             }
 

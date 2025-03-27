@@ -68,11 +68,11 @@ namespace Flsurf.Application.Freelance.Commands.WorkSession
                     return CommandResult.NotFound("Кошелёк фрилансера не найден.", session.FreelancerId);
 
                 var totalEarned = session.TotalEarned();
-                if (totalEarned < 0)
+                if (totalEarned.Amount < 0)
                     return CommandResult.BadRequest("Сумма к переводу некорректна (контракт не почасовой).");
 
                 var transferResult = await _transactionService.Transfer(
-                    new Money(totalEarned),
+                    totalEarned,
                     freelancerWallet.Id,
                     clientWallet.Id,
                     feePolicy: null,

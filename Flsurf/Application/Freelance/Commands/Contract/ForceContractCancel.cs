@@ -61,7 +61,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
 
             if (contract.BudgetType == BudgetType.Fixed)
             {
-                refundAmount = contract.Budget ?? new Money(0); 
+                refundAmount = contract.Budget; 
             }
             else if (contract.BudgetType == BudgetType.Hourly)
             {
@@ -71,7 +71,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
                 var remainingHours = totalPaidHours - totalWorkedHours;
                 if (remainingHours < 0) remainingHours = 0;
 
-                refundAmount = contract.CostPerHour ?? new Money(0) * remainingHours;
+                refundAmount = contract.CostPerHour * remainingHours;
             }
             else
             {

@@ -51,11 +51,11 @@ namespace Flsurf.Application.Freelance.Commands.Contract
 
             if (contract.BudgetType == BudgetType.Fixed)
             {
-                refundableAmount = contract.Budget ?? new Money(0);
+                refundableAmount = contract.Budget;
             }
             else if (contract.BudgetType == BudgetType.Hourly)
             {
-                if (contract.CostPerHour is null)
+                if (contract.CostPerHour == Money.Null())
                     return CommandResult.BadRequest("Не указана почасовая ставка.");
 
                 var totalWorkedHours = contract.TotalHoursWorked;

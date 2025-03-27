@@ -22,10 +22,11 @@ namespace Flsurf.Application.Freelance.Queries
                     Title = j.Title,
                     Description = j.Description,
                     Status = j.Status,
-                    Budget = j.Budget,
-                    Category = j.Category,
-                    Skills = j.Skills.Split(','),
-                    Languages = j.Languages.Split(','),
+                    Budget = j.Payout,
+                    // TODO 
+                    //Category = j.Category,
+                    //Skills = j.Skills.Split(','),
+                    //Languages = j.Languages.Split(','),
 
                     CreatedAt = j.CreatedAt ?? DateTime.UtcNow,
 

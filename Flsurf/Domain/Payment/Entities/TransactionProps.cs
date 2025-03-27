@@ -10,7 +10,7 @@ namespace Flsurf.Domain.Payment.Entities
         public string PaymentGateway { get; private set; }
         public FeeContext FeeContext { get; private set; }
 
-        private TransactionPropsEntity() { }
+        private TransactionPropsEntity() { }  // Для EF CORE 
 
         public static TransactionPropsEntity CreateGatewayProps(
             string paymentUrl,

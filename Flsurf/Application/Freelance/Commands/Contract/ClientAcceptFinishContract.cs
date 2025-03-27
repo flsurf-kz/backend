@@ -40,8 +40,8 @@ namespace Flsurf.Application.Freelance.Commands.Contract
 
             if (contract.BudgetType == BudgetType.Fixed)
             {
-                await _txService.UnfreezeAmount(contract.Budget ?? new Money(0), freelancerWallet.Id);
-                await _txService.FreezeAmount(contract.Budget ?? new Money(0), freelancerWallet.Id, 14);
+                await _txService.UnfreezeAmount(contract.Budget, freelancerWallet.Id);
+                await _txService.FreezeAmount(contract.Budget, freelancerWallet.Id, 14);
             } else if (contract.BudgetType == BudgetType.Hourly)
             {
                 // хуйня все вырубай

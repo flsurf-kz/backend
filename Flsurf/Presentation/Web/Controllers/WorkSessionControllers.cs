@@ -1,4 +1,5 @@
-﻿using Flsurf.Application.Common.Extensions;
+﻿using Flsurf.Application.Common.cqrs;
+using Flsurf.Application.Common.Extensions;
 using Flsurf.Application.Freelance.Commands.WorkSession;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
@@ -19,43 +20,43 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("start")]
-        public async Task<ActionResult<WorkSessionEntity>> StartSession([FromBody] StartWorkSessionCommand command)
+        public async Task<ActionResult<CommandResult>> StartSession([FromBody] StartWorkSessionCommand command)
         {
             var handler = _workSessionService.StartWorkSession();
             var result = await handler.Handle(command);
-            return MapResult(result);
+            return result.MapResult(this);
         }
 
         [HttpPost("submit")]
-        public async Task<ActionResult<WorkSessionEntity>> SubmitSession([FromBody] SubmitWorkSessionCommand command)
+        public async Task<ActionResult<CommandResult>> SubmitSession([FromBody] SubmitWorkSessionCommand command)
         {
             var handler = _workSessionService.SubmitWorkSession();
             var result = await handler.Handle(command);
-            return MapResult(result);
+            return result.MapResult(this);
         }
 
         [HttpPost("end")]
-        public async Task<ActionResult<WorkSessionEntity>> EndSession([FromBody] EndWorkSessionCommand command)
+        public async Task<ActionResult<CommandResult>> EndSession([FromBody] EndWorkSessionCommand command)
         {
             var handler = _workSessionService.EndWorkSession();
             var result = await handler.Handle(command);
-            return MapResult(result);
+            return result.MapResult(this);
         }
 
         [HttpPost("approve")]
-        public async Task<ActionResult<WorkSessionEntity>> ApproveSession([FromBody] ApproveWorkSessionCommand command)
+        public async Task<ActionResult<CommandResult>> ApproveSession([FromBody] ApproveWorkSessionCommand command)
         {
             var handler = _workSessionService.ApproveWorkSession();
             var result = await handler.Handle(command);
-            return MapResult(result);
+            return result.MapResult(this);
         }
 
         [HttpPost("react")]
-        public async Task<ActionResult<WorkSessionEntity>> ReactSession([FromBody] ReactToWorkSessionCommand command)
+        public async Task<ActionResult<CommandResult>> ReactSession([FromBody] ReactToWorkSessionCommand command)
         {
             var handler = _workSessionService.ReactToWorkSession();
             var result = await handler.Handle(command);
-            return result.MapResult(result);
+            return result.MapResult(this);
         }
 
         [HttpGet("{id}")]
@@ -70,9 +71,17 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<ActionResult<IEnumerable<WorkSessionEntity>>> GetSessionList([FromQuery] int start = 0, [FromQuery] int end = 10)
+        public async Task<ActionResult<ICollection<WorkSessionEntity>>> GetSessionList(
+            [FromQuery] Guid contractId, 
+            [FromQuery] int start = 0, 
+            [FromQuery] int end = 10
+        )
         {
-            var query = new GetWorkSessionsListQuery { Start = start, End = end };
+            var query = new GetWorkSessionListQuery() { 
+                ContractId = contractId, 
+                Start = start, 
+                Ends = end 
+            };
             var handler = _workSessionService.GetWorkSessionsList();
             var sessions = await handler.Handle(query);
             return Ok(sessions);

@@ -21,13 +21,13 @@ namespace Flsurf.Application.Freelance.EventHandlers
             _permService = permService;
         }
 
-        public async Task HandleEvent(UserCreated eventValue, IApplicationDbContext _context)
+        public Task HandleEvent(UserCreated eventValue, IApplicationDbContext _context)
         {
             // TODO? 
             _logger.LogInformation($"Creating freelancer or client account: {eventValue.User.Id}");
 
 
-            return;
+            return Task.FromResult(Task.CompletedTask);
         }
     }
 }

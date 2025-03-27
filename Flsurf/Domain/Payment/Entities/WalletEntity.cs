@@ -147,7 +147,7 @@ namespace Flsurf.Domain.Payment.Entities
 
             if (type == BalanceOperationType.Freeze)
             {
-                FreezeAmount(amount, DateTime.UtcNow.AddDays(2)); // потому что 
+                FreezeAmount(amount, DateTime.UtcNow.AddDays(4)); // потому что лень делать заморозку 
             } if (type == BalanceOperationType.Unfreeze)
             {
                 UnfreezeAmount(amount); 

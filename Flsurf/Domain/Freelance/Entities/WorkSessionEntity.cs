@@ -3,6 +3,7 @@ using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.Freelance.Events;
+using Flsurf.Domain.Payment.ValueObjects;
 using Flsurf.Domain.User.Entities;
 using Org.BouncyCastle.Asn1.Mozilla;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -62,18 +63,18 @@ namespace Flsurf.Domain.Freelance.Entities
         }
 
 
-        public decimal TotalEarned()
+        public Money TotalEarned()
         {
             if (Contract == null)
                 throw new NullReferenceException("Contract is not loaded dumbass");
 
-            if (Contract.BudgetType != BudgetType.Hourly || Contract.CostPerHour == null)
-                return -1;
+            if (Contract.BudgetType != BudgetType.Hourly || Contract.CostPerHour == Money.Null())
+                return Money.Null();
 
             if (EndDate == null)
-                return 0; // Фикс
+                return new Money(0); // Фикс
 
-            return Contract.CostPerHour.Value * WorkedHours();
+            return Contract.CostPerHour * WorkedHours();
         }
 
         public void StartSession()

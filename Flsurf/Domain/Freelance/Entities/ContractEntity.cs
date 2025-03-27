@@ -22,8 +22,10 @@ namespace Flsurf.Domain.Freelance.Entities
 
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        // Use Money.Null for comparisions against Null 
         public Money Budget { get; set; } = Money.Null(); // костыль 
         public ContractStatus Status { get; set; } = ContractStatus.Active;
+        // Use Money.Null for comparisions against Null 
         public Money CostPerHour { get; set; } = Money.Null(); // костыль  
         public BudgetType BudgetType { get; set; }
 
@@ -33,11 +35,12 @@ namespace Flsurf.Domain.Freelance.Entities
         // Динамически вычисляемые свойства
         public int TotalWorkSessions => WorkSessions?.Count ?? 0;
 
+        // NEED FIX this edgecase of nullable!! 
         public decimal TotalHoursWorked => WorkSessions?
             .Where(ws => ws.EndDate.HasValue)
-            .Sum(ws => (decimal)(ws.EndDate.Value - ws.StartDate).TotalHours) ?? 0;
+            .Sum(ws => (decimal)(ws.EndDate.Value - ws.StartDate).TotalHours) ?? 0;  
 
-        public Money? RemainingBudget => Budget != null && CostPerHour != null
+        public Money? RemainingBudget => Budget != Money.Null() && CostPerHour != Money.Null()
             ? Budget - (CostPerHour * TotalHoursWorked)
             : null;
 
@@ -65,7 +68,7 @@ namespace Flsurf.Domain.Freelance.Entities
                 EmployerId = employerId,
                 FreelancerId = freelancerId,
                 Budget = new Money(budget ?? 0),
-                CostPerHour = null,
+                CostPerHour = Money.Null(),
                 BudgetType = BudgetType.Fixed,
                 PaymentSchedule = paymentSchedule,
                 ContractTerms = contractTerms,
@@ -78,20 +81,17 @@ namespace Flsurf.Domain.Freelance.Entities
         public static ContractEntity CreateHourly(
             Guid employerId,
             Guid freelancerId,
-            decimal? costPerHour,
+            decimal costPerHour,
             PaymentScheduleType paymentSchedule,
             string contractTerms,
             DateTime? endDate)
         {
-            if (costPerHour == null)
-                throw new ArgumentException("Для почасового контракта необходимо указать ставку.");
-
             return new ContractEntity
             {
                 EmployerId = employerId,
                 FreelancerId = freelancerId,
-                Budget = null,
-                CostPerHour = new Money(costPerHour ?? 0),
+                Budget = Money.Null(),
+                CostPerHour = new Money(costPerHour),
                 BudgetType = BudgetType.Hourly,
                 PaymentSchedule = paymentSchedule,
                 ContractTerms = contractTerms,

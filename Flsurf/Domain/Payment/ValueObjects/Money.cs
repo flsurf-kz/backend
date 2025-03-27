@@ -31,7 +31,7 @@ namespace Flsurf.Domain.Payment.ValueObjects
             Currency = currency;
         }
 
-        public static Money Null() => new Money(-1, CurrencyEnum.RussianRuble, true);
+        public static Money Null() => new Money(-99999999999, CurrencyEnum.RussianRuble, true);
 
         // huinay
         public Money(Money money)

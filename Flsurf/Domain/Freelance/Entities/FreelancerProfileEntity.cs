@@ -25,7 +25,7 @@ namespace Flsurf.Domain.Freelance.Entities
 
 
         // ✅ Статический метод `.Create()`
-        public static FreelancerProfileEntity Create(Guid userId, string experience, decimal hourlyRate, string resume)
+        public static FreelancerProfileEntity Create(Guid userId, string experience, decimal hourlyRate, string? resume)
         {
             return new FreelancerProfileEntity
             {

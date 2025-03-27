@@ -56,7 +56,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
 
             if (contract.BudgetType == BudgetType.Fixed)
             {
-                if (contract.Budget is null)
+                if (contract.Budget == Money.Null())
                     return CommandResult.BadRequest("Не указана сумма фиксированного бюджета.");
 
                 transferAmount = new Money(contract.Budget);

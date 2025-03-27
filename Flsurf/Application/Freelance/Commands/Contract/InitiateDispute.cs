@@ -65,7 +65,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
 
             // Рассчитываем приоритет
             double priorityScore = PriorityCalculator.CalculatePriorityScore(
-                contractAmountUsd: (double)(contract.Budget ?? (contract.CostPerHour ?? 0) * 2),
+                contractAmountUsd: (double)(contract.Budget + contract.CostPerHour).Amount,
                 clientHasPremium: false,
                 freelancerHasPremium: false,
                 freelancerIsPopular: false,

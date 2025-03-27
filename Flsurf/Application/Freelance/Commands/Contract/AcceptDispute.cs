@@ -106,13 +106,13 @@ namespace Flsurf.Application.Freelance.Commands.Contract
 
             Money freezeAmount;
 
-            if (contract.BudgetType == BudgetType.Fixed && contract.Budget.HasValue)
+            if (contract.BudgetType == BudgetType.Fixed && contract.Budget != Money.Null())
             {
-                freezeAmount = new Money(contract.Budget.Value, freelancerWallet.Currency);
+                freezeAmount = contract.Budget; 
             }
-            else if (contract.BudgetType == BudgetType.Hourly && contract.CostPerHour.HasValue)
+            else if (contract.BudgetType == BudgetType.Hourly && contract.CostPerHour != Money.Null())
             {
-                freezeAmount = new Money(contract.CostPerHour.Value * 2, freelancerWallet.Currency);
+                freezeAmount = contract.CostPerHour * 2; 
             }
             else
             {

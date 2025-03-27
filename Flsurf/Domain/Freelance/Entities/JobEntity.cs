@@ -21,8 +21,7 @@ namespace Flsurf.Domain.Freelance.Entities
         public ICollection<SkillEntity> RequiredSkills { get; set; } = [];  // many to many? 
         public CategoryEntity Category { get; set; } = null!;
         public Guid CategoryId { get; set; } 
-        public Money? Budget { get; set; } 
-        public Money? HourlyRate { get; set; }
+        public Money? Payout { get; set; } 
         public DateTime? ExpirationDate { get; set; } 
         public int? Duration { get; set; }
         public JobStatus Status { get; set; } = JobStatus.Draft;
@@ -52,7 +51,7 @@ namespace Flsurf.Domain.Freelance.Entities
         {
             return new JobEntity()
             {
-                Budget = budget,
+                Payout = budget,
                 Title = title,
                 Description = description,
                 PaymentVerified = paymentVerified,
@@ -79,7 +78,7 @@ namespace Flsurf.Domain.Freelance.Entities
         {
             return new JobEntity()
             {
-                HourlyRate = horlyRate,
+                Payout = horlyRate,
                 Title = title,
                 Description = description,
                 PaymentVerified = paymentVerified,
@@ -105,7 +104,7 @@ namespace Flsurf.Domain.Freelance.Entities
                 return;  
             if (BudgetType != BudgetType.Fixed)
                 throw new DomainException("не правильный тип бюджета");
-            Budget = new Money(amount);
+            Payout = new Money(amount);
         }
 
         public void UpdateHourlyRate(decimal amount)  
@@ -114,7 +113,7 @@ namespace Flsurf.Domain.Freelance.Entities
                 return;
             if (BudgetType != BudgetType.Hourly)
                 throw new DomainException("не правильный тип бюджета");
-            HourlyRate = new Money(amount);
+            Payout = new Money(amount);
         }
     }
 }

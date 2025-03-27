@@ -5,13 +5,15 @@ using Flsurf.Domain.Payment.Entities;
 using Flsurf.Domain.Payment.Enums;
 using Flsurf.Domain.Payment.Policies;
 using Flsurf.Domain.Payment.ValueObjects;
+using Flsurf.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Payment.InnerServices
 {
-    public class TransactionInnerService(IApplicationDbContext dbContext)
+    public class TransactionInnerService(ApplicationDbContext dbContext)
     {
-        private IApplicationDbContext _dbContext = dbContext; 
+        // Не используется интерфейс из за проблем с Entry() 
+        private ApplicationDbContext _dbContext = dbContext; 
 
         /// <summary>
         /// Универсальная команда для внутреннего перевода между кошельками.
@@ -41,21 +43,26 @@ namespace Flsurf.Application.Payment.InnerServices
             return CommandResult.Success(); 
         }
 
-        public async Task<CommandResult> Transfer(
+        public Task<CommandResult> Transfer(
              Money transferAmount,
              WalletEntity recieverWallet,
              WalletEntity senderWallet,
              IFeePolicy? feePolicy,
              int? freezeForDays)
         {
+            _dbContext.Entry(recieverWallet).Collection(x => x.Transactions);
+            _dbContext.Entry(senderWallet).Collection(x => x.Transactions);
+
             if (recieverWallet == null || senderWallet == null)
             {
-                return CommandResult.NotFound("Не найден кошелек получателя или начальный кошелёк", Guid.Empty);
+                return Task.FromResult(
+                    CommandResult.NotFound("Не найден кошелек получателя или начальный кошелёк",
+                    Guid.Empty));
             }
 
             senderWallet.Transfer(transferAmount, recieverWallet, feePolicy, freezeForDays);
 
-            return CommandResult.Success();
+            return Task.FromResult(CommandResult.Success());
         }
 
         public async Task<CommandResult> Refund(Guid transactionId)

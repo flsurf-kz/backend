@@ -32,18 +32,18 @@ namespace Flsurf.Application.Staff.UseCases
                 query = query.Where(ticket => ticket.CreatedBy.Id == dto.UserId);
             }
 
-            // Фильтрация по теме тикета (SubjectId)
-            if (dto.SubjectId != null)
+            // Фильтрация по теме тикета (Subject)
+            if (string.IsNullOrEmpty(dto.Subject))
             {
                 await _permService.EnforceCheckPermission(perm);
-                query = query.Where(x => x.Subject.Id == dto.SubjectId);
+                query = query.Where(x => x.Subject == dto.Subject);
             }
 
             // Фильтрация по назначенному пользователю (IsAssignedToMe)
             if (dto.IsAssignedToMe == true)
             {
                 await _permService.EnforceCheckPermission(perm);
-                query = query.Where(x => x.AssignedUser.Id == currentUser.Id);
+                query = query.Where(x => x.AssignedUserId == currentUser.Id);
             }
 
             // Пагинация

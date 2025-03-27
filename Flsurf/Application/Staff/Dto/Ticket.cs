@@ -12,13 +12,13 @@ namespace Flsurf.Application.Staff.Dto
         public string Text { get; set; } = string.Empty;
         public ICollection<CreateFileDto> Files { get; set; } = [];
         public double PriorityScore { get; set; }
-        public Guid? LinkedDisputeId { get; set; } 
-        public string Title { get; set; }
+        public Guid? LinkedDisputeId { get; set; }
+        public string Title { get; set; } = string.Empty; 
     }
     public class GetTicketsDto : InputPagination
     {
         public Guid? UserId { get; set; }
-        public Guid? SubjectId { get; set; } = null!;
+        public string? Subject { get; set; } = string.Empty;
         public bool? IsAssignedToMe { get; set; }
     }
 

@@ -58,6 +58,6 @@ namespace Flsurf.Application.Common.Interfaces
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         EntityEntry<TEntity> Update<TEntity>(TEntity entity) where TEntity : class;
-        EntityEntry Entry(object entity);
+        EntityEntry Entry(object entity); 
     }
 }

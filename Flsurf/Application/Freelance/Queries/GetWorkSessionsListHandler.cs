@@ -10,12 +10,12 @@ using SpiceDb.Models;
 namespace Flsurf.Application.Freelance.Queries
 {
     public class GetWorkSessionsListHandler(IPermissionService permService, IApplicationDbContext dbContext)
-        : IQueryHandler<GetWorkSnapshotsListQuery, List<WorkSessionEntity>>
+        : IQueryHandler<GetWorkSessionListQuery, List<WorkSessionEntity>>
     {
         private readonly IPermissionService _permService = permService;
         private readonly IApplicationDbContext _dbContext = dbContext;
 
-        public async Task<List<WorkSessionEntity>> Handle(GetWorkSnapshotsListQuery query)
+        public async Task<List<WorkSessionEntity>> Handle(GetWorkSessionListQuery query)
         {
             // 🔐 Получаем текущего пользователя
             var user = await _permService.GetCurrentUser();

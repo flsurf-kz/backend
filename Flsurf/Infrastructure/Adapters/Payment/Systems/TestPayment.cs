@@ -4,19 +4,19 @@
     {
         public TestPaymentAdapter() { }
 
-        public async Task<PaymentResult> InitPayment(PaymentPayload payload)
+        public Task<PaymentResult> InitPayment(PaymentPayload payload)
         {
-            return new PaymentResult() { };
+            return Task.FromResult(new PaymentResult() { });
         }
 
-        public async Task<PaymentStatus> CheckPaymentStatus(string paymentId)
+        public Task<PaymentStatus> CheckPaymentStatus(string paymentId)
         {
-            return PaymentStatus.Completed;
+            return Task.FromResult(PaymentStatus.Completed);
         }
 
-        public async Task<PaymentResult> RefundPayment(string paymentId, decimal amount)
+        public Task<PaymentResult> RefundPayment(string paymentId, decimal amount)
         {
-            return new PaymentResult() { };
+            return Task.FromResult(new PaymentResult() { });
         }
     }
 }
