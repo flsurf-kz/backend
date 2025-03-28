@@ -16,11 +16,12 @@ namespace Flsurf.Domain.Payment.Entities
         public Money AppliedFee { get; private set; }
         public TransactionStatus Status { get; private set; } = TransactionStatus.Pending; 
         public TransactionType Type { get; private set; }
-        public TransactionFlow Flow { get; private set; }  // 🔥 Новое поле
+        public TransactionFlow Flow { get; private set; } 
         public TransactionPropsEntity? Props { get; private set; } = null!;
         public DateTime? FrozenUntil { get; private set; } 
         public string? Comment { get; private set; }
         public DateTime? CompletedAt { get; set; }
+        public TransactionProviderEntity? Provider { get; private set; }
 
         public TransactionEntity(
             Guid walletId,
@@ -43,7 +44,7 @@ namespace Flsurf.Domain.Payment.Entities
             Status = TransactionStatus.Pending;
             Comment = comment; 
 
-            Props = props ?? throw new ArgumentNullException(nameof(props));
+            Props = props;
             FrozenUntil = freezeTimeInDays != null ? DateTime.UtcNow.AddDays((double)freezeTimeInDays) : null;  
         }
 
@@ -66,6 +67,25 @@ namespace Flsurf.Domain.Payment.Entities
             int freezeDays)
         {
             return new TransactionEntity(walletId, amount, feePolicy, type, flow, null, freezeDays, null);
+        }
+
+        public static TransactionEntity CreateWithProvider(
+            Guid walletId, 
+            Money amount, 
+            TransactionFlow flow,
+            TransactionType type, 
+            TransactionPropsEntity props)
+        {
+            return new TransactionEntity(
+                walletId, 
+                amount, 
+                new NoFeePolicy(), 
+                type, 
+                flow, 
+                props, 
+                null, 
+                "Транзакция в платежную систему"
+            ); 
         }
 
         public bool IsIncoming() => Flow == TransactionFlow.Incoming;
