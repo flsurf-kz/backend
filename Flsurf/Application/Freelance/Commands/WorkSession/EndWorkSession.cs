@@ -4,6 +4,7 @@ using Flsurf.Application.Files.Dto;
 using Flsurf.Application.Files.UseCases;
 using Flsurf.Domain.Freelance.Events;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Freelance.Commands.WorkSession
 {
@@ -26,11 +27,10 @@ namespace Flsurf.Application.Freelance.Commands.WorkSession
                 return CommandResult.NotFound("Work session not found", command.SessionId);
 
             if (session.FreelancerId != user.Id)
-                return CommandResult.Forbidden();
+                return CommandResult.Forbidden("");
 
             var uploadedFiles = await _uploadFiles.Execute(command.SelectedFiles);
-            session.Files = uploadedFiles.ToList();
-            session.EndSession();
+            session.EndSession(uploadedFiles.ToList());
             session.AddDomainEvent(new WorkSessionEnded(session, DateTime.Now));
 
             await _context.SaveChangesAsync();

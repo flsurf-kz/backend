@@ -12,7 +12,6 @@ namespace Flsurf.Application.Payment
         {
             services.AddSingleton<PaymentAdapterFactory>();
 
-            services.AddScoped<IPurchaseService, PurchaseService>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.Configure<FeeSettings>(config.GetSection("FeeSettings"));
             services.AddSingleton<FeePolicyService>();

@@ -19,8 +19,8 @@ namespace Flsurf.Application.Payment
                     HostUrl = "lol",
                     SuccessUrl = "/api/payment/payout/paypalych"
                 }
-            ));
-            Adapters.Add(PaymentProviders.Balance, new BalancePaymentAdapter());
+            )); 
+            //Adapters.Add(PaymentProviders.Balance, new BalancePaymentAdapter());
             Adapters.Add(PaymentProviders.Test, new TestPaymentAdapter());
             // Добавьте другие адаптеры здесь
         }

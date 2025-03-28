@@ -11,8 +11,8 @@ namespace Flsurf.Application.Freelance.Permissions
 
         public Permission CanReadContract(ZedContract contract) => new(contract, "read", this);
 
-        public Permission CanReadContracts(ZedContract[] contracts) =>
-            new(contracts, "read", this);
+        public Permission CanReadContracts() =>
+            new(ZedContract.WithWildCard(), "read", this);
 
         public Permission CanDeleteCategory(ZedCategory category) => new(category, "delete", this);
         public Permission CanUpdateCategory(ZedCategory category) => new(category, "update", this);

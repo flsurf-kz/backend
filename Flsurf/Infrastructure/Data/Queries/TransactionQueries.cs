@@ -8,9 +8,7 @@ namespace Flsurf.Infrastructure.Data.Queries
     {
         public static IQueryable<TransactionEntity> IncludeStandard(this IQueryable<TransactionEntity> query)
         {
-            return query
-                .Include(x => x.CreatedByUser)
-                .Include(x => x.Provider); 
+            return query; 
         }
 
         public static IQueryable<TransactionEntity> FilterByParams(this IQueryable<TransactionEntity> query,
@@ -23,11 +21,7 @@ namespace Flsurf.Infrastructure.Data.Queries
             }
             if (operation != null)
             {
-                query = query.Where(x => x.Operation == operation);
-            }
-            if (providerName != null)
-            {
-                query = query.Where(x => x.Provider.Name == providerName);
+                query = query.Where(x => x.Type == operation);
             }
             return query;
         }

@@ -57,35 +57,5 @@ namespace Flsurf.Presentation.Web.Controllers
         {
             return Ok(await _staffService.GetTicket().Execute(new GetTicketDto() { TicketId = ticketId }));
         }
-
-        [HttpGet("ticket/{ticketId}/comments")]
-        public async Task<ActionResult<ICollection<TicketCommentEntity>>> GetTicketComments(Guid ticketId)
-        {
-            return Ok(await _staffService.GetCommentsList().Execute(new GetCommentsDto() { TicketId = ticketId }));
-        }
-
-        [HttpDelete("ticket/{ticketId}")]
-        public async Task<ActionResult<TicketEntity>> DeleteTicket(Guid ticketId)
-        {
-            return Ok(await _staffService.DeleteTicket().Execute(ticketId));
-        }
-
-        [HttpPost("ticket/{ticketId}/comment")]
-        public async Task<ActionResult<TicketCommentEntity>> CreateComment(Guid ticketId, [FromBody] CreateCommentScheme model)
-        {
-            return Ok(await _staffService.CreateComment().Execute(new CreateCommentDto()
-            {
-                TicketId = ticketId,
-                Files = model.Files,
-                ParentCommentId = model.ParentCommentId,
-                Text = model.Text,
-            }));
-        }
-
-        [HttpDelete("ticket/{ticketId}/comment/{commentId}")]
-        public async Task<ActionResult<TicketCommentEntity>> DeleteComment(Guid ticketId, Guid commentId)
-        {
-            return Ok(await _staffService.DeleteComment().Execute(commentId));
-        }
     }
 }
