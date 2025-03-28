@@ -40,7 +40,7 @@ namespace Flsurf.Application.Payment.Commands
                 return CommandResult.BadRequest(ex.Message);
             }
 
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync();
             return CommandResult.Success(command.ReceiverWalletId);
         }
     }
