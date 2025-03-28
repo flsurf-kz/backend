@@ -1,6 +1,8 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Files.Dto;
 using Flsurf.Application.Files.UseCases;
+using Flsurf.Application.Freelance.Permissions;
 using Flsurf.Application.User.Permissions;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +13,7 @@ namespace Flsurf.Application.Freelance.Commands.FreelancerTeam
     {
         public Guid TeamId { get; set; }
         public string? Name { get; set; }
-        public IFormFile? AvatarFile { get; set; }
+        public CreateFileDto? AvatarFile { get; set; }
         public bool? Closed { get; set; }
         public string? ClosedReason { get; set; }
     }
@@ -38,7 +40,9 @@ namespace Flsurf.Application.Freelance.Commands.FreelancerTeam
 
             // 🔒 Проверяем, является ли `user` владельцем команды
             bool isOwner = await _permService.CheckPermission(
-                ZedGroup.WithId(team.Id).Resource, "owner", user.Id.ToString()
+                ZedFreelancerUser
+                    .WithId(user.Id)
+                    .CanUpdateFreelancerTeam(ZedFreelancerTeam.WithId(team.Id))
             );
 
             if (!isOwner)
@@ -60,13 +64,9 @@ namespace Flsurf.Application.Freelance.Commands.FreelancerTeam
             }
 
             // 🚫 Закрытие команды (если передан флаг `Closed`)
-            if (command.Closed.HasValue)
+            if (command.Closed.HasValue && !string.IsNullOrWhiteSpace(command.ClosedReason))
             {
-                team.Closed = command.Closed.Value;
-                if (team.Closed && !string.IsNullOrWhiteSpace(command.ClosedReason))
-                {
-                    team.ClosedReason = command.ClosedReason;
-                }
+                team.CloseTeam(command.ClosedReason);
             }
 
             // 💾 Сохраняем изменения в БД

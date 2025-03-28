@@ -1,4 +1,5 @@
-﻿using Flsurf.Application.Common.Extensions;
+﻿using Flsurf.Application.Common.cqrs;
+using Flsurf.Application.Common.Extensions;
 using Flsurf.Application.Freelance.Commands.Contest;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
@@ -23,7 +24,7 @@ namespace Flsurf.Presentation.Web.Controllers
         {
             var handler = _contestService.CreateContest();
             var result = await handler.Handle(command);
-            return result.MapResult<ContestEntity>(this);
+            return result.MapResult(this);
         }
 
         [HttpPost("approve")]
@@ -31,7 +32,7 @@ namespace Flsurf.Presentation.Web.Controllers
         {
             var handler = _contestService.ApproveContest();
             var result = await handler.Handle(command);
-            return result.MapResult<ContestEntity>(this);
+            return result.MapResult(this);
         }
 
         [HttpPost("start")]
@@ -39,7 +40,7 @@ namespace Flsurf.Presentation.Web.Controllers
         {
             var handler = _contestService.StartContest();
             var result = await handler.Handle(command);
-            return result.MapResult<ContestEntity>(this);
+            return result.MapResult(this);
         }
 
         [HttpPost("end")]
@@ -47,7 +48,7 @@ namespace Flsurf.Presentation.Web.Controllers
         {
             var handler = _contestService.EndContest();
             var result = await handler.Handle(command);
-            return result.MapResult<ContestEntity>(this);
+            return result.MapResult(this);
         }
 
         [HttpPost("delete")]
@@ -55,15 +56,15 @@ namespace Flsurf.Presentation.Web.Controllers
         {
             var handler = _contestService.DeleteContest();
             var result = await handler.Handle(command);
-            return result.MapResult<Guid>(this);
+            return result.MapResult(this);
         }
 
         [HttpPost("select-winner")]
-        public async Task<ActionResult<ContestEntity>> SelectContestWinner([FromBody] SelectContestWinnerCommand command)
+        public async Task<ActionResult<CommandResult>> SelectContestWinner([FromBody] SelectContestWinnerCommand command)
         {
             var handler = _contestService.SelectContestWinner();
             var result = await handler.Handle(command);
-            return result.MapResult<ContestEntity>(this);
+            return result.MapResult(this);
         }
 
         [HttpGet("{id}")]

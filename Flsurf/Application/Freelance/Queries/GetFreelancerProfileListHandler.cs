@@ -18,7 +18,10 @@ namespace Flsurf.Application.Freelance.Queries
 
             if (query.Skills is not null && query.Skills.Length > 0)
             {
-                freelancersQuery = freelancersQuery.Where(f => query.Skills.All(skill => f.Skills.Contains(skill)));
+                freelancersQuery = freelancersQuery.Where(
+                    f => query.Skills.All(
+                        skill => f.Skills.Any(
+                            x => x.Name.Contains(skill))));  // very slow shit 
             }
 
             if (query.CostPerHour is not null && query.CostPerHour.Length == 2)
