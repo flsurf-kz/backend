@@ -44,7 +44,7 @@ public class WalletEntityTests
     [Test]
     public void Withdraw_ShouldDecreaseBalance()
     {
-        _wallet.BalanceOperation(new Money(400, CurrencyEnum.RussianRuble), BalanceOperationType.Withdraw);
+        _wallet.BalanceOperation(new Money(400, CurrencyEnum.RussianRuble), BalanceOperationType.Withdrawl);
 
         Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(600));
     }
@@ -53,7 +53,7 @@ public class WalletEntityTests
     public void Withdraw_InsufficientFunds_ShouldThrow()
     {
         Assert.Throws<NotEnoughMoneyException>(() =>
-            _wallet.BalanceOperation(new Money(2000, CurrencyEnum.RussianRuble), BalanceOperationType.Withdraw));
+            _wallet.BalanceOperation(new Money(2000, CurrencyEnum.RussianRuble), BalanceOperationType.Withdrawl));
     }
 
     [Test]
@@ -86,7 +86,7 @@ public class WalletEntityTests
         );
 
         Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(700));
-        Assert.That(_receiverWallet.Frozen.Amount.Amount, Is.EqualTo(300));
+        Assert.That(_receiverWallet.Frozen.Amount, Is.EqualTo(300));
     }
 
     [Test]
