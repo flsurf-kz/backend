@@ -8,17 +8,15 @@ namespace Flsurf.Infrastructure.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<UserToChatEntity> builder)
         {
+            // 👥 Составной первичный ключ
             builder.HasKey(x => new { x.UserId, x.ChatId });
 
-            builder
-                .HasOne(x => x.User)
-                .WithMany()
-                .HasForeignKey(x => x.UserId);
+            // 🛠 Прочие настройки (опционально, например, названия колонок)
+            builder.Property(x => x.NotificationsDisabled)
+                   .HasDefaultValue(false);
 
-            builder
-                .HasOne(x => x.Chat)
-                .WithMany()
-                .HasForeignKey(x => x.ChatId);
+            builder.Property(x => x.Bookmarked)
+                   .HasDefaultValue(false);
         }
     }
 }

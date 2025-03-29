@@ -1,8 +1,10 @@
 ﻿using Flsurf.Domain.Common;
 using Flsurf.Domain.Payment.Policies;
+using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Domain.Payment.Entities
 {
+    [Owned]
     public class TransactionPropsEntity : ValueObject
     {
         public string PaymentUrl { get; private set; }
@@ -10,7 +12,7 @@ namespace Flsurf.Domain.Payment.Entities
         public string PaymentGateway { get; private set; }
         public FeeContext FeeContext { get; private set; }
 
-        private TransactionPropsEntity() { }  // Для EF CORE 
+        public TransactionPropsEntity() { }  // Для EF CORE 
 
         public static TransactionPropsEntity CreateGatewayProps(
             string paymentUrl,

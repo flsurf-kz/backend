@@ -1,5 +1,6 @@
 ﻿using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.Freelance.Enums;
+using Flsurf.Domain.Messanging.Entities;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Domain.User.Events;
 using Flsurf.Infrastructure;

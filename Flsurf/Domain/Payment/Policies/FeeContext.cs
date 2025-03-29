@@ -1,5 +1,8 @@
-﻿namespace Flsurf.Domain.Payment.Policies
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Flsurf.Domain.Payment.Policies
 {
+    [Owned]
     public class FeeContext
     {
         public bool IsContractCancellation { get; private set; }

@@ -17,6 +17,8 @@ namespace Flsurf.Infrastructure.Data
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<WarningEntity> UserWarnings { get; set; }
         public DbSet<NotificationEntity> Notifications { get; set; }
+        public DbSet<ConnectedAccountEntity> ConnectedAccounts { get; set; }
+        public DbSet<GroupEntity> Groups { get; set; }
 
         // payment 
         public DbSet<TransactionProviderEntity> TransactionProviders { get; set; }
@@ -38,6 +40,7 @@ namespace Flsurf.Infrastructure.Data
         public DbSet<ContestEntryEntity> ContestEntries { get; set; }
         public DbSet<ContestEntity> Contests { get; set; }
         public DbSet<ContractEntity> Contracts { get; set; }
+        public DbSet<DisputeStatusHistory> DisputeStatuses { get; set; }
         public DbSet<FreelancerProfileEntity> FreelancerProfiles { get; set; }
         public DbSet<FreelancerTeamEntity> FreelancerTeams { get; set; }
         public DbSet<JobEntity> Jobs { get; set; }
