@@ -101,7 +101,7 @@ namespace Tests.Domain.UnitTests.Entities
         public void Warn_ShouldAddWarningAndNotBlockIfLessThanThree()
         {
             var user = UserEntity.Create("Иван Иванов", "test@example.com", "pass", UserTypes.Client, _passwordService);
-            var by = UserEntity.Create("Админ Админов", "admin@example.com", "pass", UserTypes.Admin, _passwordService);
+            var by = UserEntity.Create("Админ Админов", "admin@example.com", "pass", UserTypes.Freelancer, _passwordService);
 
             user.Warn("Первое предупреждение", by);
 
@@ -113,7 +113,7 @@ namespace Tests.Domain.UnitTests.Entities
         public void Warn_ShouldBlockUserIfMoreThanThreeWarnings()
         {
             var user = UserEntity.Create("Иван Иванов", "test@example.com", "pass", UserTypes.Client, _passwordService);
-            var by = UserEntity.Create("Админ Админов", "admin@example.com", "pass", UserTypes.Admin, _passwordService);
+            var by = UserEntity.Create("Админ Админов", "admin@example.com", "pass", UserTypes.Freelancer, _passwordService);
 
             user.Warn("1", by);
             user.Warn("2", by);
