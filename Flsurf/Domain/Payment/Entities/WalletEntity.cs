@@ -122,7 +122,8 @@ namespace Flsurf.Domain.Payment.Entities
                 transferMoney,
                 feePolicy ?? new NoFeePolicy(),
                 TransactionType.Transfer,
-                TransactionFlow.Outgoing);
+                TransactionFlow.Outgoing, 
+                comment: "Трансфер");
 
             var recieverTx = TransactionEntity.CreateFrozen(
                 recieverWallet.Id,
@@ -158,11 +159,12 @@ namespace Flsurf.Domain.Payment.Entities
             { 
                 // admin balance change! 
                 AcceptTransaction(TransactionEntity.Create(
-                    Id,
-                    amount,
-                    new NoFeePolicy(),
-                    TransactionType.Transfer,
-                    type == BalanceOperationType.Deposit ? TransactionFlow.Incoming : TransactionFlow.Outgoing));
+                    walletId: Id,
+                    amount: amount,
+                    feePolicy: new NoFeePolicy(),
+                    type: TransactionType.Transfer,
+                    flow: type == BalanceOperationType.Deposit ? TransactionFlow.Incoming : TransactionFlow.Outgoing, 
+                    comment: "Пополнение баланса"));
             }
         }
 
@@ -247,31 +249,28 @@ namespace Flsurf.Domain.Payment.Entities
         {
             EnsureNotBlocked();
 
-            var outgoingTx = new TransactionEntity(
-                Id,
-                transaction.NetAmount,
-                new NoFeePolicy(),
-                TransactionType.Refund,
-                TransactionFlow.Outgoing,
-                null,
-                null,
-                "Отказ транзакции");
+            var outgoingTx = TransactionEntity.Create(
+                walletId: Id,
+                amount: transaction.NetAmount,
+                feePolicy: new NoFeePolicy(),
+                type: TransactionType.Refund,
+                flow: TransactionFlow.Outgoing, 
+                comment: "Откат транзакции"
+            );
 
-            var incomingTx = new TransactionEntity(
-                returnTo.Id,
-                transaction.NetAmount,
-                new NoFeePolicy(),  // TODO!! 
-                TransactionType.Refund,
-                TransactionFlow.Incoming,
-                null,
-                null,
-                "Возврат средств"); 
+            var incomingTx = TransactionEntity.Create(
+                walletId: returnTo.Id,
+                amount: transaction.NetAmount,
+                feePolicy: new NoFeePolicy(),
+                type: TransactionType.Refund,
+                flow: TransactionFlow.Incoming, 
+                comment: "Возврат средств"
+            );
 
             incomingTx.AntoganistTransactionId = outgoingTx.Id;
             outgoingTx.AntoganistTransactionId = incomingTx.Id;
 
             AcceptTransaction(outgoingTx);
-
             returnTo.AcceptTransaction(incomingTx);
 
             AddDomainEvent(new TransactionRolledBack(this, transaction));
@@ -281,16 +280,14 @@ namespace Flsurf.Domain.Payment.Entities
         {
             EnsureNotBlocked();
 
-            // Создаем транзакцию возврата (outgoing), без receiving wallet
-            var refundTx = new TransactionEntity(
-                Id,
-                transaction.NetAmount,
-                feePolicy,
-                TransactionType.Refund,
-                TransactionFlow.Outgoing,
-                null,
-                null,
-                "Возврат средств (без получателя)");
+            var refundTx = TransactionEntity.Create(
+                walletId: Id,
+                amount: transaction.NetAmount,
+                feePolicy: feePolicy,
+                type: TransactionType.Refund,
+                flow: TransactionFlow.Outgoing,
+                comment: "Возврат средств (без получателя)"
+            );
 
             refundTx.AntoganistTransactionId = transaction.Id;
 

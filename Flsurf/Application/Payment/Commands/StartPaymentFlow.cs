@@ -86,15 +86,14 @@ namespace Flsurf.Application.Payment.Commands
                 feeContext: new FeeContext()
             );
 
-            var tx = new TransactionEntity(
+            var tx = TransactionEntity.CreateWithProvider(
                 walletId: wallet.Id,
                 amount: command.Amount,
-                feePolicy: new StandardFeePolicy(0, provider.FeePercent),
-                type: command.Type,
                 flow: command.Flow,
+                type: command.Type,
                 props: props,
-                freezeTimeInDays: null,
-                comment: $"Оплата через шлюз: {provider.Name}"
+                provider: provider,
+                feePolicy: new StandardFeePolicy(0, provider.FeePercent)
             );
 
             tx.Id = transactionId;

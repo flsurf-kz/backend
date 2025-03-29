@@ -7,7 +7,7 @@ namespace Flsurf.Domain.Freelance.Entities
 {
     public class FreelancerProfileEntity : BaseAuditableEntity
     {
-        [Key, ForeignKey("User")]
+        [ForeignKey("User")]
         public Guid UserId { get; set; }
         public UserEntity User { get; set; } = null!;
 

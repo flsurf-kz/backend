@@ -1,12 +1,11 @@
 ﻿using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace Flsurf.Domain.Freelance.Entities
 {
     public class ClientProfileEntity : BaseAuditableEntity
     {
-        [Key, ForeignKey("User")]
+        [ForeignKey("User")]
         public Guid UserId { get; set; }
         public UserEntity User { get; set; } = null!; 
         public string CompanyName { get; set; } = string.Empty;

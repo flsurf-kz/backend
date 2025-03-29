@@ -10,52 +10,47 @@ namespace Flsurf.Domain.Payment.Entities
     {
         [ForeignKey(nameof(WalletEntity))]
         public Guid WalletId { get; private set; }
+
         public Guid? AntoganistTransactionId { get; set; }
-        public Money RawAmount { get; private set; }
-        public Money NetAmount { get; private set; }
-        public Money AppliedFee { get; private set; }
-        public TransactionStatus Status { get; private set; } = TransactionStatus.Pending; 
+
+        public Money RawAmount { get; private set; } = null!;
+        public Money NetAmount { get; private set; } = null!;
+        public Money AppliedFee { get; private set; } = null!;
+
+        public TransactionStatus Status { get; private set; } = TransactionStatus.Pending;
         public TransactionType Type { get; private set; }
-        public TransactionFlow Flow { get; private set; } 
-        public TransactionPropsEntity? Props { get; private set; } = null!;
-        public DateTime? FrozenUntil { get; private set; } 
+        public TransactionFlow Flow { get; private set; }
+
+        public TransactionPropsEntity? Props { get; private set; }
+        public DateTime? FrozenUntil { get; private set; }
         public string? Comment { get; private set; }
         public DateTime? CompletedAt { get; set; }
+
         public TransactionProviderEntity? Provider { get; set; }
 
-        public TransactionEntity(
+        // EF Core constructor
+        private TransactionEntity() { }
+
+        public static TransactionEntity Create(
             Guid walletId,
             Money amount,
             IFeePolicy feePolicy,
             TransactionType type,
-            TransactionFlow flow,  // -> Новое поле
-            TransactionPropsEntity? props,
-            int? freezeTimeInDays, 
+            TransactionFlow flow, 
             string? comment)
         {
-            WalletId = walletId;
-            RawAmount = amount;
+            var tx = new TransactionEntity
+            {
+                WalletId = walletId,
+                RawAmount = amount,
+                AppliedFee = feePolicy.CalculateFee(amount, type, null),
+                Type = type,
+                Flow = flow,
+                Status = TransactionStatus.Pending,
+            };
 
-            AppliedFee = feePolicy.CalculateFee(amount, type, props?.FeeContext);
-            NetAmount = RawAmount - AppliedFee;
-
-            Type = type;
-            Flow = flow;  // ➔ Указание направления денег
-            Status = TransactionStatus.Pending;
-            Comment = comment; 
-
-            Props = props;
-            FrozenUntil = freezeTimeInDays != null ? DateTime.UtcNow.AddDays((double)freezeTimeInDays) : null;  
-        }
-
-        public static TransactionEntity Create(
-            Guid walletId, 
-            Money amount,
-            IFeePolicy feePolicy, 
-            TransactionType type,
-            TransactionFlow flow)
-        {
-            return new TransactionEntity(walletId, amount, feePolicy, type, flow, null, null, null);  
+            tx.NetAmount = tx.RawAmount - tx.AppliedFee;
+            return tx;
         }
 
         public static TransactionEntity CreateFrozen(
@@ -63,35 +58,38 @@ namespace Flsurf.Domain.Payment.Entities
             Money amount,
             IFeePolicy feePolicy,
             TransactionType type,
-            TransactionFlow flow, 
+            TransactionFlow flow,
             int freezeDays)
         {
-            return new TransactionEntity(walletId, amount, feePolicy, type, flow, null, freezeDays, null);
+            var tx = Create(walletId, amount, feePolicy, type, flow, null);
+            tx.FrozenUntil = DateTime.UtcNow.AddDays(freezeDays);
+            return tx;
         }
 
         public static TransactionEntity CreateWithProvider(
-            Guid walletId, 
-            Money amount, 
+            Guid walletId,
+            Money amount,
             TransactionFlow flow,
-            TransactionType type, 
-            TransactionPropsEntity props, 
-            TransactionProviderEntity provider, 
+            TransactionType type,
+            TransactionPropsEntity props,
+            TransactionProviderEntity provider,
             IFeePolicy? feePolicy)
         {
-            var tx = new TransactionEntity(
-                walletId, 
-                amount, 
-                feePolicy ?? new NoFeePolicy(), 
-                type, 
-                flow, 
-                props, 
-                null, 
-                "Транзакция в платежную систему"
-            );
+            var tx = new TransactionEntity
+            {
+                WalletId = walletId,
+                RawAmount = amount,
+                AppliedFee = (feePolicy ?? new NoFeePolicy()).CalculateFee(amount, type, props?.FeeContext),
+                Type = type,
+                Flow = flow,
+                Props = props,
+                Provider = provider,
+                Status = TransactionStatus.Pending,
+                Comment = $"Транзакция в платежную систему"
+            };
 
-            tx.Provider = provider;
-
-            return tx; 
+            tx.NetAmount = tx.RawAmount - tx.AppliedFee;
+            return tx;
         }
 
         public bool IsIncoming() => Flow == TransactionFlow.Incoming;
@@ -115,12 +113,12 @@ namespace Flsurf.Domain.Payment.Entities
             Status = TransactionStatus.Cancelled;
         }
 
-        // breaks ofc but i dont care 
         public void ConfirmFromGateway()
         {
             if (Props == null)
                 throw new DomainException("Не та транзакция для потверждения");
-            Complete(); 
+
+            Complete();
         }
     }
 }
