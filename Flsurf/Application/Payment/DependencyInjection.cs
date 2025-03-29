@@ -2,7 +2,6 @@
 using Flsurf.Application.Payment.Interfaces;
 using Flsurf.Application.Payment.Services;
 using Flsurf.Infrastructure;
-using Microsoft.Extensions.Configuration;
 
 namespace Flsurf.Application.Payment
 {
@@ -10,8 +9,6 @@ namespace Flsurf.Application.Payment
     {
         public static IServiceCollection AddPaymentApplicationServices(this IServiceCollection services, ConfigurationManager config)
         {
-            services.AddSingleton<PaymentAdapterFactory>();
-
             services.AddScoped<ITransactionService, TransactionService>();
             services.Configure<FeeSettings>(config.GetSection("FeeSettings"));
             services.AddSingleton<FeePolicyService>();

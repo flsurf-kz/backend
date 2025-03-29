@@ -21,7 +21,7 @@ namespace Flsurf.Domain.Payment.Entities
         public DateTime? FrozenUntil { get; private set; } 
         public string? Comment { get; private set; }
         public DateTime? CompletedAt { get; set; }
-        public TransactionProviderEntity? Provider { get; private set; }
+        public TransactionProviderEntity? Provider { get; set; }
 
         public TransactionEntity(
             Guid walletId,
@@ -74,18 +74,24 @@ namespace Flsurf.Domain.Payment.Entities
             Money amount, 
             TransactionFlow flow,
             TransactionType type, 
-            TransactionPropsEntity props)
+            TransactionPropsEntity props, 
+            TransactionProviderEntity provider, 
+            IFeePolicy? feePolicy)
         {
-            return new TransactionEntity(
+            var tx = new TransactionEntity(
                 walletId, 
                 amount, 
-                new NoFeePolicy(), 
+                feePolicy ?? new NoFeePolicy(), 
                 type, 
                 flow, 
                 props, 
                 null, 
                 "Транзакция в платежную систему"
-            ); 
+            );
+
+            tx.Provider = provider;
+
+            return tx; 
         }
 
         public bool IsIncoming() => Flow == TransactionFlow.Incoming;

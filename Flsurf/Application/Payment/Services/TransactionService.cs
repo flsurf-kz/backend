@@ -41,5 +41,10 @@ namespace Flsurf.Application.Payment.Services
         {
             return _serviceProvider.GetRequiredService<HandleWithdrawalGatewayResult>();
         }
+
+        public StartPaymentFlowHandler StartPaymentFlow()
+        {
+            return _serviceProvider.GetRequiredService<StartPaymentFlowHandler>();
+        }
     }
 }

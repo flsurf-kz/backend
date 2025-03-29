@@ -11,6 +11,7 @@ using Flsurf.Infrastructure.EventStore;
 using Flsurf.Infrastructure.Data.Intercepters;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using SpiceDb;
+using Flsurf.Infrastructure.Adapters.Payment;
 
 namespace Flsurf.Infrastructure
 {
@@ -60,6 +61,8 @@ namespace Flsurf.Infrastructure
             services.AddScoped<IEventStore, EventStore.EventStore>();
             services.AddScoped<ApplicationDbContextInitialiser>();
             services.AddScoped<EventStoreContextInitialiser>();
+
+            services.AddSingleton<IPaymentAdapterFactory, PaymentAdapterFactory>();
 
             services.AddSingleton(TimeProvider.System);
             //services.AddScoped<IEventSubscriber<BaseEvent>, LoggingHandler<BaseEvent>>(); 

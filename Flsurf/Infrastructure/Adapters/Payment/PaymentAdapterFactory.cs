@@ -1,10 +1,8 @@
-﻿
-using Flsurf.Infrastructure.Adapters.Payment;
-using Flsurf.Infrastructure.Adapters.Payment.Systems;
+﻿using Flsurf.Infrastructure.Adapters.Payment.Systems;
 
-namespace Flsurf.Application.Payment
+namespace Flsurf.Infrastructure.Adapters.Payment
 {
-    public class PaymentAdapterFactory
+    public class PaymentAdapterFactory : IPaymentAdapterFactory
     {
         private readonly Dictionary<PaymentProviders, IPaymentAdapter> Adapters = new();
 
@@ -19,7 +17,7 @@ namespace Flsurf.Application.Payment
                     HostUrl = "lol",
                     SuccessUrl = "/api/payment/payout/paypalych"
                 }
-            )); 
+            ));
             //Adapters.Add(PaymentProviders.Balance, new BalancePaymentAdapter());
             Adapters.Add(PaymentProviders.Test, new TestPaymentAdapter());
             // Добавьте другие адаптеры здесь
