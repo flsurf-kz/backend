@@ -1,111 +1,167 @@
-﻿using LMS.Domain.Payment.Enums;
-using LMS.Domain.Payment.ValueObjects;
+﻿using Flsurf.Domain.Payment.Enums;
+using Flsurf.Domain.Payment.ValueObjects;
+using NUnit.Framework;
+using System;
 
-namespace Tests.Domain.UnitTests.ValueObjects
+namespace Tests.Domain.UnitTests.ValueObjects;
+
+[TestFixture]
+public class MoneyTests
 {
-    public class MoneyTests
+    private Money rub100;
+    private Money rub50;
+    private Money usd100;
+
+    [SetUp]
+    public void Setup()
     {
-        [Test]
-        public void Constructor_SetsAmountAndCurrency()
+        rub100 = new Money(100, CurrencyEnum.RussianRuble);
+        rub50 = new Money(50, CurrencyEnum.RussianRuble);
+        usd100 = new Money(100, CurrencyEnum.Dollar);
+    }
+
+    [Test]
+    public void Constructor_ShouldSetProperties()
+    {
+        var money = new Money(123.456m, CurrencyEnum.RussianRuble);
+
+        Assert.That(money.Amount, Is.EqualTo(123.46m));
+        Assert.That(money.Currency, Is.EqualTo(CurrencyEnum.RussianRuble));
+    }
+
+    [Test]
+    public void Constructor_NegativeAmount_ShouldThrow()
+    {
+        Assert.Throws<ArgumentException>(() => new Money(-1, CurrencyEnum.Dollar));
+    }
+
+    [Test]
+    public void Equality_ShouldCompareByValue()
+    {
+        var a = new Money(100, CurrencyEnum.RussianRuble);
+        var b = new Money(100, CurrencyEnum.RussianRuble);
+
+        Assert.That(a == b, Is.True);
+        Assert.That(a.Equals(b), Is.True);
+    }
+
+    [Test]
+    public void Null_ShouldReturnSentinelInstance()
+    {
+        var money = Money.Null();
+
+        Assert.That(money.Amount, Is.LessThan(0));
+    }
+
+    [Test]
+    public void Addition_ShouldSumAmounts()
+    {
+        var result = rub50 + rub100;
+
+        Assert.That(result.Amount, Is.EqualTo(150));
+    }
+
+    [Test]
+    public void Subtraction_ShouldSubtractAmounts()
+    {
+        var result = rub100 - rub50;
+
+        Assert.That(result.Amount, Is.EqualTo(50));
+    }
+
+    [Test]
+    public void Subtraction_WhenNegative_ShouldThrow()
+    {
+        Assert.Throws<InvalidOperationException>(() =>
         {
-            // Arrange
-            decimal amount = 100.50m;
-            CurrencyEnum currency = CurrencyEnum.Dollar;
+            var result = rub50 - rub100;
+        });
+    }
 
-            // Act
-            Money money = new Money(amount, currency);
-
-            // Assert
-            Assert.That(amount == money.Amount);
-            Assert.That(currency == money.Currency);
-        }
-
-        [Test]
-        public void Constructor_DefaultCurrencyIsRussianRuble()
+    [Test]
+    public void ComparisonOperators_ShouldWorkCorrectly()
+    {
+        Assert.Multiple(() =>
         {
-            // Arrange
-            decimal amount = 100.50m;
+            Assert.That(rub100 > rub50, Is.True);
+            Assert.That(rub50 < rub100, Is.True);
+            Assert.That(rub100 >= rub100, Is.True);
+            Assert.That(rub50 <= rub100, Is.True);
+        });
+    }
 
-            // Act
-            Money money = new Money(amount);
-
-            // Assert
-            Assert.That(amount == money.Amount);
-            Assert.That(CurrencyEnum.RussianRuble == money.Currency);
-        }
-
-        [Theory]
-        [TestCase(100.50, CurrencyEnum.Dollar, 100.50, CurrencyEnum.Dollar, true)]
-        [TestCase(100.50, CurrencyEnum.Dollar, 100.50, CurrencyEnum.Euro, false)]
-        public void Equals_ReturnsExpectedResult(decimal amount1, CurrencyEnum currency1, decimal amount2, CurrencyEnum currency2, bool expectedResult)
+    [Test]
+    public void CurrencyMismatch_ShouldThrow()
+    {
+        Assert.Throws<ArgumentException>(() =>
         {
-            // Arrange
-            Money money1 = new Money(amount1, currency1);
-            Money money2 = new Money(amount2, currency2);
+            var result = rub100 + usd100;
+        });
+    }
 
-            // Act
-            bool result = money1.Equals(money2);
+    [Test]
+    public void Multiply_Decimal_ShouldWork()
+    {
+        var result = rub100 * 1.5m;
 
-            // Assert
-            Assert.That(expectedResult == result);
-        }
+        Assert.That(result.Amount, Is.EqualTo(150));
+    }
 
-        [Theory]
-        [TestCase(100.50, CurrencyEnum.Dollar, 100.50, CurrencyEnum.Dollar, true)]
-        [TestCase(100.50, CurrencyEnum.Dollar, 200.50, CurrencyEnum.Dollar, false)]
-        public void EqualityOperators_ReturnsExpectedResult(decimal amount1, CurrencyEnum currency1, decimal amount2, CurrencyEnum currency2, bool expectedResult)
+    [Test]
+    public void Multiply_Double_ShouldWork()
+    {
+        var result = rub50 * 2.0;
+
+        Assert.That(result.Amount, Is.EqualTo(100));
+    }
+
+    [Test]
+    public void Divide_ShouldReturnCorrectAmount()
+    {
+        var result = rub100 / 2.0;
+
+        Assert.That(result.Amount, Is.EqualTo(50));
+    }
+
+    [Test]
+    public void Divide_ByZero_ShouldThrow()
+    {
+        Assert.Throws<ArgumentException>(() =>
         {
-            // Arrange
-            Money money1 = new Money(amount1, currency1);
-            Money money2 = new Money(amount2, currency2);
+            var result = rub100 / 0.0;
+        });
+    }
 
-            // Act & Assert
-            Assert.That(expectedResult == (money1 == money2));
-            Assert.That(!expectedResult == (money1 != money2));
-        }
+    [Test]
+    public void IsZero_ShouldReturnTrue_WhenZero()
+    {
+        var zero = new Money(0, CurrencyEnum.Dollar);
 
-        [Test]
-        public void GreaterThanAndLessThanOperators_ThrowArgumentNullException_WhenEitherOperandIsNull()
-        {
-            // Arrange
-            Money money1 = new Money(100.50m, CurrencyEnum.Dollar);
-            Money money2 = null;
+        Assert.That(zero.IsZero(), Is.True);
+    }
 
-            // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => { var result = money1 > money2; });
-            Assert.Throws<ArgumentNullException>(() => { var result = money1 < money2; });
-        }
+    [Test]
+    public void IsZero_ShouldReturnFalse_WhenNonZero()
+    {
+        Assert.That(rub100.IsZero(), Is.False);
+    }
 
-        [Test]
-        public void GreaterThanAndLessThanOperators_ThrowArgumentException_WhenCurrenciesAreNotEqual()
-        {
-            // Arrange
-            Money money1 = new Money(100.50m, CurrencyEnum.Dollar);
-            Money money2 = new Money(200.50m, CurrencyEnum.Euro);
+    [Test]
+    public void CopyConstructor_ShouldCopyCorrectly()
+    {
+        var copy = new Money(rub50);
 
-            // Act & Assert
-            Assert.Throws<ArgumentException>(() => { var result = money1 > money2; });
-            Assert.Throws<ArgumentException>(() => { var result = money1 < money2; });
-        }
+        Assert.That(copy.Amount, Is.EqualTo(rub50.Amount));
+        Assert.That(copy.Currency, Is.EqualTo(rub50.Currency));
+    }
 
-        [Theory]
-        [TestCase(100.50, 200.50, CurrencyEnum.Dollar)]
-        [TestCase(200.50, 100.50, CurrencyEnum.Dollar)]
-        public void PlusAndMinusOperators_ReturnExpectedResult(decimal amount1, decimal amount2, CurrencyEnum currency)
-        {
-            // Arrange
-            Money money1 = new Money(amount1, currency);
-            Money money2 = new Money(amount2, currency);
+    [Test]
+    public void Equals_And_HashCode_ShouldMatch()
+    {
+        var a = new Money(123, CurrencyEnum.RussianRuble);
+        var b = new Money(123, CurrencyEnum.RussianRuble);
 
-            // Act
-            Money sum = money1 + money2;
-            Money difference = money1 - money2;
-
-            // Assert
-            Assert.That(amount1 + amount2 == sum.Amount);
-            Assert.That(amount1 - amount2 == difference.Amount);
-            Assert.That(currency == sum.Currency);
-            Assert.That(currency == difference.Currency);
-        }
+        Assert.That(a.Equals(b), Is.True);
+        Assert.That(a.GetHashCode(), Is.EqualTo(b.GetHashCode()));
     }
 }
