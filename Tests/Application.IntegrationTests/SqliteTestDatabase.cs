@@ -2,6 +2,7 @@
 using System.Data.Common;
 using System.Data;
 using Microsoft.Data.Sqlite;
+using Flsurf.Infrastructure.Data;
 
 namespace Tests.Application.IntegrationTests
 {
