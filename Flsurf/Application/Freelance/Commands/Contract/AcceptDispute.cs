@@ -96,7 +96,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             return CommandResult.Success(dispute.Id);
         }
 
-        private async Task FreezeContractFunds(ContractEntity contract)
+        private async Task<Money> FreezeContractFunds(ContractEntity contract)
         {
             var freelancerWallet = await _dbContext.Wallets.FirstOrDefaultAsync(w => w.UserId == contract.FreelancerId);
             var clientWallet = await _dbContext.Wallets.FirstOrDefaultAsync(w => w.UserId == contract.EmployerId);
@@ -122,6 +122,8 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             // Замораживаем средства у обеих сторон (если ещё не заморожены)
             await _transactionService.FreezeAmount(freezeAmount, freelancerWallet.Id, frozenTimeInDays: 999);
             await _transactionService.FreezeAmount(freezeAmount, clientWallet.Id, frozenTimeInDays: 999);
+
+            return freezeAmount; 
         }
     }
 }

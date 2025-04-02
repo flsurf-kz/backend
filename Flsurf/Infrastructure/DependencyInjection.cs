@@ -12,12 +12,16 @@ using Flsurf.Infrastructure.Data.Intercepters;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using SpiceDb;
 using Flsurf.Infrastructure.Adapters.Payment;
+using System.ComponentModel;
 
 namespace Flsurf.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructureServices(
+            this IServiceCollection services, 
+            IConfiguration configuration,
+            IWebHostEnvironment environment)
         {
             var connectionString = configuration["ConnectionString"];
             var filesDirectory = configuration["FilesDirectory"];
@@ -117,21 +121,28 @@ namespace Flsurf.Infrastructure
                         bucketName: bucketName);
                 });
             }
-
-            services.AddScoped<ISpiceDbClient, SpiceDbClient>(provider =>
+            if (environment.IsDevelopment())
             {
-                var serverAddress = configuration["SpiceDbServerAddress"];
-                var token = configuration["SpiceDbToken"];
-                if (string.IsNullOrEmpty(serverAddress) || string.IsNullOrEmpty(token))
+                services.AddScoped<IPermissionService, FakePermissionService>();
+            }
+            else
+            {
+                services.AddScoped<ISpiceDbClient, SpiceDbClient>(provider =>
                 {
-                    throw new ArgumentException("Spice db token or server address is not present");
-                }
+                    var serverAddress = configuration["SpiceDbServerAddress"];
+                    var token = configuration["SpiceDbToken"];
+                    if (string.IsNullOrEmpty(serverAddress) || string.IsNullOrEmpty(token))
+                    {
+                        throw new ArgumentException("Spice db token or server address is not present");
+                    }
 
-                var client = new SpiceDbClient(serverAddress, token, null);
+                    var client = new SpiceDbClient(serverAddress, token, null);
 
-                return client; 
-            });
-            services.AddScoped<IPermissionService, SpiceDbPermService>(); 
+                    return client;
+                });
+
+                services.AddScoped<IPermissionService, SpiceDbPermService>();
+            }
 
             services.AddAuthorizationBuilder();
 

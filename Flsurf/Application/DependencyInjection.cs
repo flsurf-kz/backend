@@ -1,5 +1,7 @@
 ﻿using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Files;
+using Flsurf.Application.Freelance;
+using Flsurf.Application.Messaging;
 using Flsurf.Application.Payment;
 using Flsurf.Application.Staff;
 using Flsurf.Application.User;
@@ -13,16 +15,19 @@ namespace Flsurf.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, ConfigurationManager config)
         {
-            // will make someone cry! registers all query, usecase, commands handlers
-            services.AddUseCasesFromAssembly(Assembly.GetExecutingAssembly());
-            services.AddCommandAndQueryHandlers(Assembly.GetExecutingAssembly());
 
             services.AddSingleton<IEventDispatcher, EventDispatcher>();
             services.AddUserApplicationServices();
             services.AddPaymentApplicationServices(config);
             services.AddFilesApplicationServices();
             services.AddStaffApplicationServices();
-            services.AddFreelancerApplicationServices(); 
+            services.AddMessagingServices(); 
+            services.AddFreelancerApplicationServices();
+
+            // will make someone cry! registers all query, usecase, commands handlers
+            services.AddUseCasesFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddCommandAndQueryHandlers(Assembly.GetExecutingAssembly());
+
 
             return services;
         }

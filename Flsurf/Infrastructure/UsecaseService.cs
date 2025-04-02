@@ -9,23 +9,28 @@ namespace Flsurf.Infrastructure
         {
             using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
             ILogger logger = factory.CreateLogger("UseCaseRegister");
-            
+
             var useCaseTypes = assembly.GetTypes()
-                .Where(type => !type.IsAbstract && !type.IsInterface && IsBaseUseCase(type) && !ignoredTypes.Contains(type))
+                .Where(type =>
+                    !type.IsAbstract &&
+                    !type.IsInterface &&
+                    IsBaseUseCase(type) &&
+                    !ignoredTypes.Contains(type))
                 .ToList();
+
+            logger.LogInformation($"Найдено обработчиков: {useCaseTypes.Count}");
 
             foreach (var useCaseType in useCaseTypes)
             {
                 services.AddScoped(useCaseType);
-
-                logger.LogInformation($"Added use case service: {useCaseType.FullName}");
+                logger.LogInformation($"Добавлен обработчик useCase-ов: {useCaseType.FullName}");
             }
         }
 
         private static bool IsBaseUseCase(Type type)
         {
-            return type.BaseType != null && type.BaseType.IsGenericType &&
-                   type.BaseType.GetGenericTypeDefinition() == typeof(BaseUseCase<,>);
+            return type.GetInterfaces().Any(i =>
+                i.IsGenericType && i.GetGenericTypeDefinition() == typeof(BaseUseCase<,>));
         }
     }
 }

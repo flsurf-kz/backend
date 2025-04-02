@@ -13,6 +13,7 @@ namespace Flsurf.Application.Payment
             services.Configure<FeeSettings>(config.GetSection("FeeSettings"));
             services.AddSingleton<FeePolicyService>();
             services.AddScoped<IWalletService, WalletService>();
+            services.AddScoped<TransactionInnerService>(); 
 
             return services;
         }

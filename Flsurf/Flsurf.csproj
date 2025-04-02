@@ -7,6 +7,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Application\Freelance\Commands\Task\CompleteTask\**" />
+    <Compile Remove="Application\Freelance\Commands\Task\CreateTask\**" />
+    <Compile Remove="Application\Freelance\Commands\Task\DeleteTask\**" />
+    <Compile Remove="Application\Freelance\Commands\Task\ReactToTask\**" />
+    <Compile Remove="Application\Freelance\Commands\Task\UpdateTask\**" />
+    <Content Remove="Application\Freelance\Commands\Task\CompleteTask\**" />
+    <Content Remove="Application\Freelance\Commands\Task\CreateTask\**" />
+    <Content Remove="Application\Freelance\Commands\Task\DeleteTask\**" />
+    <Content Remove="Application\Freelance\Commands\Task\ReactToTask\**" />
+    <Content Remove="Application\Freelance\Commands\Task\UpdateTask\**" />
+    <EmbeddedResource Remove="Application\Freelance\Commands\Task\CompleteTask\**" />
+    <EmbeddedResource Remove="Application\Freelance\Commands\Task\CreateTask\**" />
+    <EmbeddedResource Remove="Application\Freelance\Commands\Task\DeleteTask\**" />
+    <EmbeddedResource Remove="Application\Freelance\Commands\Task\ReactToTask\**" />
+    <EmbeddedResource Remove="Application\Freelance\Commands\Task\UpdateTask\**" />
+    <None Remove="Application\Freelance\Commands\Task\CompleteTask\**" />
+    <None Remove="Application\Freelance\Commands\Task\CreateTask\**" />
+    <None Remove="Application\Freelance\Commands\Task\DeleteTask\**" />
+    <None Remove="Application\Freelance\Commands\Task\ReactToTask\**" />
+    <None Remove="Application\Freelance\Commands\Task\UpdateTask\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" Version="4.5.0" />
     <PackageReference Include="CoreAdmin" Version="3.0.0" />
     <PackageReference Include="Hangfire" Version="1.8.12" />
@@ -36,11 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Freelance\Commands\Task\CompleteTask\" />
-    <Folder Include="Application\Freelance\Commands\Task\CreateTask\" />
-    <Folder Include="Application\Freelance\Commands\Task\DeleteTask\" />
-    <Folder Include="Application\Freelance\Commands\Task\ReactToTask\" />
-    <Folder Include="Application\Freelance\Commands\Task\UpdateTask\" />
+    <Folder Include="Application\Freelance\EventHandlers\" />
   </ItemGroup>
 
 </Project>

@@ -109,8 +109,8 @@ namespace Flsurf.Infrastructure.Data
             {
                 var providerImages = new Dictionary<string, string>();
 
-                providerImages[nameof(PaymentProviders.BankCardRu)] = "https://playerok.com/images/Icons/CardRF.svg";
-                providerImages[nameof(PaymentProviders.Test)] = "https://playerok.com/images/Icons/Wallet.png";
+                providerImages[nameof(PaymentProviders.BankCardRu)] = "https://assets.playerok.com/web-app/images/Icons/card-ru.svg";
+                providerImages[nameof(PaymentProviders.Test)] = "https://assets.playerok.com/web-app/images/Icons/Wallet.png";
 
                 var providers = new List<TransactionProviderEntity>
                 {

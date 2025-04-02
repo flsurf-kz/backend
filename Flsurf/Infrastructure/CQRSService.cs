@@ -1,6 +1,4 @@
 ﻿using Flsurf.Application.Common.cqrs;
-using Flsurf.Application.Common.UseCases;
-using Microsoft.Extensions.Logging;
 using System.Reflection;
 
 namespace Flsurf.Infrastructure
@@ -9,33 +7,34 @@ namespace Flsurf.Infrastructure
     {
         public static void AddCommandAndQueryHandlers(this IServiceCollection services, Assembly assembly, params Type[] ignoredTypes)
         {
+            using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
+            ILogger logger = factory.CreateLogger("CqrsRegister");
+
             var commandQueriesHandlerTypes = assembly.GetTypes()
-                .Where(type => !type.IsAbstract && !type.IsInterface && IsCommandOrQueryHandler(type) && !ignoredTypes.Contains(type))
+                .Where(type =>
+                    !type.IsAbstract &&
+                    !type.IsInterface &&
+                    IsCommandOrQueryHandler(type) &&
+                    !ignoredTypes.Contains(type))
                 .ToList();
 
-            AddTypes(services, commandQueriesHandlerTypes); 
-        }
+            logger.LogInformation($"[CQRS] Найдено обработчиков: {commandQueriesHandlerTypes.Count}");
 
-        public static void AddTypes(this IServiceCollection services, List<Type> types)
-        {
-            using ILoggerFactory factory = LoggerFactory.Create(builder => builder.AddConsole());
-            ILogger logger = factory.CreateLogger("UseCaseRegister");
-
-            foreach (var handler in types)
+            foreach (var handler in commandQueriesHandlerTypes)
             {
                 services.AddScoped(handler);
-
-                logger.LogInformation($"Added use case service: {handler.FullName}");
+                logger.LogInformation($"[CQRS] Добавлен обработчик: {handler.FullName}");
             }
         }
 
         private static bool IsCommandOrQueryHandler(Type type)
         {
-            return type.BaseType != null && type.BaseType.IsGenericType &&
-                   (
-                       type.BaseType.GetGenericTypeDefinition() == typeof(ICommandHandler<>) ||
-                       type.BaseType.GetGenericTypeDefinition() == typeof(IQueryHandler<,>)
-                   );
+            return type.GetInterfaces().Any(i =>
+                i.IsGenericType &&
+                (
+                    i.GetGenericTypeDefinition() == typeof(ICommandHandler<>) ||
+                    i.GetGenericTypeDefinition() == typeof(IQueryHandler<,>)
+                ));
         }
     }
 }
