@@ -7,13 +7,13 @@ namespace Flsurf.Infrastructure
 {
     public static class CQRSService
     {
-        public static void AddCommandHandlers(this IServiceCollection services, Assembly assembly, params Type[] ignoredTypes)
+        public static void AddCommandAndQueryHandlers(this IServiceCollection services, Assembly assembly, params Type[] ignoredTypes)
         {
-            var commandHandlerTypes = assembly.GetTypes()
+            var commandQueriesHandlerTypes = assembly.GetTypes()
                 .Where(type => !type.IsAbstract && !type.IsInterface && IsCommandOrQueryHandler(type) && !ignoredTypes.Contains(type))
                 .ToList();
 
-            AddTypes(services, commandHandlerTypes); 
+            AddTypes(services, commandQueriesHandlerTypes); 
         }
 
         public static void AddTypes(this IServiceCollection services, List<Type> types)

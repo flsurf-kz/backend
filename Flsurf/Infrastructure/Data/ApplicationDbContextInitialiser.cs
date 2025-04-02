@@ -101,8 +101,10 @@ namespace Flsurf.Infrastructure.Data
             //    _context.Groups.AddRange(groups); 
             //}
 
-            // Default data
             // Seed, if necessary
+
+            // Default data
+
             if (!_context.TransactionProviders.Any())
             {
                 var providerImages = new Dictionary<string, string>();

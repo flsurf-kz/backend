@@ -13,13 +13,16 @@ namespace Flsurf.Application
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, ConfigurationManager config)
         {
+            // will make someone cry! registers all query, usecase, commands handlers
+            services.AddUseCasesFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddCommandAndQueryHandlers(Assembly.GetExecutingAssembly());
+
             services.AddSingleton<IEventDispatcher, EventDispatcher>();
             services.AddUserApplicationServices();
             services.AddPaymentApplicationServices(config);
             services.AddFilesApplicationServices();
             services.AddStaffApplicationServices();
-
-            services.AddUseCasesFromAssembly(Assembly.GetExecutingAssembly());
+            services.AddFreelancerApplicationServices(); 
 
             return services;
         }
