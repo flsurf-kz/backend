@@ -1,96 +1,47 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Flsurf.Presentation.Web.ExceptionHandlers
 {
-    public class GuardClauseExceptionHandler : IExceptionHandler
-    {
-        private readonly ILogger<GuardClauseExceptionHandler> _logger;
 
-        public GuardClauseExceptionHandler(ILogger<GuardClauseExceptionHandler> logger)
+    public class GuardClauseExceptionFilter : ExceptionFilterAttribute
+    {
+        private readonly ILogger<GuardClauseExceptionFilter> _logger;
+
+        public GuardClauseExceptionFilter(ILogger<GuardClauseExceptionFilter> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+        public override void OnException(ExceptionContext context)
         {
-            // Handle GuardClauseViolationException
-            if (exception is ArgumentNullException guardException)
+            // Обработка нарушения guard clause (ArgumentNullException)
+            if (context.Exception is ArgumentNullException argNullEx)
             {
-                LogGuardClauseViolationException(guardException);
-                return HandleGuardClauseViolationAsync(httpContext, guardException.Message);
-            }
-
-            // Handle other exceptions within your namespace
-            if (IsInYourNamespace(exception))
-            {
-                LogExceptionInYourNamespace(exception);
-                return HandleExceptionInYourNamespaceAsync(httpContext, exception);
-            }
-
-            // Return false to indicate that this exception is not handled by this handler
-            return ValueTask.FromResult(false);
-        }
-
-        private void LogGuardClauseViolationException(ArgumentNullException guardException)
-        {
-            _logger.LogError(guardException, $"Guard clause violation: {guardException.Message}");
-        }
-
-        private async ValueTask<bool> HandleGuardClauseViolationAsync(HttpContext httpContext, string errorMessage)
-        {
-            httpContext.Response.ContentType = "application/json";
-            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-
-            var errorResponse = new
-            {
-                ErrorMessage = errorMessage
-            };
-
-            await httpContext.Response.WriteAsJsonAsync(errorResponse);
-
-            // Return true to indicate that this exception is handled by this handler
-            return true;
-        }
-
-        private bool IsInYourNamespace(Exception exception)
-        {
-            // Check if the exception type is within your namespace
-            return exception.TargetSite?.DeclaringType?.Namespace?.StartsWith("YourNamespace") == true;
-        }
-
-        private void LogExceptionInYourNamespace(Exception exception)
-        {
-            // Log the exception with the last method in the stack trace within your namespace
-            var stackTrace = exception.StackTrace?.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
-            if (stackTrace != null && stackTrace.Any())
-            {
-                var lastNamespaceMethod = stackTrace.FirstOrDefault(line => line.Contains("Flsurf"));
-                if (!string.IsNullOrWhiteSpace(lastNamespaceMethod))
+                _logger.LogError(argNullEx, "Guard clause violation: {Message}", argNullEx.Message);
+                context.Result = new JsonResult(new { ErrorMessage = argNullEx.Message })
                 {
-                    _logger.LogError(exception, $"Exception in your namespace: {exception.Message}. Last method in stack trace: {lastNamespaceMethod}");
-                    return;
-                }
+                    StatusCode = StatusCodes.Status400BadRequest
+                };
+                context.ExceptionHandled = true;
+                return;
             }
 
-            // If no method in the stack trace is within your namespace, log the exception with its message
-            _logger.LogError(exception, $"Exception in your namespace: {exception.Message}");
-        }
-
-        private async ValueTask<bool> HandleExceptionInYourNamespaceAsync(HttpContext httpContext, Exception exception)
-        {
-            // Customize the response for exceptions within your namespace
-            httpContext.Response.ContentType = "application/json";
-            httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
-            var errorResponse = new
+            // Обработка исключений, относящихся к пространству имён "Flsurf"
+            var ns = context.Exception.TargetSite?.DeclaringType?.Namespace;
+            if (!string.IsNullOrEmpty(ns) && ns.StartsWith("Flsurf"))
             {
-                ErrorMessage = "An error occurred within your namespace."
-            };
+                _logger.LogError(context.Exception, "Exception in Flsurf namespace: {Message}", context.Exception.Message);
+                context.Result = new JsonResult(new { ErrorMessage = "An error occurred within your namespace." })
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
+                context.ExceptionHandled = true;
+                return;
+            }
 
-            await httpContext.Response.WriteAsJsonAsync(errorResponse);
-
-            // Return true to indicate that this exception is handled by this handler
-            return true;
+            // Если исключение не соответствует заданным условиям, оставляем его для дальнейшей обработки
+            base.OnException(context);
         }
     }
 }

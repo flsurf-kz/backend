@@ -9,11 +9,9 @@ namespace Flsurf.Application.Freelance.Queries
     public class GetClientOrderInfoHandler(IApplicationDbContext dbContext)
         : IQueryHandler<GetClientInfoQuery, ClientJobInfo?>
     {
-        private readonly IApplicationDbContext _dbContext = dbContext;
-
         public async Task<ClientJobInfo?> Handle(GetClientInfoQuery query)
         {
-            var client = await _dbContext.ClientProfiles
+            var client = await dbContext.ClientProfiles
                 .Include(c => c.User) // Загружаем пользователя
                     .ThenInclude(x => x.Avatar)
                 .Include(c => c.Jobs) // Загружаем все опубликованные заказы

@@ -8,7 +8,7 @@ namespace Flsurf.Application.Freelance.Queries
     public class GetContestListQuery : BaseQuery
     {
         public int Start { get; set; } = 0;
-        public int End { get; set; } = 10; 
+        public int Ends { get; set; } = 10; 
     }
 
     public class GetContestListHandler : IQueryHandler<GetContestListQuery, ICollection<ContestEntity>>
@@ -22,7 +22,7 @@ namespace Flsurf.Application.Freelance.Queries
 
         public async Task<ICollection<ContestEntity>> Handle(GetContestListQuery query)
         {
-            int count = query.End - query.Start;
+            int count = query.Ends - query.Start;
             return await _context.Contests
                 .Skip(query.Start)
                 .Take(count)

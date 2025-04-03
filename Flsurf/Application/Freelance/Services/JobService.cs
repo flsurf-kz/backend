@@ -13,20 +13,20 @@ namespace Flsurf.Application.Freelance.Services
             _serviceProvider = serviceProvider;
         }
 
-        public CreateJobCommand CreateJob() =>
-            _serviceProvider.GetRequiredService<CreateJobCommand>();
+        public CreateJobHandler CreateJob() =>
+            _serviceProvider.GetRequiredService<CreateJobHandler>();
 
-        public UpdateJobCommand UpdateJob() =>
-            _serviceProvider.GetRequiredService<UpdateJobCommand>();
+        public UpdateJobHandler UpdateJob() =>
+            _serviceProvider.GetRequiredService<UpdateJobHandler>();
 
-        public DeleteJobCommand DeleteJob() =>
-            _serviceProvider.GetRequiredService<DeleteJobCommand>();
+        public DeleteJobHandler DeleteJob() =>
+            _serviceProvider.GetRequiredService<DeleteJobHandler>();
 
-        public GetJobQuery GetJob() =>
-            _serviceProvider.GetRequiredService<GetJobQuery>();
+        public GetJobHandler GetJob() =>
+            _serviceProvider.GetRequiredService<GetJobHandler>();
 
-        public GetJobsListQuery GetJobsList() =>
-            _serviceProvider.GetRequiredService<GetJobsListQuery>();
+        public GetJobsListHandler GetJobsList() =>
+            _serviceProvider.GetRequiredService<GetJobsListHandler>();
 
         public BookmarkJobHandler BookmarkJob() =>
             _serviceProvider.GetRequiredService<BookmarkJobHandler>();

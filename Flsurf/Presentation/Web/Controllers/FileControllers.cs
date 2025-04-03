@@ -2,6 +2,7 @@
 using Flsurf.Application.Files.Interfaces;
 using Flsurf.Domain.Files.Entities;
 using Flsurf.Infrastructure.Adapters.FileStorage;
+using Flsurf.Presentation.Web.ExceptionHandlers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
@@ -10,6 +11,7 @@ namespace Flsurf.Presentation.Web.Controllers
 {
     [Route("api/files/")]
     [ApiController]
+    [TypeFilter(typeof(GuardClauseExceptionFilter))]
     public class FileControllers : ControllerBase
     {
         // Govno kod 

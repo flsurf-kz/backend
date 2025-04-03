@@ -60,7 +60,6 @@ namespace Flsurf.Presentation.Web
                     }
                 });
             });
-            services.AddExceptionHandler<GuardClauseExceptionHandler>();
 
             services.AddHangfire(config =>
                 config

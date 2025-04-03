@@ -1,6 +1,10 @@
-﻿namespace Flsurf.Domain.Messanging.Enums
+﻿using System.Text.Json.Serialization;
+
+namespace Flsurf.Domain.Messanging.Enums
 {
-    public class MessageTypes
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum MessageTypes
     {
+        Text 
     }
 }

@@ -4,6 +4,6 @@ namespace Flsurf.Application.Freelance.Queries
 {
     public class GetFreelancerProfileQuery : BaseQuery
     {
-        public Guid UserId { get; }
+        public Guid UserId { get; set;  }
     }
 }

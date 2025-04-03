@@ -3,6 +3,7 @@ using Flsurf.Application.Staff.Interfaces;
 using Flsurf.Application.User.Dto;
 using Flsurf.Application.User.Interfaces;
 using Flsurf.Domain.Staff.Entities;
+using Flsurf.Presentation.Web.ExceptionHandlers;
 using Flsurf.Presentation.Web.Schemas;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,7 @@ namespace Flsurf.Presentation.Web.Controllers
     [Route("api/stuff/")]
     [ApiController]
     [Authorize(AuthenticationSchemes = "Bearer")]
+    [TypeFilter(typeof(GuardClauseExceptionFilter))]
     public class StaffControllers : ControllerBase
     {
         private readonly IUserService _userService;

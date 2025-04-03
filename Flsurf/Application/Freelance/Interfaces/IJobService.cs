@@ -6,11 +6,11 @@ namespace Flsurf.Application.Freelance.Interfaces
     // Job + Bookmarks
     public interface IJobService
     {
-        CreateJobCommand CreateJob();
-        UpdateJobCommand UpdateJob();
-        DeleteJobCommand DeleteJob();
-        GetJobQuery GetJob();
-        GetJobsListQuery GetJobsList();
+        CreateJobHandler CreateJob();
+        UpdateJobHandler UpdateJob();
+        DeleteJobHandler DeleteJob();
+        GetJobHandler GetJob();
+        GetJobsListHandler GetJobsList();
         GetClientOrderInfoHandler GetClientOrderInfo(); // если нужно
         BookmarkJobHandler BookmarkJob(); 
         HideJobHandler HideJob();

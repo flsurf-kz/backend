@@ -1,6 +1,7 @@
 ﻿using Flsurf.Application.User.Dto;
 using Flsurf.Application.User.Interfaces;
 using Flsurf.Domain.User.Entities;
+using Flsurf.Presentation.Web.ExceptionHandlers;
 using Flsurf.Presentation.Web.Schemas;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ namespace Flsurf.Presentation.Web.Controllers
     [SwaggerTag("auth")]
     [Route("api/auth/")]
     [ApiController]
+    [TypeFilter(typeof(GuardClauseExceptionFilter))]
     public class AuthControllers : ControllerBase
     {
         private readonly IUserService _userService;

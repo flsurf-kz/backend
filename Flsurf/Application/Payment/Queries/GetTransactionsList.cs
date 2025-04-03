@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Flsurf.Application.Payment.Queries
 {
-    public class GetTransactionsListDto : BaseQuery
+    public class GetTransactionsListQuery : BaseQuery
     {
         public int Start { get; set; } = 0;
         public int Ends { get; set; } = 10;
@@ -23,7 +23,7 @@ namespace Flsurf.Application.Payment.Queries
         public Guid WalletId { get; set; }
     }
 
-    public class GetTransactionsList : IQueryHandler<GetTransactionsListDto, ICollection<TransactionEntity>>
+    public class GetTransactionsList : IQueryHandler<GetTransactionsListQuery, ICollection<TransactionEntity>>
     {
         private IApplicationDbContext _context;
         private IUser _user;
@@ -36,7 +36,7 @@ namespace Flsurf.Application.Payment.Queries
             _permService = permService;
         }
 
-        public async Task<ICollection<TransactionEntity>> Handle(GetTransactionsListDto dto)
+        public async Task<ICollection<TransactionEntity>> Handle(GetTransactionsListQuery dto)
         {
             var wallet = await _context.Wallets
                 .Include(x => x.User)

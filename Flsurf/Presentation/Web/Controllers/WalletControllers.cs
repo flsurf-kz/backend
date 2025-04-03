@@ -1,19 +1,58 @@
-﻿using Flsurf.Application.Payment.Interfaces;
-using Microsoft.AspNetCore.Authorization;
+﻿using Flsurf.Application.Common.cqrs;
+using Flsurf.Application.Common.Extensions;
+using Flsurf.Application.Payment.Interfaces;
+using Flsurf.Application.Payment.Queries;
+using Flsurf.Application.Payment.UseCases;
+using Flsurf.Domain.Payment.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Flsurf.Presentation.Web.Controllers
 {
-    [Route("api/wallet/")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
-    public class WalletControllers : ControllerBase
+    [Route("api/wallet")]
+    public class WalletController : ControllerBase
     {
-        private IWalletService _walletService;
+        private readonly IWalletService _walletService;
 
-        public WalletControllers(IWalletService walletService)
+        public WalletController(IWalletService walletService)
         {
             _walletService = walletService;
+        }
+
+        /// <summary>
+        /// Выполнение операции с балансом (например, пополнение, списание и т.д.).
+        /// </summary>
+        [HttpPost("balance-operation")]
+        public async Task<ActionResult<CommandResult>> BalanceOperation([FromBody] BalanceOperationCommand command)
+        {
+            var handler = _walletService.BalanceOperation();
+            var result = await handler.Handle(command);
+            return result.MapResult(this);
+        }
+
+        /// <summary>
+        /// Получение информации о кошельке по идентификатору.
+        /// </summary>
+        [HttpGet("{walletId}")]
+        public async Task<ActionResult<WalletEntity>> GetWallet(Guid walletId)
+        {
+            var query = new GetWalletQuery { WalletId = walletId };
+            var handler = _walletService.GetWallet();
+            var wallet = await handler.Handle(query);
+            if (wallet == null)
+                return NotFound("Кошелёк не найден");
+            return Ok(wallet);
+        }
+
+        /// <summary>
+        /// Блокировка кошелька.
+        /// </summary>
+        [HttpPost("block")]
+        public async Task<ActionResult<CommandResult>> BlockWallet([FromBody] BlockWalletCommand command)
+        {
+            var handler = _walletService.BlockWallet();
+            var result = await handler.Handle(command);
+            return result.MapResult(this);
         }
     }
 }

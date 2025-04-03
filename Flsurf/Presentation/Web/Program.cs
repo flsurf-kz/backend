@@ -24,7 +24,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "NameApp API");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Flsurf API");
         options.DefaultModelsExpandDepth(-1);
     });
     await app.InitialiseDatabaseAsync();

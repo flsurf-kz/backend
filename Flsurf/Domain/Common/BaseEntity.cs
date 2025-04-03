@@ -7,13 +7,13 @@ namespace Flsurf.Domain.Common
 {
     public class BaseEntity
     {
-        [Key, Required]
+        [Key, Required, JsonPropertyOrder(100)]
         public Guid Id { get; set; }
 
-        [JsonIgnore]
+        [JsonIgnore, NotMapped]
         private readonly List<BaseEvent> _domainEvents = new();
 
-        [NotMapped]
+        [NotMapped, JsonIgnore]
         public IReadOnlyCollection<BaseEvent> DomainEvents => _domainEvents.AsReadOnly();
 
         public BaseEntity()
