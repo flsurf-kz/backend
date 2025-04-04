@@ -8,6 +8,7 @@ using Flsurf.Application.Common.Interfaces;
 using Flsurf.Infrastructure.EventDispatcher;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Messanging.Entities;
+using Flsurf.Infrastructure.Data.Configuration;
 
 namespace Flsurf.Infrastructure.Data
 {
@@ -85,6 +86,7 @@ namespace Flsurf.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyEnumToStringConversion(); 
             builder.ApplyConfigurationsFromAssembly(assembly: Assembly.GetExecutingAssembly());
         }
 
