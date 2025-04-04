@@ -13,6 +13,7 @@ using Flsurf.Infrastructure.Adapters.Permissions;
 using SpiceDb;
 using Flsurf.Infrastructure.Adapters.Payment;
 using System.ComponentModel;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Flsurf.Infrastructure
 {
@@ -143,7 +144,7 @@ namespace Flsurf.Infrastructure
 
                 services.AddScoped<IPermissionService, SpiceDbPermService>();
             }
-
+            services.AddScoped<ITicketStore, DatabaseTicketStore>();
             services.AddAuthorizationBuilder();
 
             return services;

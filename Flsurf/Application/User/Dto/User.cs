@@ -18,6 +18,18 @@ namespace Flsurf.Application.User.Dto
         public UserTypes UserType { get; set; }
         public UserRoles? Role { get; set; }
     }
+
+    // DTO для внешних пользователей
+    public class ExternalUserDto
+    {
+        [Required]
+        public string Email { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty; 
+        public string AvatarUrl { get; set; } = string.Empty;
+        [Required]
+        public string Provider { get; set; } = string.Empty; // Google, VK и т.д.
+    }
+
     public class GetUserDto
     {
         public Guid? UserId { get; set; }

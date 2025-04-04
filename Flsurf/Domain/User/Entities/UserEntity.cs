@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Text.Json.Serialization;
+using YamlDotNet.Core.Tokens;
 
 namespace Flsurf.Domain.User.Entities
 {
@@ -80,7 +81,8 @@ namespace Flsurf.Domain.User.Entities
             }
         }
         public bool Blocked { get; set; } = false;
-        public Countries Location { get; set; }
+        public Countries? Location { get; set; }
+        public bool IsExternalUser { get; private set; } = false; 
 
         public static UserEntity Create(
             string fullname,
@@ -104,6 +106,23 @@ namespace Flsurf.Domain.User.Entities
             return user;
         }
 
+        public static UserEntity CreateExternal(
+            string fullname,
+            string email,
+            PasswordService passwordService)
+        {
+            var user = new UserEntity
+            {
+                Fullname = fullname,
+                Email = email,
+                IsExternalUser = true,
+            };
+            user.HashedPassword = passwordService.HashPassword(user, Guid.NewGuid().ToString()); // Генерируем случайный пароль
+
+            user.AddDomainEvent(new UserCreated(user));
+            return user;
+        }
+
         public void Block()
         {
             Blocked = true;
@@ -121,6 +140,13 @@ namespace Flsurf.Domain.User.Entities
             }
 
             HashedPassword = passwordService.HashPassword(this, newPassword);
+        }
+
+        public bool VerifyPassword(string passwordCheck, PasswordService passwordService)
+        {
+            var result = passwordService.VerifyHashedPassword(
+                this, HashedPassword, passwordCheck);
+            return result == PasswordVerificationResult.Success; 
         }
 
         public void UpdatePassword(string newPassword, PasswordService passwordService)

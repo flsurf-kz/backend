@@ -19,6 +19,8 @@ namespace Flsurf.Infrastructure.Data
         public DbSet<NotificationEntity> Notifications { get; set; }
         public DbSet<ConnectedAccountEntity> ConnectedAccounts { get; set; }
         public DbSet<GroupEntity> Groups { get; set; }
+        public DbSet<SessionTicketEntity> SessionTickets { get; set; }
+
 
         // payment 
         public DbSet<TransactionProviderEntity> TransactionProviders { get; set; }
@@ -70,6 +72,7 @@ namespace Flsurf.Infrastructure.Data
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            // необходимо сделать очередь которая будет выполнятся паралельно ПОСЛЕ сохранения! 
             //await DispatchDomainEventsAsync();
             return await base.SaveChangesAsync(cancellationToken);
         }

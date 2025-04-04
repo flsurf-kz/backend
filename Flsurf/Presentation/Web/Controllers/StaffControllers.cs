@@ -13,7 +13,6 @@ namespace Flsurf.Presentation.Web.Controllers
 {
     [Route("api/stuff/")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
     [TypeFilter(typeof(GuardClauseExceptionFilter))]
     public class StaffControllers : ControllerBase
     {

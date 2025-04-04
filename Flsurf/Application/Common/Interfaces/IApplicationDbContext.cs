@@ -54,6 +54,7 @@ namespace Flsurf.Application.Common.Interfaces
         public DbSet<MessageEntity> Messages { get; set; }
         public DbSet<MessageReadEntity> MessageReads { get; set; }
         public DbSet<UserToChatEntity> UserToChats { get; set; }
+        public DbSet<SessionTicketEntity> SessionTickets { get; set; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

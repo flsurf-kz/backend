@@ -41,6 +41,11 @@ namespace Flsurf.Application.User
             return ServiceProvider.GetRequiredService<ResetPassword>();
         }
 
+        public FindOrCreateExternalUser FindOrCreateExternalUser()
+        {
+            return ServiceProvider.GetRequiredService<FindOrCreateExternalUser>(); 
+        }
+
         public GetNotifications GetNotifications()
         {
             return ServiceProvider.GetRequiredService<GetNotifications>();

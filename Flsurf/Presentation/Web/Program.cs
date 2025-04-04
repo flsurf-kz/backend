@@ -5,6 +5,7 @@ using Flsurf.Domain;
 using Flsurf.Application;
 using Flsurf.Infrastructure.Data;
 using Flsurf.Infrastructure.EventStore;
+using Flsurf.Infrastructure.BackgroundJobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,9 @@ app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 
 app.UseHangfireDashboard();
+
+BackgroundJobsRegister.RegisterInfrastructureBGJobs();
+
 app.UseAuthorization();
 app.UseAuthentication();
 app.UseWebSockets(new WebSocketOptions() { 

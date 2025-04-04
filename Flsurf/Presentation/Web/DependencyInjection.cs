@@ -11,6 +11,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Flsurf.Infrastructure.Data;
+using System;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Flsurf.Presentation.Web
 {
@@ -32,14 +36,12 @@ namespace Flsurf.Presentation.Web
                 var info = new OpenApiInfo { Title = "SpakOfMind Flsurf", Version = "v1" };
                 options.SwaggerDoc(name: "v1", info: info);
                 options.EnableAnnotations();
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                options.AddSecurityDefinition("session", new OpenApiSecurityScheme
                 {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter a valid JWT token",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    BearerFormat = "JWT"
+                    Type = SecuritySchemeType.ApiKey,
+                    In = ParameterLocation.Cookie,
+                    Name = "session_token",
+                    Description = "Session Token"
                 });
                 options.SchemaFilter<StreamSchemaFilter>();
 
@@ -53,7 +55,7 @@ namespace Flsurf.Presentation.Web
                             Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
+                                Id = "session"
                             }
                         },
                         new string[] {}
@@ -92,25 +94,28 @@ namespace Flsurf.Presentation.Web
             }
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddCookie(options =>
             {
-                var secretKey = configuration["Jwt:SecretKey"];
-
-                Guard.Against.Null(secretKey, message: "Jwt:SecretKey does not exists");
-
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["Jwt:Issuer"],
-                    ValidAudience = configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-                };
-            });
+                options.Cookie.Name = "session_token";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.SlidingExpiration = true;
+                options.SessionStore = new DatabaseTicketStore(
+                    services.BuildServiceProvider().GetRequiredService<IApplicationDbContext>(),
+                    services.BuildServiceProvider().GetRequiredService<IMemoryCache>()
+                );
+            })
+            .AddGoogleOpenIdConnect(options =>
+            {
+                options.ClientId = configuration["Authentication:Google:ClientId"];
+                options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+                options.CallbackPath = "/signin-google";
+            }); 
             services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
             services.AddHttpContextAccessor();
             services.AddScoped<IUser, CurrentUser>();

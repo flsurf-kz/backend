@@ -14,6 +14,7 @@ namespace Flsurf.Application.User.Interfaces
         public abstract SendResetCode SendResetPasswordCode();
         public abstract ResetPassword ResetPassword();
         public abstract GetNotifications GetNotifications();
+        public abstract FindOrCreateExternalUser FindOrCreateExternalUser();
         public abstract CreateNotification CreateNotification();
     }
 }

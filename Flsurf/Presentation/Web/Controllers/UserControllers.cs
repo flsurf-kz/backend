@@ -24,7 +24,6 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPatch("{userId}")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<bool>> UpdateUser(Guid userId, [FromBody] UpdateUserDto model)
         {
             var result = await UserService
@@ -34,7 +33,6 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPatch("me")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<bool>> UpdateMe([FromBody] UpdateUserDto model)
         {
             var result = await UserService
@@ -44,7 +42,6 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpGet("me")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
         public async Task<ActionResult<UserEntity>> GetMe()
         {
             var result = await UserService
