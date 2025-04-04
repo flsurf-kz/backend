@@ -8,7 +8,7 @@ namespace Flsurf.Application.Freelance.Commands.Category
 {
     public class DeleteCategoryCommand : BaseCommand
     {
-        public Guid CategoryId { get; }
+        public Guid CategoryId { get; set; }
     }
 
 

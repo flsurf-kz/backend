@@ -34,11 +34,11 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpDelete("delete")]
-        public async Task<ActionResult<CommandResult>> DeleteCategory([FromBody] DeleteCategoryCommand command)
+        [HttpDelete("{categoryId}")]
+        public async Task<ActionResult<CommandResult>> DeleteCategory(Guid categoryId)
         {
             var handler = _categoryService.DeleteCategory();
-            var result = await handler.Handle(command);
+            var result = await handler.Handle(new DeleteCategoryCommand() { CategoryId = categoryId });
             return result.MapResult(this);
         }
 

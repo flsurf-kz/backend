@@ -8,8 +8,8 @@ namespace Flsurf.Application.Freelance.Commands.Category
 {
     public class UpdateCategoryCommand : BaseCommand
     {
-        public Guid CategoryId { get; }
-        public string? Name { get; }
+        public Guid CategoryId { get; set; }
+        public string? Name { get; set; }
     }
 
     public class UpdateCategoryHandler : ICommandHandler<UpdateCategoryCommand>

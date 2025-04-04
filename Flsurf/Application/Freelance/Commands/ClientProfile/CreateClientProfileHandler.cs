@@ -1,25 +1,32 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Files.Dto;
+using Flsurf.Application.Files.UseCases;
+using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.Freelance.Entities;
+using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Flsurf.Application.Freelance.Commands.ClientProfile
 {
     public class CreateClientProfileCommand : BaseCommand
     {
         public string CompanyName { get; set; } = string.Empty;
-        public string CompanyDescription { get; set; } = string.Empty;
-        public string CompanyWebsite { get; set; } = string.Empty;
-        public string Location { get; set; } = string.Empty;
-        public string CompanyLogo { get; set; } = string.Empty;
-        public string EmployerType { get; set; } = string.Empty;
+        public string? CompanyDescription { get; set; } = string.Empty;
+        public string? CompanyWebsite { get; set; } = string.Empty;
+        public string? Location { get; set; } = string.Empty;
+        public CreateFileDto? CompanyLogo { get; set; } 
+        public ClientType EmployerType { get; set; }
+        [Phone]
         public string PhoneNumber { get; set; } = string.Empty;
     }
 
     public class CreateClientProfileHandler(
         IApplicationDbContext dbContext,
-        IPermissionService permService)
+        IPermissionService permService, 
+        UploadFile uploadFile)
         : ICommandHandler<CreateClientProfileCommand>
     {
         public async Task<CommandResult> Handle(CreateClientProfileCommand command)
@@ -40,6 +47,11 @@ namespace Flsurf.Application.Freelance.Commands.ClientProfile
                 return CommandResult.Conflict("Client profile already exists.");
             }
 
+            FileEntity? file = null;
+            if (command.CompanyLogo != null)
+            {
+                file = await uploadFile.Execute(command.CompanyLogo);
+            }
             // Создаем новый профиль
             var profile = new ClientProfileEntity
             {
@@ -48,8 +60,8 @@ namespace Flsurf.Application.Freelance.Commands.ClientProfile
                 CompanyDescription = command.CompanyDescription,
                 CompanyWebsite = command.CompanyWebsite,
                 Location = command.Location,
-                CompanyLogo = command.CompanyLogo,
-                EmployerType = command.EmployerType,
+                CompanyLogo = file,
+                ClientType = command.EmployerType,
                 PhoneNumber = command.PhoneNumber
             };
 

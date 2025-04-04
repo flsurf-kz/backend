@@ -52,16 +52,23 @@ namespace Flsurf.Infrastructure.Data
 
         public async Task RenewAsync(string key, AuthenticationTicket ticket)
         {
-            var session = await _context.SessionTickets.FindAsync(key);
+            if (!Guid.TryParse(key, out var keyGuid))
+                throw new ArgumentException("Invalid key format", nameof(key));
+
+            var session = await _context.SessionTickets.FindAsync(keyGuid);
             if (session != null)
             {
                 session.Value = SerializeTicket(ticket);
-                session.ExpiresAt = ticket.Properties.ExpiresUtc?.DateTime ?? DateTimeOffset.Now.AddMinutes(60);
+                // Приводим время к UTC
+                session.ExpiresAt = ticket.Properties.ExpiresUtc.HasValue
+                    ? ticket.Properties.ExpiresUtc.Value.ToUniversalTime()
+                    : DateTimeOffset.UtcNow.AddMinutes(60);
 
                 _context.SessionTickets.Update(session);
                 await _context.SaveChangesAsync();
             }
         }
+
 
         public async Task RemoveAsync(string key)
         {
