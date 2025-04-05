@@ -9,7 +9,7 @@ on:
 jobs:
   publish-client:
     runs-on: ubuntu-latest
-
+    environment: flsurf-publish
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,3 +35,4 @@ jobs:
         working-directory: ./Flsurf/Client
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
