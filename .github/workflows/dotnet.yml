@@ -36,7 +36,7 @@ jobs:
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Generate TypeScript client with NSwag
-        run: nswag run Flsurf/nswag.json
+        run: nswag run nswag.json
         working-directory: ./Flsurf
 
       - name: Setup Node.js
