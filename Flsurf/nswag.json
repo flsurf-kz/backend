@@ -1,7 +1,7 @@
 {
   "swaggerGenerator": {
-    "fromDocument": {
-      "url": "http://localhost:8000/swagger/v1/swagger.json",
+    "fromFile": {
+      "path": "swagger.json",
       "output": null
     }
   },

@@ -133,6 +133,8 @@ namespace Flsurf.Presentation.Web
             services.AddHttpContextAccessor();
             services.AddScoped<IUser, CurrentUser>();
 
+            services.AddHostedService<SwaggerFileUpdater>();
+
             return services;
         }
     }
