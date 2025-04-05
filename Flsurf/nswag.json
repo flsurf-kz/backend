@@ -1,8 +1,7 @@
 {
   "swaggerGenerator": {
     "fromFile": {
-      "path": "swagger.json",
-      "output": null
+      "path": "swagger.json"
     }
   },
   "codeGenerators": {
