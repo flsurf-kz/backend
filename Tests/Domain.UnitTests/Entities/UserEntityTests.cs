@@ -43,7 +43,7 @@ namespace Tests.Domain.UnitTests.Entities
         {
             var user = UserEntity.Create("Иван Иванов", "test@example.com", "password", UserTypes.Client, _passwordService);
 
-            user.Block();
+            user.Block(true);
 
             Assert.That(user.Blocked, Is.True);
         }
@@ -92,7 +92,7 @@ namespace Tests.Domain.UnitTests.Entities
         public void SetTelegramId_WhenBlocked_ShouldThrowAccessDenied()
         {
             var user = UserEntity.Create("Иван Иванов", "test@example.com", "pass", UserTypes.Client, _passwordService);
-            user.Block();
+            user.Block(true);
 
             Assert.Throws<AccessDenied>(() => user.TelegramId = "tg_fail");
         }

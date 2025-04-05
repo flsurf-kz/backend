@@ -1,8 +1,11 @@
-﻿using Flsurf.Application.User;
+﻿using Flsurf.Application.Common.cqrs;
+using Flsurf.Application.User;
+using Flsurf.Application.User.Commands;
 using Flsurf.Application.User.Dto;
 using Flsurf.Domain.User.Entities;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Data;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -46,9 +49,9 @@ namespace Tests.Application.IntegrationTests
             using var scope = _scopeFactory.CreateScope();
 
             var userService = scope.ServiceProvider.GetRequiredService<UserService>(); 
-            UserEntity result = await userService
+            CommandResult result = await userService
                 .CreateUser()
-                .Execute(new CreateUserDto()
+                .Handle(new CreateUserCommand()
                 {
                     Name = userName,
                     Surname = surname, 
@@ -56,9 +59,13 @@ namespace Tests.Application.IntegrationTests
                     Role = role, 
                 });
 
-            _userId = result.Id; 
+            if (!result.IsSuccess) 
+                throw new Exception(result.Message);
+            if (!Guid.TryParse(result.Id, out var userId))
+                throw new Exception("Пиздец");
+            _userId = userId;  
 
-            return result.Id;
+            return userId;
         }
 
         public static async Task ResetState()
