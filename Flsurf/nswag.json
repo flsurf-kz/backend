@@ -11,7 +11,7 @@
       "withCredentials": true,
       "clientBaseClass": "",
       "configurationClass": "",
-      "httpClass": "fetch",
+      "httpClass": "Fetch",
       "promiseType": "Promise",
       "generateClientInterfaces": true,
       "injectionTokenType": "InjectionToken",
