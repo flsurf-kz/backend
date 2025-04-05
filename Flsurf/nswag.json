@@ -1,0 +1,28 @@
+{
+  "swaggerGenerator": {
+    "fromDocument": {
+      "url": "https://your-api-url/swagger/v1/swagger.json",
+      "output": null
+    }
+  },
+  "codeGenerators": {
+    "openApiToTypeScriptClient": {
+      "template": "Fetch",
+      "withCredentials": true,
+      "clientBaseClass": "",
+      "configurationClass": "",
+      "httpClass": "fetch",
+      "promiseType": "Promise",
+      "generateClientInterfaces": true,
+      "injectionTokenType": "InjectionToken",
+      "useTransformOptionsMethod": false,
+      "useTransformResultMethod": false,
+      "className": "{controller}Client",
+      "namespace": "",
+      "typeStyle": "Class",
+      "generateOptionalParameters": true,
+      "excludedTypeNames": [],
+      "wrapDtoExceptions": false
+    }
+  }
+}
