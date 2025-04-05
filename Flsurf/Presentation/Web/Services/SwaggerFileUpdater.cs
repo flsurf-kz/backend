@@ -35,7 +35,7 @@ namespace Flsurf.Presentation.Web.Services
                     // Сериализуем документ в JSON (можно использовать System.Text.Json или Newtonsoft.Json)
                     var json = Newtonsoft.Json.JsonConvert.SerializeObject(swaggerDoc, Newtonsoft.Json.Formatting.Indented);
                     // Определяем путь для сохранения файла, например, в корне проекта или в wwwroot
-                    var filePath = Path.Combine(_env.ContentRootPath, "swagger.json");
+                    var filePath = Path.Combine(_env.ContentRootPath, "Client", "swagger.json");
                     File.WriteAllText(filePath, json);
                     _logger.LogInformation("Swagger JSON file updated at {FilePath}", filePath);
                 }

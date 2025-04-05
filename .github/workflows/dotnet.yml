@@ -17,7 +17,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: '8.0.x'
 
       - name: Restore dependencies
         run: dotnet restore
@@ -29,15 +29,14 @@ jobs:
         run: dotnet test --no-build --verbosity normal
 
       - name: Install NSwag CLI
-        run: dotnet tool install --global NSwag.ConsoleCore
+        run: dotnet tool install --global NSwag.ConsoleCore --version 13.18.2
 
-      # Добавляем глобальные инструменты в PATH
       - name: Add .dotnet tools to PATH
         run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Generate TypeScript client with NSwag
         run: nswag run nswag.json
-        working-directory: ./Flsurf
+        working-directory: ./Flsurf/Client
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -47,13 +46,12 @@ jobs:
 
       - name: Install npm dependencies and build client
         run: |
-          cd backend/generated-client
           npm install
-          npm run build   # Если есть скрипт сборки, иначе можно убрать эту строку
-          
+          npm run build   # Если у вас определён скрипт сборки
+        working-directory: ./Flsurf/Client
+
       - name: Publish npm package
-        run: |
-          cd backend/generated-client
-          npm publish --access public
+        run: npm publish --access public
+        working-directory: ./Flsurf/Client
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
