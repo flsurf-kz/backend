@@ -24,6 +24,12 @@ jobs:
         run: npm install
         working-directory: ./Flsurf/Client
 
+      - name: Configure npm authentication
+        run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > .npmrc
+        working-directory: ./Flsurf/Client
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish npm package
         run: npm publish --access public
         working-directory: ./Flsurf/Client
