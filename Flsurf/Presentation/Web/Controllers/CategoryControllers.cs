@@ -19,7 +19,7 @@ namespace Flsurf.Presentation.Web.Controllers
             _categoryService = categoryService;
         }
 
-        [HttpPost("create")]
+        [HttpPost("create", Name = "CreateCategory")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> CreateCategory([FromBody] CreateCategoryCommand command)
         {
@@ -28,7 +28,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("update")]
+        [HttpPost("update", Name = "UpdateCategory")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateCategory([FromBody] UpdateCategoryCommand command)
         {
@@ -37,7 +37,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpDelete("{categoryId}")]
+        [HttpDelete("{categoryId}", Name = "DeleteCategory")]
         public async Task<ActionResult<CommandResult>> DeleteCategory(Guid categoryId)
         {
             var handler = _categoryService.DeleteCategory();
@@ -45,7 +45,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpGet("list")]
+        [HttpGet("list", Name = "GetCategories")]
         public async Task<ActionResult<ICollection<CategoryEntity>>> GetCategories()
         {
             var handler = _categoryService.GetCategories();

@@ -26,7 +26,7 @@ namespace Flsurf.Presentation.Web.Controllers
             _staffService = staffService;
         }
 
-        [HttpPost("user/{userId}/block")]
+        [HttpPost("user/{userId}/block", Name = "BlockUser")]
         public async Task<ActionResult<bool>> BlockUser(Guid userId)
         {
             await _userService.BlockUser()
@@ -34,7 +34,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return Ok(true);
         }
 
-        [HttpPost("user/{userId}/warn")]
+        [HttpPost("user/{userId}/warn", Name = "WarnUser")]
         public async Task<ActionResult<bool>> WarnUser(Guid userId, [FromBody] WarnUserScheme model)
         {
             await _userService.WarnUser()
@@ -42,19 +42,19 @@ namespace Flsurf.Presentation.Web.Controllers
             return Ok(true);
         }
 
-        [HttpPost("ticket")]
+        [HttpPost("ticket", Name = "CreateTicket")]
         public async Task<ActionResult<TicketEntity>> CreateTicket([FromBody] CreateTicketDto ticket)
         {
             return Ok(await _staffService.CreateTicket().Execute(ticket));
         }
 
-        [HttpGet("ticket")]
+        [HttpGet("ticket", Name = "GetTickets")]
         public async Task<ActionResult<ICollection<TicketEntity>>> GetTickets([FromBody] GetTicketsDto model)
         {
             return Ok(await _staffService.GetTicketsList().Execute(model));
         }
 
-        [HttpGet("ticket/{ticketId}")]
+        [HttpGet("ticket/{ticketId}", Name = "GetTicket")]
         public async Task<ActionResult<TicketEntity>> GetTicket(Guid ticketId)
         {
             return Ok(await _staffService.GetTicket().Execute(new GetTicketDto() { TicketId = ticketId }));

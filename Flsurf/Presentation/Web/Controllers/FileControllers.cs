@@ -26,7 +26,7 @@ namespace Flsurf.Presentation.Web.Controllers
             _context = dbContext;
         }
 
-        [HttpPost("upload")]
+        [HttpPost("upload", Name = "UploadFile")]
         public async Task<ActionResult<FileEntity>> UploadFile(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -37,7 +37,7 @@ namespace Flsurf.Presentation.Web.Controllers
                 .Execute(new Application.Files.Dto.CreateFileDto() { Stream = file.OpenReadStream(), Name = file.FileName }));
         }
 
-        [HttpGet("download/{fileId}")]
+        [HttpGet("download/{fileId}", Name = "DownloadFile")]
         public async Task<IActionResult> DownloadFile(Guid fileId)
         {
             var fileModel = await _context.Files.FirstOrDefaultAsync(x => x.Id == fileId);

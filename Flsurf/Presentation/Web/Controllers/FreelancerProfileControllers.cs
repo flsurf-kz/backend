@@ -19,7 +19,7 @@ namespace Flsurf.Presentation.Web.Controllers
             _freelancerProfileService = freelancerProfileService;
         }
 
-        [HttpPost("create")]
+        [HttpPost("create", Name = "CreateFreelancerProfile")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> CreateFreelancerProfile([FromBody] CreateFreelancerProfileCommand command)
         {
@@ -28,7 +28,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("update")]
+        [HttpPost("update", Name = "UpdateFreelancerProfile")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateFreelancerProfile([FromBody] UpdateFreelancerProfileCommand command)
         {
@@ -37,7 +37,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("hide")]
+        [HttpPost("hide", Name = "HideFreelancerProfile")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> HideFreelancerProfile([FromBody] HideFreelancerProfileCommand command)
         {
@@ -46,7 +46,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("{userId}", Name = "GetFreelancerProfile")]
         public async Task<ActionResult<FreelancerProfileEntity>> GetFreelancerProfile(Guid userId)
         {
             var query = new GetFreelancerProfileQuery { UserId = userId };
@@ -57,7 +57,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return Ok(profile);
         }
 
-        [HttpGet("list")]
+        [HttpGet("list", Name = "GetFreelancerProfileList")]
         public async Task<ActionResult<ICollection<FreelancerProfileEntity>>> GetFreelancerProfileList(
             [FromQuery] int start = 0,
             [FromQuery] int end = 10,
@@ -80,6 +80,5 @@ namespace Flsurf.Presentation.Web.Controllers
             var profiles = await handler.Handle(query);
             return Ok(profiles);
         }
-
     }
 }

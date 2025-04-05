@@ -20,7 +20,7 @@ namespace Flsurf.Presentation.Web.Controllers
             _taskService = taskService;
         }
 
-        [HttpPost("create")]
+        [HttpPost("create", Name = "CreateTask")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> CreateTask([FromBody] CreateTaskCommand command)
         {
@@ -29,7 +29,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("complete")]
+        [HttpPost("complete", Name = "CompleteTask")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> CompleteTask([FromBody] CompleteTaskCommand command)
         {
@@ -38,7 +38,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("react")]
+        [HttpPost("react", Name = "ReactToTask")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> ReactToTask([FromBody] ReactToTaskCommand command)
         {
@@ -47,7 +47,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("update")]
+        [HttpPost("update", Name = "UpdateTask")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateTask([FromBody] UpdateTaskCommand command)
         {
@@ -56,7 +56,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("delete", Name = "DeleteTask")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> DeleteTask([FromBody] DeleteTaskCommand command)
         {
@@ -65,7 +65,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpGet("list/{contractId}")]
+        [HttpGet("list/{contractId}", Name = "GetTasks")]
         [Authorize]
         public async Task<ActionResult<ICollection<TransactionEntity>>> GetTasks(
             Guid contractId, [FromQuery] int start = 0, [FromQuery] int end = 10)

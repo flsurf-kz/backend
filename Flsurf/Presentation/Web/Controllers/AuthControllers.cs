@@ -23,7 +23,7 @@ namespace Flsurf.Presentation.Web.Controllers
     [TypeFilter(typeof(GuardClauseExceptionFilter))]
     public class AuthController(IUserService _userService, PasswordService passwordService) : ControllerBase
     {
-        [HttpPost("login")]
+        [HttpPost("login", Name = "Login")]
         public async Task<IActionResult> Login([FromBody] LoginUserSchema model)
         {
             if (User?.Identity?.IsAuthenticated == true)
@@ -56,14 +56,14 @@ namespace Flsurf.Presentation.Web.Controllers
             return Ok(new { Message = "Authenticated" });
         }
 
-        [HttpPost("logout")]
+        [HttpPost("logout", Name = "Logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Ok();
         }
 
-        [HttpPost("register")]
+        [HttpPost("register", Name = "Register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserSchema model)
         {
             // Если пользователь уже авторизован, регистрация не разрешается
@@ -79,21 +79,21 @@ namespace Flsurf.Presentation.Web.Controllers
                 Password = model.Password,
                 Name = model.Name,
                 Surname = model.Surname,
-                UserType = Domain.User.Enums.UserTypes.NonUser, 
+                UserType = Domain.User.Enums.UserTypes.NonUser,
             };
 
             // Выполняем команду создания пользователя через UserService.
             var result = await _userService.CreateUser().Handle(command);
 
             if (!result.IsSuccess)
-                return result.MapResult(this); 
+                return result.MapResult(this);
 
             // it should be fast
             var user = await _userService.GetUser().Handle(new GetUserQuery() { UserId = result.GetIdAsGuid() });
 
             // it is just impossible
             if (user == null)
-                return result.MapResult(this); 
+                return result.MapResult(this);
 
             var claims = new List<Claim>
             {
@@ -117,7 +117,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return CommandResult.Success(user.Id).MapResult(this);
         }
 
-        [HttpGet("external-login/{provider}")]
+        [HttpGet("external-login/{provider}", Name = "ExternalLogin")]
         public IActionResult ExternalLogin(string provider)
         {
             var authProperties = new AuthenticationProperties
@@ -128,7 +128,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return Challenge(authProperties, provider);
         }
 
-        [HttpGet("external-login-callback")]
+        [HttpGet("external-login-callback", Name = "ExternalLoginCallback")]
         public async Task<IActionResult> ExternalLoginCallback()
         {
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -183,5 +183,4 @@ namespace Flsurf.Presentation.Web.Controllers
             return new ClaimsPrincipal(identity);
         }
     }
-
 }

@@ -27,16 +27,16 @@ namespace Flsurf.Presentation.Web.Controllers
             _user = user;
         }
 
-        [HttpPatch("{userId}")]
+        [HttpPatch("{userId}", Name = "UpdateUser")]
         public async Task<ActionResult<bool>> UpdateUser(Guid userId, [FromBody] UpdateUserCommand model)
         {
             var result = await UserService
                 .UpdateUser()
                 .Handle(model);
-            return result.MapResult(this); 
+            return result.MapResult(this);
         }
 
-        [HttpPatch("me")]
+        [HttpPatch("me", Name = "UpdateMe")]
         public async Task<ActionResult<bool>> UpdateMe([FromBody] UpdateUserCommand model)
         {
             var result = await UserService
@@ -45,7 +45,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpGet("me")]
+        [HttpGet("me", Name = "GetMe")]
         public async Task<ActionResult<UserEntity?>> GetMe()
         {
             var result = await UserService
@@ -54,7 +54,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result;
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("{userId}", Name = "GetUserById")]
         public async Task<ActionResult<UserEntity?>> GetUserById(Guid userId)
         {
             var result = await UserService

@@ -26,7 +26,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         // GET: api/<NotificationController>
-        [HttpGet("user/{userId}")]
+        [HttpGet("user/{userId}", Name = "GetNotifications")]
         public async Task<ActionResult<ICollection<NotificationEntity>>> GetNotifications(Guid userId, [FromQuery] InputPagination pagination)
         {
             return Ok(await _userService.GetNotifications().Handle(
@@ -39,11 +39,10 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         // POST api/<NotificationController>
-        [HttpPost("")]
+        [HttpPost("", Name = "CreateNotification")]
         public async Task<ActionResult<CommandResult>> CreateNotification([FromBody] CreateNotificationCommand model)
         {
             var result = await _userService.CreateNotifications().Handle(model);
-
             return result.MapResult(this);
         }
     }

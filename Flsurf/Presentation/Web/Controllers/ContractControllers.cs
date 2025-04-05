@@ -20,7 +20,7 @@ namespace Flsurf.Presentation.Web.Controllers
             _contractService = contractService;
         }
 
-        [HttpPost("create")]
+        [HttpPost("create", Name = "CreateContract")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> CreateContract([FromBody] CreateContractCommand command)
         {
@@ -29,7 +29,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("client-accept-finish")]
+        [HttpPost("client-accept-finish", Name = "ClientAcceptFinishContract")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> ClientAcceptFinishContract([FromBody] ClientAcceptFinishContractCommand command)
         {
@@ -38,7 +38,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("client-close")]
+        [HttpPost("client-close", Name = "ClientCloseContract")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> ClientCloseContract([FromBody] ClientCloseContractCommand command)
         {
@@ -47,7 +47,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("client-reject-completion")]
+        [HttpPost("client-reject-completion", Name = "ClientRejectContractCompletion")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> ClientRejectContractCompletion([FromBody] ClientRejectContractCompletionCommand command)
         {
@@ -56,7 +56,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("freelancer-accept")]
+        [HttpPost("freelancer-accept", Name = "FreelancerAcceptContract")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> FreelancerAcceptContract([FromBody] FreelancerAcceptContractCommand command)
         {
@@ -65,7 +65,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("freelancer-finish")]
+        [HttpPost("freelancer-finish", Name = "FreelancerFinishContract")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> FreelancerFinishContract([FromBody] FreelancerFinishContractCommand command)
         {
@@ -74,7 +74,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("accept-dispute")]
+        [HttpPost("accept-dispute", Name = "AcceptDispute")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> AcceptDispute([FromBody] AcceptDisputeCommand command)
         {
@@ -83,7 +83,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("initiate-dispute")]
+        [HttpPost("initiate-dispute", Name = "InitiateDispute")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> InitiateDispute([FromBody] InitiateDisputeCommand command)
         {
@@ -92,7 +92,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("resolve-dispute")]
+        [HttpPost("resolve-dispute", Name = "ResolveDispute")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> ResolveDispute([FromBody] ResolveDisputeCommand command)
         {
@@ -101,7 +101,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("force-cancel")]
+        [HttpPost("force-cancel", Name = "ForceContractCancel")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> ForceContractCancel([FromBody] ForceContractCancelCommand command)
         {
@@ -110,7 +110,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetContract")]
         public async Task<ActionResult<ContractEntity>> GetContract(Guid id)
         {
             var query = new GetContractQuery { ContractId = id };
@@ -121,7 +121,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return Ok(contract);
         }
 
-        [HttpGet("list")]
+        [HttpGet("list", Name = "GetContractsList")]
         public async Task<ActionResult<ICollection<ContractEntity>>> GetContractsList(
             [FromQuery] int start = 0, [FromQuery] int end = 10)
         {

@@ -41,148 +41,148 @@ export interface IClient {
      * @param body (optional) 
      * @return Success
      */
-    create(body?: CreateCategoryCommand | undefined): Promise<CommandResult>;
+    createCategory(body?: CreateCategoryCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    update(body?: UpdateCategoryCommand | undefined): Promise<CommandResult>;
+    updateCategory(body?: UpdateCategoryCommand | undefined): Promise<CommandResult>;
 
     /**
      * @return Success
      */
-    category(categoryId: string): Promise<CommandResult>;
+    deleteCategory(categoryId: string): Promise<CommandResult>;
 
     /**
      * @return Success
      */
-    list(): Promise<CategoryEntity[]>;
+    getCategories(): Promise<CategoryEntity[]>;
 
     /**
      * @return Success
      */
-    orderInfo(userId: string): Promise<ClientJobInfo>;
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    create2(body?: CreateClientProfileCommand | undefined): Promise<CommandResult>;
+    getClientOrderInfo(userId: string): Promise<ClientJobInfo>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    suspend(body?: SuspendClientProfileCommand | undefined): Promise<CommandResult>;
+    createClientProfile(body?: CreateClientProfileCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    update2(body?: UpdateClientProfileCommand | undefined): Promise<CommandResult>;
+    suspendClientProfile(body?: SuspendClientProfileCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    create3(body?: CreateContestCommand | undefined): Promise<CommandResult>;
+    updateClientProfile(body?: UpdateClientProfileCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    approve(body?: ApproveContestCommand | undefined): Promise<CommandResult>;
+    createContest(body?: CreateContestCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    start(body?: StartContestCommand | undefined): Promise<CommandResult>;
+    approveContest(body?: ApproveContestCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    end(body?: EndContestCommand | undefined): Promise<CommandResult>;
+    startContest(body?: StartContestCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    delete(body?: DeleteContestCommand | undefined): Promise<CommandResult>;
+    endContest(body?: EndContestCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    selectWinner(body?: SelectContestWinnerCommand | undefined): Promise<CommandResult>;
+    deleteContest(body?: DeleteContestCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    submitEntry(body?: SubmitContestEntryCommand | undefined): Promise<CommandResult>;
+    selectContestWinner(body?: SelectContestWinnerCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    deleteEntry(body?: DeleteContestEntryCommand | undefined): Promise<CommandResult>;
+    submitContestEntry(body?: SubmitContestEntryCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    update3(body?: UpdateContestCommand | undefined): Promise<CommandResult>;
+    deleteContestEntry(body?: DeleteContestEntryCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updateContest(body?: UpdateContestCommand | undefined): Promise<CommandResult>;
 
     /**
      * @return Success
      */
-    contest(id: string): Promise<ContestEntity>;
+    getContest(id: string): Promise<ContestEntity>;
 
     /**
      * @param start (optional) 
      * @param end (optional) 
      * @return Success
      */
-    list2(start?: number | undefined, end?: number | undefined): Promise<ContestEntity[]>;
+    getContestList(start?: number | undefined, end?: number | undefined): Promise<ContestEntity[]>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    create4(body?: CreateContractCommand | undefined): Promise<CommandResult>;
+    createContract(body?: CreateContractCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    clientAcceptFinish(body?: ClientAcceptFinishContractCommand | undefined): Promise<CommandResult>;
+    clientAcceptFinishContract(body?: ClientAcceptFinishContractCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    clientClose(body?: ClientCloseContractCommand | undefined): Promise<CommandResult>;
+    clientCloseContract(body?: ClientCloseContractCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    clientRejectCompletion(body?: ClientRejectContractCompletionCommand | undefined): Promise<CommandResult>;
+    clientRejectContractCompletion(body?: ClientRejectContractCompletionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    freelancerAccept(body?: FreelancerAcceptContractCommand | undefined): Promise<CommandResult>;
+    freelancerAcceptContract(body?: FreelancerAcceptContractCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    freelancerFinish(body?: FreelancerFinishContractCommand | undefined): Promise<CommandResult>;
+    freelancerFinishContract(body?: FreelancerFinishContractCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
@@ -206,53 +206,53 @@ export interface IClient {
      * @param body (optional) 
      * @return Success
      */
-    forceCancel(body?: ForceContractCancelCommand | undefined): Promise<CommandResult>;
+    forceContractCancel(body?: ForceContractCancelCommand | undefined): Promise<CommandResult>;
 
     /**
      * @return Success
      */
-    contract(id: string): Promise<ContractEntity>;
+    getContract(id: string): Promise<ContractEntity>;
 
     /**
      * @param start (optional) 
      * @param end (optional) 
      * @return Success
      */
-    list3(start?: number | undefined, end?: number | undefined): Promise<ContractEntity[]>;
+    getContractsList(start?: number | undefined, end?: number | undefined): Promise<ContractEntity[]>;
 
     /**
      * @param file (optional) 
      * @return Success
      */
-    upload(file?: FileParameter | undefined): Promise<FileEntity>;
+    uploadFile(file?: FileParameter | undefined): Promise<FileEntity>;
 
     /**
      * @return Success
      */
-    download(fileId: string): Promise<void>;
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    create5(body?: CreateFreelancerProfileCommand | undefined): Promise<CommandResult>;
+    downloadFile(fileId: string): Promise<void>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    update4(body?: UpdateFreelancerProfileCommand | undefined): Promise<CommandResult>;
+    createFreelancerProfile(body?: CreateFreelancerProfileCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    hide(body?: HideFreelancerProfileCommand | undefined): Promise<CommandResult>;
+    updateFreelancerProfile(body?: UpdateFreelancerProfileCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    hideFreelancerProfile(body?: HideFreelancerProfileCommand | undefined): Promise<CommandResult>;
 
     /**
      * @return Success
      */
-    freelancerProfile(userId: string): Promise<FreelancerProfileEntity>;
+    getFreelancerProfile(userId: string): Promise<FreelancerProfileEntity>;
 
     /**
      * @param start (optional) 
@@ -264,72 +264,72 @@ export interface IClient {
      * @param maxReviews (optional) 
      * @return Success
      */
-    list4(start?: number | undefined, end?: number | undefined, skills?: string[] | undefined, minCost?: number | undefined, maxCost?: number | undefined, minReviews?: number | undefined, maxReviews?: number | undefined): Promise<FreelancerProfileEntity[]>;
+    getFreelancerProfileList(start?: number | undefined, end?: number | undefined, skills?: string[] | undefined, minCost?: number | undefined, maxCost?: number | undefined, minReviews?: number | undefined, maxReviews?: number | undefined): Promise<FreelancerProfileEntity[]>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    create6(body?: CreateFreelancerTeamCommand | undefined): Promise<CommandResult>;
+    createFreelancerTeam(body?: CreateFreelancerTeamCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    update5(body?: UpdateFreelancerTeamCommand | undefined): Promise<CommandResult>;
+    updateFreelancerTeam(body?: UpdateFreelancerTeamCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    delete2(body?: DeleteFreelancerTeamCommand | undefined): Promise<CommandResult>;
+    deleteFreelancerTeam(body?: DeleteFreelancerTeamCommand | undefined): Promise<CommandResult>;
 
     /**
      * @return Success
      */
-    list5(): Promise<FreelancerTeamEntity[]>;
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    create7(body?: CreateJobCommand | undefined): Promise<CommandResult>;
+    getFreelancerTeams(): Promise<FreelancerTeamEntity[]>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    update6(body?: UpdateJobCommand | undefined): Promise<CommandResult>;
+    createJob(body?: CreateJobCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    delete3(body?: DeleteJobCommand | undefined): Promise<CommandResult>;
+    updateJob(body?: UpdateJobCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    deleteJob(body?: DeleteJobCommand | undefined): Promise<CommandResult>;
 
     /**
      * @return Success
      */
-    job(id: string): Promise<Job>;
+    getJob(id: string): Promise<Job>;
 
     /**
      * @param start (optional) 
      * @param end (optional) 
      * @return Success
      */
-    list6(start?: number | undefined, end?: number | undefined): Promise<Job[]>;
+    getJobsList(start?: number | undefined, end?: number | undefined): Promise<Job[]>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    bookmark(body?: BookmarkJobCommand | undefined): Promise<CommandResult>;
+    bookmarkJob(body?: BookmarkJobCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    hide2(body?: HideJobCommand | undefined): Promise<CommandResult>;
+    hideJob(body?: HideJobCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
@@ -352,195 +352,195 @@ export interface IClient {
     /**
      * @return Success
      */
-    bookmarks(): Promise<JobEntity[]>;
+    getBookmarksList(): Promise<JobEntity[]>;
 
     /**
      * @param start (optional) 
      * @param ends (optional) 
      * @return Success
      */
-    userAll(userId: string, start?: number | undefined, ends?: number | undefined): Promise<NotificationEntity[]>;
+    getNotifications(userId: string, start?: number | undefined, ends?: number | undefined): Promise<NotificationEntity[]>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    notification(body?: CreateNotificationCommand | undefined): Promise<CommandResult>;
+    createNotification(body?: CreateNotificationCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    create8(body?: AddPortfolioProjectCommand | undefined): Promise<CommandResult>;
+    createPortfolioProject(body?: AddPortfolioProjectCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    update7(body?: UpdatePortfolioProjectCommand | undefined): Promise<CommandResult>;
+    updatePortfolioProject(body?: UpdatePortfolioProjectCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    delete4(body?: DeletePortfolioProjectCommand | undefined): Promise<CommandResult>;
+    deletePortfolioProject(body?: DeletePortfolioProjectCommand | undefined): Promise<CommandResult>;
 
     /**
      * @return Success
      */
-    list7(): Promise<PortfolioProjectEntity[]>;
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    create9(body?: CreateSkillsCommand | undefined): Promise<CommandResult>;
+    getPortfolioProjects(): Promise<PortfolioProjectEntity[]>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    update8(body?: UpdateSkillsCommand | undefined): Promise<CommandResult>;
+    createSkills(body?: CreateSkillsCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    delete5(body?: DeleteSkillsCommand | undefined): Promise<CommandResult>;
-
-    /**
-     * @return Success
-     */
-    list8(): Promise<SkillEntity[]>;
-
-    /**
-     * @return Success
-     */
-    block(userId: string): Promise<boolean>;
+    updateSkills(body?: UpdateSkillsCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    warn(userId: string, body?: WarnUserScheme | undefined): Promise<boolean>;
+    deleteSkills(body?: DeleteSkillsCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @return Success
+     */
+    getSkills(): Promise<SkillEntity[]>;
+
+    /**
+     * @return Success
+     */
+    blockUser(userId: string): Promise<boolean>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    ticketPOST(body?: CreateTicketDto | undefined): Promise<TicketEntity>;
+    warnUser(userId: string, body?: WarnUserScheme | undefined): Promise<boolean>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    ticketAll(body?: GetTicketsDto | undefined): Promise<TicketEntity[]>;
-
-    /**
-     * @return Success
-     */
-    ticketGET(ticketId: string): Promise<TicketEntity>;
+    createTicket(body?: CreateTicketDto | undefined): Promise<TicketEntity>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    create10(body?: CreateTaskCommand | undefined): Promise<CommandResult>;
+    getTickets(body?: GetTicketsDto | undefined): Promise<TicketEntity[]>;
+
+    /**
+     * @return Success
+     */
+    getTicket(ticketId: string): Promise<TicketEntity>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    complete(body?: CompleteTaskCommand | undefined): Promise<CommandResult>;
+    createTask(body?: CreateTaskCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    react(body?: ReactToTaskCommand | undefined): Promise<CommandResult>;
+    completeTask(body?: CompleteTaskCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    update9(body?: UpdateTaskCommand | undefined): Promise<CommandResult>;
+    reactToTask(body?: ReactToTaskCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    delete6(body?: DeleteTaskCommand | undefined): Promise<CommandResult>;
+    updateTask(body?: UpdateTaskCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    deleteTask(body?: DeleteTaskCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param start (optional) 
      * @param end (optional) 
      * @return Success
      */
-    list9(contractId: string, start?: number | undefined, end?: number | undefined): Promise<TransactionEntity[]>;
+    getTasks(contractId: string, start?: number | undefined, end?: number | undefined): Promise<TransactionEntity[]>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    handle(body?: HandleTransactionCommand | undefined): Promise<CommandResult>;
+    handleTransaction(body?: HandleTransactionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param start (optional) 
      * @param end (optional) 
      * @return Success
      */
-    list10(start?: number | undefined, end?: number | undefined): Promise<TransactionEntity[]>;
+    getTransactionsList(start?: number | undefined, end?: number | undefined): Promise<TransactionEntity[]>;
 
     /**
      * @return Success
      */
-    providers(): Promise<TransactionProviderEntity[]>;
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    depositResult(body?: GatewayResultCommand | undefined): Promise<CommandResult>;
+    getTransactionProviders(): Promise<TransactionProviderEntity[]>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    refund(body?: RefundTransactionCommand | undefined): Promise<CommandResult>;
+    handleDepositGatewayResult(body?: GatewayResultCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    withdrawalResult(body?: GatewayResultCommand | undefined): Promise<CommandResult>;
+    refundTransaction(body?: RefundTransactionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    start2(body?: StartPaymentFlowCommand | undefined): Promise<CommandResult>;
+    handleWithdrawalGatewayResult(body?: GatewayResultCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    userPATCH(userId: string, body?: UpdateUserCommand | undefined): Promise<boolean>;
-
-    /**
-     * @return Success
-     */
-    userGET(userId: string): Promise<UserEntity>;
+    startPaymentFlow(body?: StartPaymentFlowCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    mePATCH(body?: UpdateUserCommand | undefined): Promise<boolean>;
+    updateUser(userId: string, body?: UpdateUserCommand | undefined): Promise<boolean>;
 
     /**
      * @return Success
      */
-    meGET(): Promise<UserEntity>;
+    getUserById(userId: string): Promise<UserEntity>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updateMe(body?: UpdateUserCommand | undefined): Promise<boolean>;
+
+    /**
+     * @return Success
+     */
+    getMe(): Promise<UserEntity>;
 
     /**
      * @param body (optional) 
@@ -551,48 +551,48 @@ export interface IClient {
     /**
      * @return Success
      */
-    wallet(walletId: string): Promise<WalletEntity>;
+    getWallet(walletId: string): Promise<WalletEntity>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    block2(body?: BlockWalletCommand | undefined): Promise<CommandResult>;
+    blockWallet(body?: BlockWalletCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    start3(body?: StartWorkSessionCommand | undefined): Promise<CommandResult>;
+    startSession(body?: StartWorkSessionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    submit(body?: SubmitWorkSessionCommand | undefined): Promise<CommandResult>;
+    submitSession(body?: SubmitWorkSessionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    end2(body?: EndWorkSessionCommand | undefined): Promise<CommandResult>;
+    endSession(body?: EndWorkSessionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    approve2(body?: ApproveWorkSessionCommand | undefined): Promise<CommandResult>;
+    approveSession(body?: ApproveWorkSessionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    react2(body?: ReactToWorkSessionCommand | undefined): Promise<CommandResult>;
+    reactSession(body?: ReactToWorkSessionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @return Success
      */
-    workSession(id: string): Promise<WorkSessionEntity>;
+    getSession(id: string): Promise<WorkSessionEntity>;
 
     /**
      * @param contractId (optional) 
@@ -600,7 +600,7 @@ export interface IClient {
      * @param end (optional) 
      * @return Success
      */
-    list11(contractId?: string | undefined, start?: number | undefined, end?: number | undefined): Promise<WorkSessionEntity[]>;
+    getSessionList(contractId?: string | undefined, start?: number | undefined, end?: number | undefined): Promise<WorkSessionEntity[]>;
 }
 
 export class Client implements IClient {
@@ -795,7 +795,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    create(body?: CreateCategoryCommand | undefined): Promise<CommandResult> {
+    createCategory(body?: CreateCategoryCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/category/create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -811,11 +811,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreate(_response);
+            return this.processCreateCategory(_response);
         });
     }
 
-    protected processCreate(response: Response): Promise<CommandResult> {
+    protected processCreateCategory(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -837,7 +837,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    update(body?: UpdateCategoryCommand | undefined): Promise<CommandResult> {
+    updateCategory(body?: UpdateCategoryCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/category/update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -853,11 +853,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdate(_response);
+            return this.processUpdateCategory(_response);
         });
     }
 
-    protected processUpdate(response: Response): Promise<CommandResult> {
+    protected processUpdateCategory(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -878,7 +878,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    category(categoryId: string): Promise<CommandResult> {
+    deleteCategory(categoryId: string): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/category/{categoryId}";
         if (categoryId === undefined || categoryId === null)
             throw new Error("The parameter 'categoryId' must be defined.");
@@ -893,11 +893,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCategory(_response);
+            return this.processDeleteCategory(_response);
         });
     }
 
-    protected processCategory(response: Response): Promise<CommandResult> {
+    protected processDeleteCategory(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -918,7 +918,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    list(): Promise<CategoryEntity[]> {
+    getCategories(): Promise<CategoryEntity[]> {
         let url_ = this.baseUrl + "/api/category/list";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -930,11 +930,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processList(_response);
+            return this.processGetCategories(_response);
         });
     }
 
-    protected processList(response: Response): Promise<CategoryEntity[]> {
+    protected processGetCategories(response: Response): Promise<CategoryEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -962,7 +962,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    orderInfo(userId: string): Promise<ClientJobInfo> {
+    getClientOrderInfo(userId: string): Promise<ClientJobInfo> {
         let url_ = this.baseUrl + "/api/client-profile/order-info/{userId}";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -977,11 +977,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processOrderInfo(_response);
+            return this.processGetClientOrderInfo(_response);
         });
     }
 
-    protected processOrderInfo(response: Response): Promise<ClientJobInfo> {
+    protected processGetClientOrderInfo(response: Response): Promise<ClientJobInfo> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1003,7 +1003,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    create2(body?: CreateClientProfileCommand | undefined): Promise<CommandResult> {
+    createClientProfile(body?: CreateClientProfileCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/client-profile/create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1019,11 +1019,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreate2(_response);
+            return this.processCreateClientProfile(_response);
         });
     }
 
-    protected processCreate2(response: Response): Promise<CommandResult> {
+    protected processCreateClientProfile(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1045,7 +1045,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    suspend(body?: SuspendClientProfileCommand | undefined): Promise<CommandResult> {
+    suspendClientProfile(body?: SuspendClientProfileCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/client-profile/suspend";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1061,11 +1061,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processSuspend(_response);
+            return this.processSuspendClientProfile(_response);
         });
     }
 
-    protected processSuspend(response: Response): Promise<CommandResult> {
+    protected processSuspendClientProfile(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1087,7 +1087,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    update2(body?: UpdateClientProfileCommand | undefined): Promise<CommandResult> {
+    updateClientProfile(body?: UpdateClientProfileCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/client-profile/update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1103,11 +1103,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdate2(_response);
+            return this.processUpdateClientProfile(_response);
         });
     }
 
-    protected processUpdate2(response: Response): Promise<CommandResult> {
+    protected processUpdateClientProfile(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1129,7 +1129,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    create3(body?: CreateContestCommand | undefined): Promise<CommandResult> {
+    createContest(body?: CreateContestCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1145,11 +1145,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreate3(_response);
+            return this.processCreateContest(_response);
         });
     }
 
-    protected processCreate3(response: Response): Promise<CommandResult> {
+    protected processCreateContest(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1171,7 +1171,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    approve(body?: ApproveContestCommand | undefined): Promise<CommandResult> {
+    approveContest(body?: ApproveContestCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/approve";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1187,11 +1187,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processApprove(_response);
+            return this.processApproveContest(_response);
         });
     }
 
-    protected processApprove(response: Response): Promise<CommandResult> {
+    protected processApproveContest(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1213,7 +1213,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    start(body?: StartContestCommand | undefined): Promise<CommandResult> {
+    startContest(body?: StartContestCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/start";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1229,11 +1229,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processStart(_response);
+            return this.processStartContest(_response);
         });
     }
 
-    protected processStart(response: Response): Promise<CommandResult> {
+    protected processStartContest(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1255,7 +1255,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    end(body?: EndContestCommand | undefined): Promise<CommandResult> {
+    endContest(body?: EndContestCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/end";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1271,11 +1271,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processEnd(_response);
+            return this.processEndContest(_response);
         });
     }
 
-    protected processEnd(response: Response): Promise<CommandResult> {
+    protected processEndContest(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1297,7 +1297,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    delete(body?: DeleteContestCommand | undefined): Promise<CommandResult> {
+    deleteContest(body?: DeleteContestCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/delete";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1313,11 +1313,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDelete(_response);
+            return this.processDeleteContest(_response);
         });
     }
 
-    protected processDelete(response: Response): Promise<CommandResult> {
+    protected processDeleteContest(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1339,7 +1339,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    selectWinner(body?: SelectContestWinnerCommand | undefined): Promise<CommandResult> {
+    selectContestWinner(body?: SelectContestWinnerCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/select-winner";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1355,11 +1355,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processSelectWinner(_response);
+            return this.processSelectContestWinner(_response);
         });
     }
 
-    protected processSelectWinner(response: Response): Promise<CommandResult> {
+    protected processSelectContestWinner(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1381,7 +1381,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    submitEntry(body?: SubmitContestEntryCommand | undefined): Promise<CommandResult> {
+    submitContestEntry(body?: SubmitContestEntryCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/submit-entry";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1397,11 +1397,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processSubmitEntry(_response);
+            return this.processSubmitContestEntry(_response);
         });
     }
 
-    protected processSubmitEntry(response: Response): Promise<CommandResult> {
+    protected processSubmitContestEntry(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1423,7 +1423,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    deleteEntry(body?: DeleteContestEntryCommand | undefined): Promise<CommandResult> {
+    deleteContestEntry(body?: DeleteContestEntryCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/delete-entry";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1439,11 +1439,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDeleteEntry(_response);
+            return this.processDeleteContestEntry(_response);
         });
     }
 
-    protected processDeleteEntry(response: Response): Promise<CommandResult> {
+    protected processDeleteContestEntry(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1465,7 +1465,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    update3(body?: UpdateContestCommand | undefined): Promise<CommandResult> {
+    updateContest(body?: UpdateContestCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1481,11 +1481,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdate3(_response);
+            return this.processUpdateContest(_response);
         });
     }
 
-    protected processUpdate3(response: Response): Promise<CommandResult> {
+    protected processUpdateContest(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1506,7 +1506,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    contest(id: string): Promise<ContestEntity> {
+    getContest(id: string): Promise<ContestEntity> {
         let url_ = this.baseUrl + "/api/contest/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1521,11 +1521,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processContest(_response);
+            return this.processGetContest(_response);
         });
     }
 
-    protected processContest(response: Response): Promise<ContestEntity> {
+    protected processGetContest(response: Response): Promise<ContestEntity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1548,7 +1548,7 @@ export class Client implements IClient {
      * @param end (optional) 
      * @return Success
      */
-    list2(start?: number | undefined, end?: number | undefined): Promise<ContestEntity[]> {
+    getContestList(start?: number | undefined, end?: number | undefined): Promise<ContestEntity[]> {
         let url_ = this.baseUrl + "/api/contest/list?";
         if (start === null)
             throw new Error("The parameter 'start' cannot be null.");
@@ -1568,11 +1568,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processList2(_response);
+            return this.processGetContestList(_response);
         });
     }
 
-    protected processList2(response: Response): Promise<ContestEntity[]> {
+    protected processGetContestList(response: Response): Promise<ContestEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1601,7 +1601,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    create4(body?: CreateContractCommand | undefined): Promise<CommandResult> {
+    createContract(body?: CreateContractCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1617,11 +1617,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreate4(_response);
+            return this.processCreateContract(_response);
         });
     }
 
-    protected processCreate4(response: Response): Promise<CommandResult> {
+    protected processCreateContract(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1643,7 +1643,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    clientAcceptFinish(body?: ClientAcceptFinishContractCommand | undefined): Promise<CommandResult> {
+    clientAcceptFinishContract(body?: ClientAcceptFinishContractCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/client-accept-finish";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1659,11 +1659,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processClientAcceptFinish(_response);
+            return this.processClientAcceptFinishContract(_response);
         });
     }
 
-    protected processClientAcceptFinish(response: Response): Promise<CommandResult> {
+    protected processClientAcceptFinishContract(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1685,7 +1685,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    clientClose(body?: ClientCloseContractCommand | undefined): Promise<CommandResult> {
+    clientCloseContract(body?: ClientCloseContractCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/client-close";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1701,11 +1701,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processClientClose(_response);
+            return this.processClientCloseContract(_response);
         });
     }
 
-    protected processClientClose(response: Response): Promise<CommandResult> {
+    protected processClientCloseContract(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1727,7 +1727,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    clientRejectCompletion(body?: ClientRejectContractCompletionCommand | undefined): Promise<CommandResult> {
+    clientRejectContractCompletion(body?: ClientRejectContractCompletionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/client-reject-completion";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1743,11 +1743,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processClientRejectCompletion(_response);
+            return this.processClientRejectContractCompletion(_response);
         });
     }
 
-    protected processClientRejectCompletion(response: Response): Promise<CommandResult> {
+    protected processClientRejectContractCompletion(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1769,7 +1769,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    freelancerAccept(body?: FreelancerAcceptContractCommand | undefined): Promise<CommandResult> {
+    freelancerAcceptContract(body?: FreelancerAcceptContractCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/freelancer-accept";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1785,11 +1785,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processFreelancerAccept(_response);
+            return this.processFreelancerAcceptContract(_response);
         });
     }
 
-    protected processFreelancerAccept(response: Response): Promise<CommandResult> {
+    protected processFreelancerAcceptContract(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1811,7 +1811,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    freelancerFinish(body?: FreelancerFinishContractCommand | undefined): Promise<CommandResult> {
+    freelancerFinishContract(body?: FreelancerFinishContractCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/freelancer-finish";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1827,11 +1827,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processFreelancerFinish(_response);
+            return this.processFreelancerFinishContract(_response);
         });
     }
 
-    protected processFreelancerFinish(response: Response): Promise<CommandResult> {
+    protected processFreelancerFinishContract(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -1979,7 +1979,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    forceCancel(body?: ForceContractCancelCommand | undefined): Promise<CommandResult> {
+    forceContractCancel(body?: ForceContractCancelCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/force-cancel";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1995,11 +1995,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processForceCancel(_response);
+            return this.processForceContractCancel(_response);
         });
     }
 
-    protected processForceCancel(response: Response): Promise<CommandResult> {
+    protected processForceContractCancel(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2020,7 +2020,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    contract(id: string): Promise<ContractEntity> {
+    getContract(id: string): Promise<ContractEntity> {
         let url_ = this.baseUrl + "/api/contract/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2035,11 +2035,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processContract(_response);
+            return this.processGetContract(_response);
         });
     }
 
-    protected processContract(response: Response): Promise<ContractEntity> {
+    protected processGetContract(response: Response): Promise<ContractEntity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2062,7 +2062,7 @@ export class Client implements IClient {
      * @param end (optional) 
      * @return Success
      */
-    list3(start?: number | undefined, end?: number | undefined): Promise<ContractEntity[]> {
+    getContractsList(start?: number | undefined, end?: number | undefined): Promise<ContractEntity[]> {
         let url_ = this.baseUrl + "/api/contract/list?";
         if (start === null)
             throw new Error("The parameter 'start' cannot be null.");
@@ -2082,11 +2082,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processList3(_response);
+            return this.processGetContractsList(_response);
         });
     }
 
-    protected processList3(response: Response): Promise<ContractEntity[]> {
+    protected processGetContractsList(response: Response): Promise<ContractEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2115,7 +2115,7 @@ export class Client implements IClient {
      * @param file (optional) 
      * @return Success
      */
-    upload(file?: FileParameter | undefined): Promise<FileEntity> {
+    uploadFile(file?: FileParameter | undefined): Promise<FileEntity> {
         let url_ = this.baseUrl + "/api/files/upload";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2134,11 +2134,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpload(_response);
+            return this.processUploadFile(_response);
         });
     }
 
-    protected processUpload(response: Response): Promise<FileEntity> {
+    protected processUploadFile(response: Response): Promise<FileEntity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2159,7 +2159,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    download(fileId: string): Promise<void> {
+    downloadFile(fileId: string): Promise<void> {
         let url_ = this.baseUrl + "/api/files/download/{fileId}";
         if (fileId === undefined || fileId === null)
             throw new Error("The parameter 'fileId' must be defined.");
@@ -2173,11 +2173,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDownload(_response);
+            return this.processDownloadFile(_response);
         });
     }
 
-    protected processDownload(response: Response): Promise<void> {
+    protected processDownloadFile(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2196,7 +2196,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    create5(body?: CreateFreelancerProfileCommand | undefined): Promise<CommandResult> {
+    createFreelancerProfile(body?: CreateFreelancerProfileCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/freelancer-profile/create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2212,11 +2212,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreate5(_response);
+            return this.processCreateFreelancerProfile(_response);
         });
     }
 
-    protected processCreate5(response: Response): Promise<CommandResult> {
+    protected processCreateFreelancerProfile(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2238,7 +2238,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    update4(body?: UpdateFreelancerProfileCommand | undefined): Promise<CommandResult> {
+    updateFreelancerProfile(body?: UpdateFreelancerProfileCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/freelancer-profile/update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2254,11 +2254,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdate4(_response);
+            return this.processUpdateFreelancerProfile(_response);
         });
     }
 
-    protected processUpdate4(response: Response): Promise<CommandResult> {
+    protected processUpdateFreelancerProfile(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2280,7 +2280,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    hide(body?: HideFreelancerProfileCommand | undefined): Promise<CommandResult> {
+    hideFreelancerProfile(body?: HideFreelancerProfileCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/freelancer-profile/hide";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2296,11 +2296,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processHide(_response);
+            return this.processHideFreelancerProfile(_response);
         });
     }
 
-    protected processHide(response: Response): Promise<CommandResult> {
+    protected processHideFreelancerProfile(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2321,7 +2321,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    freelancerProfile(userId: string): Promise<FreelancerProfileEntity> {
+    getFreelancerProfile(userId: string): Promise<FreelancerProfileEntity> {
         let url_ = this.baseUrl + "/api/freelancer-profile/{userId}";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -2336,11 +2336,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processFreelancerProfile(_response);
+            return this.processGetFreelancerProfile(_response);
         });
     }
 
-    protected processFreelancerProfile(response: Response): Promise<FreelancerProfileEntity> {
+    protected processGetFreelancerProfile(response: Response): Promise<FreelancerProfileEntity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2368,7 +2368,7 @@ export class Client implements IClient {
      * @param maxReviews (optional) 
      * @return Success
      */
-    list4(start?: number | undefined, end?: number | undefined, skills?: string[] | undefined, minCost?: number | undefined, maxCost?: number | undefined, minReviews?: number | undefined, maxReviews?: number | undefined): Promise<FreelancerProfileEntity[]> {
+    getFreelancerProfileList(start?: number | undefined, end?: number | undefined, skills?: string[] | undefined, minCost?: number | undefined, maxCost?: number | undefined, minReviews?: number | undefined, maxReviews?: number | undefined): Promise<FreelancerProfileEntity[]> {
         let url_ = this.baseUrl + "/api/freelancer-profile/list?";
         if (start === null)
             throw new Error("The parameter 'start' cannot be null.");
@@ -2408,11 +2408,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processList4(_response);
+            return this.processGetFreelancerProfileList(_response);
         });
     }
 
-    protected processList4(response: Response): Promise<FreelancerProfileEntity[]> {
+    protected processGetFreelancerProfileList(response: Response): Promise<FreelancerProfileEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2441,7 +2441,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    create6(body?: CreateFreelancerTeamCommand | undefined): Promise<CommandResult> {
+    createFreelancerTeam(body?: CreateFreelancerTeamCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/freelancer-team/create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2457,11 +2457,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreate6(_response);
+            return this.processCreateFreelancerTeam(_response);
         });
     }
 
-    protected processCreate6(response: Response): Promise<CommandResult> {
+    protected processCreateFreelancerTeam(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2483,7 +2483,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    update5(body?: UpdateFreelancerTeamCommand | undefined): Promise<CommandResult> {
+    updateFreelancerTeam(body?: UpdateFreelancerTeamCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/freelancer-team/update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2499,11 +2499,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdate5(_response);
+            return this.processUpdateFreelancerTeam(_response);
         });
     }
 
-    protected processUpdate5(response: Response): Promise<CommandResult> {
+    protected processUpdateFreelancerTeam(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2525,7 +2525,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    delete2(body?: DeleteFreelancerTeamCommand | undefined): Promise<CommandResult> {
+    deleteFreelancerTeam(body?: DeleteFreelancerTeamCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/freelancer-team/delete";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2541,11 +2541,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDelete2(_response);
+            return this.processDeleteFreelancerTeam(_response);
         });
     }
 
-    protected processDelete2(response: Response): Promise<CommandResult> {
+    protected processDeleteFreelancerTeam(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2566,7 +2566,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    list5(): Promise<FreelancerTeamEntity[]> {
+    getFreelancerTeams(): Promise<FreelancerTeamEntity[]> {
         let url_ = this.baseUrl + "/api/freelancer-team/list";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2578,11 +2578,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processList5(_response);
+            return this.processGetFreelancerTeams(_response);
         });
     }
 
-    protected processList5(response: Response): Promise<FreelancerTeamEntity[]> {
+    protected processGetFreelancerTeams(response: Response): Promise<FreelancerTeamEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2611,7 +2611,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    create7(body?: CreateJobCommand | undefined): Promise<CommandResult> {
+    createJob(body?: CreateJobCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/job/create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2627,11 +2627,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreate7(_response);
+            return this.processCreateJob(_response);
         });
     }
 
-    protected processCreate7(response: Response): Promise<CommandResult> {
+    protected processCreateJob(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2653,7 +2653,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    update6(body?: UpdateJobCommand | undefined): Promise<CommandResult> {
+    updateJob(body?: UpdateJobCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/job/update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2669,11 +2669,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdate6(_response);
+            return this.processUpdateJob(_response);
         });
     }
 
-    protected processUpdate6(response: Response): Promise<CommandResult> {
+    protected processUpdateJob(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2695,7 +2695,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    delete3(body?: DeleteJobCommand | undefined): Promise<CommandResult> {
+    deleteJob(body?: DeleteJobCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/job/delete";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2711,11 +2711,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDelete3(_response);
+            return this.processDeleteJob(_response);
         });
     }
 
-    protected processDelete3(response: Response): Promise<CommandResult> {
+    protected processDeleteJob(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2736,7 +2736,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    job(id: string): Promise<Job> {
+    getJob(id: string): Promise<Job> {
         let url_ = this.baseUrl + "/api/job/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2751,11 +2751,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processJob(_response);
+            return this.processGetJob(_response);
         });
     }
 
-    protected processJob(response: Response): Promise<Job> {
+    protected processGetJob(response: Response): Promise<Job> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2778,7 +2778,7 @@ export class Client implements IClient {
      * @param end (optional) 
      * @return Success
      */
-    list6(start?: number | undefined, end?: number | undefined): Promise<Job[]> {
+    getJobsList(start?: number | undefined, end?: number | undefined): Promise<Job[]> {
         let url_ = this.baseUrl + "/api/job/list?";
         if (start === null)
             throw new Error("The parameter 'start' cannot be null.");
@@ -2798,11 +2798,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processList6(_response);
+            return this.processGetJobsList(_response);
         });
     }
 
-    protected processList6(response: Response): Promise<Job[]> {
+    protected processGetJobsList(response: Response): Promise<Job[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2831,7 +2831,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    bookmark(body?: BookmarkJobCommand | undefined): Promise<CommandResult> {
+    bookmarkJob(body?: BookmarkJobCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/job/bookmark";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2847,11 +2847,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processBookmark(_response);
+            return this.processBookmarkJob(_response);
         });
     }
 
-    protected processBookmark(response: Response): Promise<CommandResult> {
+    protected processBookmarkJob(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2873,7 +2873,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    hide2(body?: HideJobCommand | undefined): Promise<CommandResult> {
+    hideJob(body?: HideJobCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/job/hide";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2889,11 +2889,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processHide2(_response);
+            return this.processHideJob(_response);
         });
     }
 
-    protected processHide2(response: Response): Promise<CommandResult> {
+    protected processHideJob(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3040,7 +3040,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    bookmarks(): Promise<JobEntity[]> {
+    getBookmarksList(): Promise<JobEntity[]> {
         let url_ = this.baseUrl + "/api/job/bookmarks";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3052,11 +3052,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processBookmarks(_response);
+            return this.processGetBookmarksList(_response);
         });
     }
 
-    protected processBookmarks(response: Response): Promise<JobEntity[]> {
+    protected processGetBookmarksList(response: Response): Promise<JobEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3086,7 +3086,7 @@ export class Client implements IClient {
      * @param ends (optional) 
      * @return Success
      */
-    userAll(userId: string, start?: number | undefined, ends?: number | undefined): Promise<NotificationEntity[]> {
+    getNotifications(userId: string, start?: number | undefined, ends?: number | undefined): Promise<NotificationEntity[]> {
         let url_ = this.baseUrl + "/api/notification/user/{userId}?";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -3109,11 +3109,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUserAll(_response);
+            return this.processGetNotifications(_response);
         });
     }
 
-    protected processUserAll(response: Response): Promise<NotificationEntity[]> {
+    protected processGetNotifications(response: Response): Promise<NotificationEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3142,7 +3142,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    notification(body?: CreateNotificationCommand | undefined): Promise<CommandResult> {
+    createNotification(body?: CreateNotificationCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/notification";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3158,11 +3158,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processNotification(_response);
+            return this.processCreateNotification(_response);
         });
     }
 
-    protected processNotification(response: Response): Promise<CommandResult> {
+    protected processCreateNotification(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3184,7 +3184,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    create8(body?: AddPortfolioProjectCommand | undefined): Promise<CommandResult> {
+    createPortfolioProject(body?: AddPortfolioProjectCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/portfolio-project/create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3200,11 +3200,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreate8(_response);
+            return this.processCreatePortfolioProject(_response);
         });
     }
 
-    protected processCreate8(response: Response): Promise<CommandResult> {
+    protected processCreatePortfolioProject(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3226,7 +3226,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    update7(body?: UpdatePortfolioProjectCommand | undefined): Promise<CommandResult> {
+    updatePortfolioProject(body?: UpdatePortfolioProjectCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/portfolio-project/update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3242,11 +3242,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdate7(_response);
+            return this.processUpdatePortfolioProject(_response);
         });
     }
 
-    protected processUpdate7(response: Response): Promise<CommandResult> {
+    protected processUpdatePortfolioProject(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3268,7 +3268,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    delete4(body?: DeletePortfolioProjectCommand | undefined): Promise<CommandResult> {
+    deletePortfolioProject(body?: DeletePortfolioProjectCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/portfolio-project/delete";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3284,11 +3284,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDelete4(_response);
+            return this.processDeletePortfolioProject(_response);
         });
     }
 
-    protected processDelete4(response: Response): Promise<CommandResult> {
+    protected processDeletePortfolioProject(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3309,7 +3309,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    list7(): Promise<PortfolioProjectEntity[]> {
+    getPortfolioProjects(): Promise<PortfolioProjectEntity[]> {
         let url_ = this.baseUrl + "/api/portfolio-project/list";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3321,11 +3321,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processList7(_response);
+            return this.processGetPortfolioProjects(_response);
         });
     }
 
-    protected processList7(response: Response): Promise<PortfolioProjectEntity[]> {
+    protected processGetPortfolioProjects(response: Response): Promise<PortfolioProjectEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3354,7 +3354,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    create9(body?: CreateSkillsCommand | undefined): Promise<CommandResult> {
+    createSkills(body?: CreateSkillsCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/skill/create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3370,11 +3370,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreate9(_response);
+            return this.processCreateSkills(_response);
         });
     }
 
-    protected processCreate9(response: Response): Promise<CommandResult> {
+    protected processCreateSkills(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3396,7 +3396,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    update8(body?: UpdateSkillsCommand | undefined): Promise<CommandResult> {
+    updateSkills(body?: UpdateSkillsCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/skill/update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3412,11 +3412,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdate8(_response);
+            return this.processUpdateSkills(_response);
         });
     }
 
-    protected processUpdate8(response: Response): Promise<CommandResult> {
+    protected processUpdateSkills(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3438,7 +3438,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    delete5(body?: DeleteSkillsCommand | undefined): Promise<CommandResult> {
+    deleteSkills(body?: DeleteSkillsCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/skill/delete";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3454,11 +3454,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDelete5(_response);
+            return this.processDeleteSkills(_response);
         });
     }
 
-    protected processDelete5(response: Response): Promise<CommandResult> {
+    protected processDeleteSkills(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3479,7 +3479,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    list8(): Promise<SkillEntity[]> {
+    getSkills(): Promise<SkillEntity[]> {
         let url_ = this.baseUrl + "/api/skill/list";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3491,11 +3491,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processList8(_response);
+            return this.processGetSkills(_response);
         });
     }
 
-    protected processList8(response: Response): Promise<SkillEntity[]> {
+    protected processGetSkills(response: Response): Promise<SkillEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3523,7 +3523,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    block(userId: string): Promise<boolean> {
+    blockUser(userId: string): Promise<boolean> {
         let url_ = this.baseUrl + "/api/stuff/user/{userId}/block";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -3538,11 +3538,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processBlock(_response);
+            return this.processBlockUser(_response);
         });
     }
 
-    protected processBlock(response: Response): Promise<boolean> {
+    protected processBlockUser(response: Response): Promise<boolean> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3565,7 +3565,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    warn(userId: string, body?: WarnUserScheme | undefined): Promise<boolean> {
+    warnUser(userId: string, body?: WarnUserScheme | undefined): Promise<boolean> {
         let url_ = this.baseUrl + "/api/stuff/user/{userId}/warn";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -3584,11 +3584,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processWarn(_response);
+            return this.processWarnUser(_response);
         });
     }
 
-    protected processWarn(response: Response): Promise<boolean> {
+    protected processWarnUser(response: Response): Promise<boolean> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3611,7 +3611,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    ticketPOST(body?: CreateTicketDto | undefined): Promise<TicketEntity> {
+    createTicket(body?: CreateTicketDto | undefined): Promise<TicketEntity> {
         let url_ = this.baseUrl + "/api/stuff/ticket";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3627,11 +3627,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processTicketPOST(_response);
+            return this.processCreateTicket(_response);
         });
     }
 
-    protected processTicketPOST(response: Response): Promise<TicketEntity> {
+    protected processCreateTicket(response: Response): Promise<TicketEntity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3653,7 +3653,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    ticketAll(body?: GetTicketsDto | undefined): Promise<TicketEntity[]> {
+    getTickets(body?: GetTicketsDto | undefined): Promise<TicketEntity[]> {
         let url_ = this.baseUrl + "/api/stuff/ticket";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3669,11 +3669,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processTicketAll(_response);
+            return this.processGetTickets(_response);
         });
     }
 
-    protected processTicketAll(response: Response): Promise<TicketEntity[]> {
+    protected processGetTickets(response: Response): Promise<TicketEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3701,7 +3701,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    ticketGET(ticketId: string): Promise<TicketEntity> {
+    getTicket(ticketId: string): Promise<TicketEntity> {
         let url_ = this.baseUrl + "/api/stuff/ticket/{ticketId}";
         if (ticketId === undefined || ticketId === null)
             throw new Error("The parameter 'ticketId' must be defined.");
@@ -3716,11 +3716,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processTicketGET(_response);
+            return this.processGetTicket(_response);
         });
     }
 
-    protected processTicketGET(response: Response): Promise<TicketEntity> {
+    protected processGetTicket(response: Response): Promise<TicketEntity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3742,7 +3742,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    create10(body?: CreateTaskCommand | undefined): Promise<CommandResult> {
+    createTask(body?: CreateTaskCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/task/create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3758,11 +3758,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processCreate10(_response);
+            return this.processCreateTask(_response);
         });
     }
 
-    protected processCreate10(response: Response): Promise<CommandResult> {
+    protected processCreateTask(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3784,7 +3784,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    complete(body?: CompleteTaskCommand | undefined): Promise<CommandResult> {
+    completeTask(body?: CompleteTaskCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/task/complete";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3800,11 +3800,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processComplete(_response);
+            return this.processCompleteTask(_response);
         });
     }
 
-    protected processComplete(response: Response): Promise<CommandResult> {
+    protected processCompleteTask(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3826,7 +3826,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    react(body?: ReactToTaskCommand | undefined): Promise<CommandResult> {
+    reactToTask(body?: ReactToTaskCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/task/react";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3842,11 +3842,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processReact(_response);
+            return this.processReactToTask(_response);
         });
     }
 
-    protected processReact(response: Response): Promise<CommandResult> {
+    protected processReactToTask(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3868,7 +3868,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    update9(body?: UpdateTaskCommand | undefined): Promise<CommandResult> {
+    updateTask(body?: UpdateTaskCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/task/update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3884,11 +3884,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUpdate9(_response);
+            return this.processUpdateTask(_response);
         });
     }
 
-    protected processUpdate9(response: Response): Promise<CommandResult> {
+    protected processUpdateTask(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3910,7 +3910,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    delete6(body?: DeleteTaskCommand | undefined): Promise<CommandResult> {
+    deleteTask(body?: DeleteTaskCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/task/delete";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -3926,11 +3926,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDelete6(_response);
+            return this.processDeleteTask(_response);
         });
     }
 
-    protected processDelete6(response: Response): Promise<CommandResult> {
+    protected processDeleteTask(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3953,7 +3953,7 @@ export class Client implements IClient {
      * @param end (optional) 
      * @return Success
      */
-    list9(contractId: string, start?: number | undefined, end?: number | undefined): Promise<TransactionEntity[]> {
+    getTasks(contractId: string, start?: number | undefined, end?: number | undefined): Promise<TransactionEntity[]> {
         let url_ = this.baseUrl + "/api/task/list/{contractId}?";
         if (contractId === undefined || contractId === null)
             throw new Error("The parameter 'contractId' must be defined.");
@@ -3976,11 +3976,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processList9(_response);
+            return this.processGetTasks(_response);
         });
     }
 
-    protected processList9(response: Response): Promise<TransactionEntity[]> {
+    protected processGetTasks(response: Response): Promise<TransactionEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4009,7 +4009,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    handle(body?: HandleTransactionCommand | undefined): Promise<CommandResult> {
+    handleTransaction(body?: HandleTransactionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/transaction/handle";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4025,11 +4025,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processHandle(_response);
+            return this.processHandleTransaction(_response);
         });
     }
 
-    protected processHandle(response: Response): Promise<CommandResult> {
+    protected processHandleTransaction(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4052,7 +4052,7 @@ export class Client implements IClient {
      * @param end (optional) 
      * @return Success
      */
-    list10(start?: number | undefined, end?: number | undefined): Promise<TransactionEntity[]> {
+    getTransactionsList(start?: number | undefined, end?: number | undefined): Promise<TransactionEntity[]> {
         let url_ = this.baseUrl + "/api/transaction/list?";
         if (start === null)
             throw new Error("The parameter 'start' cannot be null.");
@@ -4072,11 +4072,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processList10(_response);
+            return this.processGetTransactionsList(_response);
         });
     }
 
-    protected processList10(response: Response): Promise<TransactionEntity[]> {
+    protected processGetTransactionsList(response: Response): Promise<TransactionEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4104,7 +4104,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    providers(): Promise<TransactionProviderEntity[]> {
+    getTransactionProviders(): Promise<TransactionProviderEntity[]> {
         let url_ = this.baseUrl + "/api/transaction/providers";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4116,11 +4116,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processProviders(_response);
+            return this.processGetTransactionProviders(_response);
         });
     }
 
-    protected processProviders(response: Response): Promise<TransactionProviderEntity[]> {
+    protected processGetTransactionProviders(response: Response): Promise<TransactionProviderEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4149,7 +4149,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    depositResult(body?: GatewayResultCommand | undefined): Promise<CommandResult> {
+    handleDepositGatewayResult(body?: GatewayResultCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/transaction/deposit-result";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4165,11 +4165,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processDepositResult(_response);
+            return this.processHandleDepositGatewayResult(_response);
         });
     }
 
-    protected processDepositResult(response: Response): Promise<CommandResult> {
+    protected processHandleDepositGatewayResult(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4191,7 +4191,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    refund(body?: RefundTransactionCommand | undefined): Promise<CommandResult> {
+    refundTransaction(body?: RefundTransactionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/transaction/refund";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4207,11 +4207,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processRefund(_response);
+            return this.processRefundTransaction(_response);
         });
     }
 
-    protected processRefund(response: Response): Promise<CommandResult> {
+    protected processRefundTransaction(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4233,7 +4233,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    withdrawalResult(body?: GatewayResultCommand | undefined): Promise<CommandResult> {
+    handleWithdrawalGatewayResult(body?: GatewayResultCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/transaction/withdrawal-result";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4249,11 +4249,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processWithdrawalResult(_response);
+            return this.processHandleWithdrawalGatewayResult(_response);
         });
     }
 
-    protected processWithdrawalResult(response: Response): Promise<CommandResult> {
+    protected processHandleWithdrawalGatewayResult(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4275,7 +4275,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    start2(body?: StartPaymentFlowCommand | undefined): Promise<CommandResult> {
+    startPaymentFlow(body?: StartPaymentFlowCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/transaction/start";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4291,11 +4291,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processStart2(_response);
+            return this.processStartPaymentFlow(_response);
         });
     }
 
-    protected processStart2(response: Response): Promise<CommandResult> {
+    protected processStartPaymentFlow(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4317,7 +4317,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    userPATCH(userId: string, body?: UpdateUserCommand | undefined): Promise<boolean> {
+    updateUser(userId: string, body?: UpdateUserCommand | undefined): Promise<boolean> {
         let url_ = this.baseUrl + "/api/user/{userId}";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -4336,11 +4336,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUserPATCH(_response);
+            return this.processUpdateUser(_response);
         });
     }
 
-    protected processUserPATCH(response: Response): Promise<boolean> {
+    protected processUpdateUser(response: Response): Promise<boolean> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4362,7 +4362,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    userGET(userId: string): Promise<UserEntity> {
+    getUserById(userId: string): Promise<UserEntity> {
         let url_ = this.baseUrl + "/api/user/{userId}";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -4377,11 +4377,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUserGET(_response);
+            return this.processGetUserById(_response);
         });
     }
 
-    protected processUserGET(response: Response): Promise<UserEntity> {
+    protected processGetUserById(response: Response): Promise<UserEntity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4403,7 +4403,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    mePATCH(body?: UpdateUserCommand | undefined): Promise<boolean> {
+    updateMe(body?: UpdateUserCommand | undefined): Promise<boolean> {
         let url_ = this.baseUrl + "/api/user/me";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4419,11 +4419,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processMePATCH(_response);
+            return this.processUpdateMe(_response);
         });
     }
 
-    protected processMePATCH(response: Response): Promise<boolean> {
+    protected processUpdateMe(response: Response): Promise<boolean> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4445,7 +4445,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    meGET(): Promise<UserEntity> {
+    getMe(): Promise<UserEntity> {
         let url_ = this.baseUrl + "/api/user/me";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4457,11 +4457,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processMeGET(_response);
+            return this.processGetMe(_response);
         });
     }
 
-    protected processMeGET(response: Response): Promise<UserEntity> {
+    protected processGetMe(response: Response): Promise<UserEntity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4524,7 +4524,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    wallet(walletId: string): Promise<WalletEntity> {
+    getWallet(walletId: string): Promise<WalletEntity> {
         let url_ = this.baseUrl + "/api/wallet/{walletId}";
         if (walletId === undefined || walletId === null)
             throw new Error("The parameter 'walletId' must be defined.");
@@ -4539,11 +4539,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processWallet(_response);
+            return this.processGetWallet(_response);
         });
     }
 
-    protected processWallet(response: Response): Promise<WalletEntity> {
+    protected processGetWallet(response: Response): Promise<WalletEntity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4565,7 +4565,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    block2(body?: BlockWalletCommand | undefined): Promise<CommandResult> {
+    blockWallet(body?: BlockWalletCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/wallet/block";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4581,11 +4581,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processBlock2(_response);
+            return this.processBlockWallet(_response);
         });
     }
 
-    protected processBlock2(response: Response): Promise<CommandResult> {
+    protected processBlockWallet(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4607,7 +4607,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    start3(body?: StartWorkSessionCommand | undefined): Promise<CommandResult> {
+    startSession(body?: StartWorkSessionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/work-session/start";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4623,11 +4623,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processStart3(_response);
+            return this.processStartSession(_response);
         });
     }
 
-    protected processStart3(response: Response): Promise<CommandResult> {
+    protected processStartSession(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4649,7 +4649,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    submit(body?: SubmitWorkSessionCommand | undefined): Promise<CommandResult> {
+    submitSession(body?: SubmitWorkSessionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/work-session/submit";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4665,11 +4665,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processSubmit(_response);
+            return this.processSubmitSession(_response);
         });
     }
 
-    protected processSubmit(response: Response): Promise<CommandResult> {
+    protected processSubmitSession(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4691,7 +4691,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    end2(body?: EndWorkSessionCommand | undefined): Promise<CommandResult> {
+    endSession(body?: EndWorkSessionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/work-session/end";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4707,11 +4707,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processEnd2(_response);
+            return this.processEndSession(_response);
         });
     }
 
-    protected processEnd2(response: Response): Promise<CommandResult> {
+    protected processEndSession(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4733,7 +4733,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    approve2(body?: ApproveWorkSessionCommand | undefined): Promise<CommandResult> {
+    approveSession(body?: ApproveWorkSessionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/work-session/approve";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4749,11 +4749,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processApprove2(_response);
+            return this.processApproveSession(_response);
         });
     }
 
-    protected processApprove2(response: Response): Promise<CommandResult> {
+    protected processApproveSession(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4775,7 +4775,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    react2(body?: ReactToWorkSessionCommand | undefined): Promise<CommandResult> {
+    reactSession(body?: ReactToWorkSessionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/work-session/react";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4791,11 +4791,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processReact2(_response);
+            return this.processReactSession(_response);
         });
     }
 
-    protected processReact2(response: Response): Promise<CommandResult> {
+    protected processReactSession(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4816,7 +4816,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    workSession(id: string): Promise<WorkSessionEntity> {
+    getSession(id: string): Promise<WorkSessionEntity> {
         let url_ = this.baseUrl + "/api/work-session/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -4831,11 +4831,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processWorkSession(_response);
+            return this.processGetSession(_response);
         });
     }
 
-    protected processWorkSession(response: Response): Promise<WorkSessionEntity> {
+    protected processGetSession(response: Response): Promise<WorkSessionEntity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4859,7 +4859,7 @@ export class Client implements IClient {
      * @param end (optional) 
      * @return Success
      */
-    list11(contractId?: string | undefined, start?: number | undefined, end?: number | undefined): Promise<WorkSessionEntity[]> {
+    getSessionList(contractId?: string | undefined, start?: number | undefined, end?: number | undefined): Promise<WorkSessionEntity[]> {
         let url_ = this.baseUrl + "/api/work-session/list?";
         if (contractId === null)
             throw new Error("The parameter 'contractId' cannot be null.");
@@ -4883,11 +4883,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processList11(_response);
+            return this.processGetSessionList(_response);
         });
     }
 
-    protected processList11(response: Response): Promise<WorkSessionEntity[]> {
+    protected processGetSessionList(response: Response): Promise<WorkSessionEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {

@@ -20,7 +20,7 @@ namespace Flsurf.Presentation.Web.Controllers
             _freelancerTeamService = freelancerTeamService;
         }
 
-        [HttpPost("create")]
+        [HttpPost("create", Name = "CreateFreelancerTeam")]
         public async Task<ActionResult<CommandResult>> CreateFreelancerTeam([FromBody] CreateFreelancerTeamCommand command)
         {
             var handler = _freelancerTeamService.CreateFreelancerTeam();
@@ -28,7 +28,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("update")]
+        [HttpPost("update", Name = "UpdateFreelancerTeam")]
         public async Task<ActionResult<CommandResult>> UpdateFreelancerTeam([FromBody] UpdateFreelancerTeamCommand command)
         {
             var handler = _freelancerTeamService.UpdateFreelancerTeam();
@@ -36,7 +36,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("delete", Name = "DeleteFreelancerTeam")]
         public async Task<ActionResult<CommandResult>> DeleteFreelancerTeam([FromBody] DeleteFreelancerTeamCommand command)
         {
             var handler = _freelancerTeamService.DeleteFreelancerTeam();
@@ -44,7 +44,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpGet("list")]
+        [HttpGet("list", Name = "GetFreelancerTeams")]
         public async Task<ActionResult<ICollection<FreelancerTeamEntity>>> GetFreelancerTeams()
         {
             var handler = _freelancerTeamService.GetFreelancerTeams();

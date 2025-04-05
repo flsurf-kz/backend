@@ -10,7 +10,7 @@
         "tags": [
           "Auth"
         ],
-        "operationId": "login",
+        "operationId": "Login",
         "requestBody": {
           "content": {
             "application/json": {
@@ -42,7 +42,7 @@
         "tags": [
           "Auth"
         ],
-        "operationId": "logout",
+        "operationId": "Logout",
         "responses": {
           "200": {
             "description": "Success"
@@ -55,7 +55,7 @@
         "tags": [
           "Auth"
         ],
-        "operationId": "register",
+        "operationId": "Register",
         "requestBody": {
           "content": {
             "application/json": {
@@ -87,7 +87,7 @@
         "tags": [
           "Auth"
         ],
-        "operationId": "external-login",
+        "operationId": "ExternalLogin",
         "parameters": [
           {
             "name": "provider",
@@ -110,7 +110,7 @@
         "tags": [
           "Auth"
         ],
-        "operationId": "external-login-callback",
+        "operationId": "ExternalLoginCallback",
         "responses": {
           "200": {
             "description": "Success"
@@ -123,7 +123,7 @@
         "tags": [
           "Category"
         ],
-        "operationId": "create",
+        "operationId": "CreateCategory",
         "requestBody": {
           "content": {
             "application/json": {
@@ -172,7 +172,7 @@
         "tags": [
           "Category"
         ],
-        "operationId": "update",
+        "operationId": "UpdateCategory",
         "requestBody": {
           "content": {
             "application/json": {
@@ -221,7 +221,7 @@
         "tags": [
           "Category"
         ],
-        "operationId": "category",
+        "operationId": "DeleteCategory",
         "parameters": [
           {
             "name": "categoryId",
@@ -262,7 +262,7 @@
         "tags": [
           "Category"
         ],
-        "operationId": "list",
+        "operationId": "GetCategories",
         "responses": {
           "200": {
             "description": "Success",
@@ -301,7 +301,7 @@
         "tags": [
           "ClientProfile"
         ],
-        "operationId": "order-info",
+        "operationId": "GetClientOrderInfo",
         "parameters": [
           {
             "name": "userId",
@@ -342,7 +342,7 @@
         "tags": [
           "ClientProfile"
         ],
-        "operationId": "create2",
+        "operationId": "CreateClientProfile",
         "requestBody": {
           "content": {
             "application/json": {
@@ -391,7 +391,7 @@
         "tags": [
           "ClientProfile"
         ],
-        "operationId": "suspend",
+        "operationId": "SuspendClientProfile",
         "requestBody": {
           "content": {
             "application/json": {
@@ -440,7 +440,7 @@
         "tags": [
           "ClientProfile"
         ],
-        "operationId": "update2",
+        "operationId": "UpdateClientProfile",
         "requestBody": {
           "content": {
             "application/json": {
@@ -489,7 +489,7 @@
         "tags": [
           "Contest"
         ],
-        "operationId": "create3",
+        "operationId": "CreateContest",
         "requestBody": {
           "content": {
             "application/json": {
@@ -538,7 +538,7 @@
         "tags": [
           "Contest"
         ],
-        "operationId": "approve",
+        "operationId": "ApproveContest",
         "requestBody": {
           "content": {
             "application/json": {
@@ -587,7 +587,7 @@
         "tags": [
           "Contest"
         ],
-        "operationId": "start",
+        "operationId": "StartContest",
         "requestBody": {
           "content": {
             "application/json": {
@@ -636,7 +636,7 @@
         "tags": [
           "Contest"
         ],
-        "operationId": "end",
+        "operationId": "EndContest",
         "requestBody": {
           "content": {
             "application/json": {
@@ -685,7 +685,7 @@
         "tags": [
           "Contest"
         ],
-        "operationId": "delete",
+        "operationId": "DeleteContest",
         "requestBody": {
           "content": {
             "application/json": {
@@ -734,7 +734,7 @@
         "tags": [
           "Contest"
         ],
-        "operationId": "select-winner",
+        "operationId": "SelectContestWinner",
         "requestBody": {
           "content": {
             "application/json": {
@@ -783,7 +783,7 @@
         "tags": [
           "Contest"
         ],
-        "operationId": "submit-entry",
+        "operationId": "SubmitContestEntry",
         "requestBody": {
           "content": {
             "application/json": {
@@ -832,7 +832,7 @@
         "tags": [
           "Contest"
         ],
-        "operationId": "delete-entry",
+        "operationId": "DeleteContestEntry",
         "requestBody": {
           "content": {
             "application/json": {
@@ -881,7 +881,7 @@
         "tags": [
           "Contest"
         ],
-        "operationId": "update3",
+        "operationId": "UpdateContest",
         "requestBody": {
           "content": {
             "application/json": {
@@ -930,7 +930,7 @@
         "tags": [
           "Contest"
         ],
-        "operationId": "contest",
+        "operationId": "GetContest",
         "parameters": [
           {
             "name": "id",
@@ -971,7 +971,7 @@
         "tags": [
           "Contest"
         ],
-        "operationId": "list2",
+        "operationId": "GetContestList",
         "parameters": [
           {
             "name": "start",
@@ -1030,7 +1030,7 @@
         "tags": [
           "Contract"
         ],
-        "operationId": "create4",
+        "operationId": "CreateContract",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1079,7 +1079,7 @@
         "tags": [
           "Contract"
         ],
-        "operationId": "client-accept-finish",
+        "operationId": "ClientAcceptFinishContract",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1128,7 +1128,7 @@
         "tags": [
           "Contract"
         ],
-        "operationId": "client-close",
+        "operationId": "ClientCloseContract",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1177,7 +1177,7 @@
         "tags": [
           "Contract"
         ],
-        "operationId": "client-reject-completion",
+        "operationId": "ClientRejectContractCompletion",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1226,7 +1226,7 @@
         "tags": [
           "Contract"
         ],
-        "operationId": "freelancer-accept",
+        "operationId": "FreelancerAcceptContract",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1275,7 +1275,7 @@
         "tags": [
           "Contract"
         ],
-        "operationId": "freelancer-finish",
+        "operationId": "FreelancerFinishContract",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1324,7 +1324,7 @@
         "tags": [
           "Contract"
         ],
-        "operationId": "accept-dispute",
+        "operationId": "AcceptDispute",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1373,7 +1373,7 @@
         "tags": [
           "Contract"
         ],
-        "operationId": "initiate-dispute",
+        "operationId": "InitiateDispute",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1422,7 +1422,7 @@
         "tags": [
           "Contract"
         ],
-        "operationId": "resolve-dispute",
+        "operationId": "ResolveDispute",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1471,7 +1471,7 @@
         "tags": [
           "Contract"
         ],
-        "operationId": "force-cancel",
+        "operationId": "ForceContractCancel",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1520,7 +1520,7 @@
         "tags": [
           "Contract"
         ],
-        "operationId": "contract",
+        "operationId": "GetContract",
         "parameters": [
           {
             "name": "id",
@@ -1561,7 +1561,7 @@
         "tags": [
           "Contract"
         ],
-        "operationId": "list3",
+        "operationId": "GetContractsList",
         "parameters": [
           {
             "name": "start",
@@ -1620,7 +1620,7 @@
         "tags": [
           "FileControllers"
         ],
-        "operationId": "upload",
+        "operationId": "UploadFile",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -1670,7 +1670,7 @@
         "tags": [
           "FileControllers"
         ],
-        "operationId": "download",
+        "operationId": "DownloadFile",
         "parameters": [
           {
             "name": "fileId",
@@ -1694,7 +1694,7 @@
         "tags": [
           "FreelancerProfile"
         ],
-        "operationId": "create5",
+        "operationId": "CreateFreelancerProfile",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1743,7 +1743,7 @@
         "tags": [
           "FreelancerProfile"
         ],
-        "operationId": "update4",
+        "operationId": "UpdateFreelancerProfile",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1792,7 +1792,7 @@
         "tags": [
           "FreelancerProfile"
         ],
-        "operationId": "hide",
+        "operationId": "HideFreelancerProfile",
         "requestBody": {
           "content": {
             "application/json": {
@@ -1841,7 +1841,7 @@
         "tags": [
           "FreelancerProfile"
         ],
-        "operationId": "freelancer-profile",
+        "operationId": "GetFreelancerProfile",
         "parameters": [
           {
             "name": "userId",
@@ -1882,7 +1882,7 @@
         "tags": [
           "FreelancerProfile"
         ],
-        "operationId": "list4",
+        "operationId": "GetFreelancerProfileList",
         "parameters": [
           {
             "name": "start",
@@ -1983,7 +1983,7 @@
         "tags": [
           "FreelancerTeam"
         ],
-        "operationId": "create6",
+        "operationId": "CreateFreelancerTeam",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2032,7 +2032,7 @@
         "tags": [
           "FreelancerTeam"
         ],
-        "operationId": "update5",
+        "operationId": "UpdateFreelancerTeam",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2081,7 +2081,7 @@
         "tags": [
           "FreelancerTeam"
         ],
-        "operationId": "delete2",
+        "operationId": "DeleteFreelancerTeam",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2130,7 +2130,7 @@
         "tags": [
           "FreelancerTeam"
         ],
-        "operationId": "list5",
+        "operationId": "GetFreelancerTeams",
         "responses": {
           "200": {
             "description": "Success",
@@ -2169,7 +2169,7 @@
         "tags": [
           "Job"
         ],
-        "operationId": "create7",
+        "operationId": "CreateJob",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2218,7 +2218,7 @@
         "tags": [
           "Job"
         ],
-        "operationId": "update6",
+        "operationId": "UpdateJob",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2267,7 +2267,7 @@
         "tags": [
           "Job"
         ],
-        "operationId": "delete3",
+        "operationId": "DeleteJob",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2316,7 +2316,7 @@
         "tags": [
           "Job"
         ],
-        "operationId": "job",
+        "operationId": "GetJob",
         "parameters": [
           {
             "name": "id",
@@ -2357,7 +2357,7 @@
         "tags": [
           "Job"
         ],
-        "operationId": "list6",
+        "operationId": "GetJobsList",
         "parameters": [
           {
             "name": "start",
@@ -2416,7 +2416,7 @@
         "tags": [
           "Job"
         ],
-        "operationId": "bookmark",
+        "operationId": "BookmarkJob",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2465,7 +2465,7 @@
         "tags": [
           "Job"
         ],
-        "operationId": "hide2",
+        "operationId": "HideJob",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2514,7 +2514,7 @@
         "tags": [
           "Job"
         ],
-        "operationId": "submit-proposal",
+        "operationId": "SubmitProposal",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2563,7 +2563,7 @@
         "tags": [
           "Job"
         ],
-        "operationId": "update-proposal",
+        "operationId": "UpdateProposal",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2612,7 +2612,7 @@
         "tags": [
           "Job"
         ],
-        "operationId": "withdraw-proposal",
+        "operationId": "WithdrawProposal",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2661,7 +2661,7 @@
         "tags": [
           "Job"
         ],
-        "operationId": "bookmarks",
+        "operationId": "GetBookmarksList",
         "responses": {
           "200": {
             "description": "Success",
@@ -2700,7 +2700,7 @@
         "tags": [
           "Notification"
         ],
-        "operationId": "userAll",
+        "operationId": "GetNotifications",
         "parameters": [
           {
             "name": "userId",
@@ -2766,7 +2766,7 @@
         "tags": [
           "Notification"
         ],
-        "operationId": "notification",
+        "operationId": "CreateNotification",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2815,7 +2815,7 @@
         "tags": [
           "PortfolioProject"
         ],
-        "operationId": "create8",
+        "operationId": "CreatePortfolioProject",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2864,7 +2864,7 @@
         "tags": [
           "PortfolioProject"
         ],
-        "operationId": "update7",
+        "operationId": "UpdatePortfolioProject",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2913,7 +2913,7 @@
         "tags": [
           "PortfolioProject"
         ],
-        "operationId": "delete4",
+        "operationId": "DeletePortfolioProject",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2962,7 +2962,7 @@
         "tags": [
           "PortfolioProject"
         ],
-        "operationId": "list7",
+        "operationId": "GetPortfolioProjects",
         "responses": {
           "200": {
             "description": "Success",
@@ -3001,7 +3001,7 @@
         "tags": [
           "Skill"
         ],
-        "operationId": "create9",
+        "operationId": "CreateSkills",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3050,7 +3050,7 @@
         "tags": [
           "Skill"
         ],
-        "operationId": "update8",
+        "operationId": "UpdateSkills",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3099,7 +3099,7 @@
         "tags": [
           "Skill"
         ],
-        "operationId": "delete5",
+        "operationId": "DeleteSkills",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3148,7 +3148,7 @@
         "tags": [
           "Skill"
         ],
-        "operationId": "list8",
+        "operationId": "GetSkills",
         "responses": {
           "200": {
             "description": "Success",
@@ -3187,7 +3187,7 @@
         "tags": [
           "StaffControllers"
         ],
-        "operationId": "block",
+        "operationId": "BlockUser",
         "parameters": [
           {
             "name": "userId",
@@ -3228,7 +3228,7 @@
         "tags": [
           "StaffControllers"
         ],
-        "operationId": "warn",
+        "operationId": "WarnUser",
         "parameters": [
           {
             "name": "userId",
@@ -3288,7 +3288,7 @@
         "tags": [
           "StaffControllers"
         ],
-        "operationId": "ticketPOST",
+        "operationId": "CreateTicket",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3335,7 +3335,7 @@
         "tags": [
           "StaffControllers"
         ],
-        "operationId": "ticketAll",
+        "operationId": "GetTickets",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3393,7 +3393,7 @@
         "tags": [
           "StaffControllers"
         ],
-        "operationId": "ticketGET",
+        "operationId": "GetTicket",
         "parameters": [
           {
             "name": "ticketId",
@@ -3434,7 +3434,7 @@
         "tags": [
           "Task"
         ],
-        "operationId": "create10",
+        "operationId": "CreateTask",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3483,7 +3483,7 @@
         "tags": [
           "Task"
         ],
-        "operationId": "complete",
+        "operationId": "CompleteTask",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3532,7 +3532,7 @@
         "tags": [
           "Task"
         ],
-        "operationId": "react",
+        "operationId": "ReactToTask",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3581,7 +3581,7 @@
         "tags": [
           "Task"
         ],
-        "operationId": "update9",
+        "operationId": "UpdateTask",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3630,7 +3630,7 @@
         "tags": [
           "Task"
         ],
-        "operationId": "delete6",
+        "operationId": "DeleteTask",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3679,7 +3679,7 @@
         "tags": [
           "Task"
         ],
-        "operationId": "list9",
+        "operationId": "GetTasks",
         "parameters": [
           {
             "name": "contractId",
@@ -3747,7 +3747,7 @@
         "tags": [
           "Transaction"
         ],
-        "operationId": "handle",
+        "operationId": "HandleTransaction",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3796,7 +3796,7 @@
         "tags": [
           "Transaction"
         ],
-        "operationId": "list10",
+        "operationId": "GetTransactionsList",
         "parameters": [
           {
             "name": "start",
@@ -3855,7 +3855,7 @@
         "tags": [
           "Transaction"
         ],
-        "operationId": "providers",
+        "operationId": "GetTransactionProviders",
         "responses": {
           "200": {
             "description": "Success",
@@ -3894,7 +3894,7 @@
         "tags": [
           "Transaction"
         ],
-        "operationId": "deposit-result",
+        "operationId": "HandleDepositGatewayResult",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3943,7 +3943,7 @@
         "tags": [
           "Transaction"
         ],
-        "operationId": "refund",
+        "operationId": "RefundTransaction",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3992,7 +3992,7 @@
         "tags": [
           "Transaction"
         ],
-        "operationId": "withdrawal-result",
+        "operationId": "HandleWithdrawalGatewayResult",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4041,7 +4041,7 @@
         "tags": [
           "Transaction"
         ],
-        "operationId": "start2",
+        "operationId": "StartPaymentFlow",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4090,7 +4090,7 @@
         "tags": [
           "UserControllers"
         ],
-        "operationId": "userPATCH",
+        "operationId": "UpdateUser",
         "parameters": [
           {
             "name": "userId",
@@ -4148,7 +4148,7 @@
         "tags": [
           "UserControllers"
         ],
-        "operationId": "userGET",
+        "operationId": "GetUserById",
         "parameters": [
           {
             "name": "userId",
@@ -4189,7 +4189,7 @@
         "tags": [
           "UserControllers"
         ],
-        "operationId": "mePATCH",
+        "operationId": "UpdateMe",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4236,7 +4236,7 @@
         "tags": [
           "UserControllers"
         ],
-        "operationId": "meGET",
+        "operationId": "GetMe",
         "responses": {
           "200": {
             "description": "Success",
@@ -4266,7 +4266,7 @@
         "tags": [
           "Wallet"
         ],
-        "operationId": "balance-operation",
+        "operationId": "BalanceOperation",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4315,7 +4315,7 @@
         "tags": [
           "Wallet"
         ],
-        "operationId": "wallet",
+        "operationId": "GetWallet",
         "parameters": [
           {
             "name": "walletId",
@@ -4356,7 +4356,7 @@
         "tags": [
           "Wallet"
         ],
-        "operationId": "block2",
+        "operationId": "BlockWallet",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4405,7 +4405,7 @@
         "tags": [
           "WorkSession"
         ],
-        "operationId": "start3",
+        "operationId": "StartSession",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4454,7 +4454,7 @@
         "tags": [
           "WorkSession"
         ],
-        "operationId": "submit",
+        "operationId": "SubmitSession",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4503,7 +4503,7 @@
         "tags": [
           "WorkSession"
         ],
-        "operationId": "end2",
+        "operationId": "EndSession",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4552,7 +4552,7 @@
         "tags": [
           "WorkSession"
         ],
-        "operationId": "approve2",
+        "operationId": "ApproveSession",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4601,7 +4601,7 @@
         "tags": [
           "WorkSession"
         ],
-        "operationId": "react2",
+        "operationId": "ReactSession",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4650,7 +4650,7 @@
         "tags": [
           "WorkSession"
         ],
-        "operationId": "work-session",
+        "operationId": "GetSession",
         "parameters": [
           {
             "name": "id",
@@ -4691,7 +4691,7 @@
         "tags": [
           "WorkSession"
         ],
-        "operationId": "list11",
+        "operationId": "GetSessionList",
         "parameters": [
           {
             "name": "contractId",

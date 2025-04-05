@@ -24,7 +24,7 @@ namespace Flsurf.Presentation.Web.Controllers
         /// <summary>
         /// Выполнение операции с балансом (например, пополнение, списание и т.д.).
         /// </summary>
-        [HttpPost("balance-operation")]
+        [HttpPost("balance-operation", Name = "BalanceOperation")]
         public async Task<ActionResult<CommandResult>> BalanceOperation([FromBody] BalanceOperationCommand command)
         {
             var handler = _walletService.BalanceOperation();
@@ -35,7 +35,7 @@ namespace Flsurf.Presentation.Web.Controllers
         /// <summary>
         /// Получение информации о кошельке по идентификатору.
         /// </summary>
-        [HttpGet("{walletId}")]
+        [HttpGet("{walletId}", Name = "GetWallet")]
         public async Task<ActionResult<WalletEntity>> GetWallet(Guid walletId)
         {
             var query = new GetWalletQuery { WalletId = walletId };
@@ -49,7 +49,7 @@ namespace Flsurf.Presentation.Web.Controllers
         /// <summary>
         /// Блокировка кошелька.
         /// </summary>
-        [HttpPost("block")]
+        [HttpPost("block", Name = "BlockWallet")]
         public async Task<ActionResult<CommandResult>> BlockWallet([FromBody] BlockWalletCommand command)
         {
             var handler = _walletService.BlockWallet();

@@ -25,7 +25,7 @@ namespace Flsurf.Presentation.Web.Controllers
         /// </summary>
         /// <param name="userId">Идентификатор пользвателя.</param>
         /// <returns>Информация о заказах клиента.</returns>
-        [HttpGet("order-info/{userId}")]
+        [HttpGet("order-info/{userId}", Name = "GetClientOrderInfo")]
         public async Task<ActionResult<ClientJobInfo>> GetClientOrderInfo(Guid userId)
         {
             var query = new GetClientInfoQuery { UserId = userId };
@@ -41,7 +41,7 @@ namespace Flsurf.Presentation.Web.Controllers
         /// </summary>
         /// <param name="command">Параметры для создания профиля.</param>
         /// <returns>Результат операции создания профиля.</returns>
-        [HttpPost("create")]
+        [HttpPost("create", Name = "CreateClientProfile")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> CreateClientProfile([FromBody] CreateClientProfileCommand command)
         {
@@ -55,7 +55,7 @@ namespace Flsurf.Presentation.Web.Controllers
         /// </summary>
         /// <param name="command">Параметры для приостановки профиля.</param>
         /// <returns>Результат операции приостановки.</returns>
-        [HttpPost("suspend")]
+        [HttpPost("suspend", Name = "SuspendClientProfile")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> SuspendClientProfile([FromBody] SuspendClientProfileCommand command)
         {
@@ -69,7 +69,7 @@ namespace Flsurf.Presentation.Web.Controllers
         /// </summary>
         /// <param name="command">Параметры для обновления профиля.</param>
         /// <returns>Результат операции обновления профиля.</returns>
-        [HttpPost("update")]
+        [HttpPost("update", Name = "UpdateClientProfile")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateClientProfile([FromBody] UpdateClientProfileCommand command)
         {
@@ -78,4 +78,5 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
     }
+
 }

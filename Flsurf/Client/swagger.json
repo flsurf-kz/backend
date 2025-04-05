@@ -28,7 +28,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "Login",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -244,7 +244,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "Logout",
           "Parameters": [],
           "RequestBody": null,
           "Responses": {
@@ -287,7 +287,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "Register",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -503,7 +503,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "ExternalLogin",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -605,7 +605,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "ExternalLoginCallback",
           "Parameters": [],
           "RequestBody": null,
           "Responses": {
@@ -648,7 +648,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "CreateCategory",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -1030,7 +1030,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UpdateCategory",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -1412,7 +1412,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "DeleteCategory",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -1680,7 +1680,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetCategories",
           "Parameters": [],
           "RequestBody": null,
           "Responses": {
@@ -2009,7 +2009,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetClientOrderInfo",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -2277,7 +2277,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "CreateClientProfile",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -2659,7 +2659,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "SuspendClientProfile",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -3041,7 +3041,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UpdateClientProfile",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -3423,7 +3423,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "CreateContest",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -3805,7 +3805,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "ApproveContest",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -4187,7 +4187,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "StartContest",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -4569,7 +4569,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "EndContest",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -4951,7 +4951,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "DeleteContest",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -5333,7 +5333,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "SelectContestWinner",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -5715,7 +5715,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "SubmitContestEntry",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -6097,7 +6097,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "DeleteContestEntry",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -6479,7 +6479,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UpdateContest",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -6861,7 +6861,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetContest",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -7129,7 +7129,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetContestList",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -7583,7 +7583,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "CreateContract",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -7965,7 +7965,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "ClientAcceptFinishContract",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -8347,7 +8347,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "ClientCloseContract",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -8729,7 +8729,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "ClientRejectContractCompletion",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -9111,7 +9111,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "FreelancerAcceptContract",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -9493,7 +9493,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "FreelancerFinishContract",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -9875,7 +9875,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "AcceptDispute",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -10257,7 +10257,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "InitiateDispute",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -10639,7 +10639,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "ResolveDispute",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -11021,7 +11021,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "ForceContractCancel",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -11403,7 +11403,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetContract",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -11671,7 +11671,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetContractsList",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -12125,7 +12125,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UploadFile",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -12440,7 +12440,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "DownloadFile",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -12542,7 +12542,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "CreateFreelancerProfile",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -12924,7 +12924,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UpdateFreelancerProfile",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -13306,7 +13306,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "HideFreelancerProfile",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -13688,7 +13688,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetFreelancerProfile",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -13956,7 +13956,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetFreelancerProfileList",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -14740,7 +14740,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "CreateFreelancerTeam",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -15122,7 +15122,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UpdateFreelancerTeam",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -15504,7 +15504,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "DeleteFreelancerTeam",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -15886,7 +15886,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetFreelancerTeams",
           "Parameters": [],
           "RequestBody": null,
           "Responses": {
@@ -16215,7 +16215,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "CreateJob",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -16597,7 +16597,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UpdateJob",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -16979,7 +16979,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "DeleteJob",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -17361,7 +17361,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetJob",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -17629,7 +17629,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetJobsList",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -18083,7 +18083,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "BookmarkJob",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -18465,7 +18465,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "HideJob",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -18847,7 +18847,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "SubmitProposal",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -19229,7 +19229,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UpdateProposal",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -19611,7 +19611,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "WithdrawProposal",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -19993,7 +19993,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetBookmarksList",
           "Parameters": [],
           "RequestBody": null,
           "Responses": {
@@ -20322,7 +20322,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetNotifications",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -20826,7 +20826,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "CreateNotification",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -21208,7 +21208,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "CreatePortfolioProject",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -21590,7 +21590,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UpdatePortfolioProject",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -21972,7 +21972,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "DeletePortfolioProject",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -22354,7 +22354,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetPortfolioProjects",
           "Parameters": [],
           "RequestBody": null,
           "Responses": {
@@ -22683,7 +22683,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "CreateSkills",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -23065,7 +23065,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UpdateSkills",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -23447,7 +23447,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "DeleteSkills",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -23829,7 +23829,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetSkills",
           "Parameters": [],
           "RequestBody": null,
           "Responses": {
@@ -24158,7 +24158,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "BlockUser",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -24402,7 +24402,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "WarnUser",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -24819,7 +24819,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "CreateTicket",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -25192,7 +25192,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetTickets",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -25694,7 +25694,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetTicket",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -25962,7 +25962,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "CreateTask",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -26344,7 +26344,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "CompleteTask",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -26726,7 +26726,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "ReactToTask",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -27108,7 +27108,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UpdateTask",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -27490,7 +27490,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "DeleteTask",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -27872,7 +27872,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetTasks",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -28384,7 +28384,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "HandleTransaction",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -28766,7 +28766,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetTransactionsList",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -29220,7 +29220,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetTransactionProviders",
           "Parameters": [],
           "RequestBody": null,
           "Responses": {
@@ -29549,7 +29549,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "HandleDepositGatewayResult",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -29931,7 +29931,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "RefundTransaction",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -30313,7 +30313,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "HandleWithdrawalGatewayResult",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -30695,7 +30695,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "StartPaymentFlow",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -31077,7 +31077,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UpdateUser",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -31485,7 +31485,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetUserById",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -31753,7 +31753,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UpdateMe",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -32102,7 +32102,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetMe",
           "Parameters": [],
           "RequestBody": null,
           "Responses": {
@@ -32311,7 +32311,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "BalanceOperation",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -32693,7 +32693,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetWallet",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -32961,7 +32961,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "BlockWallet",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -33343,7 +33343,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "StartSession",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -33725,7 +33725,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "SubmitSession",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -34107,7 +34107,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "EndSession",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -34489,7 +34489,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "ApproveSession",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -34871,7 +34871,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "ReactSession",
           "Parameters": [],
           "RequestBody": {
             "UnresolvedReference": false,
@@ -35253,7 +35253,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetSession",
           "Parameters": [
             {
               "UnresolvedReference": false,
@@ -35521,7 +35521,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "GetSessionList",
           "Parameters": [
             {
               "UnresolvedReference": false,

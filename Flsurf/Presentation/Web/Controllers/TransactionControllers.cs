@@ -22,7 +22,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         // Обработка транзакции (например, создание или обновление транзакции)
-        [HttpPost("handle")]
+        [HttpPost("handle", Name = "HandleTransaction")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> HandleTransaction([FromBody] HandleTransactionCommand command)
         {
@@ -32,7 +32,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         // Получение списка транзакций
-        [HttpGet("list")]
+        [HttpGet("list", Name = "GetTransactionsList")]
         [Authorize]
         public async Task<ActionResult<ICollection<TransactionEntity>>> GetTransactionsList(
             [FromQuery] int start = 0, [FromQuery] int end = 10)
@@ -44,7 +44,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         // Получение провайдеров транзакций
-        [HttpGet("providers")]
+        [HttpGet("providers", Name = "GetTransactionProviders")]
         public async Task<ActionResult<ICollection<TransactionProviderEntity>>> GetTransactionProviders()
         {
             var query = new GetTransactionProvidersQuery();
@@ -54,7 +54,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         // Обработка результата от шлюза депозита
-        [HttpPost("deposit-result")]
+        [HttpPost("deposit-result", Name = "HandleDepositGatewayResult")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> HandleDepositGatewayResult([FromBody] GatewayResultCommand command)
         {
@@ -64,7 +64,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         // Возврат средств по транзакции
-        [HttpPost("refund")]
+        [HttpPost("refund", Name = "RefundTransaction")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> RefundTransaction([FromBody] RefundTransactionCommand command)
         {
@@ -74,7 +74,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         // Обработка результата от шлюза вывода средств
-        [HttpPost("withdrawal-result")]
+        [HttpPost("withdrawal-result", Name = "HandleWithdrawalGatewayResult")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> HandleWithdrawalGatewayResult([FromBody] GatewayResultCommand command)
         {
@@ -84,7 +84,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         // Запуск потока оплаты
-        [HttpPost("start")]
+        [HttpPost("start", Name = "StartPaymentFlow")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> StartPaymentFlow([FromBody] StartPaymentFlowCommand command)
         {

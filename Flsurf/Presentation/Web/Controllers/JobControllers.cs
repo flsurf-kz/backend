@@ -20,7 +20,7 @@ namespace Flsurf.Presentation.Web.Controllers
             _jobService = jobService;
         }
 
-        [HttpPost("create")]
+        [HttpPost("create", Name = "CreateJob")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> CreateJob([FromBody] CreateJobCommand command)
         {
@@ -29,7 +29,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("update")]
+        [HttpPost("update", Name = "UpdateJob")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateJob([FromBody] UpdateJobCommand command)
         {
@@ -38,7 +38,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("delete", Name = "DeleteJob")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> DeleteJob([FromBody] DeleteJobCommand command)
         {
@@ -47,7 +47,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetJob")]
         public async Task<ActionResult<Job>> GetJob(Guid id)
         {
             var query = new GetJobQuery { JobId = id };
@@ -58,7 +58,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return Ok(job);
         }
 
-        [HttpGet("list")]
+        [HttpGet("list", Name = "GetJobsList")]
         public async Task<ActionResult<ICollection<Job>>> GetJobsList(
             [FromQuery] int start = 0, [FromQuery] int end = 10)
         {
@@ -68,7 +68,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return Ok(jobs);
         }
 
-        [HttpPost("bookmark")]
+        [HttpPost("bookmark", Name = "BookmarkJob")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> BookmarkJob([FromBody] BookmarkJobCommand command)
         {
@@ -77,7 +77,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("hide")]
+        [HttpPost("hide", Name = "HideJob")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> HideJob([FromBody] HideJobCommand command)
         {
@@ -86,7 +86,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("submit-proposal")]
+        [HttpPost("submit-proposal", Name = "SubmitProposal")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> SubmitProposal([FromBody] SubmitProposalCommand command)
         {
@@ -95,7 +95,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("update-proposal")]
+        [HttpPost("update-proposal", Name = "UpdateProposal")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateProposal([FromBody] UpdateProposalCommand command)
         {
@@ -104,7 +104,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("withdraw-proposal")]
+        [HttpPost("withdraw-proposal", Name = "WithdrawProposal")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> WithdrawProposal([FromBody] WithdrawProposalCommand command)
         {
@@ -113,7 +113,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpGet("bookmarks")]
+        [HttpGet("bookmarks", Name = "GetBookmarksList")]
         [Authorize]
         public async Task<ActionResult<ICollection<JobEntity>>> GetBookmarksList()
         {

@@ -19,7 +19,7 @@ namespace Flsurf.Presentation.Web.Controllers
             _portfolioProjectService = portfolioProjectService;
         }
 
-        [HttpPost("create")]
+        [HttpPost("create", Name = "CreatePortfolioProject")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> CreatePortfolioProject([FromBody] AddPortfolioProjectCommand command)
         {
@@ -28,7 +28,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("update")]
+        [HttpPost("update", Name = "UpdatePortfolioProject")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> UpdatePortfolioProject([FromBody] UpdatePortfolioProjectCommand command)
         {
@@ -37,7 +37,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("delete", Name = "DeletePortfolioProject")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> DeletePortfolioProject([FromBody] DeletePortfolioProjectCommand command)
         {
@@ -46,7 +46,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpGet("list")]
+        [HttpGet("list", Name = "GetPortfolioProjects")]
         [Authorize]
         public async Task<ActionResult<ICollection<PortfolioProjectEntity>>> GetPortfolioProjects()
         {

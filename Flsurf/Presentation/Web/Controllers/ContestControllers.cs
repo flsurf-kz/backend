@@ -20,7 +20,7 @@ namespace Flsurf.Presentation.Web.Controllers
             _contestService = contestService;
         }
 
-        [HttpPost("create")]
+        [HttpPost("create", Name = "CreateContest")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> CreateContest([FromBody] CreateContestCommand command)
         {
@@ -29,7 +29,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("approve")]
+        [HttpPost("approve", Name = "ApproveContest")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> ApproveContest([FromBody] ApproveContestCommand command)
         {
@@ -38,7 +38,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("start")]
+        [HttpPost("start", Name = "StartContest")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> StartContest([FromBody] StartContestCommand command)
         {
@@ -47,7 +47,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("end")]
+        [HttpPost("end", Name = "EndContest")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> EndContest([FromBody] EndContestCommand command)
         {
@@ -56,7 +56,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("delete", Name = "DeleteContest")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> DeleteContest([FromBody] DeleteContestCommand command)
         {
@@ -65,7 +65,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("select-winner")]
+        [HttpPost("select-winner", Name = "SelectContestWinner")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> SelectContestWinner([FromBody] SelectContestWinnerCommand command)
         {
@@ -74,7 +74,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("submit-entry")]
+        [HttpPost("submit-entry", Name = "SubmitContestEntry")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> SubmitContestEntry([FromBody] SubmitContestEntryCommand command)
         {
@@ -83,7 +83,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpDelete("delete-entry")]
+        [HttpDelete("delete-entry", Name = "DeleteContestEntry")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> DeleteContestEntry([FromBody] DeleteContestEntryCommand command)
         {
@@ -92,7 +92,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("update")]
+        [HttpPost("update", Name = "UpdateContest")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateContest([FromBody] UpdateContestCommand command)
         {
@@ -101,7 +101,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetContest")]
         public async Task<ActionResult<ContestEntity>> GetContest(Guid id)
         {
             var query = new GetContestQuery { ContestId = id };
@@ -112,7 +112,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return Ok(contest);
         }
 
-        [HttpGet("list")]
+        [HttpGet("list", Name = "GetContestList")]
         public async Task<ActionResult<ICollection<ContestEntity>>> GetContestList(
             [FromQuery] int start = 0, [FromQuery] int end = 10)
         {

@@ -19,7 +19,7 @@ namespace Flsurf.Presentation.Web.Controllers
             _skillService = skillService;
         }
 
-        [HttpPost("create")]
+        [HttpPost("create", Name = "CreateSkills")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> CreateSkills([FromBody] CreateSkillsCommand command)
         {
@@ -28,7 +28,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpPost("update")]
+        [HttpPost("update", Name = "UpdateSkills")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateSkills([FromBody] UpdateSkillsCommand command)
         {
@@ -37,7 +37,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete("delete", Name = "DeleteSkills")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> DeleteSkills([FromBody] DeleteSkillsCommand command)
         {
@@ -46,7 +46,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpGet("list")]
+        [HttpGet("list", Name = "GetSkills")]
         public async Task<ActionResult<ICollection<SkillEntity>>> GetSkills()
         {
             var handler = _skillService.GetSkills();
