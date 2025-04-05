@@ -4,11 +4,13 @@ using Flsurf.Application.Freelance.Commands.FreelancerTeam;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 using Flsurf.Domain.Freelance.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Flsurf.Presentation.Web.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/freelancer-team")]
     public class FreelancerTeamController : ControllerBase
     {

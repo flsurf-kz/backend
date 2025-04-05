@@ -1,6 +1,5 @@
 ﻿using Flsurf.Application.User.EventHandlers;
 using Flsurf.Application.User.Interfaces;
-using Flsurf.Application.User.UseCases;
 
 namespace Flsurf.Application.User
 {

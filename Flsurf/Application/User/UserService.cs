@@ -1,5 +1,6 @@
-﻿using Flsurf.Application.User.Interfaces;
-using Flsurf.Application.User.UseCases;
+﻿using Flsurf.Application.User.Commands;
+using Flsurf.Application.User.Interfaces;
+using Flsurf.Application.User.Queries;
 
 namespace Flsurf.Application.User
 {
@@ -14,31 +15,31 @@ namespace Flsurf.Application.User
             ServiceProvider = serviceProvider;
         }
 
-        public CreateUser Create()
+        public CreateUserHandler CreateUser()
         {
-            return ServiceProvider.GetRequiredService<CreateUser>();
+            return ServiceProvider.GetRequiredService<CreateUserHandler>();
         }
 
-        public UpdateUser Update()
+        public UpdateUserHandler UpdateUser()
         {
-            return ServiceProvider.GetRequiredService<UpdateUser>();
+            return ServiceProvider.GetRequiredService<UpdateUserHandler>();
         }
 
-        public GetUser Get()
+        public GetUserHandler GetUser()
         {
-            return ServiceProvider.GetRequiredService<GetUser>();
+            return ServiceProvider.GetRequiredService<GetUserHandler>();
         }
-        public GetUsersList GetList()
+        public GetUsersListHandler GetUsersList()
         {
-            return ServiceProvider.GetRequiredService<GetUsersList>();
+            return ServiceProvider.GetRequiredService<GetUsersListHandler>();
         }
-        public SendResetCode SendResetPasswordCode()
+        public SendResetCodeHandler SendResetPasswordCode()
         {
-            return ServiceProvider.GetRequiredService<SendResetCode>();
+            return ServiceProvider.GetRequiredService<SendResetCodeHandler>();
         }
-        public ResetPassword ResetPassword()
+        public ResetPasswordHandler ResetPassword()
         {
-            return ServiceProvider.GetRequiredService<ResetPassword>();
+            return ServiceProvider.GetRequiredService<ResetPasswordHandler>();
         }
 
         public FindOrCreateExternalUser FindOrCreateExternalUser()
@@ -46,19 +47,24 @@ namespace Flsurf.Application.User
             return ServiceProvider.GetRequiredService<FindOrCreateExternalUser>(); 
         }
 
-        public GetNotifications GetNotifications()
+        public GetNotificationsHandler GetNotifications()
         {
-            return ServiceProvider.GetRequiredService<GetNotifications>();
+            return ServiceProvider.GetRequiredService<GetNotificationsHandler>();
         }
 
-        public CreateNotification CreateNotification()
+        public CreateNotificationHandler CreateNotifications()
         {
-            return ServiceProvider.GetRequiredService<CreateNotification>();
+            return ServiceProvider.GetRequiredService<CreateNotificationHandler>();
         }
 
-        public WarnUser WarnUser()
+        public WarnUserHandler WarnUser()
         {
-            return ServiceProvider.GetRequiredService<WarnUser>();
+            return ServiceProvider.GetRequiredService<WarnUserHandler>();
+        }
+
+        public BlockUserHandler BlockUser()
+        {
+            return ServiceProvider.GetRequiredService<BlockUserHandler>();
         }
     }
 }

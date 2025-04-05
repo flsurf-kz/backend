@@ -4,6 +4,7 @@ using Flsurf.Application.Freelance.Commands.Category.UpdateCategory;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 using Flsurf.Domain.Freelance.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Flsurf.Presentation.Web.Controllers
@@ -19,6 +20,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> CreatePortfolioProject([FromBody] AddPortfolioProjectCommand command)
         {
             var handler = _portfolioProjectService.CreatePortfolioProject();
@@ -27,6 +29,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("update")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> UpdatePortfolioProject([FromBody] UpdatePortfolioProjectCommand command)
         {
             var handler = _portfolioProjectService.UpdatePortfolioProject();
@@ -35,6 +38,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpDelete("delete")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> DeletePortfolioProject([FromBody] DeletePortfolioProjectCommand command)
         {
             var handler = _portfolioProjectService.DeletePortfolioProject();
@@ -43,6 +47,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpGet("list")]
+        [Authorize]
         public async Task<ActionResult<ICollection<PortfolioProjectEntity>>> GetPortfolioProjects()
         {
             var handler = _portfolioProjectService.GetPortfolioProjects();

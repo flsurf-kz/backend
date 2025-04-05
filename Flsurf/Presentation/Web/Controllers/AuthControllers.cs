@@ -9,6 +9,11 @@ using System.Security.Claims;
 using Flsurf.Infrastructure;
 using Swashbuckle.AspNetCore.Annotations;
 using Flsurf.Domain.User.Entities;
+using System.Xml.Linq;
+using Flsurf.Application.User.Queries;
+using Flsurf.Application.User.Commands;
+using Flsurf.Application.Common.Extensions;
+using Flsurf.Application.Common.cqrs;
 
 namespace Flsurf.Presentation.Web.Controllers
 {
@@ -21,7 +26,11 @@ namespace Flsurf.Presentation.Web.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserSchema model)
         {
-            var user = await _userService.Get().Execute(new GetUserDto { Email = model.Email });
+            if (User?.Identity?.IsAuthenticated == true)
+            {
+                return BadRequest("Вы уже авторизованы. Для входа пользователя, пожалуйста, выйдите из системы.");
+            }
+            var user = await _userService.GetUser().Handle(new GetUserQuery { Email = model.Email });
             if (user == null || !user.VerifyPassword(model.Password, passwordService))
                 return Unauthorized();
 
@@ -52,6 +61,60 @@ namespace Flsurf.Presentation.Web.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return Ok();
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterUserSchema model)
+        {
+            // Если пользователь уже авторизован, регистрация не разрешается
+            if (User?.Identity?.IsAuthenticated == true)
+            {
+                return CommandResult.BadRequest("Вы уже авторизованы, вам нельзя регистрироваться еще раз").MapResult(this);
+            }
+
+            // Создаем команду для регистрации пользователя.
+            var command = new CreateUserCommand
+            {
+                Email = model.Email,
+                Password = model.Password,
+                Name = model.Name,
+                Surname = model.Surname,
+                UserType = Domain.User.Enums.UserTypes.NonUser, 
+            };
+
+            // Выполняем команду создания пользователя через UserService.
+            var result = await _userService.CreateUser().Handle(command);
+
+            if (!result.IsSuccess)
+                return result.MapResult(this); 
+
+            // it should be fast
+            var user = await _userService.GetUser().Handle(new GetUserQuery() { UserId = result.GetIdAsGuid() });
+
+            // it is just impossible
+            if (user == null)
+                return result.MapResult(this); 
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.Fullname)
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal,
+                new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
+                });
+
+            return CommandResult.Success(user.Id).MapResult(this);
         }
 
         [HttpGet("external-login/{provider}")]

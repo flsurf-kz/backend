@@ -32,8 +32,14 @@ if (app.Environment.IsDevelopment())
     await app.InitialiseEventStoreDatabaseAsync(); 
 }
 app.UseEventDispatcher(); 
-app.UseStaticFiles();
-app.MapDefaultControllerRoute();
+app.UseStaticFiles(); 
+app.UseRouting();
+
+app.UseCors("TaskManger");
+
+// Õ≈ Ã≈Õﬂ“‹, ÀŒÀ
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
@@ -42,12 +48,9 @@ app.UseHangfireDashboard();
 
 BackgroundJobsRegister.RegisterInfrastructureBGJobs();
 
-app.UseAuthorization();
-app.UseAuthentication();
 app.UseWebSockets(new WebSocketOptions() { 
     KeepAliveInterval = TimeSpan.FromMinutes(2), 
 });
-app.UseCors("TaskManger");
 app.MapControllers();
 
 app.Run();

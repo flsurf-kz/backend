@@ -1,5 +1,6 @@
 ﻿using Flsurf.Application.Staff.Dto;
 using Flsurf.Application.Staff.Interfaces;
+using Flsurf.Application.User.Commands;
 using Flsurf.Application.User.Dto;
 using Flsurf.Application.User.Interfaces;
 using Flsurf.Domain.Staff.Entities;
@@ -28,8 +29,8 @@ namespace Flsurf.Presentation.Web.Controllers
         [HttpPost("user/{userId}/block")]
         public async Task<ActionResult<bool>> BlockUser(Guid userId)
         {
-            await _userService.Update()
-                .Execute(new UpdateUserDto { UserId = userId, Blocked = true });
+            await _userService.BlockUser()
+                .Handle(new BlockUserCommand { UserId = userId, Blocked = true });
             return Ok(true);
         }
 
@@ -37,7 +38,7 @@ namespace Flsurf.Presentation.Web.Controllers
         public async Task<ActionResult<bool>> WarnUser(Guid userId, [FromBody] WarnUserScheme model)
         {
             await _userService.WarnUser()
-                .Execute(new WarnUserDto() { UserId = userId, Reason = model.Reason });
+                .Handle(new WarnUserCommand() { UserId = userId, Reason = model.Reason });
             return Ok(true);
         }
 

@@ -19,6 +19,7 @@ namespace Flsurf.Infrastructure.Data.Configuration
             builder
                 .Property(e => e.Type)
                 .HasConversion<string>();
+
         }
     }
 }

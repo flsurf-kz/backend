@@ -1,20 +1,22 @@
-﻿using Flsurf.Application.User.UseCases;
+﻿using Flsurf.Application.User.Commands;
+using Flsurf.Application.User.Queries;
 using Microsoft.AspNetCore.Identity.Data;
 
 namespace Flsurf.Application.User.Interfaces
 {
     public interface IUserService
     {
-        public abstract CreateUser Create();
+        CreateUserHandler CreateUser();
 
-        public abstract UpdateUser Update();
-        public abstract GetUser Get();
-        public abstract WarnUser WarnUser();
-        public abstract GetUsersList GetList();
-        public abstract SendResetCode SendResetPasswordCode();
-        public abstract ResetPassword ResetPassword();
-        public abstract GetNotifications GetNotifications();
-        public abstract FindOrCreateExternalUser FindOrCreateExternalUser();
-        public abstract CreateNotification CreateNotification();
+        UpdateUserHandler UpdateUser();
+        GetUserHandler GetUser();
+        WarnUserHandler WarnUser();
+        GetUsersListHandler GetUsersList();
+        SendResetCodeHandler SendResetPasswordCode();
+        ResetPasswordHandler ResetPassword();
+        GetNotificationsHandler GetNotifications();
+        BlockUserHandler BlockUser();
+        FindOrCreateExternalUser FindOrCreateExternalUser();
+        CreateNotificationHandler CreateNotifications();
     }
 }

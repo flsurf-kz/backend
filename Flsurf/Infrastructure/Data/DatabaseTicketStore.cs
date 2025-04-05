@@ -72,7 +72,10 @@ namespace Flsurf.Infrastructure.Data
 
         public async Task RemoveAsync(string key)
         {
-            var session = await _context.SessionTickets.FindAsync(key);
+            if (!Guid.TryParse(key, out var keyGuid))
+                throw new ArgumentException("Invalid key format", nameof(key));
+
+            var session = await _context.SessionTickets.FindAsync(keyGuid);
             if (session != null)
             {
                 _context.SessionTickets.Remove(session);

@@ -5,6 +5,7 @@ using Flsurf.Application.Payment.Interfaces;
 using Flsurf.Application.Payment.Queries;
 using Flsurf.Application.Payment.UseCases;
 using Flsurf.Domain.Payment.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Flsurf.Presentation.Web.Controllers
@@ -22,6 +23,7 @@ namespace Flsurf.Presentation.Web.Controllers
 
         // Обработка транзакции (например, создание или обновление транзакции)
         [HttpPost("handle")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> HandleTransaction([FromBody] HandleTransactionCommand command)
         {
             var handler = _transactionService.HandleTransaction();
@@ -31,6 +33,7 @@ namespace Flsurf.Presentation.Web.Controllers
 
         // Получение списка транзакций
         [HttpGet("list")]
+        [Authorize]
         public async Task<ActionResult<ICollection<TransactionEntity>>> GetTransactionsList(
             [FromQuery] int start = 0, [FromQuery] int end = 10)
         {
@@ -52,6 +55,7 @@ namespace Flsurf.Presentation.Web.Controllers
 
         // Обработка результата от шлюза депозита
         [HttpPost("deposit-result")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> HandleDepositGatewayResult([FromBody] GatewayResultCommand command)
         {
             var handler = _transactionService.HandleDepositGatewayResult();
@@ -61,6 +65,7 @@ namespace Flsurf.Presentation.Web.Controllers
 
         // Возврат средств по транзакции
         [HttpPost("refund")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> RefundTransaction([FromBody] RefundTransactionCommand command)
         {
             var handler = _transactionService.RefundTransaction();
@@ -70,6 +75,7 @@ namespace Flsurf.Presentation.Web.Controllers
 
         // Обработка результата от шлюза вывода средств
         [HttpPost("withdrawal-result")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> HandleWithdrawalGatewayResult([FromBody] GatewayResultCommand command)
         {
             var handler = _transactionService.HandleWithdrawlGatewayResult();
@@ -79,6 +85,7 @@ namespace Flsurf.Presentation.Web.Controllers
 
         // Запуск потока оплаты
         [HttpPost("start")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> StartPaymentFlow([FromBody] StartPaymentFlowCommand command)
         {
             var handler = _transactionService.StartPaymentFlow();

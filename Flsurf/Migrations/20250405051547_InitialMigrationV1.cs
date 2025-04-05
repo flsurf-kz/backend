@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Flsurf.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class InitialMigrationV1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,7 +42,7 @@ namespace Flsurf.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Avatar = table.Column<Guid>(type: "uuid", nullable: false),
                     Link = table.Column<string>(type: "text", nullable: false),
-                    Type = table.Column<int>(type: "integer", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -70,6 +70,19 @@ namespace Flsurf.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SessionTickets",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Value = table.Column<byte[]>(type: "bytea", nullable: false),
+                    ExpiresAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SessionTickets", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BookmarkedJobs",
                 columns: table => new
                 {
@@ -93,7 +106,7 @@ namespace Flsurf.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Type = table.Column<int>(type: "integer", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
                     IsArchived = table.Column<bool>(type: "boolean", nullable: false),
                     IsTextingAllowed = table.Column<bool>(type: "boolean", nullable: false),
                     FinishedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -113,15 +126,14 @@ namespace Flsurf.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CompanyName = table.Column<string>(type: "text", nullable: false),
-                    CompanyDescription = table.Column<string>(type: "text", nullable: false),
-                    CompanyWebsite = table.Column<string>(type: "text", nullable: false),
-                    Rating = table.Column<float>(type: "real", nullable: false),
-                    Location = table.Column<string>(type: "text", nullable: false),
-                    CompanyLogo = table.Column<string>(type: "text", nullable: false),
-                    EmployerType = table.Column<string>(type: "text", nullable: false),
+                    CompanyName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    CompanyDescription = table.Column<string>(type: "text", nullable: true),
+                    CompanyWebsite = table.Column<string>(type: "text", nullable: true),
+                    Location = table.Column<string>(type: "text", nullable: true),
+                    CompanyLogoId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ClientType = table.Column<string>(type: "text", nullable: false),
                     IsPhoneVerified = table.Column<bool>(type: "boolean", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
                     LastActiveAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Suspended = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -142,7 +154,7 @@ namespace Flsurf.Migrations
                     ContestId = table.Column<Guid>(type: "uuid", nullable: false),
                     FreelancerId = table.Column<Guid>(type: "uuid", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    Reaction = table.Column<int>(type: "integer", nullable: false),
+                    Reaction = table.Column<string>(type: "text", nullable: false),
                     Hidden = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -166,7 +178,7 @@ namespace Flsurf.Migrations
                     PrizePool_Currency = table.Column<int>(type: "integer", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
                     WinnerEntryId = table.Column<Guid>(type: "uuid", nullable: true),
                     IsResultPublic = table.Column<bool>(type: "boolean", nullable: false),
                     IsEntriesPublic = table.Column<bool>(type: "boolean", nullable: false),
@@ -191,11 +203,11 @@ namespace Flsurf.Migrations
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Budget_Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     Budget_Currency = table.Column<int>(type: "integer", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
                     CostPerHour_Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     CostPerHour_Currency = table.Column<int>(type: "integer", nullable: false),
-                    BudgetType = table.Column<int>(type: "integer", nullable: false),
-                    PaymentSchedule = table.Column<int>(type: "integer", nullable: false),
+                    BudgetType = table.Column<string>(type: "text", nullable: false),
+                    PaymentSchedule = table.Column<string>(type: "text", nullable: false),
                     IsPaused = table.Column<bool>(type: "boolean", nullable: false),
                     PauseReason = table.Column<string>(type: "text", nullable: true),
                     ContractTerms = table.Column<string>(type: "text", nullable: false),
@@ -260,7 +272,7 @@ namespace Flsurf.Migrations
                     ContractId = table.Column<Guid>(type: "uuid", nullable: false),
                     InitiatorId = table.Column<Guid>(type: "uuid", nullable: false),
                     Reason = table.Column<string>(type: "text", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
                     StaffTicketId = table.Column<Guid>(type: "uuid", nullable: true),
                     MessengerChatId = table.Column<Guid>(type: "uuid", nullable: true),
                     ModeratorComment = table.Column<string>(type: "text", nullable: true),
@@ -286,7 +298,7 @@ namespace Flsurf.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     DisputeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
                     Comment = table.Column<string>(type: "text", nullable: false),
                     ChangedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DisputeEntityId = table.Column<Guid>(type: "uuid", nullable: true)
@@ -309,6 +321,7 @@ namespace Flsurf.Migrations
                     FileName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     FilePath = table.Column<string>(type: "text", nullable: false),
                     MimeType = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
+                    OriginalDownloadUrl = table.Column<string>(type: "text", nullable: true),
                     Size = table.Column<long>(type: "bigint", nullable: false),
                     ContestEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     ContestEntryEntityId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -344,7 +357,7 @@ namespace Flsurf.Migrations
                     Text = table.Column<string>(type: "text", nullable: false),
                     FromUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     ToUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Type = table.Column<int>(type: "integer", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
                     Data = table.Column<string>(type: "jsonb", nullable: true),
                     IconId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -418,7 +431,7 @@ namespace Flsurf.Migrations
                     Experience = table.Column<string>(type: "text", nullable: false),
                     Resume = table.Column<string>(type: "text", nullable: true),
                     CostPerHour = table.Column<decimal>(type: "numeric", nullable: false),
-                    Availability = table.Column<int>(type: "integer", nullable: false),
+                    Availability = table.Column<string>(type: "text", nullable: false),
                     Rating = table.Column<float>(type: "real", nullable: false),
                     IsHidden = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -438,7 +451,7 @@ namespace Flsurf.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FreelancerTeamId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -483,15 +496,16 @@ namespace Flsurf.Migrations
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Surname = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     HashedPassword = table.Column<string>(type: "text", nullable: false),
-                    Role = table.Column<int>(type: "integer", nullable: false),
-                    Type = table.Column<int>(type: "integer", nullable: false),
+                    Role = table.Column<string>(type: "text", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     AvatarId = table.Column<Guid>(type: "uuid", nullable: true),
                     IsOnline = table.Column<bool>(type: "boolean", nullable: false),
                     IsSuperadmin = table.Column<bool>(type: "boolean", nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: true),
                     Blocked = table.Column<bool>(type: "boolean", nullable: false),
-                    Location = table.Column<int>(type: "integer", nullable: false),
+                    Location = table.Column<string>(type: "text", nullable: true),
+                    IsExternalUser = table.Column<bool>(type: "boolean", nullable: false),
                     ChatEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     FreelancerTeamEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     GroupEntityId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -534,7 +548,7 @@ namespace Flsurf.Migrations
                     ChatId = table.Column<Guid>(type: "uuid", nullable: false),
                     InvitedById = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -576,9 +590,9 @@ namespace Flsurf.Migrations
                     Payout_Currency = table.Column<int>(type: "integer", nullable: true),
                     ExpirationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Duration = table.Column<int>(type: "integer", nullable: true),
-                    Status = table.Column<int>(type: "integer", nullable: false),
-                    Level = table.Column<int>(type: "integer", nullable: false),
-                    BudgetType = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
+                    Level = table.Column<string>(type: "text", nullable: false),
+                    BudgetType = table.Column<string>(type: "text", nullable: false),
                     PublicationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     PaymentVerified = table.Column<bool>(type: "boolean", nullable: false),
                     ContractId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -719,7 +733,7 @@ namespace Flsurf.Migrations
                     Text = table.Column<string>(type: "text", nullable: false),
                     Subject = table.Column<string>(type: "text", nullable: false),
                     AnsweredCommentId = table.Column<Guid>(type: "uuid", nullable: true),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
                     AssignedUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     ClosedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -799,7 +813,7 @@ namespace Flsurf.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Currency = table.Column<int>(type: "integer", nullable: false),
+                    Currency = table.Column<string>(type: "text", nullable: false),
                     Frozen_Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     Frozen_Currency = table.Column<int>(type: "integer", nullable: false),
                     AvailableBalance_Amount = table.Column<decimal>(type: "numeric", nullable: false),
@@ -807,7 +821,7 @@ namespace Flsurf.Migrations
                     PendingIncome_Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     PendingIncome_Currency = table.Column<int>(type: "integer", nullable: false),
                     Blocked = table.Column<bool>(type: "boolean", nullable: false),
-                    BlockReason = table.Column<int>(type: "integer", nullable: false),
+                    BlockReason = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -839,7 +853,7 @@ namespace Flsurf.Migrations
                     SubmittedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     ApprovedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     RejectedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -871,7 +885,7 @@ namespace Flsurf.Migrations
                     FreelancerId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProposedRate = table.Column<decimal>(type: "numeric", nullable: false),
                     CoverLetter = table.Column<string>(type: "text", nullable: false),
-                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -1087,6 +1101,11 @@ namespace Flsurf.Migrations
                 name: "IX_Chats_OwnerId",
                 table: "Chats",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClientProfiles_CompanyLogoId",
+                table: "ClientProfiles",
+                column: "CompanyLogoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClientProfiles_UserId",
@@ -1448,6 +1467,13 @@ namespace Flsurf.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_ClientProfiles_Files_CompanyLogoId",
+                table: "ClientProfiles",
+                column: "CompanyLogoId",
+                principalTable: "Files",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_ClientProfiles_Users_UserId",
                 table: "ClientProfiles",
                 column: "UserId",
@@ -1664,28 +1690,12 @@ namespace Flsurf.Migrations
                 table: "WorkSessions");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_ContestEntries_Contests_ContestId",
-                table: "ContestEntries");
+                name: "FK_ClientProfiles_Files_CompanyLogoId",
+                table: "ClientProfiles");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Files_Contests_ContestEntityId",
-                table: "Files");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Contracts_Chats_ChatEntityId",
-                table: "Contracts");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Messages_Chats_ChatId",
-                table: "Messages");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Contracts_ClientProfiles_ClientProfileEntityId",
-                table: "Contracts");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Contracts_FreelancerTeams_FreelancerTeamEntityId",
-                table: "Contracts");
+                name: "FK_FreelancerTeams_Files_AvatarId",
+                table: "FreelancerTeams");
 
             migrationBuilder.DropTable(
                 name: "BookmarkedJobs");
@@ -1716,6 +1726,9 @@ namespace Flsurf.Migrations
 
             migrationBuilder.DropTable(
                 name: "Reviews");
+
+            migrationBuilder.DropTable(
+                name: "SessionTickets");
 
             migrationBuilder.DropTable(
                 name: "Tasks");
@@ -1754,18 +1767,6 @@ namespace Flsurf.Migrations
                 name: "Groups");
 
             migrationBuilder.DropTable(
-                name: "Contests");
-
-            migrationBuilder.DropTable(
-                name: "Chats");
-
-            migrationBuilder.DropTable(
-                name: "ClientProfiles");
-
-            migrationBuilder.DropTable(
-                name: "FreelancerTeams");
-
-            migrationBuilder.DropTable(
                 name: "Files");
 
             migrationBuilder.DropTable(
@@ -1787,6 +1788,9 @@ namespace Flsurf.Migrations
                 name: "WorkSessions");
 
             migrationBuilder.DropTable(
+                name: "Contests");
+
+            migrationBuilder.DropTable(
                 name: "FreelancerProfiles");
 
             migrationBuilder.DropTable(
@@ -1794,6 +1798,15 @@ namespace Flsurf.Migrations
 
             migrationBuilder.DropTable(
                 name: "Contracts");
+
+            migrationBuilder.DropTable(
+                name: "Chats");
+
+            migrationBuilder.DropTable(
+                name: "ClientProfiles");
+
+            migrationBuilder.DropTable(
+                name: "FreelancerTeams");
         }
     }
 }

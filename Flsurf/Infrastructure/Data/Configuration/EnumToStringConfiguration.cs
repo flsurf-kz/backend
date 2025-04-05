@@ -8,10 +8,14 @@ namespace Flsurf.Infrastructure.Data.Configuration
     {
         public static void ApplyEnumToStringConversion(this ModelBuilder modelBuilder)
         {
-            // Перебираем все зарегистрированные entity types, включая owned
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                // Получаем все публичные свойства, являющиеся enum или nullable enum
+                // Пропускаем owned-сущности
+                if (entityType.IsOwned())
+                {
+                    continue;
+                }
+
                 var enumProperties = entityType.ClrType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                     .Where(p => p.PropertyType.IsEnum ||
                                 (Nullable.GetUnderlyingType(p.PropertyType)?.IsEnum ?? false));
@@ -28,5 +32,5 @@ namespace Flsurf.Infrastructure.Data.Configuration
                 }
             }
         }
-    }  
+    }
 }

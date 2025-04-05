@@ -11,6 +11,12 @@ namespace Flsurf.Application.Common.cqrs
 
         public bool IsSuccess => Status == HttpStatusCode.OK;
 
+        public Guid? GetIdAsGuid() {
+            if (Id == null)
+                return null; 
+            return Guid.Parse(Id); 
+        } 
+
         private CommandResult(string message, string? id, List<string>? ids, HttpStatusCode status)
         {
             Message = message;

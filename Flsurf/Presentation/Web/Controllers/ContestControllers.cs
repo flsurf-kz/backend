@@ -4,6 +4,7 @@ using Flsurf.Application.Freelance.Commands.Contest;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 using Flsurf.Domain.Freelance.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -20,6 +21,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> CreateContest([FromBody] CreateContestCommand command)
         {
             var handler = _contestService.CreateContest();
@@ -28,6 +30,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("approve")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> ApproveContest([FromBody] ApproveContestCommand command)
         {
             var handler = _contestService.ApproveContest();
@@ -36,6 +39,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("start")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> StartContest([FromBody] StartContestCommand command)
         {
             var handler = _contestService.StartContest();
@@ -44,6 +48,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("end")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> EndContest([FromBody] EndContestCommand command)
         {
             var handler = _contestService.EndContest();
@@ -52,6 +57,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpDelete("delete")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> DeleteContest([FromBody] DeleteContestCommand command)
         {
             var handler = _contestService.DeleteContest();
@@ -60,6 +66,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("select-winner")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> SelectContestWinner([FromBody] SelectContestWinnerCommand command)
         {
             var handler = _contestService.SelectContestWinner();
@@ -68,6 +75,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("submit-entry")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> SubmitContestEntry([FromBody] SubmitContestEntryCommand command)
         {
             var handler = _contestService.SubmitContestEntry();
@@ -76,6 +84,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpDelete("delete-entry")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> DeleteContestEntry([FromBody] DeleteContestEntryCommand command)
         {
             var handler = _contestService.DeleteContestEntry();
@@ -84,6 +93,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("update")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateContest([FromBody] UpdateContestCommand command)
         {
             var handler = _contestService.UpdateContest();

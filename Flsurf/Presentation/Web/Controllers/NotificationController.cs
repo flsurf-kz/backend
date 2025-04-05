@@ -1,6 +1,10 @@
-﻿using Flsurf.Application.Common.Models;
+﻿using Flsurf.Application.Common.cqrs;
+using Flsurf.Application.Common.Extensions;
+using Flsurf.Application.Common.Models;
+using Flsurf.Application.User.Commands;
 using Flsurf.Application.User.Dto;
 using Flsurf.Application.User.Interfaces;
+using Flsurf.Application.User.Queries;
 using Flsurf.Domain.User.Entities;
 using Flsurf.Presentation.Web.ExceptionHandlers;
 using Microsoft.AspNetCore.Mvc;
@@ -25,8 +29,8 @@ namespace Flsurf.Presentation.Web.Controllers
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<ICollection<NotificationEntity>>> GetNotifications(Guid userId, [FromQuery] InputPagination pagination)
         {
-            return Ok(await _userService.GetNotifications().Execute(
-                new GetNotificationsDto()
+            return Ok(await _userService.GetNotifications().Handle(
+                new GetNotificationsQuery()
                 {
                     UserId = userId,
                     Start = pagination.Start,
@@ -36,10 +40,11 @@ namespace Flsurf.Presentation.Web.Controllers
 
         // POST api/<NotificationController>
         [HttpPost("")]
-        public async Task<ActionResult<NotificationCreatedDto>> CreateNotification([FromBody] CreateNotificationDto model)
+        public async Task<ActionResult<CommandResult>> CreateNotification([FromBody] CreateNotificationCommand model)
         {
-            var result = await _userService.CreateNotification().Execute(model);
-            return Ok(result);
+            var result = await _userService.CreateNotifications().Handle(model);
+
+            return result.MapResult(this);
         }
     }
 }

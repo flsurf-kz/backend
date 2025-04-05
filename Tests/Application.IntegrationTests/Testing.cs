@@ -47,7 +47,7 @@ namespace Tests.Application.IntegrationTests
 
             var userService = scope.ServiceProvider.GetRequiredService<UserService>(); 
             UserEntity result = await userService
-                .Create()
+                .CreateUser()
                 .Execute(new CreateUserDto()
                 {
                     Name = userName,

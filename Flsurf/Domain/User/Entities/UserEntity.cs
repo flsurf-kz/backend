@@ -123,9 +123,9 @@ namespace Flsurf.Domain.User.Entities
             return user;
         }
 
-        public void Block()
+        public void Block(bool block)
         {
-            Blocked = true;
+            Blocked = block;
 
             AddDomainEvent(new UserBlocked(this));
         }
@@ -165,7 +165,7 @@ namespace Flsurf.Domain.User.Entities
             Warnings.Add(warn);
             if (Warnings.Count > 3)
             {
-                Block();
+                Block(true);
                 return;
             }
             AddDomainEvent(new UserWarned(this, reason));

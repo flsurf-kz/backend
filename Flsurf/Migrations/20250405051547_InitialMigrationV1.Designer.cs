@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Flsurf.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250404075942_SmallUpdate")]
-    partial class SmallUpdate
+    [Migration("20250405051547_InitialMigrationV1")]
+    partial class InitialMigrationV1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -176,20 +176,22 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("CompanyDescription")
+                    b.Property<string>("ClientType")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CompanyLogo")
-                        .IsRequired()
+                    b.Property<string>("CompanyDescription")
                         .HasColumnType("text");
+
+                    b.Property<Guid?>("CompanyLogoId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("CompanyWebsite")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -197,10 +199,6 @@ namespace Flsurf.Migrations
 
                     b.Property<Guid?>("CreatedById")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("EmployerType")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<bool>("IsPhoneVerified")
                         .HasColumnType("boolean");
@@ -215,15 +213,10 @@ namespace Flsurf.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
 
                     b.Property<bool>("Suspended")
                         .HasColumnType("boolean");
@@ -232,6 +225,8 @@ namespace Flsurf.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CompanyLogoId");
 
                     b.HasIndex("UserId");
 
@@ -275,8 +270,9 @@ namespace Flsurf.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -323,8 +319,9 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Reaction")
-                        .HasColumnType("integer");
+                    b.Property<string>("Reaction")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -344,8 +341,9 @@ namespace Flsurf.Migrations
                     b.Property<decimal?>("Bonus")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("BudgetType")
-                        .HasColumnType("integer");
+                    b.Property<string>("BudgetType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Guid?>("ChatEntityId")
                         .HasColumnType("uuid");
@@ -390,14 +388,16 @@ namespace Flsurf.Migrations
                     b.Property<string>("PauseReason")
                         .HasColumnType("text");
 
-                    b.Property<int>("PaymentSchedule")
-                        .HasColumnType("integer");
+                    b.Property<string>("PaymentSchedule")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -451,8 +451,9 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("StaffTicketId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -482,8 +483,9 @@ namespace Flsurf.Migrations
                     b.Property<Guid>("DisputeId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -498,8 +500,9 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Availability")
-                        .HasColumnType("integer");
+                    b.Property<string>("Availability")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<decimal>("CostPerHour")
                         .HasColumnType("numeric");
@@ -603,8 +606,9 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -624,8 +628,9 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("BudgetType")
-                        .HasColumnType("integer");
+                    b.Property<string>("BudgetType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
@@ -664,8 +669,9 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Level")
-                        .HasColumnType("integer");
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("PaymentVerified")
                         .HasColumnType("boolean");
@@ -673,8 +679,9 @@ namespace Flsurf.Migrations
                     b.Property<DateTime?>("PublicationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -825,8 +832,9 @@ namespace Flsurf.Migrations
                     b.Property<decimal>("ProposedRate")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -968,8 +976,9 @@ namespace Flsurf.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("SubmittedAt")
                         .HasColumnType("timestamp with time zone");
@@ -1017,8 +1026,9 @@ namespace Flsurf.Migrations
                     b.Property<Guid>("OwnerId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -1051,8 +1061,9 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -1318,8 +1329,9 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("BlockReason")
-                        .HasColumnType("integer");
+                    b.Property<string>("BlockReason")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("Blocked")
                         .HasColumnType("boolean");
@@ -1330,8 +1342,9 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("CreatedById")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Currency")
-                        .HasColumnType("integer");
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModifiedAt")
                         .HasColumnType("timestamp with time zone");
@@ -1420,8 +1433,9 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Subject")
                         .IsRequired()
@@ -1469,8 +1483,9 @@ namespace Flsurf.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -1542,8 +1557,9 @@ namespace Flsurf.Migrations
                     b.Property<Guid>("ToUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -1620,8 +1636,8 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("Location")
-                        .HasColumnType("integer");
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1631,16 +1647,18 @@ namespace Flsurf.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -1780,11 +1798,17 @@ namespace Flsurf.Migrations
 
             modelBuilder.Entity("Flsurf.Domain.Freelance.Entities.ClientProfileEntity", b =>
                 {
+                    b.HasOne("Flsurf.Domain.Files.Entities.FileEntity", "CompanyLogo")
+                        .WithMany()
+                        .HasForeignKey("CompanyLogoId");
+
                     b.HasOne("Flsurf.Domain.User.Entities.UserEntity", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CompanyLogo");
 
                     b.Navigation("User");
                 });

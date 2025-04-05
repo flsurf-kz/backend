@@ -4,6 +4,7 @@ using Flsurf.Application.Freelance.Commands.Contract;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 using Flsurf.Domain.Freelance.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.Contracts;
 
@@ -20,6 +21,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> CreateContract([FromBody] CreateContractCommand command)
         {
             var handler = _contractService.CreateContract();
@@ -28,6 +30,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("client-accept-finish")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> ClientAcceptFinishContract([FromBody] ClientAcceptFinishContractCommand command)
         {
             var handler = _contractService.ClientAcceptFinishContract();
@@ -36,6 +39,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("client-close")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> ClientCloseContract([FromBody] ClientCloseContractCommand command)
         {
             var handler = _contractService.ClientCloseContract();
@@ -44,6 +48,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("client-reject-completion")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> ClientRejectContractCompletion([FromBody] ClientRejectContractCompletionCommand command)
         {
             var handler = _contractService.ClientRejectContract();
@@ -52,6 +57,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("freelancer-accept")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> FreelancerAcceptContract([FromBody] FreelancerAcceptContractCommand command)
         {
             var handler = _contractService.FreelancerAcceptContract();
@@ -60,6 +66,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("freelancer-finish")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> FreelancerFinishContract([FromBody] FreelancerFinishContractCommand command)
         {
             var handler = _contractService.FreelancerFinishContract();
@@ -68,6 +75,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("accept-dispute")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> AcceptDispute([FromBody] AcceptDisputeCommand command)
         {
             var handler = _contractService.AcceptDispute();
@@ -76,6 +84,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("initiate-dispute")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> InitiateDispute([FromBody] InitiateDisputeCommand command)
         {
             var handler = _contractService.InitiateDispute();
@@ -84,6 +93,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("resolve-dispute")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> ResolveDispute([FromBody] ResolveDisputeCommand command)
         {
             var handler = _contractService.ResolveDispute();
@@ -92,6 +102,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("force-cancel")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> ForceContractCancel([FromBody] ForceContractCancelCommand command)
         {
             var handler = _contractService.ForceContractCancel();

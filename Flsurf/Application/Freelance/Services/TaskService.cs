@@ -1,5 +1,6 @@
 ﻿using Flsurf.Application.Freelance.Commands.Task;
 using Flsurf.Application.Freelance.Interfaces;
+using Flsurf.Application.Freelance.Queries;
 
 namespace Flsurf.Application.Freelance.Services
 {
@@ -12,29 +13,34 @@ namespace Flsurf.Application.Freelance.Services
             _provider = provider;
         }
 
-        public CreateTaskHandler Create()
+        public CreateTaskHandler CreateTask()
         {
             return _provider.GetRequiredService<CreateTaskHandler>();
         }
 
-        public CompleteTaskHandler Complete()
+        public CompleteTaskHandler CompleteTask()
         {
             return _provider.GetRequiredService<CompleteTaskHandler>();
         }
 
-        public ReactToTaskHandler React()
+        public ReactToTaskHandler ReactToTask()
         {
             return _provider.GetRequiredService<ReactToTaskHandler>();
         }
 
-        public UpdateTaskHandler Update()
+        public UpdateTaskHandler UpdateTask()
         {
             return _provider.GetRequiredService<UpdateTaskHandler>();
         }
 
-        public DeleteTaskHandler Delete()
+        public DeleteTaskHandler DeleteTask()
         {
             return _provider.GetRequiredService<DeleteTaskHandler>();
+        }
+
+        public GetTasksListHandler GetTasks()
+        {
+            return _provider.GetRequiredService<GetTasksListHandler>();
         }
     }
 

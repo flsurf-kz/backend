@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Flsurf.Domain.User.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace Flsurf.Presentation.Web.Schemas
 {
@@ -25,5 +26,19 @@ namespace Flsurf.Presentation.Web.Schemas
         [Required]
         public string Password { get; set; } = null!;
         public bool RememberMe { get; set; } = false;
+    }
+
+    public class RegisterUserSchema
+    {
+        [Required, StringLength(52)]
+        public string Name { get; set; } = null!;
+        [Required, StringLength(52)]
+        public string Surname { get; set; } = null!;
+        [Phone]
+        public string? Phone { get; set; }
+        [Required]
+        public string Password { get; set; } = null!;
+        [Required, EmailAddress]
+        public string Email { get; set; } = null!;
     }
 }

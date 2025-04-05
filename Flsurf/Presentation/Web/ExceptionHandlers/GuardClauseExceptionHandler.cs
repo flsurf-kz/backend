@@ -32,7 +32,7 @@ namespace Flsurf.Presentation.Web.ExceptionHandlers
             if (!string.IsNullOrEmpty(ns) && ns.StartsWith("Flsurf"))
             {
                 _logger.LogError(context.Exception, "Exception in Flsurf namespace: {Message}", context.Exception.Message);
-                context.Result = new JsonResult(new { ErrorMessage = "An error occurred within your namespace." })
+                context.Result = new JsonResult(new { ErrorMessage = "An error occurred within your namespace. error:" + context.Exception.Message })
                 {
                     StatusCode = StatusCodes.Status500InternalServerError
                 };

@@ -9,13 +9,13 @@ using SpiceDb.Models;
 
 namespace Flsurf.Application.Freelance.Queries
 {
-    public class GetTasksHandler(IPermissionService permService, IApplicationDbContext dbContext)
-        : IQueryHandler<GetTasksQuery, List<TaskEntity>>
+    public class GetTasksListHandler(IPermissionService permService, IApplicationDbContext dbContext)
+        : IQueryHandler<GetTasksListQuery, List<TaskEntity>>
     {
         private readonly IPermissionService _permService = permService;
         private readonly IApplicationDbContext _dbContext = dbContext;
 
-        public async Task<List<TaskEntity>> Handle(GetTasksQuery query)
+        public async Task<List<TaskEntity>> Handle(GetTasksListQuery query)
         {
             // 🔐 Получаем текущего пользователя
             var user = await _permService.GetCurrentUser();

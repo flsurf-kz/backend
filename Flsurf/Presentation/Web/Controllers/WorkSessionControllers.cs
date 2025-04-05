@@ -4,12 +4,14 @@ using Flsurf.Application.Freelance.Commands.WorkSession;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 using Flsurf.Domain.Freelance.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Flsurf.Presentation.Web.Controllers
 {
     [ApiController]
     [Route("api/work-session")]
+    [Authorize]
     public class WorkSessionController : ControllerBase
     {
         private readonly IWorkSessionService _workSessionService;

@@ -4,6 +4,7 @@ using Flsurf.Application.Freelance.Commands.Skills;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 using Flsurf.Domain.Freelance.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Flsurf.Presentation.Web.Controllers
@@ -19,6 +20,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> CreateSkills([FromBody] CreateSkillsCommand command)
         {
             var handler = _skillService.CreateSkills();
@@ -27,6 +29,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("update")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateSkills([FromBody] UpdateSkillsCommand command)
         {
             var handler = _skillService.UpdateSkills();
@@ -35,6 +38,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpDelete("delete")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> DeleteSkills([FromBody] DeleteSkillsCommand command)
         {
             var handler = _skillService.DeleteSkills();

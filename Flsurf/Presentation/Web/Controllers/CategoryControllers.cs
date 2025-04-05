@@ -5,6 +5,7 @@ using Flsurf.Application.Freelance.Commands.Category;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 using Flsurf.Domain.Freelance.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Flsurf.Presentation.Web.Controllers
 {
@@ -19,6 +20,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> CreateCategory([FromBody] CreateCategoryCommand command)
         {
             var handler = _categoryService.CreateCategory();
@@ -27,6 +29,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("update")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateCategory([FromBody] UpdateCategoryCommand command)
         {
             var handler = _categoryService.UpdateCategory();

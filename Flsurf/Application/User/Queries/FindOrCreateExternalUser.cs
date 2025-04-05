@@ -8,11 +8,12 @@ using Flsurf.Domain.User.Entities;
 using Flsurf.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace Flsurf.Application.User.UseCases
+namespace Flsurf.Application.User.Queries
 {
+    // осталяем потому что пиздец 
     public class FindOrCreateExternalUser(
             IApplicationDbContext _context,
-            PasswordService _passwordService, 
+            PasswordService _passwordService,
             UploadFile _uploadFile) : BaseUseCase<ExternalUserDto, UserEntity>
     {
         public async Task<UserEntity> Execute(ExternalUserDto dto)
@@ -54,7 +55,7 @@ namespace Flsurf.Application.User.UseCases
             // Обновляем аватар
             if (!string.IsNullOrEmpty(dto.AvatarUrl) && (user.Avatar == null || user.Avatar.FilePath != dto.AvatarUrl))
             {
-                user.Avatar = await _uploadFile.Execute(new CreateFileDto() { DownloadUrl = dto.AvatarUrl }); 
+                user.Avatar = await _uploadFile.Execute(new CreateFileDto() { DownloadUrl = dto.AvatarUrl });
                 needsUpdate = true;
             }
 

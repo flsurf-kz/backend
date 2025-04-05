@@ -4,6 +4,7 @@ using Flsurf.Application.Freelance.Commands.ClientProfile;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 using Flsurf.Application.Freelance.Queries.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Flsurf.Presentation.Web.Controllers
@@ -41,6 +42,7 @@ namespace Flsurf.Presentation.Web.Controllers
         /// <param name="command">Параметры для создания профиля.</param>
         /// <returns>Результат операции создания профиля.</returns>
         [HttpPost("create")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> CreateClientProfile([FromBody] CreateClientProfileCommand command)
         {
             var handler = _clientProfileService.CreateClientProfile();
@@ -54,6 +56,7 @@ namespace Flsurf.Presentation.Web.Controllers
         /// <param name="command">Параметры для приостановки профиля.</param>
         /// <returns>Результат операции приостановки.</returns>
         [HttpPost("suspend")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> SuspendClientProfile([FromBody] SuspendClientProfileCommand command)
         {
             var handler = _clientProfileService.SuspendClientProfile();
@@ -67,6 +70,7 @@ namespace Flsurf.Presentation.Web.Controllers
         /// <param name="command">Параметры для обновления профиля.</param>
         /// <returns>Результат операции обновления профиля.</returns>
         [HttpPost("update")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateClientProfile([FromBody] UpdateClientProfileCommand command)
         {
             var handler = _clientProfileService.UpdateClientProfile();

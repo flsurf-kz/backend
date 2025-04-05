@@ -86,8 +86,9 @@ namespace Flsurf.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyEnumToStringConversion(); 
             builder.ApplyConfigurationsFromAssembly(assembly: Assembly.GetExecutingAssembly());
+
+            builder.ApplyEnumToStringConversion();
         }
 
         private async Task DispatchDomainEventsAsync()

@@ -5,6 +5,7 @@ using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 using Flsurf.Domain.Freelance.Entities;
 using Hangfire.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Flsurf.Presentation.Web.Controllers
@@ -20,6 +21,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> CreateJob([FromBody] CreateJobCommand command)
         {
             var handler = _jobService.CreateJob();
@@ -28,6 +30,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("update")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateJob([FromBody] UpdateJobCommand command)
         {
             var handler = _jobService.UpdateJob();
@@ -36,6 +39,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpDelete("delete")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> DeleteJob([FromBody] DeleteJobCommand command)
         {
             var handler = _jobService.DeleteJob();
@@ -65,6 +69,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("bookmark")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> BookmarkJob([FromBody] BookmarkJobCommand command)
         {
             var handler = _jobService.BookmarkJob();
@@ -73,6 +78,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("hide")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> HideJob([FromBody] HideJobCommand command)
         {
             var handler = _jobService.HideJob();
@@ -81,6 +87,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("submit-proposal")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> SubmitProposal([FromBody] SubmitProposalCommand command)
         {
             var handler = _jobService.SubmitProposal();
@@ -89,6 +96,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("update-proposal")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateProposal([FromBody] UpdateProposalCommand command)
         {
             var handler = _jobService.UpdateProposal();
@@ -97,6 +105,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("withdraw-proposal")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> WithdrawProposal([FromBody] WithdrawProposalCommand command)
         {
             var handler = _jobService.WithdrawProposal();
@@ -105,6 +114,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpGet("bookmarks")]
+        [Authorize]
         public async Task<ActionResult<ICollection<JobEntity>>> GetBookmarksList()
         {
             var handler = _jobService.GetBookmarksList();

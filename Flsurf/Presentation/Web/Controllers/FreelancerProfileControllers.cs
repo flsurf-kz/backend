@@ -4,6 +4,7 @@ using Flsurf.Application.Freelance.Commands.FreelancerProfile;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 using Flsurf.Domain.Freelance.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Flsurf.Presentation.Web.Controllers
@@ -19,6 +20,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> CreateFreelancerProfile([FromBody] CreateFreelancerProfileCommand command)
         {
             var handler = _freelancerProfileService.CreateFreelancerProfile();
@@ -27,6 +29,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("update")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> UpdateFreelancerProfile([FromBody] UpdateFreelancerProfileCommand command)
         {
             var handler = _freelancerProfileService.UpdateFreelancerProfile();
@@ -35,6 +38,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("hide")]
+        [Authorize]
         public async Task<ActionResult<CommandResult>> HideFreelancerProfile([FromBody] HideFreelancerProfileCommand command)
         {
             var handler = _freelancerProfileService.HideFreelancerProfile();

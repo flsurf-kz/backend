@@ -4,12 +4,14 @@ using Flsurf.Application.Payment.Interfaces;
 using Flsurf.Application.Payment.Queries;
 using Flsurf.Application.Payment.UseCases;
 using Flsurf.Domain.Payment.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Flsurf.Presentation.Web.Controllers
 {
     [ApiController]
     [Route("api/wallet")]
+    [Authorize]
     public class WalletController : ControllerBase
     {
         private readonly IWalletService _walletService;
