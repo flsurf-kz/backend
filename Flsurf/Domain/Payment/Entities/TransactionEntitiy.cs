@@ -116,7 +116,7 @@ namespace Flsurf.Domain.Payment.Entities
         public void ConfirmFromGateway()
         {
             if (Props == null)
-                throw new DomainException("Не та транзакция для потверждения");
+                throw new DomainException("Не та транзакция для потверждения", false);
 
             Complete();
         }

@@ -149,21 +149,24 @@ namespace Flsurf.Domain.Payment.Entities
             if (type == BalanceOperationType.Freeze)
             {
                 FreezeAmount(amount, DateTime.UtcNow.AddDays(4)); // потому что лень делать заморозку 
-            } if (type == BalanceOperationType.Unfreeze)
+            }
+            else if (type == BalanceOperationType.Unfreeze)
             {
-                UnfreezeAmount(amount); 
-            } if (type == BalanceOperationType.PendingIncome)
+                UnfreezeAmount(amount);
+            }
+            else if (type == BalanceOperationType.PendingIncome)
             {
-                PendingIncome += amount; 
-            } else 
-            { 
+                PendingIncome += amount;
+            }
+            else
+            {
                 // admin balance change! 
                 AcceptTransaction(TransactionEntity.Create(
                     walletId: Id,
                     amount: amount,
                     feePolicy: new NoFeePolicy(),
                     type: TransactionType.Transfer,
-                    flow: type == BalanceOperationType.Deposit ? TransactionFlow.Incoming : TransactionFlow.Outgoing, 
+                    flow: type == BalanceOperationType.Deposit ? TransactionFlow.Incoming : TransactionFlow.Outgoing,
                     comment: "Пополнение баланса"));
             }
         }

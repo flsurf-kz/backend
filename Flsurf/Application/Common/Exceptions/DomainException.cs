@@ -8,5 +8,11 @@
             : base($"Domain exception is raised, incorrect data, info: {information}") {
             info = information; 
         }
+
+        public DomainException(string information, bool formatting)
+            : base(!formatting ? information : $"Domain exception is raised, incorrect data, info: {information}" )
+        {
+            info = information;
+        }
     }
 }
