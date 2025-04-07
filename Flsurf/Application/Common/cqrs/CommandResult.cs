@@ -25,6 +25,11 @@ namespace Flsurf.Application.Common.cqrs
             Status = status;
         }
 
+
+        // Успех: создание объекта
+        public static CommandResult Success(string message, Guid id) =>
+            new CommandResult(message, id.ToString(), null, HttpStatusCode.OK);
+
         // Успех: создание объекта
         public static CommandResult Success(Guid id) =>
             new CommandResult(string.Empty, id.ToString(), null, HttpStatusCode.OK);

@@ -4,7 +4,7 @@
   "documentGenerator": {
     "fromDocument": {
       "url": "http://localhost:8000/swagger/v1/swagger.json",
-      "output": "FlsurfClient.ts",
+      "output": "FlsurfSwagger.json",
       "newLineBehavior": "Auto"
     }
   },
@@ -19,6 +19,7 @@
       "httpClass": "HttpClient",
       "withCredentials": true,
       "useSingletonProvider": false,
+      "useFetchCredentials": true,
       "injectionTokenType": "InjectionToken",
       "rxJsVersion": 6.0,
       "dateTimeType": "Date",

@@ -28,7 +28,7 @@ namespace Flsurf.Presentation.Web.Controllers
         {
             if (User?.Identity?.IsAuthenticated == true)
             {
-                return BadRequest("Вы уже авторизованы. Для входа пользователя, пожалуйста, выйдите из системы.");
+                return CommandResult.Forbidden("Вы уже авторизованы").MapResult(this); 
             }
             var user = await _userService.GetUser().Handle(new GetUserQuery { Email = model.Email });
             if (user == null || !user.VerifyPassword(model.Password, passwordService))
@@ -53,7 +53,7 @@ namespace Flsurf.Presentation.Web.Controllers
                     ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
                 });
 
-            return Ok(new { Message = "Authenticated" });
+            return CommandResult.Success("Authenticated", user.Id).MapResult(this); 
         }
 
         [HttpPost("logout", Name = "Logout")]

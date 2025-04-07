@@ -35,7 +35,7 @@ app.UseEventDispatcher();
 app.UseStaticFiles(); 
 app.UseRouting();
 
-app.UseCors("TaskManger");
+app.UseCors("FLsurf");
 
 // ме лемърэ, кнк
 app.UseAuthentication();

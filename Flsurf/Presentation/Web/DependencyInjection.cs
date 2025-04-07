@@ -74,10 +74,17 @@ namespace Flsurf.Presentation.Web
             services.AddHangfireServer();
             services.AddCoreAdmin();
 
-            services.AddCors(option => option.AddPolicy("SparkOfMindLms", builder =>
+            services.AddCors(options =>
             {
-                builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-            }));
+                options.AddPolicy("FLsurf", builder =>
+                {
+                    builder
+                        .AllowAnyOrigin() // или нужный вам домен
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
             services.AddMemoryCache();
 
             services.AddHealthChecks();
