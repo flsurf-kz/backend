@@ -78,8 +78,9 @@ namespace Flsurf.Presentation.Web
             {
                 options.AddPolicy("FLsurf", builder =>
                 {
+                    // CHANGE TODO, WHEN IN PRODUCTION 
                     builder
-                        .AllowAnyOrigin() // или нужный вам домен
+                        .SetIsOriginAllowed(_ => true)
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
