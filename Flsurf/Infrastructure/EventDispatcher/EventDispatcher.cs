@@ -1,4 +1,5 @@
-﻿using Flsurf.Application.Common.Interfaces;
+﻿using Flsurf.Application.Common.Events;
+using Flsurf.Application.Common.Interfaces;
 using Flsurf.Infrastructure.EventStore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -7,141 +8,158 @@ namespace Flsurf.Infrastructure.EventDispatcher
 {
     public class EventDispatcher : IEventDispatcher
     {
-        private readonly Dictionary<Type, List<Type>> eventListeners = new();
+        // Два словаря:
+        // - Первый для доменных обработчиков
+        private readonly Dictionary<Type, List<Type>> _domainSubscribers = new();
+        // - Второй для интеграционных
+        private readonly Dictionary<Type, List<Type>> _integrationSubscribers = new();
+
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<EventDispatcher> _logger;
         private readonly IServiceProvider _serviceProvider;
-        private readonly HashSet<Type> ignoredTypes = new HashSet<Type>(); // Новое поле для игнорируемых типов
+        private readonly HashSet<Type> _ignoredTypes = new();
 
         public EventDispatcher(
-            ILogger<EventDispatcher> logger, IServiceScopeFactory scopeFactory, IServiceProvider serviceProvider)
+            ILogger<EventDispatcher> logger,
+            IServiceScopeFactory scopeFactory,
+            IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
             _logger = logger;
             _scopeFactory = scopeFactory;
+            _serviceProvider = serviceProvider;
         }
 
         public void AddIgnoredTypes(IEnumerable<Type> types)
         {
             foreach (var type in types)
             {
-                _logger.LogInformation($"Added {type.FullName} into ignore list");
-                ignoredTypes.Add(type);
+                _logger.LogInformation("Added {TypeName} to ignore list", type.FullName);
+                _ignoredTypes.Add(type);
             }
         }
 
+        /// <summary>
+        /// Регистрирует все классы, реализующие доменный или интеграционный интерфейс.
+        /// </summary>
         public void RegisterEventSubscribers(Assembly assembly, IServiceScope scope)
         {
-            var eventSubscriberTypes = assembly.GetTypes()
-                .Where(type => type.IsClass && !type.IsAbstract && ImplementsEventSubscriberInterface(type));
-            _logger.LogInformation(
-                $"Started to registering event subscribers, types: {string.Join(", ", eventSubscriberTypes.Select(t => t.FullName))}");
-            foreach (var eventSubscriberType in eventSubscriberTypes)
+            var subscriberTypes = assembly.GetTypes()
+                .Where(t => t.IsClass && !t.IsAbstract && !_ignoredTypes.Contains(t))
+                .Where(ImplementsAnyEventSubscriberInterface)
+                .ToList();
+
+            _logger.LogInformation("Registering event subscribers: {Types}",
+                string.Join(", ", subscriberTypes.Select(t => t.FullName)));
+
+            foreach (var subscriberType in subscriberTypes)
             {
-                if (ignoredTypes.Contains(eventSubscriberType)) // Проверка на игнорируемые типы
+                // Убедимся, что этот тип зарегистрирован в DI
+                scope.ServiceProvider.GetRequiredService(subscriberType);
+
+                // Доменные хендлеры
+                var domainEventTypes = GetDomainEventTypesFromSubscriber(subscriberType);
+                foreach (var domainEventType in domainEventTypes)
                 {
-                    _logger.LogInformation($"Skipping registration of ignored type {eventSubscriberType.FullName}");
-                    continue;
-                }
-                // verfication! 
-                scope.ServiceProvider.GetRequiredService(eventSubscriberType);
-                var eventTypes = GetEventTypes(eventSubscriberType);
-                foreach (var eventType in eventTypes)
-                {
-                    if (!eventListeners.ContainsKey(eventType))
+                    if (!_domainSubscribers.ContainsKey(domainEventType))
+                        _domainSubscribers[domainEventType] = new List<Type>();
+
+                    if (!_domainSubscribers[domainEventType].Contains(subscriberType))
                     {
-                        eventListeners[eventType] = new List<Type>();
+                        _domainSubscribers[domainEventType].Add(subscriberType);
+                        _logger.LogInformation("Added domain subscriber {Subscriber} for event type {EventType}",
+                            subscriberType.FullName, domainEventType.FullName);
                     }
+                }
 
-                    if (!eventListeners[eventType].Contains(eventSubscriberType))
+                // Интеграционные хендлеры
+                var integrationEventTypes = GetIntegrationEventTypesFromSubscriber(subscriberType);
+                foreach (var integrationEventType in integrationEventTypes)
+                {
+                    if (!_integrationSubscribers.ContainsKey(integrationEventType))
+                        _integrationSubscribers[integrationEventType] = new List<Type>();
+
+                    if (!_integrationSubscribers[integrationEventType].Contains(subscriberType))
                     {
-                        eventListeners[eventType].Add(eventSubscriberType);
-                        _logger.LogInformation($"Added event subscriber {eventSubscriberType.FullName} for event type {eventType.FullName}");
+                        _integrationSubscribers[integrationEventType].Add(subscriberType);
+                        _logger.LogInformation("Added integration subscriber {Subscriber} for event type {EventType}",
+                            subscriberType.FullName, integrationEventType.FullName);
                     }
                 }
             }
         }
 
-        public void RegisterEventSubscriber<TEvent>(IEventSubscriber<TEvent> eventSubscriber) where TEvent : BaseEvent
+        // ============== Методы для диспатча ==============
+
+        /// <summary>
+        /// Обработать доменные события (все хендлеры, реализующие IDomainEventSubscriber<T>).
+        /// Вызывается до коммита транзакции.
+        /// </summary>
+        public async Task DispatchDomainEventAsync<TEvent>(TEvent @event, IApplicationDbContext dbContext) where TEvent : BaseEvent
         {
-            var eventTypes = GetEventTypes(typeof(TEvent));
-
-            foreach (var eventType in eventTypes)
-            {
-                if (!eventListeners.ContainsKey(eventType))
-                {
-                    eventListeners[eventType] = new List<Type>();
-                }
-
-                var eventSubscriberType = typeof(IEventSubscriber<>).MakeGenericType(typeof(TEvent));
-                if (!eventListeners[eventType].Contains(eventSubscriberType))
-                {
-                    eventListeners[eventType].Add(eventSubscriberType);
-                }
-            }
-        }
-
-        public void AddListener<TEvent>(Action<TEvent> listener) where TEvent : BaseEvent
-        {
-            var eventType = typeof(TEvent);
-            if (!eventListeners.ContainsKey(eventType))
-            {
-                eventListeners[eventType] = new List<Type>();
-            }
-
-            var listenerType = listener.GetType();
-            if (!eventListeners[eventType].Contains(listenerType))
-            {
-                eventListeners[eventType].Add(listenerType);
-            }
-        }
-
-        public void RemoveListener<TEvent>(Action<TEvent> listener) where TEvent : BaseEvent
-        {
-            var eventType = typeof(TEvent);
-            if (eventListeners.ContainsKey(eventType))
-            {
-                var listenerType = listener.GetType();
-                eventListeners[eventType].Remove(listenerType);
-            }
-        }
-
-        public async Task Dispatch<TEvent>(TEvent @event, IApplicationDbContext dbContext) where TEvent : BaseEvent
-        {
-            _logger.LogInformation($"Dispatching event: {@event}, its type: {@event.GetType()}");
-
             var eventType = @event.GetType();
+            _logger.LogInformation("Dispatching DOMAIN event: {EventType}", eventType.Name);
 
-            if (eventListeners.ContainsKey(eventType))
+            if (_domainSubscribers.ContainsKey(eventType))
             {
-                foreach (var eventSubscriberType in eventListeners[eventType])
+                foreach (var subscriberType in _domainSubscribers[eventType])
                 {
-                    using (var scope = _scopeFactory.CreateScope())
-                    {
-                        var eventSubscriber = scope.ServiceProvider.GetRequiredService(eventSubscriberType);
-                        dynamic dynamicSubscriber = Convert.ChangeType(eventSubscriber, eventSubscriberType);
-
-                        await dynamicSubscriber.HandleEvent((dynamic)@event, dbContext);
-
-                        // only after succesful completion, event could be added to eventStore. 
-                        var eventStore = scope.ServiceProvider.GetRequiredService<IEventStore>();
-
-                        await eventStore.StoreEvent(@event);
-                    }
+                    using var scope = _scopeFactory.CreateScope();
+                    var subscriber = scope.ServiceProvider.GetRequiredService(subscriberType);
+                    // Вызываем dynamic-инвокацию
+                    dynamic dynamicSubscriber = Convert.ChangeType(subscriber, subscriberType);
+                    await dynamicSubscriber.HandleEvent((dynamic)@event, dbContext);
                 }
             }
         }
 
-        private IEnumerable<Type> GetEventTypes(Type eventSubscriberType)
+        /// <summary>
+        /// Обработать интеграционные события (все хендлеры, реализующие IIntegrationEventSubscriber<T>).
+        /// Вызывается после коммита транзакции.
+        /// </summary>
+        public async Task DispatchIntegrationEventAsync<TEvent>(TEvent @event) where TEvent : BaseEvent
         {
-            return eventSubscriberType.GetInterfaces()
-                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventSubscriber<>))
+            var eventType = @event.GetType();
+            _logger.LogInformation("Dispatching INTEGRATION event: {EventType}", eventType.Name);
+
+            if (_integrationSubscribers.ContainsKey(eventType))
+            {
+                foreach (var subscriberType in _integrationSubscribers[eventType])
+                {
+                    using var scope = _scopeFactory.CreateScope();
+                    var subscriber = scope.ServiceProvider.GetRequiredService(subscriberType);
+                    dynamic dynamicSubscriber = Convert.ChangeType(subscriber, subscriberType);
+                    // Здесь dbContext обычно не нужен, поэтому null
+                    await dynamicSubscriber.HandleEvent((dynamic)@event);
+                }
+            }
+        }
+
+        // ========== Вспомогательные методы ===========
+
+        private bool ImplementsAnyEventSubscriberInterface(Type type)
+        {
+            return type.GetInterfaces().Any(i =>
+                i.IsGenericType && (
+                    i.GetGenericTypeDefinition() == typeof(IDomainEventSubscriber<>) ||
+                    i.GetGenericTypeDefinition() == typeof(IIntegrationEventSubscriber<>)
+                ));
+        }
+
+        private IEnumerable<Type> GetDomainEventTypesFromSubscriber(Type subscriberType)
+        {
+            // Ищем все интерфейсы вида: IDomainEventSubscriber<TEvent>
+            return subscriberType.GetInterfaces()
+                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDomainEventSubscriber<>))
                 .Select(i => i.GetGenericArguments()[0]);
         }
 
-        private bool ImplementsEventSubscriberInterface(Type type)
+        private IEnumerable<Type> GetIntegrationEventTypesFromSubscriber(Type subscriberType)
         {
-            return type.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventSubscriber<>));
+            // Ищем все интерфейсы вида: IIntegrationEventSubscriber<TEvent>
+            return subscriberType.GetInterfaces()
+                .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IIntegrationEventSubscriber<>))
+                .Select(i => i.GetGenericArguments()[0]);
         }
     }
+
 }

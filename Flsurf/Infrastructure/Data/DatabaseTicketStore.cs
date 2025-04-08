@@ -31,7 +31,7 @@ namespace Flsurf.Infrastructure.Data
 
         public async Task<AuthenticationTicket?> RetrieveAsync(string key)
         {
-            if (_cache.TryGetValue(key, out AuthenticationTicket cachedTicket))
+            if (_cache.TryGetValue(key, out AuthenticationTicket? cachedTicket))
                 return cachedTicket;
 
             if (!Guid.TryParse(key, out var keyId))

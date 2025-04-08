@@ -8,12 +8,12 @@ namespace Flsurf.Domain.Payment.Events
 {
     public class TransactionCreated(TransactionEntity transaction) : DomainEvent
     {
-        public TransactionEntity Transaction { get; set; } = transaction;
+        public Guid TransactionId { get; } = transaction.Id; 
     }
 
     public class TransactionConfirmed(TransactionEntity transaction) : DomainEvent
     {
-        public TransactionEntity Transaction { get; set; } = transaction;
+        public Guid TransactionId { get; } = transaction.Id; 
     }
 
     public class TransactionRolledBack : DomainEvent

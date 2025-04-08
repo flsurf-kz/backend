@@ -1,13 +1,17 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
 using Flsurf.Domain.Freelance.Entities;
+using Flsurf.Domain.User.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Freelance.Commands.FreelancerProfile
 {
     public class CreateFreelancerProfileCommand : BaseCommand
     {
+        // for internal usage 
+        public Guid? UserId { get; set; } 
         public string Experience { get; set; } = string.Empty;
         public decimal HourlyRate { get; set; }
         public string? Resume { get; set; }
@@ -27,7 +31,17 @@ namespace Flsurf.Application.Freelance.Commands.FreelancerProfile
 
         public async Task<CommandResult> Handle(CreateFreelancerProfileCommand command)
         {
-            var user = await _permService.GetCurrentUser();
+            UserEntity? user;
+
+            if (command.UserId == null)
+                user = await _permService.GetCurrentUser();
+            else
+                user = await _dbContext.Users
+                    .IncludeStandard()
+                    .FirstOrDefaultAsync(x => x.Id == command.UserId);
+            if (user == null)
+                return CommandResult.NotFound("ПОшел нахуй отсюда", command.UserId ?? Guid.Empty);
+
             if (user.Type != Domain.User.Enums.UserTypes.NonUser)
             {
                 return CommandResult.Conflict("You are already registered freelancer"); 

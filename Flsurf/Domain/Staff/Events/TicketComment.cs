@@ -5,13 +5,13 @@ namespace Flsurf.Domain.Staff.Events
 {
     public class TicketCommentAdded(TicketCommentEntity comment, TicketEntity ticket) : DomainEvent
     {
-        public TicketEntity Ticket { get; set; } = ticket;
-        public TicketCommentEntity Comment { get; set; } = comment;
+        public Guid TicketId { get; } = ticket.Id; 
+        public Guid CommentId { get; } = comment.Id;
     }
 
     public class TicketCommentRemoved(TicketCommentEntity comment, TicketEntity ticket) : DomainEvent
     {
-        public TicketEntity Ticket { get; set; } = ticket;
-        public TicketCommentEntity Comment { get; set; } = comment;
+        public Guid TicketId { get; } = comment.Id;
+        public Guid CommentId { get; } = ticket.Id; 
     }
 }

@@ -1,9 +1,10 @@
-﻿using Flsurf.Application.Common.Interfaces;
+﻿using Flsurf.Application.Common.Events;
+using Flsurf.Application.Common.Interfaces;
 using Newtonsoft.Json;
 
 namespace Flsurf.Infrastructure.EventDispatcher
 {
-    public class LoggingHandler<Event> : IEventSubscriber<Event> where Event : BaseEvent
+    public class LoggingHandler<Event> : IDomainEventSubscriber<Event> where Event : BaseEvent
     {
         private ILogger _logger;
 

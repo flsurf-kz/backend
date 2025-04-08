@@ -45238,7 +45238,9 @@
         "OneOf": [],
         "AnyOf": [],
         "Not": null,
-        "Required": [],
+        "Required": [
+          "companyName"
+        ],
         "Items": null,
         "MaxItems": null,
         "MinItems": null,
@@ -45336,7 +45338,7 @@
             "Minimum": null,
             "ExclusiveMinimum": null,
             "MaxLength": null,
-            "MinLength": null,
+            "MinLength": 1,
             "Pattern": null,
             "MultipleOf": null,
             "Default": null,
@@ -45359,7 +45361,7 @@
             "Discriminator": null,
             "Example": null,
             "Enum": [],
-            "Nullable": true,
+            "Nullable": false,
             "ExternalDocs": null,
             "Deprecated": false,
             "Xml": null,
@@ -46780,6 +46782,47 @@
             "Example": null,
             "Enum": [],
             "Nullable": false,
+            "ExternalDocs": null,
+            "Deprecated": false,
+            "Xml": null,
+            "Extensions": {},
+            "UnresolvedReference": false,
+            "Reference": null
+          },
+          "userId": {
+            "Title": null,
+            "Type": "string",
+            "Format": "uuid",
+            "Description": null,
+            "Maximum": null,
+            "ExclusiveMaximum": null,
+            "Minimum": null,
+            "ExclusiveMinimum": null,
+            "MaxLength": null,
+            "MinLength": null,
+            "Pattern": null,
+            "MultipleOf": null,
+            "Default": null,
+            "ReadOnly": false,
+            "WriteOnly": false,
+            "AllOf": [],
+            "OneOf": [],
+            "AnyOf": [],
+            "Not": null,
+            "Required": [],
+            "Items": null,
+            "MaxItems": null,
+            "MinItems": null,
+            "UniqueItems": null,
+            "Properties": {},
+            "MaxProperties": null,
+            "MinProperties": null,
+            "AdditionalPropertiesAllowed": true,
+            "AdditionalProperties": null,
+            "Discriminator": null,
+            "Example": null,
+            "Enum": [],
+            "Nullable": true,
             "ExternalDocs": null,
             "Deprecated": false,
             "Xml": null,
@@ -48246,7 +48289,17 @@
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
+                "Value": "Other"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
                 "Value": "NonUser"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
+                "Value": "Staff"
               }
             ],
             "Nullable": true,
@@ -69394,10 +69447,12 @@
         "AnyOf": [],
         "Not": null,
         "Required": [
+          "country",
           "email",
           "name",
           "password",
-          "surname"
+          "surname",
+          "type"
         ],
         "Items": null,
         "MaxItems": null,
@@ -69601,6 +69656,130 @@
             "Discriminator": null,
             "Example": null,
             "Enum": [],
+            "Nullable": false,
+            "ExternalDocs": null,
+            "Deprecated": false,
+            "Xml": null,
+            "Extensions": {},
+            "UnresolvedReference": false,
+            "Reference": null
+          },
+          "country": {
+            "Title": null,
+            "Type": "string",
+            "Format": null,
+            "Description": null,
+            "Maximum": null,
+            "ExclusiveMaximum": null,
+            "Minimum": null,
+            "ExclusiveMinimum": null,
+            "MaxLength": null,
+            "MinLength": null,
+            "Pattern": null,
+            "MultipleOf": null,
+            "Default": null,
+            "ReadOnly": false,
+            "WriteOnly": false,
+            "AllOf": [],
+            "OneOf": [],
+            "AnyOf": [],
+            "Not": null,
+            "Required": [],
+            "Items": null,
+            "MaxItems": null,
+            "MinItems": null,
+            "UniqueItems": null,
+            "Properties": {},
+            "MaxProperties": null,
+            "MinProperties": null,
+            "AdditionalPropertiesAllowed": true,
+            "AdditionalProperties": null,
+            "Discriminator": null,
+            "Example": null,
+            "Enum": [
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
+                "Value": "Kazakhstan"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
+                "Value": "Russia"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
+                "Value": "Belarus"
+              }
+            ],
+            "Nullable": false,
+            "ExternalDocs": null,
+            "Deprecated": false,
+            "Xml": null,
+            "Extensions": {},
+            "UnresolvedReference": false,
+            "Reference": null
+          },
+          "type": {
+            "Title": null,
+            "Type": "string",
+            "Format": null,
+            "Description": null,
+            "Maximum": null,
+            "ExclusiveMaximum": null,
+            "Minimum": null,
+            "ExclusiveMinimum": null,
+            "MaxLength": null,
+            "MinLength": null,
+            "Pattern": null,
+            "MultipleOf": null,
+            "Default": null,
+            "ReadOnly": false,
+            "WriteOnly": false,
+            "AllOf": [],
+            "OneOf": [],
+            "AnyOf": [],
+            "Not": null,
+            "Required": [],
+            "Items": null,
+            "MaxItems": null,
+            "MinItems": null,
+            "UniqueItems": null,
+            "Properties": {},
+            "MaxProperties": null,
+            "MinProperties": null,
+            "AdditionalPropertiesAllowed": true,
+            "AdditionalProperties": null,
+            "Discriminator": null,
+            "Example": null,
+            "Enum": [
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
+                "Value": "Freelancer"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
+                "Value": "Client"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
+                "Value": "Other"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
+                "Value": "NonUser"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
+                "Value": "Staff"
+              }
+            ],
             "Nullable": false,
             "ExternalDocs": null,
             "Deprecated": false,
@@ -88949,7 +89128,17 @@
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
+                "Value": "Other"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
                 "Value": "NonUser"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
+                "Value": "Staff"
               }
             ],
             "Nullable": false,

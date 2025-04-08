@@ -101,7 +101,7 @@ namespace Flsurf.Domain.User.Entities
 
             user.HashedPassword = hashedPassword;
 
-            user.AddDomainEvent(new UserCreated(User: user));
+            user.AddDomainEvent(new UserCreated(user));
 
             return user;
         }

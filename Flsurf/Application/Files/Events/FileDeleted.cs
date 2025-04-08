@@ -1,5 +1,4 @@
 ﻿using Flsurf.Domain.Files.Entities;
-using Flsurf.Infrastructure.EventDispatcher;
 
 namespace Flsurf.Application.Files.Events
 {

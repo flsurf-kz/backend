@@ -55,9 +55,9 @@
             };
         }
 
-        public async Task<PaymentStatus> CheckPaymentStatus(string paymentId)
+        public Task<PaymentStatus> CheckPaymentStatus(string paymentId)
         {
-            return PaymentStatus.Pending;
+            return Task.FromResult(PaymentStatus.Pending);
         }
 
         public Task<PaymentResult> RefundPayment(string paymentId, decimal amount)

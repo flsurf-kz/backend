@@ -6303,7 +6303,7 @@ export interface ICreateCategoryCommand {
 export class CreateClientProfileCommand implements ICreateClientProfileCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
-    companyName?: string | undefined;
+    companyName!: string;
     companyDescription?: string | undefined;
     companyWebsite?: string | undefined;
     location?: string | undefined;
@@ -6359,7 +6359,7 @@ export class CreateClientProfileCommand implements ICreateClientProfileCommand {
 export interface ICreateClientProfileCommand {
     commandId?: string | undefined;
     timestamp?: Date;
-    companyName?: string | undefined;
+    companyName: string;
     companyDescription?: string | undefined;
     companyWebsite?: string | undefined;
     location?: string | undefined;
@@ -6551,6 +6551,7 @@ export interface ICreateFileDto {
 export class CreateFreelancerProfileCommand implements ICreateFreelancerProfileCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
+    userId?: string | undefined;
     experience?: string | undefined;
     hourlyRate?: number;
     resume?: string | undefined;
@@ -6568,6 +6569,7 @@ export class CreateFreelancerProfileCommand implements ICreateFreelancerProfileC
         if (_data) {
             (<any>this).commandId = _data["commandId"];
             (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
+            this.userId = _data["userId"];
             this.experience = _data["experience"];
             this.hourlyRate = _data["hourlyRate"];
             this.resume = _data["resume"];
@@ -6585,6 +6587,7 @@ export class CreateFreelancerProfileCommand implements ICreateFreelancerProfileC
         data = typeof data === 'object' ? data : {};
         data["commandId"] = this.commandId;
         data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
+        data["userId"] = this.userId;
         data["experience"] = this.experience;
         data["hourlyRate"] = this.hourlyRate;
         data["resume"] = this.resume;
@@ -6595,6 +6598,7 @@ export class CreateFreelancerProfileCommand implements ICreateFreelancerProfileC
 export interface ICreateFreelancerProfileCommand {
     commandId?: string | undefined;
     timestamp?: Date;
+    userId?: string | undefined;
     experience?: string | undefined;
     hourlyRate?: number;
     resume?: string | undefined;
@@ -10266,6 +10270,8 @@ export class RegisterUserSchema implements IRegisterUserSchema {
     phone?: string | undefined;
     password!: string;
     email!: string;
+    country!: RegisterUserSchemaCountry;
+    type!: RegisterUserSchemaType;
 
     constructor(data?: IRegisterUserSchema) {
         if (data) {
@@ -10283,6 +10289,8 @@ export class RegisterUserSchema implements IRegisterUserSchema {
             this.phone = _data["phone"];
             this.password = _data["password"];
             this.email = _data["email"];
+            this.country = _data["country"];
+            this.type = _data["type"];
         }
     }
 
@@ -10300,6 +10308,8 @@ export class RegisterUserSchema implements IRegisterUserSchema {
         data["phone"] = this.phone;
         data["password"] = this.password;
         data["email"] = this.email;
+        data["country"] = this.country;
+        data["type"] = this.type;
         return data;
     }
 }
@@ -10310,6 +10320,8 @@ export interface IRegisterUserSchema {
     phone?: string | undefined;
     password: string;
     email: string;
+    country: RegisterUserSchemaCountry;
+    type: RegisterUserSchemaType;
 }
 
 export class ResolveDisputeCommand implements IResolveDisputeCommand {
@@ -13668,7 +13680,9 @@ export enum CreateNotificationCommandRole {
 export enum CreateNotificationCommandType {
     Freelancer = "Freelancer",
     Client = "Client",
+    Other = "Other",
     NonUser = "NonUser",
+    Staff = "Staff",
 }
 
 export enum EventInfoMemberType {
@@ -13948,6 +13962,20 @@ export enum ProposalEntityStatus {
     Hidden = "Hidden",
 }
 
+export enum RegisterUserSchemaCountry {
+    Kazakhstan = "Kazakhstan",
+    Russia = "Russia",
+    Belarus = "Belarus",
+}
+
+export enum RegisterUserSchemaType {
+    Freelancer = "Freelancer",
+    Client = "Client",
+    Other = "Other",
+    NonUser = "NonUser",
+    Staff = "Staff",
+}
+
 export enum ResolveDisputeCommandStrategy {
     _0 = 0,
     _1 = 1,
@@ -14140,7 +14168,9 @@ export enum UserEntityRole {
 export enum UserEntityType {
     Freelancer = "Freelancer",
     Client = "Client",
+    Other = "Other",
     NonUser = "NonUser",
+    Staff = "Staff",
 }
 
 export enum UserEntityLocation {

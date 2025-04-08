@@ -51,6 +51,8 @@ BackgroundJobsRegister.RegisterInfrastructureBGJobs();
 app.UseWebSockets(new WebSocketOptions() { 
     KeepAliveInterval = TimeSpan.FromMinutes(2), 
 });
+
+app.MapHealthChecks("/api/health");
 app.MapControllers();
 
 app.Run();

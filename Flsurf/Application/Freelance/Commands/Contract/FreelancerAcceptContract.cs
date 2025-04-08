@@ -97,7 +97,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             }
 
             // Событие подписания контракта
-            contract.AddDomainEvent(new ContractSignedEvent(contract.Id, freelancer.Id));
+            contract.AddDomainEvent(new ContractSignedEvent(contract, freelancer));
 
             await _dbContext.SaveChangesAsync();
 

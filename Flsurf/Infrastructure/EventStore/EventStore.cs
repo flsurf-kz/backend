@@ -1,5 +1,4 @@
 ﻿using Flsurf.Application.Common.Interfaces;
-using Flsurf.Infrastructure.EventDispatcher;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -17,7 +16,7 @@ namespace Flsurf.Infrastructure.EventStore
             _user = user;
         }
 
-        public async Task StoreEvent<TEvent>(TEvent @event) where TEvent : BaseEvent
+        public async Task StoreEvent<TEvent>(TEvent @event, bool isIntegrationEvent) where TEvent : BaseEvent
         {
             var jsonOptions = new JsonSerializerSettings
             {
@@ -32,13 +31,15 @@ namespace Flsurf.Infrastructure.EventStore
             {
                 EventId = Guid.NewGuid(),
                 ByUserId = _user.Id,
-                EventType = typeof(TEvent).Name,
-                Data = JsonConvert.SerializeObject(@event, jsonOptions)
+                EventType = typeof(TEvent).FullName ?? typeof(TEvent).Name, // можно FullName для точного соответствия
+                Data = JsonConvert.SerializeObject(@event, jsonOptions),
+                IsIntegrationEvent = isIntegrationEvent
             };
 
             await _context.Events.AddAsync(storedEvent);
             await _context.SaveChangesAsync();
         }
+
 
         public async Task<IEnumerable<StoredEvent>> GetEvents(BaseEvent _eventType, DateTime? from = null, DateTime? to = null)
         {

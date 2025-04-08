@@ -1,10 +1,9 @@
 ﻿using Flsurf.Domain.User.Entities;
-using Flsurf.Infrastructure.EventDispatcher;
 
 namespace Flsurf.Domain.User.Events
 {
-    public class UserCreated(UserEntity User) : BaseEvent
+    public class UserCreated(UserEntity user) : BaseEvent
     {
-        public UserEntity User { get; set; } = User;
+        public Guid UserId { get; } = user.Id;
     }
 }

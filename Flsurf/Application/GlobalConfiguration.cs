@@ -1,4 +1,5 @@
-﻿using Flsurf.Infrastructure.EventDispatcher;
+﻿using Flsurf.Application.Common.Events;
+using Flsurf.Infrastructure.EventDispatcher;
 using System.Reflection;
 
 namespace Flsurf.Application
@@ -7,7 +8,7 @@ namespace Flsurf.Application
     {
         public static IApplicationBuilder UseEventDispatcher(this IApplicationBuilder app)
         {
-            var eventDispatcher = (EventDispatcher)app.ApplicationServices.GetRequiredService<IEventDispatcher>();
+            var eventDispatcher = app.ApplicationServices.GetRequiredService<IEventDispatcher>();
 
             eventDispatcher.AddIgnoredTypes([typeof(LoggingHandler<>)]);
 

@@ -1,30 +1,30 @@
 ﻿using Flsurf.Domain.Freelance.Entities;
-using Flsurf.Infrastructure.EventDispatcher;
 
 namespace Flsurf.Domain.Freelance.Events
 {
+
     public class TaskCreatedEvent(TaskEntity task) : BaseEvent
     {
-        public TaskEntity Task { get; } = task; 
+        public Guid TaskId { get; } = task.Id;
     }
 
     public class TaskCompletedEvent(TaskEntity task) : BaseEvent
     {
-        public TaskEntity Task { get; } = task; 
+        public Guid TaskId { get; } = task.Id;
     }
 
     public class TaskApprovedEvent(TaskEntity task) : BaseEvent
     {
-        public TaskEntity Task { get; } = task; 
+        public Guid TaskId { get; } = task.Id;
     }
 
     public class TaskSentForRevisionEvent(TaskEntity task) : BaseEvent
     {
-        public TaskEntity Task { get; } = task; 
+        public Guid TaskId { get; } = task.Id;
     }
 
     public class TaskUpdatedEvent(TaskEntity task) : BaseEvent
     {
-        public TaskEntity Task { get; } = task; 
+        public Guid TaskId { get; } = task.Id;
     }
 }

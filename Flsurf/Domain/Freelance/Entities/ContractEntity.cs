@@ -38,7 +38,7 @@ namespace Flsurf.Domain.Freelance.Entities
         // NEED FIX this edgecase of nullable!! 
         public decimal TotalHoursWorked => WorkSessions?
             .Where(ws => ws.EndDate.HasValue)
-            .Sum(ws => (decimal)(ws.EndDate.Value - ws.StartDate).TotalHours) ?? 0;  
+            .Sum(ws => (decimal)(ws.EndDate!.Value - ws.StartDate).TotalHours) ?? 0;  
 
         public Money? RemainingBudget => Budget != Money.Null() && CostPerHour != Money.Null()
             ? Budget - (CostPerHour * TotalHoursWorked)

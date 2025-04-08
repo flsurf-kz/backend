@@ -14,6 +14,7 @@ using SpiceDb;
 using Flsurf.Infrastructure.Adapters.Payment;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Flsurf.Infrastructure.EventDispatcher;
 
 namespace Flsurf.Infrastructure
 {
@@ -66,6 +67,7 @@ namespace Flsurf.Infrastructure
             services.AddScoped<IEventStore, EventStore.EventStore>();
             services.AddScoped<ApplicationDbContextInitialiser>();
             services.AddScoped<EventStoreContextInitialiser>();
+            services.AddHostedService<IntegrationEventWorker>(); 
 
             services.AddSingleton<IPaymentAdapterFactory, PaymentAdapterFactory>();
 

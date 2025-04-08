@@ -5,10 +5,11 @@ using Flsurf.Domain.Payment.Entities;
 using Flsurf.Domain.Staff.Entities;
 using Flsurf.Domain.User.Entities;
 using Flsurf.Application.Common.Interfaces;
-using Flsurf.Infrastructure.EventDispatcher;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Messanging.Entities;
 using Flsurf.Infrastructure.Data.Configuration;
+using Flsurf.Application.Common.Events;
+using Flsurf.Infrastructure.EventStore;
 
 namespace Flsurf.Infrastructure.Data
 {
@@ -65,17 +66,44 @@ namespace Flsurf.Infrastructure.Data
 
 
         private readonly IEventDispatcher _dispatcher;
+        private readonly IEventStore _eventStore; 
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IEventDispatcher eventDispatcher) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IEventDispatcher eventDispatcher, IEventStore eventStore) : base(options)
         {
             _dispatcher = eventDispatcher;
+            // god forgive me for this sin 
+            _eventStore = eventStore; 
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            // необходимо сделать очередь которая будет выполнятся паралельно ПОСЛЕ сохранения! 
-            //await DispatchDomainEventsAsync();
-            return await base.SaveChangesAsync(cancellationToken);
+            // Собираем все события, они не будут разделены на две категории из за запарности 
+            var eventsEntites = ChangeTracker.Entries<BaseEntity>()
+                .Where(e => e.Entity.DomainEvents?.Any() == true)
+                .Select(e => e.Entity)
+                .ToList();
+
+            var domainEvents = eventsEntites
+                .SelectMany(e => e.DomainEvents)
+                .ToList();
+
+            eventsEntites.ForEach(e => e.ClearDomainEvents());
+
+            // Вызываем доменные обработчики (как раньше)
+            await DispatchDomainEventsAsync(domainEvents);
+
+            // Сохраняем (commit) доменные изменения
+            var result = await base.SaveChangesAsync(cancellationToken);
+
+            // Сохраняем эти события в таблицу Outbox (или EventStore)
+            // Здесь можно сериализовать событие и добавить в OutboxIntegrationEvents
+            foreach (var @event in domainEvents)
+            {
+                await _eventStore.StoreEvent(@event, isIntegrationEvent: true);
+            }
+            // теперь эти события в паралельном обработчике. 
+
+            return result;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -91,24 +119,13 @@ namespace Flsurf.Infrastructure.Data
             builder.ApplyEnumToStringConversion();
         }
 
-        private async Task DispatchDomainEventsAsync()
+        private async Task DispatchDomainEventsAsync(List<BaseEvent> domainEvents)
         {
-            var entities = ChangeTracker
-                .Entries<BaseEntity>()
-                .Where(e => e.Entity.DomainEvents.Any())
-                .Select(e => e.Entity);
-
-            var domainEvents = entities
-                .SelectMany(e => e.DomainEvents)
-                .ToList();
-
-            entities.ToList().ForEach(e => e.ClearDomainEvents());
-
             foreach (var domainEvent in domainEvents)
             {
                 try
                 {
-                    await _dispatcher.Dispatch(domainEvent, this);
+                    await _dispatcher.DispatchDomainEventAsync(domainEvent, this);
                 }
                 catch
                 {

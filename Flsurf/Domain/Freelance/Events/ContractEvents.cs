@@ -1,31 +1,25 @@
 ﻿using Flsurf.Domain.Freelance.Entities;
-using Flsurf.Infrastructure.EventDispatcher;
+using Flsurf.Domain.User.Entities;
 
 namespace Flsurf.Domain.Freelance.Events
 {
     public class DeadLineChanged(ContractEntity contract, DateTime endTime) : DomainEvent
     {
-        public ContractEntity Contract { get; } = contract; 
+        public Guid ContractId { get; } = contract.Id;
         public DateTime DeadLine { get; } = endTime;
     }
 
     // notifies freelancer about task was added
     public class ContractTaskAdded(ContractEntity contract, TaskEntity task) : DomainEvent
-    {  
-        public ContractEntity Contrct { get; } = contract;
-        public TaskEntity Task { get; } = task;
+    {
+        public Guid ContractId { get; } = contract.Id;
+        public Guid TaskId { get; } = task.Id;
     }
 
-    public class ContractSignedEvent : DomainEvent
+    public class ContractSignedEvent(ContractEntity contract, UserEntity freelancer) : DomainEvent
     {
-        public Guid ContractId { get; }
-        public Guid FreelancerId { get; }
-
-        public ContractSignedEvent(Guid contractId, Guid freelancerId)
-        {
-            ContractId = contractId;
-            FreelancerId = freelancerId;
-        }
+        public Guid ContractId { get; } = contract.Id;
+        public Guid FreelancerId { get; } = freelancer.Id;
     }
 
     public class ContractSentToFreelancer : DomainEvent
@@ -94,18 +88,19 @@ namespace Flsurf.Domain.Freelance.Events
         }
     }
 
-    public class ContractFinished(ContractEntity _contract) : DomainEvent {
-        public ContractEntity Contract { get; } = _contract; 
+    public class ContractFinished(ContractEntity contract) : DomainEvent
+    {
+        public Guid ContractId { get; } = contract.Id;
     }
 
-    public class ContractResumed(ContractEntity _contract) : DomainEvent
+    public class ContractResumed(ContractEntity contract) : DomainEvent
     {
-        public ContractEntity Contract { get; } = _contract;
+        public Guid ContractId { get; } = contract.Id;
     }
 
-    public class ContractPaused(ContractEntity _contract, string reason) : DomainEvent
+    public class ContractPaused(ContractEntity contract, string reason) : DomainEvent
     {
-        public ContractEntity Contract { get; } = _contract;
-        public string Reason { get; } = reason; 
+        public Guid ContractId { get; } = contract.Id;
+        public string Reason { get; } = reason;
     }
 }

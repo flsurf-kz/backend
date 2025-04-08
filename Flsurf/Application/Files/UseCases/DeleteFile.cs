@@ -1,4 +1,5 @@
-﻿using Flsurf.Application.Common.Interfaces;
+﻿using Flsurf.Application.Common.Events;
+using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Files.Dto;
 using Flsurf.Application.Files.Events;
@@ -6,7 +7,6 @@ using Flsurf.Application.Files.Permissions;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.FileStorage;
 using Flsurf.Infrastructure.Adapters.Permissions;
-using Flsurf.Infrastructure.EventDispatcher;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Files.UseCases
@@ -56,7 +56,8 @@ namespace Flsurf.Application.Files.UseCases
 
             // very important dont remove, it will cause silent deletion ALL
             // of files if someone does hacking stuff in SuperUser user
-            await _eventDispatcher.Dispatch(new FileDeleted(file), _context);
+            await _eventDispatcher.DispatchDomainEventAsync(new FileDeleted(file), _context);
+
             _context.Files.Remove(file);
             await _context.SaveChangesAsync();
 

@@ -5,7 +5,7 @@ namespace Flsurf.Domain.User.Events
 {
     public class UserRoleUpdated(UserEntity user, UserRoles role) : DomainEvent
     {
-        public UserEntity User { get; set; } = user;
-        public UserRoles Role { get; set; } = role; 
+        public Guid UserId { get; } = user.Id;
+        public UserRoles Role { get; } = role;
     }
 }

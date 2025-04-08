@@ -9,6 +9,7 @@ namespace Flsurf.Infrastructure.Adapters.Permissions
     {
         public static async IAsyncEnumerable<T> Empty<T>()
         {
+            await Task.CompletedTask;
             yield break;
         }
     }

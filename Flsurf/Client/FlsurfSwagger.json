@@ -5820,6 +5820,9 @@
       "CreateClientProfileCommand": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "companyName"
+        ],
         "properties": {
           "commandId": {
             "type": "string",
@@ -5833,7 +5836,7 @@
           },
           "companyName": {
             "type": "string",
-            "nullable": true
+            "minLength": 1
           },
           "companyDescription": {
             "type": "string",
@@ -5998,6 +6001,11 @@
             "type": "string",
             "readOnly": true,
             "format": "date-time"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
           },
           "experience": {
             "type": "string",
@@ -6169,7 +6177,9 @@
             "enum": [
               "Freelancer",
               "Client",
-              "NonUser"
+              "Other",
+              "NonUser",
+              "Staff"
             ]
           }
         }
@@ -8523,10 +8533,12 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
+          "country",
           "email",
           "name",
           "password",
-          "surname"
+          "surname",
+          "type"
         ],
         "properties": {
           "name": {
@@ -8552,6 +8564,24 @@
             "type": "string",
             "format": "email",
             "minLength": 1
+          },
+          "country": {
+            "type": "string",
+            "enum": [
+              "Kazakhstan",
+              "Russia",
+              "Belarus"
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "Freelancer",
+              "Client",
+              "Other",
+              "NonUser",
+              "Staff"
+            ]
           }
         }
       },
@@ -10682,7 +10712,9 @@
             "enum": [
               "Freelancer",
               "Client",
-              "NonUser"
+              "Other",
+              "NonUser",
+              "Staff"
             ]
           },
           "email": {

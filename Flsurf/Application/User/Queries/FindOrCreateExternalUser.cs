@@ -25,7 +25,7 @@ namespace Flsurf.Application.User.Queries
             if (user != null)
             {
                 // Обновляем информацию, если необходимо
-                UpdateUserIfNeeded(user, dto);
+                await UpdateUserIfNeeded(user, dto);
                 return user;
             }
 

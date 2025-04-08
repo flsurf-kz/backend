@@ -7,9 +7,9 @@ namespace Flsurf.Application.Messaging.UseCases
     {
         public MarkAsRead() { }
 
-        public async Task<bool> Execute(MarkAsReadDto dto)
+        public Task<bool> Execute(MarkAsReadDto dto)
         {
-            return true;
+            return Task.FromResult(true);
         }
     }
 }

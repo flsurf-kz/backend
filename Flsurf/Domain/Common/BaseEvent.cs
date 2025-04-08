@@ -1,8 +1,7 @@
-﻿namespace Flsurf.Infrastructure.EventDispatcher
+﻿namespace Flsurf.Domain.Common
 {
     public abstract class BaseEvent
     {
-
         public DateTime Timestamp { get; set; }
         public Guid? AggregateId { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using Flsurf.Domain.User.Enums;
+﻿using Flsurf.Domain.Freelance.Enums;
+using Flsurf.Domain.User.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace Flsurf.Presentation.Web.Schemas
@@ -40,5 +41,9 @@ namespace Flsurf.Presentation.Web.Schemas
         public string Password { get; set; } = null!;
         [Required, EmailAddress]
         public string Email { get; set; } = null!;
+        [Required]
+        public Countries Country { get; set; }
+        [Required]
+        public UserTypes Type { get; set; }
     }
 }

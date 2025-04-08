@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Components;
 using Flsurf.Infrastructure.Data;
 using Flsurf.Domain.Common;
-using Flsurf.Infrastructure.EventDispatcher;
+using Flsurf.Application.Common.Events;
 
 namespace Flsurf.Infrastructure.Data.Intercepters
 {
@@ -55,7 +55,7 @@ namespace Flsurf.Infrastructure.Data.Intercepters
                 try
                 {
                     var dispatcher = _serviceProvider.GetRequiredService<IEventDispatcher>();
-                    await dispatcher.Dispatch(domainEvent, (ApplicationDbContext)context);
+                    await dispatcher.DispatchDomainEventAsync(domainEvent, (ApplicationDbContext)context);
                 }
                 catch
                 {

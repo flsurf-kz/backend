@@ -4,6 +4,6 @@ namespace Flsurf.Domain.User.Events
 {
     public class GroupCreated(GroupEntity group) : DomainEvent
     {
-        public GroupEntity Group { get; set; } = group;
+        public Guid GroupId { get; } = group.Id;
     }
 }

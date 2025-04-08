@@ -15,5 +15,16 @@ namespace Flsurf.Infrastructure.EventStore
         [Column(TypeName = "jsonb")]
         [Required]
         public string Data { get; set; } = null!;
+        /// <summary>
+        /// Указывает, является ли событие интеграционным (внешним).
+        /// Для доменных или прочих событий ставим false.
+        /// </summary>
+        public bool IsIntegrationEvent { get; set; }
+
+        /// <summary>
+        /// Показывает, было ли событие уже обработано
+        /// асинхронным воркером (true - да, false - нет).
+        /// </summary>
+        public bool Processed { get; set; } = false;
     }
 }

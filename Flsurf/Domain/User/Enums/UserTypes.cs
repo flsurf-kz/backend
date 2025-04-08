@@ -7,6 +7,8 @@ namespace Flsurf.Domain.User.Enums
     {
         Freelancer, 
         Client, 
+        Other, 
         NonUser, 
+        Staff, 
     }
 }

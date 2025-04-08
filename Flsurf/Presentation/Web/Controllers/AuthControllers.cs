@@ -79,7 +79,7 @@ namespace Flsurf.Presentation.Web.Controllers
                 Password = model.Password,
                 Name = model.Name,
                 Surname = model.Surname,
-                UserType = Domain.User.Enums.UserTypes.NonUser,
+                UserType = model.Type,
             };
 
             // Выполняем команду создания пользователя через UserService.
@@ -139,9 +139,9 @@ namespace Flsurf.Presentation.Web.Controllers
 
             var userDto = new ExternalUserDto
             {
-                Email = externalUser.FindFirstValue(ClaimTypes.Email),
-                FullName = externalUser.FindFirstValue(ClaimTypes.Name),
-                Provider = result.Properties.Items[".AuthScheme"] // Имя провайдера
+                Email = externalUser?.FindFirstValue(ClaimTypes.Email) ?? string.Empty,
+                FullName = externalUser?.FindFirstValue(ClaimTypes.Name) ?? string.Empty,
+                Provider = result?.Properties?.Items?[".AuthScheme"] ?? string.Empty // Имя провайдера
             };
 
             var user = await _userService
@@ -169,11 +169,7 @@ namespace Flsurf.Presentation.Web.Controllers
                 new Claim("UserType", user.Type.ToString())
             };
 
-            // Добавление ролей (если используется Role-Based Access Control)
-            if (user.Role != null)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, user.Role.ToString()));
-            }
+            claims.Add(new Claim(ClaimTypes.Role, user.Role.ToString()));
 
             var identity = new ClaimsIdentity(
                 claims,
