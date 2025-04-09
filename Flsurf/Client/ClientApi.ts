@@ -14,7 +14,7 @@ export interface IClient {
      * @param body (optional) 
      * @return Success
      */
-    login(body?: LoginUserSchema | undefined): Promise<void>;
+    login(body?: LoginUserSchema | undefined): Promise<CommandResult>;
 
     /**
      * @return Success
@@ -25,7 +25,7 @@ export interface IClient {
      * @param body (optional) 
      * @return Success
      */
-    register(body?: RegisterUserSchema | undefined): Promise<void>;
+    register(body?: RegisterUserSchema | undefined): Promise<CommandResult>;
 
     /**
      * @return Success
@@ -617,7 +617,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    login(body?: LoginUserSchema | undefined): Promise<void> {
+    login(body?: LoginUserSchema | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/auth/login";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -628,6 +628,7 @@ export class Client implements IClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "text/plain"
             }
         };
 
@@ -636,19 +637,22 @@ export class Client implements IClient {
         });
     }
 
-    protected processLogin(response: Response): Promise<void> {
+    protected processLogin(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<CommandResult>(null as any);
     }
 
     /**
@@ -688,7 +692,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    register(body?: RegisterUserSchema | undefined): Promise<void> {
+    register(body?: RegisterUserSchema | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/auth/register";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -699,6 +703,7 @@ export class Client implements IClient {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Accept": "text/plain"
             }
         };
 
@@ -707,19 +712,22 @@ export class Client implements IClient {
         });
     }
 
-    protected processRegister(response: Response): Promise<void> {
+    protected processRegister(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
-            return;
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
             });
         } else if (status !== 200 && status !== 204) {
             return response.text().then((_responseText) => {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<void>(null as any);
+        return Promise.resolve<CommandResult>(null as any);
     }
 
     /**

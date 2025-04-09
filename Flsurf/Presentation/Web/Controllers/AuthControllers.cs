@@ -24,7 +24,7 @@ namespace Flsurf.Presentation.Web.Controllers
     public class AuthController(IUserService _userService, PasswordService passwordService) : ControllerBase
     {
         [HttpPost("login", Name = "Login")]
-        public async Task<IActionResult> Login([FromBody] LoginUserSchema model)
+        public async Task<ActionResult<CommandResult>> Login([FromBody] LoginUserSchema model)
         {
             if (User?.Identity?.IsAuthenticated == true)
             {
@@ -64,7 +64,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("register", Name = "Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterUserSchema model)
+        public async Task<ActionResult<CommandResult>> Register([FromBody] RegisterUserSchema model)
         {
             // Если пользователь уже авторизован, регистрация не разрешается
             if (User?.Identity?.IsAuthenticated == true)
