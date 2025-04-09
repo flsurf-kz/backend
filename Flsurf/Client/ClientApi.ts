@@ -41,6 +41,18 @@ export interface IClient {
      * @param body (optional) 
      * @return Success
      */
+    sendResetPasswordCode(body?: SendResetCodeCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    resetPassword(body?: ResetPasswordCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     createCategory(body?: CreateCategoryCommand | undefined): Promise<CommandResult>;
 
     /**
@@ -797,6 +809,90 @@ export class Client implements IClient {
             });
         }
         return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    sendResetPasswordCode(body?: SendResetCodeCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/auth/send-reset-code";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processSendResetPasswordCode(_response);
+        });
+    }
+
+    protected processSendResetPasswordCode(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    resetPassword(body?: ResetPasswordCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/auth/reset-password";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processResetPassword(_response);
+        });
+    }
+
+    protected processResetPassword(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
     }
 
     /**
@@ -10332,6 +10428,58 @@ export interface IRegisterUserSchema {
     type: RegisterUserSchemaType;
 }
 
+export class ResetPasswordCommand implements IResetPasswordCommand {
+    readonly commandId?: string | undefined;
+    readonly timestamp?: Date;
+    code!: string;
+    email!: string;
+    newPassword!: string;
+
+    constructor(data?: IResetPasswordCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).commandId = _data["commandId"];
+            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
+            this.code = _data["code"];
+            this.email = _data["email"];
+            this.newPassword = _data["newPassword"];
+        }
+    }
+
+    static fromJS(data: any): ResetPasswordCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ResetPasswordCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["commandId"] = this.commandId;
+        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
+        data["code"] = this.code;
+        data["email"] = this.email;
+        data["newPassword"] = this.newPassword;
+        return data;
+    }
+}
+
+export interface IResetPasswordCommand {
+    commandId?: string | undefined;
+    timestamp?: Date;
+    code: string;
+    email: string;
+    newPassword: string;
+}
+
 export class ResolveDisputeCommand implements IResolveDisputeCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
@@ -10554,6 +10702,50 @@ export interface ISelectContestWinnerCommand {
     timestamp?: Date;
     contestId: string;
     entryId: string;
+}
+
+export class SendResetCodeCommand implements ISendResetCodeCommand {
+    readonly commandId?: string | undefined;
+    readonly timestamp?: Date;
+    email!: string;
+
+    constructor(data?: ISendResetCodeCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).commandId = _data["commandId"];
+            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): SendResetCodeCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new SendResetCodeCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["commandId"] = this.commandId;
+        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
+        data["email"] = this.email;
+        return data;
+    }
+}
+
+export interface ISendResetCodeCommand {
+    commandId?: string | undefined;
+    timestamp?: Date;
+    email: string;
 }
 
 export class SkillEntity implements ISkillEntity {

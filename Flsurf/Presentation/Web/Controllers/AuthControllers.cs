@@ -178,5 +178,53 @@ namespace Flsurf.Presentation.Web.Controllers
 
             return new ClaimsPrincipal(identity);
         }
+
+        /// <summary>
+        /// Отправляет на указанный email код для сброса пароля
+        /// </summary>
+        [HttpPost("send-reset-code", Name = "SendResetPasswordCode")]
+        public async Task<ActionResult<CommandResult>> SendResetPasswordCode([FromBody] SendResetCodeCommand model)
+        {
+            // Если пользователь уже авторизован, регистрация не разрешается
+            if (User?.Identity?.IsAuthenticated == true)
+            {
+                return CommandResult.BadRequest("Вы уже авторизованы, сброс пароля невозможен").MapResult(this);
+            }
+
+            // Формируем команду для отправки кода сброса
+            var command = new SendResetCodeCommand
+            {
+                Email = model.Email
+            };
+
+            // Выполняем команду через UserService
+            var result = await _userService.SendResetPasswordCode().Handle(command);
+
+            if (!result.IsSuccess)
+                return result.MapResult(this);
+
+            return CommandResult.Success().MapResult(this);
+        }
+
+        /// <summary>
+        /// Сбрасывает пароль пользователя по коду, отправленному на email
+        /// </summary>
+        [HttpPost("reset-password", Name = "ResetPassword")]
+        public async Task<ActionResult<CommandResult>> ResetPassword([FromBody] ResetPasswordCommand model)
+        {
+            // Формируем команду для сброса пароля
+            var command = new ResetPasswordCommand
+            {
+                Code = model.Code,
+                NewPassword = model.NewPassword
+            };
+
+            var result = await _userService.ResetPassword().Handle(command);
+
+            if (!result.IsSuccess)
+                return result.MapResult(this);
+
+            return CommandResult.Success().MapResult(this);
+        }
     }
 }
