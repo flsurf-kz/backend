@@ -5722,9 +5722,9 @@ export interface IClientRejectContractCompletionCommand {
 
 export class CommandResult implements ICommandResult {
     readonly message?: string | undefined;
-    readonly id?: string | undefined;
+    readonly id!: string;
     readonly ids?: string[] | undefined;
-    readonly status?: CommandResultStatus;
+    readonly status!: CommandResultStatus;
     readonly isSuccess?: boolean;
 
     constructor(data?: ICommandResult) {
@@ -5774,9 +5774,9 @@ export class CommandResult implements ICommandResult {
 
 export interface ICommandResult {
     message?: string | undefined;
-    id?: string | undefined;
+    id: string;
     ids?: string[] | undefined;
-    status?: CommandResultStatus;
+    status: CommandResultStatus;
     isSuccess?: boolean;
 }
 

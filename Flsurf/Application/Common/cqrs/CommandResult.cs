@@ -1,12 +1,15 @@
-﻿using System.Net;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
 
 namespace Flsurf.Application.Common.cqrs
 {
     public class CommandResult
     {
         public string Message { get; }
+        [Required]
         public string? Id { get; }
         public List<string>? Ids { get; }
+        [Required]
         public HttpStatusCode Status { get; }
 
         public bool IsSuccess => Status == HttpStatusCode.OK;
