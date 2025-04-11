@@ -325,11 +325,10 @@ export interface IClient {
     getJob(id: string): Promise<Job>;
 
     /**
-     * @param start (optional) 
-     * @param end (optional) 
+     * @param body (optional) 
      * @return Success
      */
-    getJobsList(start?: number | undefined, end?: number | undefined): Promise<Job[]>;
+    getJobsList(body?: GetJobsListQuery | undefined): Promise<Job[]>;
 
     /**
      * @param body (optional) 
@@ -2878,25 +2877,20 @@ export class Client implements IClient {
     }
 
     /**
-     * @param start (optional) 
-     * @param end (optional) 
+     * @param body (optional) 
      * @return Success
      */
-    getJobsList(start?: number | undefined, end?: number | undefined): Promise<Job[]> {
-        let url_ = this.baseUrl + "/api/job/list?";
-        if (start === null)
-            throw new Error("The parameter 'start' cannot be null.");
-        else if (start !== undefined)
-            url_ += "start=" + encodeURIComponent("" + start) + "&";
-        if (end === null)
-            throw new Error("The parameter 'end' cannot be null.");
-        else if (end !== undefined)
-            url_ += "end=" + encodeURIComponent("" + end) + "&";
+    getJobsList(body?: GetJobsListQuery | undefined): Promise<Job[]> {
+        let url_ = this.baseUrl + "/api/job/list";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_: RequestInit = {
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "text/plain"
             }
         };
@@ -8463,6 +8457,126 @@ export interface IGatewayResultCommand {
     metadata?: { [key: string]: string; } | undefined;
 }
 
+export class GetJobsListQuery implements IGetJobsListQuery {
+    readonly queryId?: string | undefined;
+    readonly timestamp?: Date;
+    start?: number;
+    ends?: number;
+    search?: string | undefined;
+    categoryId?: string | undefined;
+    levels?: Levels[] | undefined;
+    isHourly?: boolean | undefined;
+    minBudget?: number | undefined;
+    maxBudget?: number | undefined;
+    minHourlyRate?: number | undefined;
+    maxHourlyRate?: number | undefined;
+    minProposals?: number | undefined;
+    maxProposals?: number | undefined;
+    minDurationDays?: number | undefined;
+    maxDurationDays?: number | undefined;
+    employerLocation?: GetJobsListQueryEmployerLocation | undefined;
+    statuses?: Statuses[] | undefined;
+
+    constructor(data?: IGetJobsListQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).queryId = _data["queryId"];
+            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
+            this.start = _data["start"];
+            this.ends = _data["ends"];
+            this.search = _data["search"];
+            this.categoryId = _data["categoryId"];
+            if (Array.isArray(_data["levels"])) {
+                this.levels = [] as any;
+                for (let item of _data["levels"])
+                    this.levels!.push(item);
+            }
+            this.isHourly = _data["isHourly"];
+            this.minBudget = _data["minBudget"];
+            this.maxBudget = _data["maxBudget"];
+            this.minHourlyRate = _data["minHourlyRate"];
+            this.maxHourlyRate = _data["maxHourlyRate"];
+            this.minProposals = _data["minProposals"];
+            this.maxProposals = _data["maxProposals"];
+            this.minDurationDays = _data["minDurationDays"];
+            this.maxDurationDays = _data["maxDurationDays"];
+            this.employerLocation = _data["employerLocation"];
+            if (Array.isArray(_data["statuses"])) {
+                this.statuses = [] as any;
+                for (let item of _data["statuses"])
+                    this.statuses!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): GetJobsListQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetJobsListQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["queryId"] = this.queryId;
+        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
+        data["start"] = this.start;
+        data["ends"] = this.ends;
+        data["search"] = this.search;
+        data["categoryId"] = this.categoryId;
+        if (Array.isArray(this.levels)) {
+            data["levels"] = [];
+            for (let item of this.levels)
+                data["levels"].push(item);
+        }
+        data["isHourly"] = this.isHourly;
+        data["minBudget"] = this.minBudget;
+        data["maxBudget"] = this.maxBudget;
+        data["minHourlyRate"] = this.minHourlyRate;
+        data["maxHourlyRate"] = this.maxHourlyRate;
+        data["minProposals"] = this.minProposals;
+        data["maxProposals"] = this.maxProposals;
+        data["minDurationDays"] = this.minDurationDays;
+        data["maxDurationDays"] = this.maxDurationDays;
+        data["employerLocation"] = this.employerLocation;
+        if (Array.isArray(this.statuses)) {
+            data["statuses"] = [];
+            for (let item of this.statuses)
+                data["statuses"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IGetJobsListQuery {
+    queryId?: string | undefined;
+    timestamp?: Date;
+    start?: number;
+    ends?: number;
+    search?: string | undefined;
+    categoryId?: string | undefined;
+    levels?: Levels[] | undefined;
+    isHourly?: boolean | undefined;
+    minBudget?: number | undefined;
+    maxBudget?: number | undefined;
+    minHourlyRate?: number | undefined;
+    maxHourlyRate?: number | undefined;
+    minProposals?: number | undefined;
+    maxProposals?: number | undefined;
+    minDurationDays?: number | undefined;
+    maxDurationDays?: number | undefined;
+    employerLocation?: GetJobsListQueryEmployerLocation | undefined;
+    statuses?: Statuses[] | undefined;
+}
+
 export class GetTicketsDto implements IGetTicketsDto {
     start?: number;
     ends?: number;
@@ -13947,6 +14061,29 @@ export enum GatewayResultCommandCurrency {
     RussianRuble = "RussianRuble",
     Dollar = "Dollar",
     Euro = "Euro",
+}
+
+export enum Levels {
+    Beginner = "Beginner",
+    Intermediate = "Intermediate",
+    Expert = "Expert",
+}
+
+export enum GetJobsListQueryEmployerLocation {
+    Kazakhstan = "Kazakhstan",
+    Russia = "Russia",
+    Belarus = "Belarus",
+}
+
+export enum Statuses {
+    Open = "Open",
+    Expired = "Expired",
+    Closed = "Closed",
+    Accepted = "Accepted",
+    InContract = "InContract",
+    Draft = "Draft",
+    Completed = "Completed",
+    WaitingFreelancerApproval = "WaitingFreelancerApproval",
 }
 
 export enum JobEntityStatus {

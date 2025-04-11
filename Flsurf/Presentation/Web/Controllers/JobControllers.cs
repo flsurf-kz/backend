@@ -58,11 +58,10 @@ namespace Flsurf.Presentation.Web.Controllers
             return Ok(job);
         }
 
-        [HttpGet("list", Name = "GetJobsList")]
+        [HttpPost("list", Name = "GetJobsList")]
         public async Task<ActionResult<ICollection<Job>>> GetJobsList(
-            [FromQuery] int start = 0, [FromQuery] int end = 10)
+            [FromBody] GetJobsListQuery query)
         {
-            var query = new GetJobsListQuery { Start = start, Ends = end };
             var handler = _jobService.GetJobsList();
             var jobs = await handler.Handle(query);
             return Ok(jobs);
