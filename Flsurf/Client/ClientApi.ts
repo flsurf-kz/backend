@@ -421,9 +421,10 @@ export interface IClient {
     deleteSkills(body?: DeleteSkillsCommand | undefined): Promise<CommandResult>;
 
     /**
+     * @param searchQuery (optional) 
      * @return Success
      */
-    getSkills(): Promise<SkillEntity[]>;
+    getSkills(searchQuery?: string | undefined): Promise<SkillEntity[]>;
 
     /**
      * @return Success
@@ -3581,10 +3582,15 @@ export class Client implements IClient {
     }
 
     /**
+     * @param searchQuery (optional) 
      * @return Success
      */
-    getSkills(): Promise<SkillEntity[]> {
-        let url_ = this.baseUrl + "/api/skill/list";
+    getSkills(searchQuery?: string | undefined): Promise<SkillEntity[]> {
+        let url_ = this.baseUrl + "/api/skill/list?";
+        if (searchQuery === null)
+            throw new Error("The parameter 'searchQuery' cannot be null.");
+        else if (searchQuery !== undefined)
+            url_ += "searchQuery=" + encodeURIComponent("" + searchQuery) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {

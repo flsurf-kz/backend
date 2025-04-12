@@ -17,9 +17,9 @@ namespace Flsurf.Application.Freelance.Queries
             var skillsQuery = _dbContext.Skills.AsQueryable();
 
             // 🔎 Поиск по названию навыка
-            if (!string.IsNullOrWhiteSpace(query.Search))
+            if (!string.IsNullOrWhiteSpace(query.SearchQuery))
             {
-                string searchLower = query.Search.ToLower();
+                string searchLower = query.SearchQuery.ToLower();
                 skillsQuery = skillsQuery.Where(s => s.Name.ToLower().Contains(searchLower));
             }
 
