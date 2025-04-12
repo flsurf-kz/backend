@@ -18970,11 +18970,11 @@
                       "Reference": {
                         "ExternalResource": null,
                         "Type": 0,
-                        "Id": "Job",
+                        "Id": "JobEntity",
                         "IsExternal": false,
                         "IsLocal": true,
-                        "ReferenceV3": "#/components/schemas/Job",
-                        "ReferenceV2": "#/definitions/Job"
+                        "ReferenceV3": "#/components/schemas/JobEntity",
+                        "ReferenceV2": "#/definitions/JobEntity"
                       }
                     },
                     "MaxItems": null,
@@ -19065,11 +19065,11 @@
                       "Reference": {
                         "ExternalResource": null,
                         "Type": 0,
-                        "Id": "Job",
+                        "Id": "JobEntity",
                         "IsExternal": false,
                         "IsLocal": true,
-                        "ReferenceV3": "#/components/schemas/Job",
-                        "ReferenceV2": "#/definitions/Job"
+                        "ReferenceV3": "#/components/schemas/JobEntity",
+                        "ReferenceV2": "#/definitions/JobEntity"
                       }
                     },
                     "MaxItems": null,
@@ -19160,11 +19160,11 @@
                       "Reference": {
                         "ExternalResource": null,
                         "Type": 0,
-                        "Id": "Job",
+                        "Id": "JobEntity",
                         "IsExternal": false,
                         "IsLocal": true,
-                        "ReferenceV3": "#/components/schemas/Job",
-                        "ReferenceV2": "#/definitions/Job"
+                        "ReferenceV3": "#/components/schemas/JobEntity",
+                        "ReferenceV2": "#/definitions/JobEntity"
                       }
                     },
                     "MaxItems": null,

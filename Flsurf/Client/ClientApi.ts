@@ -328,7 +328,7 @@ export interface IClient {
      * @param body (optional) 
      * @return Success
      */
-    getJobsList(body?: GetJobsListQuery | undefined): Promise<Job[]>;
+    getJobsList(body?: GetJobsListQuery | undefined): Promise<JobEntity[]>;
 
     /**
      * @param body (optional) 
@@ -2880,7 +2880,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    getJobsList(body?: GetJobsListQuery | undefined): Promise<Job[]> {
+    getJobsList(body?: GetJobsListQuery | undefined): Promise<JobEntity[]> {
         let url_ = this.baseUrl + "/api/job/list";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2900,7 +2900,7 @@ export class Client implements IClient {
         });
     }
 
-    protected processGetJobsList(response: Response): Promise<Job[]> {
+    protected processGetJobsList(response: Response): Promise<JobEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2910,7 +2910,7 @@ export class Client implements IClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(Job.fromJS(item));
+                    result200!.push(JobEntity.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -2922,7 +2922,7 @@ export class Client implements IClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Job[]>(null as any);
+        return Promise.resolve<JobEntity[]>(null as any);
     }
 
     /**

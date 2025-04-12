@@ -59,7 +59,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpPost("list", Name = "GetJobsList")]
-        public async Task<ActionResult<ICollection<Job>>> GetJobsList(
+        public async Task<ActionResult<ICollection<JobEntity>>> GetJobsList(
             [FromBody] GetJobsListQuery query)
         {
             var handler = _jobService.GetJobsList();
