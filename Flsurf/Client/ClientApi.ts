@@ -67,9 +67,10 @@ export interface IClient {
     deleteCategory(categoryId: string): Promise<CommandResult>;
 
     /**
+     * @param searchQuery (optional) 
      * @return Success
      */
-    getCategories(): Promise<CategoryEntity[]>;
+    getCategories(searchQuery?: string | undefined): Promise<CategoryEntity[]>;
 
     /**
      * @return Success
@@ -1019,10 +1020,15 @@ export class Client implements IClient {
     }
 
     /**
+     * @param searchQuery (optional) 
      * @return Success
      */
-    getCategories(): Promise<CategoryEntity[]> {
-        let url_ = this.baseUrl + "/api/category/list";
+    getCategories(searchQuery?: string | undefined): Promise<CategoryEntity[]> {
+        let url_ = this.baseUrl + "/api/category/list?";
+        if (searchQuery === null)
+            throw new Error("The parameter 'searchQuery' cannot be null.");
+        else if (searchQuery !== undefined)
+            url_ += "searchQuery=" + encodeURIComponent("" + searchQuery) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
