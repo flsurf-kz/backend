@@ -8476,6 +8476,8 @@ export class GetJobsListQuery implements IGetJobsListQuery {
     maxDurationDays?: number | undefined;
     employerLocation?: GetJobsListQueryEmployerLocation | undefined;
     statuses?: Statuses[] | undefined;
+    sortType?: GetJobsListQuerySortType | undefined;
+    sortOption?: GetJobsListQuerySortOption | undefined;
 
     constructor(data?: IGetJobsListQuery) {
         if (data) {
@@ -8514,6 +8516,8 @@ export class GetJobsListQuery implements IGetJobsListQuery {
                 for (let item of _data["statuses"])
                     this.statuses!.push(item);
             }
+            this.sortType = _data["sortType"];
+            this.sortOption = _data["sortOption"];
         }
     }
 
@@ -8552,6 +8556,8 @@ export class GetJobsListQuery implements IGetJobsListQuery {
             for (let item of this.statuses)
                 data["statuses"].push(item);
         }
+        data["sortType"] = this.sortType;
+        data["sortOption"] = this.sortOption;
         return data;
     }
 }
@@ -8575,6 +8581,8 @@ export interface IGetJobsListQuery {
     maxDurationDays?: number | undefined;
     employerLocation?: GetJobsListQueryEmployerLocation | undefined;
     statuses?: Statuses[] | undefined;
+    sortType?: GetJobsListQuerySortType | undefined;
+    sortOption?: GetJobsListQuerySortOption | undefined;
 }
 
 export class GetTicketsDto implements IGetTicketsDto {
@@ -14084,6 +14092,18 @@ export enum Statuses {
     Draft = "Draft",
     Completed = "Completed",
     WaitingFreelancerApproval = "WaitingFreelancerApproval",
+}
+
+export enum GetJobsListQuerySortType {
+    Ascending = "Ascending",
+    Descending = "Descending",
+    Default = "Default",
+    Recommended = "Recommended",
+}
+
+export enum GetJobsListQuerySortOption {
+    _0 = 0,
+    _1 = 1,
 }
 
 export enum JobEntityStatus {

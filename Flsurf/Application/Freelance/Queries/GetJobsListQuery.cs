@@ -1,4 +1,5 @@
 ﻿using Flsurf.Application.Common.cqrs;
+using Flsurf.Application.Common.Models;
 using Flsurf.Domain.Freelance.Enums;
 
 namespace Flsurf.Application.Freelance.Queries
@@ -26,6 +27,8 @@ namespace Flsurf.Application.Freelance.Queries
 
         public Countries? EmployerLocation { get; set; } 
         public JobStatus[]? Statuses { get; set; } 
+        public SortByTypes? SortType { get; set; }
+        public SortOption? SortOption { get; set; }
     }
 
 }

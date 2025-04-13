@@ -93,6 +93,9 @@ namespace Flsurf.Application.Freelance.Queries
                 jobsQuery = jobsQuery.Where(j => query.Statuses.Contains(j.Status));
             }
 
+            if (query.SortOption != null && query.SortType != null)
+                jobsQuery = jobsQuery.OrderBy(x => x.PublicationDate); 
+
             // 🔥 Сортировка + Пагинация
             var jobs = await jobsQuery
                 .OrderByDescending(j => j.PublicationDate)
