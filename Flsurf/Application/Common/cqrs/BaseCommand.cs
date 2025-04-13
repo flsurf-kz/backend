@@ -1,13 +1,14 @@
 ﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Flsurf.Application.Common.cqrs
 {
     public abstract class BaseCommand
     {
-        [JsonIgnore]
+        [JsonIgnore, NotMapped]
         public string CommandId { get; } // Уникальный идентификатор команды
 
-        [JsonIgnore]
+        [JsonIgnore, NotMapped]
         public DateTime Timestamp { get; } // Временная метка создания команды
 
         protected BaseCommand()

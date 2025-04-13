@@ -46,11 +46,11 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpGet("list", Name = "GetCategories")]
-        public async Task<ActionResult<ICollection<CategoryEntity>>> GetCategories()
+        public async Task<ActionResult<ICollection<CategoryEntity>>> GetCategories([FromQuery] string? searchQuery)
         {
             var handler = _categoryService.GetCategories();
             // Для простых операций чтения можно возвращать сущности напрямую
-            var categories = await handler.Handle(new GetCategoriesQuery());
+            var categories = await handler.Handle(new GetCategoriesQuery() { SearchQuery = searchQuery });
             return Ok(categories);
         }
     }

@@ -3,6 +3,7 @@ using Flsurf.Application.Common.Extensions;
 using Flsurf.Application.Freelance.Commands.Skills;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
+using Flsurf.Application.Freelance.Queries.Responses;
 using Flsurf.Domain.Freelance.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,10 +48,10 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpGet("list", Name = "GetSkills")]
-        public async Task<ActionResult<ICollection<SkillEntity>>> GetSkills()
+        public async Task<ActionResult<ICollection<SkillModel>>> GetSkills([FromQuery] string searchQuery)
         {
             var handler = _skillService.GetSkills();
-            var skills = await handler.Handle(new GetSkillsQuery());
+            var skills = await handler.Handle(new GetSkillsQuery() { SearchQuery = searchQuery});
             return Ok(skills);
         }
     }

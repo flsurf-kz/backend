@@ -67,9 +67,10 @@ export interface IClient {
     deleteCategory(categoryId: string): Promise<CommandResult>;
 
     /**
+     * @param searchQuery (optional) 
      * @return Success
      */
-    getCategories(): Promise<CategoryEntity[]>;
+    getCategories(searchQuery?: string | undefined): Promise<CategoryEntity[]>;
 
     /**
      * @return Success
@@ -328,7 +329,7 @@ export interface IClient {
      * @param body (optional) 
      * @return Success
      */
-    getJobsList(body?: GetJobsListQuery | undefined): Promise<Job[]>;
+    getJobsList(body?: GetJobsListQuery | undefined): Promise<JobEntity[]>;
 
     /**
      * @param body (optional) 
@@ -420,9 +421,10 @@ export interface IClient {
     deleteSkills(body?: DeleteSkillsCommand | undefined): Promise<CommandResult>;
 
     /**
+     * @param searchQuery (optional) 
      * @return Success
      */
-    getSkills(): Promise<SkillEntity[]>;
+    getSkills(searchQuery?: string | undefined): Promise<SkillEntity[]>;
 
     /**
      * @return Success
@@ -1019,10 +1021,15 @@ export class Client implements IClient {
     }
 
     /**
+     * @param searchQuery (optional) 
      * @return Success
      */
-    getCategories(): Promise<CategoryEntity[]> {
-        let url_ = this.baseUrl + "/api/category/list";
+    getCategories(searchQuery?: string | undefined): Promise<CategoryEntity[]> {
+        let url_ = this.baseUrl + "/api/category/list?";
+        if (searchQuery === null)
+            throw new Error("The parameter 'searchQuery' cannot be null.");
+        else if (searchQuery !== undefined)
+            url_ += "searchQuery=" + encodeURIComponent("" + searchQuery) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -2880,7 +2887,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    getJobsList(body?: GetJobsListQuery | undefined): Promise<Job[]> {
+    getJobsList(body?: GetJobsListQuery | undefined): Promise<JobEntity[]> {
         let url_ = this.baseUrl + "/api/job/list";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2900,7 +2907,7 @@ export class Client implements IClient {
         });
     }
 
-    protected processGetJobsList(response: Response): Promise<Job[]> {
+    protected processGetJobsList(response: Response): Promise<JobEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -2910,7 +2917,7 @@ export class Client implements IClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(Job.fromJS(item));
+                    result200!.push(JobEntity.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -2922,7 +2929,7 @@ export class Client implements IClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Job[]>(null as any);
+        return Promise.resolve<JobEntity[]>(null as any);
     }
 
     /**
@@ -3575,10 +3582,15 @@ export class Client implements IClient {
     }
 
     /**
+     * @param searchQuery (optional) 
      * @return Success
      */
-    getSkills(): Promise<SkillEntity[]> {
-        let url_ = this.baseUrl + "/api/skill/list";
+    getSkills(searchQuery?: string | undefined): Promise<SkillEntity[]> {
+        let url_ = this.baseUrl + "/api/skill/list?";
+        if (searchQuery === null)
+            throw new Error("The parameter 'searchQuery' cannot be null.");
+        else if (searchQuery !== undefined)
+            url_ += "searchQuery=" + encodeURIComponent("" + searchQuery) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
