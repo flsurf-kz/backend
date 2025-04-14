@@ -85,7 +85,9 @@ public class MoneyTests
         {
             Assert.That(rub100 > rub50, Is.True);
             Assert.That(rub50 < rub100, Is.True);
+#pragma warning disable CS1718 // Comparison made to same variable
             Assert.That(rub100 >= rub100, Is.True);
+#pragma warning restore CS1718 // Comparison made to same variable
             Assert.That(rub50 <= rub100, Is.True);
         });
     }
