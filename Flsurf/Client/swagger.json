@@ -18894,11 +18894,11 @@
                     "Reference": {
                       "ExternalResource": null,
                       "Type": 0,
-                      "Id": "JobDetails",
+                      "Id": "JobEntity",
                       "IsExternal": false,
                       "IsLocal": true,
-                      "ReferenceV3": "#/components/schemas/JobDetails",
-                      "ReferenceV2": "#/definitions/JobDetails"
+                      "ReferenceV3": "#/components/schemas/JobEntity",
+                      "ReferenceV2": "#/definitions/JobEntity"
                     }
                   },
                   "Example": null,
@@ -18949,11 +18949,11 @@
                     "Reference": {
                       "ExternalResource": null,
                       "Type": 0,
-                      "Id": "JobDetails",
+                      "Id": "JobEntity",
                       "IsExternal": false,
                       "IsLocal": true,
-                      "ReferenceV3": "#/components/schemas/JobDetails",
-                      "ReferenceV2": "#/definitions/JobDetails"
+                      "ReferenceV3": "#/components/schemas/JobEntity",
+                      "ReferenceV2": "#/definitions/JobEntity"
                     }
                   },
                   "Example": null,
@@ -19004,11 +19004,11 @@
                     "Reference": {
                       "ExternalResource": null,
                       "Type": 0,
-                      "Id": "JobDetails",
+                      "Id": "JobEntity",
                       "IsExternal": false,
                       "IsLocal": true,
-                      "ReferenceV3": "#/components/schemas/JobDetails",
-                      "ReferenceV2": "#/definitions/JobDetails"
+                      "ReferenceV3": "#/components/schemas/JobEntity",
+                      "ReferenceV2": "#/definitions/JobEntity"
                     }
                   },
                   "Example": null,

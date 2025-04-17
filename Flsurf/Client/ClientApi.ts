@@ -328,7 +328,7 @@ export interface IClient {
     /**
      * @return Success
      */
-    getRawJob(id: string): Promise<JobDetails>;
+    getRawJob(id: string): Promise<JobEntity>;
 
     /**
      * @param body (optional) 
@@ -2891,7 +2891,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    getRawJob(id: string): Promise<JobDetails> {
+    getRawJob(id: string): Promise<JobEntity> {
         let url_ = this.baseUrl + "/api/job/{id}/raw";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2910,14 +2910,14 @@ export class Client implements IClient {
         });
     }
 
-    protected processGetRawJob(response: Response): Promise<JobDetails> {
+    protected processGetRawJob(response: Response): Promise<JobEntity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = JobDetails.fromJS(resultData200);
+            result200 = JobEntity.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -2925,7 +2925,7 @@ export class Client implements IClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<JobDetails>(null as any);
+        return Promise.resolve<JobEntity>(null as any);
     }
 
     /**

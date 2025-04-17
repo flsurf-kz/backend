@@ -60,7 +60,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpGet("{id}/raw", Name = "GetRawJob")]
-        public async Task<ActionResult<JobDetails>> GetJobRaw(Guid id)
+        public async Task<ActionResult<JobEntity>> GetJobRaw(Guid id)
         {
             var query = new GetRawJobQuery { JobId = id };
             var handler = _jobService.GetRawJob();
