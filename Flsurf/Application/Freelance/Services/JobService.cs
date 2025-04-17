@@ -25,6 +25,9 @@ namespace Flsurf.Application.Freelance.Services
         public GetJobHandler GetJob() =>
             _serviceProvider.GetRequiredService<GetJobHandler>();
 
+        public GetRawJobHandler GetRawJob() =>
+            _serviceProvider.GetRequiredService<GetRawJobHandler>(); 
+
         public GetJobsListHandler GetJobsList() =>
             _serviceProvider.GetRequiredService<GetJobsListHandler>();
 

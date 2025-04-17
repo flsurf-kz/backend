@@ -323,7 +323,12 @@ export interface IClient {
     /**
      * @return Success
      */
-    getJob(id: string): Promise<Job>;
+    getJob(id: string): Promise<JobDetails>;
+
+    /**
+     * @return Success
+     */
+    getRawJob(id: string): Promise<JobDetails>;
 
     /**
      * @param body (optional) 
@@ -424,7 +429,7 @@ export interface IClient {
      * @param searchQuery (optional) 
      * @return Success
      */
-    getSkills(searchQuery?: string | undefined): Promise<SkillEntity[]>;
+    getSkills(searchQuery?: string | undefined): Promise<SkillModel[]>;
 
     /**
      * @return Success
@@ -2846,7 +2851,7 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    getJob(id: string): Promise<Job> {
+    getJob(id: string): Promise<JobDetails> {
         let url_ = this.baseUrl + "/api/job/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -2865,14 +2870,14 @@ export class Client implements IClient {
         });
     }
 
-    protected processGetJob(response: Response): Promise<Job> {
+    protected processGetJob(response: Response): Promise<JobDetails> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = Job.fromJS(resultData200);
+            result200 = JobDetails.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -2880,7 +2885,47 @@ export class Client implements IClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<Job>(null as any);
+        return Promise.resolve<JobDetails>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getRawJob(id: string): Promise<JobDetails> {
+        let url_ = this.baseUrl + "/api/job/{id}/raw";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetRawJob(_response);
+        });
+    }
+
+    protected processGetRawJob(response: Response): Promise<JobDetails> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = JobDetails.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<JobDetails>(null as any);
     }
 
     /**
@@ -3585,7 +3630,7 @@ export class Client implements IClient {
      * @param searchQuery (optional) 
      * @return Success
      */
-    getSkills(searchQuery?: string | undefined): Promise<SkillEntity[]> {
+    getSkills(searchQuery?: string | undefined): Promise<SkillModel[]> {
         let url_ = this.baseUrl + "/api/skill/list?";
         if (searchQuery === null)
             throw new Error("The parameter 'searchQuery' cannot be null.");
@@ -3605,7 +3650,7 @@ export class Client implements IClient {
         });
     }
 
-    protected processGetSkills(response: Response): Promise<SkillEntity[]> {
+    protected processGetSkills(response: Response): Promise<SkillModel[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3615,7 +3660,7 @@ export class Client implements IClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(SkillEntity.fromJS(item));
+                    result200!.push(SkillModel.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -3627,7 +3672,7 @@ export class Client implements IClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<SkillEntity[]>(null as any);
+        return Promise.resolve<SkillModel[]>(null as any);
     }
 
     /**
@@ -5231,142 +5276,6 @@ export interface IApproveWorkSessionCommand {
     sessionId?: string;
 }
 
-export class Assembly implements IAssembly {
-    readonly definedTypes?: TypeInfo[] | undefined;
-    readonly exportedTypes?: Type[] | undefined;
-    readonly codeBase?: string | undefined;
-    entryPoint?: MethodInfo;
-    readonly fullName?: string | undefined;
-    readonly imageRuntimeVersion?: string | undefined;
-    readonly isDynamic?: boolean;
-    readonly location?: string | undefined;
-    readonly reflectionOnly?: boolean;
-    readonly isCollectible?: boolean;
-    readonly isFullyTrusted?: boolean;
-    readonly customAttributes?: CustomAttributeData[] | undefined;
-    readonly escapedCodeBase?: string | undefined;
-    manifestModule?: Module;
-    readonly modules?: Module[] | undefined;
-    readonly globalAssemblyCache?: boolean;
-    readonly hostContext?: number;
-    readonly securityRuleSet?: AssemblySecurityRuleSet;
-
-    constructor(data?: IAssembly) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["definedTypes"])) {
-                (<any>this).definedTypes = [] as any;
-                for (let item of _data["definedTypes"])
-                    (<any>this).definedTypes!.push(TypeInfo.fromJS(item));
-            }
-            if (Array.isArray(_data["exportedTypes"])) {
-                (<any>this).exportedTypes = [] as any;
-                for (let item of _data["exportedTypes"])
-                    (<any>this).exportedTypes!.push(Type.fromJS(item));
-            }
-            (<any>this).codeBase = _data["codeBase"];
-            this.entryPoint = _data["entryPoint"] ? MethodInfo.fromJS(_data["entryPoint"]) : <any>undefined;
-            (<any>this).fullName = _data["fullName"];
-            (<any>this).imageRuntimeVersion = _data["imageRuntimeVersion"];
-            (<any>this).isDynamic = _data["isDynamic"];
-            (<any>this).location = _data["location"];
-            (<any>this).reflectionOnly = _data["reflectionOnly"];
-            (<any>this).isCollectible = _data["isCollectible"];
-            (<any>this).isFullyTrusted = _data["isFullyTrusted"];
-            if (Array.isArray(_data["customAttributes"])) {
-                (<any>this).customAttributes = [] as any;
-                for (let item of _data["customAttributes"])
-                    (<any>this).customAttributes!.push(CustomAttributeData.fromJS(item));
-            }
-            (<any>this).escapedCodeBase = _data["escapedCodeBase"];
-            this.manifestModule = _data["manifestModule"] ? Module.fromJS(_data["manifestModule"]) : <any>undefined;
-            if (Array.isArray(_data["modules"])) {
-                (<any>this).modules = [] as any;
-                for (let item of _data["modules"])
-                    (<any>this).modules!.push(Module.fromJS(item));
-            }
-            (<any>this).globalAssemblyCache = _data["globalAssemblyCache"];
-            (<any>this).hostContext = _data["hostContext"];
-            (<any>this).securityRuleSet = _data["securityRuleSet"];
-        }
-    }
-
-    static fromJS(data: any): Assembly {
-        data = typeof data === 'object' ? data : {};
-        let result = new Assembly();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.definedTypes)) {
-            data["definedTypes"] = [];
-            for (let item of this.definedTypes)
-                data["definedTypes"].push(item.toJSON());
-        }
-        if (Array.isArray(this.exportedTypes)) {
-            data["exportedTypes"] = [];
-            for (let item of this.exportedTypes)
-                data["exportedTypes"].push(item.toJSON());
-        }
-        data["codeBase"] = this.codeBase;
-        data["entryPoint"] = this.entryPoint ? this.entryPoint.toJSON() : <any>undefined;
-        data["fullName"] = this.fullName;
-        data["imageRuntimeVersion"] = this.imageRuntimeVersion;
-        data["isDynamic"] = this.isDynamic;
-        data["location"] = this.location;
-        data["reflectionOnly"] = this.reflectionOnly;
-        data["isCollectible"] = this.isCollectible;
-        data["isFullyTrusted"] = this.isFullyTrusted;
-        if (Array.isArray(this.customAttributes)) {
-            data["customAttributes"] = [];
-            for (let item of this.customAttributes)
-                data["customAttributes"].push(item.toJSON());
-        }
-        data["escapedCodeBase"] = this.escapedCodeBase;
-        data["manifestModule"] = this.manifestModule ? this.manifestModule.toJSON() : <any>undefined;
-        if (Array.isArray(this.modules)) {
-            data["modules"] = [];
-            for (let item of this.modules)
-                data["modules"].push(item.toJSON());
-        }
-        data["globalAssemblyCache"] = this.globalAssemblyCache;
-        data["hostContext"] = this.hostContext;
-        data["securityRuleSet"] = this.securityRuleSet;
-        return data;
-    }
-}
-
-export interface IAssembly {
-    definedTypes?: TypeInfo[] | undefined;
-    exportedTypes?: Type[] | undefined;
-    codeBase?: string | undefined;
-    entryPoint?: MethodInfo;
-    fullName?: string | undefined;
-    imageRuntimeVersion?: string | undefined;
-    isDynamic?: boolean;
-    location?: string | undefined;
-    reflectionOnly?: boolean;
-    isCollectible?: boolean;
-    isFullyTrusted?: boolean;
-    customAttributes?: CustomAttributeData[] | undefined;
-    escapedCodeBase?: string | undefined;
-    manifestModule?: Module;
-    modules?: Module[] | undefined;
-    globalAssemblyCache?: boolean;
-    hostContext?: number;
-    securityRuleSet?: AssemblySecurityRuleSet;
-}
-
 export class BalanceOperationCommand implements IBalanceOperationCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
@@ -5592,6 +5501,36 @@ export interface ICategoryEntity {
     parentCategoryId?: string | undefined;
     parentCategory?: CategoryEntity;
     subCategories?: CategoryEntity[] | undefined;
+}
+
+export class CategoryModel implements ICategoryModel {
+
+    constructor(data?: ICategoryModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+    }
+
+    static fromJS(data: any): CategoryModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new CategoryModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        return data;
+    }
+}
+
+export interface ICategoryModel {
 }
 
 export class ClientAcceptFinishContractCommand implements IClientAcceptFinishContractCommand {
@@ -5924,174 +5863,6 @@ export interface ICompleteTaskCommand {
     commandId?: string | undefined;
     timestamp?: Date;
     taskId?: string;
-}
-
-export class ConstructorInfo implements IConstructorInfo {
-    readonly name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    readonly customAttributes?: CustomAttributeData[] | undefined;
-    readonly isCollectible?: boolean;
-    readonly metadataToken?: number;
-    readonly attributes?: ConstructorInfoAttributes;
-    readonly methodImplementationFlags?: ConstructorInfoMethodImplementationFlags;
-    readonly callingConvention?: ConstructorInfoCallingConvention;
-    readonly isAbstract?: boolean;
-    readonly isConstructor?: boolean;
-    readonly isFinal?: boolean;
-    readonly isHideBySig?: boolean;
-    readonly isSpecialName?: boolean;
-    readonly isStatic?: boolean;
-    readonly isVirtual?: boolean;
-    readonly isAssembly?: boolean;
-    readonly isFamily?: boolean;
-    readonly isFamilyAndAssembly?: boolean;
-    readonly isFamilyOrAssembly?: boolean;
-    readonly isPrivate?: boolean;
-    readonly isPublic?: boolean;
-    readonly isConstructedGenericMethod?: boolean;
-    readonly isGenericMethod?: boolean;
-    readonly isGenericMethodDefinition?: boolean;
-    readonly containsGenericParameters?: boolean;
-    methodHandle?: RuntimeMethodHandle;
-    readonly isSecurityCritical?: boolean;
-    readonly isSecuritySafeCritical?: boolean;
-    readonly isSecurityTransparent?: boolean;
-    readonly memberType?: ConstructorInfoMemberType;
-
-    constructor(data?: IConstructorInfo) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).name = _data["name"];
-            this.declaringType = _data["declaringType"] ? Type.fromJS(_data["declaringType"]) : <any>undefined;
-            this.reflectedType = _data["reflectedType"] ? Type.fromJS(_data["reflectedType"]) : <any>undefined;
-            this.module = _data["module"] ? Module.fromJS(_data["module"]) : <any>undefined;
-            if (Array.isArray(_data["customAttributes"])) {
-                (<any>this).customAttributes = [] as any;
-                for (let item of _data["customAttributes"])
-                    (<any>this).customAttributes!.push(CustomAttributeData.fromJS(item));
-            }
-            (<any>this).isCollectible = _data["isCollectible"];
-            (<any>this).metadataToken = _data["metadataToken"];
-            (<any>this).attributes = _data["attributes"];
-            (<any>this).methodImplementationFlags = _data["methodImplementationFlags"];
-            (<any>this).callingConvention = _data["callingConvention"];
-            (<any>this).isAbstract = _data["isAbstract"];
-            (<any>this).isConstructor = _data["isConstructor"];
-            (<any>this).isFinal = _data["isFinal"];
-            (<any>this).isHideBySig = _data["isHideBySig"];
-            (<any>this).isSpecialName = _data["isSpecialName"];
-            (<any>this).isStatic = _data["isStatic"];
-            (<any>this).isVirtual = _data["isVirtual"];
-            (<any>this).isAssembly = _data["isAssembly"];
-            (<any>this).isFamily = _data["isFamily"];
-            (<any>this).isFamilyAndAssembly = _data["isFamilyAndAssembly"];
-            (<any>this).isFamilyOrAssembly = _data["isFamilyOrAssembly"];
-            (<any>this).isPrivate = _data["isPrivate"];
-            (<any>this).isPublic = _data["isPublic"];
-            (<any>this).isConstructedGenericMethod = _data["isConstructedGenericMethod"];
-            (<any>this).isGenericMethod = _data["isGenericMethod"];
-            (<any>this).isGenericMethodDefinition = _data["isGenericMethodDefinition"];
-            (<any>this).containsGenericParameters = _data["containsGenericParameters"];
-            this.methodHandle = _data["methodHandle"] ? RuntimeMethodHandle.fromJS(_data["methodHandle"]) : <any>undefined;
-            (<any>this).isSecurityCritical = _data["isSecurityCritical"];
-            (<any>this).isSecuritySafeCritical = _data["isSecuritySafeCritical"];
-            (<any>this).isSecurityTransparent = _data["isSecurityTransparent"];
-            (<any>this).memberType = _data["memberType"];
-        }
-    }
-
-    static fromJS(data: any): ConstructorInfo {
-        data = typeof data === 'object' ? data : {};
-        let result = new ConstructorInfo();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["declaringType"] = this.declaringType ? this.declaringType.toJSON() : <any>undefined;
-        data["reflectedType"] = this.reflectedType ? this.reflectedType.toJSON() : <any>undefined;
-        data["module"] = this.module ? this.module.toJSON() : <any>undefined;
-        if (Array.isArray(this.customAttributes)) {
-            data["customAttributes"] = [];
-            for (let item of this.customAttributes)
-                data["customAttributes"].push(item.toJSON());
-        }
-        data["isCollectible"] = this.isCollectible;
-        data["metadataToken"] = this.metadataToken;
-        data["attributes"] = this.attributes;
-        data["methodImplementationFlags"] = this.methodImplementationFlags;
-        data["callingConvention"] = this.callingConvention;
-        data["isAbstract"] = this.isAbstract;
-        data["isConstructor"] = this.isConstructor;
-        data["isFinal"] = this.isFinal;
-        data["isHideBySig"] = this.isHideBySig;
-        data["isSpecialName"] = this.isSpecialName;
-        data["isStatic"] = this.isStatic;
-        data["isVirtual"] = this.isVirtual;
-        data["isAssembly"] = this.isAssembly;
-        data["isFamily"] = this.isFamily;
-        data["isFamilyAndAssembly"] = this.isFamilyAndAssembly;
-        data["isFamilyOrAssembly"] = this.isFamilyOrAssembly;
-        data["isPrivate"] = this.isPrivate;
-        data["isPublic"] = this.isPublic;
-        data["isConstructedGenericMethod"] = this.isConstructedGenericMethod;
-        data["isGenericMethod"] = this.isGenericMethod;
-        data["isGenericMethodDefinition"] = this.isGenericMethodDefinition;
-        data["containsGenericParameters"] = this.containsGenericParameters;
-        data["methodHandle"] = this.methodHandle ? this.methodHandle.toJSON() : <any>undefined;
-        data["isSecurityCritical"] = this.isSecurityCritical;
-        data["isSecuritySafeCritical"] = this.isSecuritySafeCritical;
-        data["isSecurityTransparent"] = this.isSecurityTransparent;
-        data["memberType"] = this.memberType;
-        return data;
-    }
-}
-
-export interface IConstructorInfo {
-    name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    customAttributes?: CustomAttributeData[] | undefined;
-    isCollectible?: boolean;
-    metadataToken?: number;
-    attributes?: ConstructorInfoAttributes;
-    methodImplementationFlags?: ConstructorInfoMethodImplementationFlags;
-    callingConvention?: ConstructorInfoCallingConvention;
-    isAbstract?: boolean;
-    isConstructor?: boolean;
-    isFinal?: boolean;
-    isHideBySig?: boolean;
-    isSpecialName?: boolean;
-    isStatic?: boolean;
-    isVirtual?: boolean;
-    isAssembly?: boolean;
-    isFamily?: boolean;
-    isFamilyAndAssembly?: boolean;
-    isFamilyOrAssembly?: boolean;
-    isPrivate?: boolean;
-    isPublic?: boolean;
-    isConstructedGenericMethod?: boolean;
-    isGenericMethod?: boolean;
-    isGenericMethodDefinition?: boolean;
-    containsGenericParameters?: boolean;
-    methodHandle?: RuntimeMethodHandle;
-    isSecurityCritical?: boolean;
-    isSecuritySafeCritical?: boolean;
-    isSecurityTransparent?: boolean;
-    memberType?: ConstructorInfoMemberType;
 }
 
 export class ContestEntity implements IContestEntity {
@@ -7113,158 +6884,6 @@ export interface ICreateTicketDto {
     title?: string | undefined;
 }
 
-export class CustomAttributeData implements ICustomAttributeData {
-    attributeType?: Type;
-    constructor_?: ConstructorInfo;
-    readonly constructorArguments?: CustomAttributeTypedArgument[] | undefined;
-    readonly namedArguments?: CustomAttributeNamedArgument[] | undefined;
-
-    constructor(data?: ICustomAttributeData) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.attributeType = _data["attributeType"] ? Type.fromJS(_data["attributeType"]) : <any>undefined;
-            this.constructor_ = _data["constructor"] ? ConstructorInfo.fromJS(_data["constructor"]) : <any>undefined;
-            if (Array.isArray(_data["constructorArguments"])) {
-                (<any>this).constructorArguments = [] as any;
-                for (let item of _data["constructorArguments"])
-                    (<any>this).constructorArguments!.push(CustomAttributeTypedArgument.fromJS(item));
-            }
-            if (Array.isArray(_data["namedArguments"])) {
-                (<any>this).namedArguments = [] as any;
-                for (let item of _data["namedArguments"])
-                    (<any>this).namedArguments!.push(CustomAttributeNamedArgument.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): CustomAttributeData {
-        data = typeof data === 'object' ? data : {};
-        let result = new CustomAttributeData();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["attributeType"] = this.attributeType ? this.attributeType.toJSON() : <any>undefined;
-        data["constructor"] = this.constructor_ ? this.constructor_.toJSON() : <any>undefined;
-        if (Array.isArray(this.constructorArguments)) {
-            data["constructorArguments"] = [];
-            for (let item of this.constructorArguments)
-                data["constructorArguments"].push(item.toJSON());
-        }
-        if (Array.isArray(this.namedArguments)) {
-            data["namedArguments"] = [];
-            for (let item of this.namedArguments)
-                data["namedArguments"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface ICustomAttributeData {
-    attributeType?: Type;
-    constructor_?: ConstructorInfo;
-    constructorArguments?: CustomAttributeTypedArgument[] | undefined;
-    namedArguments?: CustomAttributeNamedArgument[] | undefined;
-}
-
-export class CustomAttributeNamedArgument implements ICustomAttributeNamedArgument {
-    memberInfo?: MemberInfo;
-    typedValue?: CustomAttributeTypedArgument;
-    readonly memberName?: string | undefined;
-    readonly isField?: boolean;
-
-    constructor(data?: ICustomAttributeNamedArgument) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.memberInfo = _data["memberInfo"] ? MemberInfo.fromJS(_data["memberInfo"]) : <any>undefined;
-            this.typedValue = _data["typedValue"] ? CustomAttributeTypedArgument.fromJS(_data["typedValue"]) : <any>undefined;
-            (<any>this).memberName = _data["memberName"];
-            (<any>this).isField = _data["isField"];
-        }
-    }
-
-    static fromJS(data: any): CustomAttributeNamedArgument {
-        data = typeof data === 'object' ? data : {};
-        let result = new CustomAttributeNamedArgument();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["memberInfo"] = this.memberInfo ? this.memberInfo.toJSON() : <any>undefined;
-        data["typedValue"] = this.typedValue ? this.typedValue.toJSON() : <any>undefined;
-        data["memberName"] = this.memberName;
-        data["isField"] = this.isField;
-        return data;
-    }
-}
-
-export interface ICustomAttributeNamedArgument {
-    memberInfo?: MemberInfo;
-    typedValue?: CustomAttributeTypedArgument;
-    memberName?: string | undefined;
-    isField?: boolean;
-}
-
-export class CustomAttributeTypedArgument implements ICustomAttributeTypedArgument {
-    argumentType?: Type;
-    value?: any | undefined;
-
-    constructor(data?: ICustomAttributeTypedArgument) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.argumentType = _data["argumentType"] ? Type.fromJS(_data["argumentType"]) : <any>undefined;
-            this.value = _data["value"];
-        }
-    }
-
-    static fromJS(data: any): CustomAttributeTypedArgument {
-        data = typeof data === 'object' ? data : {};
-        let result = new CustomAttributeTypedArgument();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["argumentType"] = this.argumentType ? this.argumentType.toJSON() : <any>undefined;
-        data["value"] = this.value;
-        return data;
-    }
-}
-
-export interface ICustomAttributeTypedArgument {
-    argumentType?: Type;
-    value?: any | undefined;
-}
-
 export class DeleteContestCommand implements IDeleteContestCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
@@ -7693,106 +7312,6 @@ export interface IEndWorkSessionCommand {
     selectedFiles?: CreateFileDto[] | undefined;
 }
 
-export class EventInfo implements IEventInfo {
-    readonly name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    readonly customAttributes?: CustomAttributeData[] | undefined;
-    readonly isCollectible?: boolean;
-    readonly metadataToken?: number;
-    readonly memberType?: EventInfoMemberType;
-    readonly attributes?: EventInfoAttributes;
-    readonly isSpecialName?: boolean;
-    addMethod?: MethodInfo;
-    removeMethod?: MethodInfo;
-    raiseMethod?: MethodInfo;
-    readonly isMulticast?: boolean;
-    eventHandlerType?: Type;
-
-    constructor(data?: IEventInfo) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).name = _data["name"];
-            this.declaringType = _data["declaringType"] ? Type.fromJS(_data["declaringType"]) : <any>undefined;
-            this.reflectedType = _data["reflectedType"] ? Type.fromJS(_data["reflectedType"]) : <any>undefined;
-            this.module = _data["module"] ? Module.fromJS(_data["module"]) : <any>undefined;
-            if (Array.isArray(_data["customAttributes"])) {
-                (<any>this).customAttributes = [] as any;
-                for (let item of _data["customAttributes"])
-                    (<any>this).customAttributes!.push(CustomAttributeData.fromJS(item));
-            }
-            (<any>this).isCollectible = _data["isCollectible"];
-            (<any>this).metadataToken = _data["metadataToken"];
-            (<any>this).memberType = _data["memberType"];
-            (<any>this).attributes = _data["attributes"];
-            (<any>this).isSpecialName = _data["isSpecialName"];
-            this.addMethod = _data["addMethod"] ? MethodInfo.fromJS(_data["addMethod"]) : <any>undefined;
-            this.removeMethod = _data["removeMethod"] ? MethodInfo.fromJS(_data["removeMethod"]) : <any>undefined;
-            this.raiseMethod = _data["raiseMethod"] ? MethodInfo.fromJS(_data["raiseMethod"]) : <any>undefined;
-            (<any>this).isMulticast = _data["isMulticast"];
-            this.eventHandlerType = _data["eventHandlerType"] ? Type.fromJS(_data["eventHandlerType"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): EventInfo {
-        data = typeof data === 'object' ? data : {};
-        let result = new EventInfo();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["declaringType"] = this.declaringType ? this.declaringType.toJSON() : <any>undefined;
-        data["reflectedType"] = this.reflectedType ? this.reflectedType.toJSON() : <any>undefined;
-        data["module"] = this.module ? this.module.toJSON() : <any>undefined;
-        if (Array.isArray(this.customAttributes)) {
-            data["customAttributes"] = [];
-            for (let item of this.customAttributes)
-                data["customAttributes"].push(item.toJSON());
-        }
-        data["isCollectible"] = this.isCollectible;
-        data["metadataToken"] = this.metadataToken;
-        data["memberType"] = this.memberType;
-        data["attributes"] = this.attributes;
-        data["isSpecialName"] = this.isSpecialName;
-        data["addMethod"] = this.addMethod ? this.addMethod.toJSON() : <any>undefined;
-        data["removeMethod"] = this.removeMethod ? this.removeMethod.toJSON() : <any>undefined;
-        data["raiseMethod"] = this.raiseMethod ? this.raiseMethod.toJSON() : <any>undefined;
-        data["isMulticast"] = this.isMulticast;
-        data["eventHandlerType"] = this.eventHandlerType ? this.eventHandlerType.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IEventInfo {
-    name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    customAttributes?: CustomAttributeData[] | undefined;
-    isCollectible?: boolean;
-    metadataToken?: number;
-    memberType?: EventInfoMemberType;
-    attributes?: EventInfoAttributes;
-    isSpecialName?: boolean;
-    addMethod?: MethodInfo;
-    removeMethod?: MethodInfo;
-    raiseMethod?: MethodInfo;
-    isMulticast?: boolean;
-    eventHandlerType?: Type;
-}
-
 export class FeeContext implements IFeeContext {
     readonly isContractCancellation?: boolean;
     readonly isAdminOverride?: boolean;
@@ -7831,150 +7350,6 @@ export class FeeContext implements IFeeContext {
 export interface IFeeContext {
     isContractCancellation?: boolean;
     isAdminOverride?: boolean;
-}
-
-export class FieldInfo implements IFieldInfo {
-    readonly name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    readonly customAttributes?: CustomAttributeData[] | undefined;
-    readonly isCollectible?: boolean;
-    readonly metadataToken?: number;
-    readonly memberType?: FieldInfoMemberType;
-    readonly attributes?: FieldInfoAttributes;
-    fieldType?: Type;
-    readonly isInitOnly?: boolean;
-    readonly isLiteral?: boolean;
-    readonly isNotSerialized?: boolean;
-    readonly isPinvokeImpl?: boolean;
-    readonly isSpecialName?: boolean;
-    readonly isStatic?: boolean;
-    readonly isAssembly?: boolean;
-    readonly isFamily?: boolean;
-    readonly isFamilyAndAssembly?: boolean;
-    readonly isFamilyOrAssembly?: boolean;
-    readonly isPrivate?: boolean;
-    readonly isPublic?: boolean;
-    readonly isSecurityCritical?: boolean;
-    readonly isSecuritySafeCritical?: boolean;
-    readonly isSecurityTransparent?: boolean;
-    fieldHandle?: RuntimeFieldHandle;
-
-    constructor(data?: IFieldInfo) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).name = _data["name"];
-            this.declaringType = _data["declaringType"] ? Type.fromJS(_data["declaringType"]) : <any>undefined;
-            this.reflectedType = _data["reflectedType"] ? Type.fromJS(_data["reflectedType"]) : <any>undefined;
-            this.module = _data["module"] ? Module.fromJS(_data["module"]) : <any>undefined;
-            if (Array.isArray(_data["customAttributes"])) {
-                (<any>this).customAttributes = [] as any;
-                for (let item of _data["customAttributes"])
-                    (<any>this).customAttributes!.push(CustomAttributeData.fromJS(item));
-            }
-            (<any>this).isCollectible = _data["isCollectible"];
-            (<any>this).metadataToken = _data["metadataToken"];
-            (<any>this).memberType = _data["memberType"];
-            (<any>this).attributes = _data["attributes"];
-            this.fieldType = _data["fieldType"] ? Type.fromJS(_data["fieldType"]) : <any>undefined;
-            (<any>this).isInitOnly = _data["isInitOnly"];
-            (<any>this).isLiteral = _data["isLiteral"];
-            (<any>this).isNotSerialized = _data["isNotSerialized"];
-            (<any>this).isPinvokeImpl = _data["isPinvokeImpl"];
-            (<any>this).isSpecialName = _data["isSpecialName"];
-            (<any>this).isStatic = _data["isStatic"];
-            (<any>this).isAssembly = _data["isAssembly"];
-            (<any>this).isFamily = _data["isFamily"];
-            (<any>this).isFamilyAndAssembly = _data["isFamilyAndAssembly"];
-            (<any>this).isFamilyOrAssembly = _data["isFamilyOrAssembly"];
-            (<any>this).isPrivate = _data["isPrivate"];
-            (<any>this).isPublic = _data["isPublic"];
-            (<any>this).isSecurityCritical = _data["isSecurityCritical"];
-            (<any>this).isSecuritySafeCritical = _data["isSecuritySafeCritical"];
-            (<any>this).isSecurityTransparent = _data["isSecurityTransparent"];
-            this.fieldHandle = _data["fieldHandle"] ? RuntimeFieldHandle.fromJS(_data["fieldHandle"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): FieldInfo {
-        data = typeof data === 'object' ? data : {};
-        let result = new FieldInfo();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["declaringType"] = this.declaringType ? this.declaringType.toJSON() : <any>undefined;
-        data["reflectedType"] = this.reflectedType ? this.reflectedType.toJSON() : <any>undefined;
-        data["module"] = this.module ? this.module.toJSON() : <any>undefined;
-        if (Array.isArray(this.customAttributes)) {
-            data["customAttributes"] = [];
-            for (let item of this.customAttributes)
-                data["customAttributes"].push(item.toJSON());
-        }
-        data["isCollectible"] = this.isCollectible;
-        data["metadataToken"] = this.metadataToken;
-        data["memberType"] = this.memberType;
-        data["attributes"] = this.attributes;
-        data["fieldType"] = this.fieldType ? this.fieldType.toJSON() : <any>undefined;
-        data["isInitOnly"] = this.isInitOnly;
-        data["isLiteral"] = this.isLiteral;
-        data["isNotSerialized"] = this.isNotSerialized;
-        data["isPinvokeImpl"] = this.isPinvokeImpl;
-        data["isSpecialName"] = this.isSpecialName;
-        data["isStatic"] = this.isStatic;
-        data["isAssembly"] = this.isAssembly;
-        data["isFamily"] = this.isFamily;
-        data["isFamilyAndAssembly"] = this.isFamilyAndAssembly;
-        data["isFamilyOrAssembly"] = this.isFamilyOrAssembly;
-        data["isPrivate"] = this.isPrivate;
-        data["isPublic"] = this.isPublic;
-        data["isSecurityCritical"] = this.isSecurityCritical;
-        data["isSecuritySafeCritical"] = this.isSecuritySafeCritical;
-        data["isSecurityTransparent"] = this.isSecurityTransparent;
-        data["fieldHandle"] = this.fieldHandle ? this.fieldHandle.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IFieldInfo {
-    name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    customAttributes?: CustomAttributeData[] | undefined;
-    isCollectible?: boolean;
-    metadataToken?: number;
-    memberType?: FieldInfoMemberType;
-    attributes?: FieldInfoAttributes;
-    fieldType?: Type;
-    isInitOnly?: boolean;
-    isLiteral?: boolean;
-    isNotSerialized?: boolean;
-    isPinvokeImpl?: boolean;
-    isSpecialName?: boolean;
-    isStatic?: boolean;
-    isAssembly?: boolean;
-    isFamily?: boolean;
-    isFamilyAndAssembly?: boolean;
-    isFamilyOrAssembly?: boolean;
-    isPrivate?: boolean;
-    isPublic?: boolean;
-    isSecurityCritical?: boolean;
-    isSecuritySafeCritical?: boolean;
-    isSecurityTransparent?: boolean;
-    fieldHandle?: RuntimeFieldHandle;
 }
 
 export class FileEntity implements IFileEntity {
@@ -8781,36 +8156,6 @@ export interface IHideJobCommand {
     jobId?: string;
 }
 
-export class ICustomAttributeProvider implements IICustomAttributeProvider {
-
-    constructor(data?: IICustomAttributeProvider) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): ICustomAttributeProvider {
-        data = typeof data === 'object' ? data : {};
-        let result = new ICustomAttributeProvider();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IICustomAttributeProvider {
-}
-
 export class InitiateDisputeCommand implements IInitiateDisputeCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
@@ -8859,44 +8204,28 @@ export interface IInitiateDisputeCommand {
     reason?: string | undefined;
 }
 
-export class IntPtr implements IIntPtr {
+export class JobDetails implements IJobDetails {
+    jobId?: string;
+    title?: string | undefined;
+    description?: string | undefined;
+    status?: JobDetailsStatus;
+    budget?: Money;
+    currency?: JobDetailsCurrency;
+    category?: CategoryModel;
+    skills?: string[] | undefined;
+    languages?: string[] | undefined;
+    clientName?: string | undefined;
+    clientAvatarUrl?: string | undefined;
+    isClientVerified?: boolean;
+    createdAt?: Date;
+    deadline?: Date | undefined;
+    responsesRangeMin?: number;
+    responsesRangeMax?: number;
+    dailyResponsesMin?: number;
+    dailyResponsesMax?: number;
+    confirmedResponses?: number;
 
-    constructor(data?: IIntPtr) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): IntPtr {
-        data = typeof data === 'object' ? data : {};
-        let result = new IntPtr();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IIntPtr {
-}
-
-export class Job implements IJob {
-    type?: Type;
-    method?: MethodInfo;
-    readonly args?: any[] | undefined;
-    readonly queue?: string | undefined;
-    readonly arguments?: string[] | undefined;
-
-    constructor(data?: IJob) {
+    constructor(data?: IJobDetails) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -8907,54 +8236,96 @@ export class Job implements IJob {
 
     init(_data?: any) {
         if (_data) {
-            this.type = _data["type"] ? Type.fromJS(_data["type"]) : <any>undefined;
-            this.method = _data["method"] ? MethodInfo.fromJS(_data["method"]) : <any>undefined;
-            if (Array.isArray(_data["args"])) {
-                (<any>this).args = [] as any;
-                for (let item of _data["args"])
-                    (<any>this).args!.push(item);
+            this.jobId = _data["jobId"];
+            this.title = _data["title"];
+            this.description = _data["description"];
+            this.status = _data["status"];
+            this.budget = _data["budget"] ? Money.fromJS(_data["budget"]) : <any>undefined;
+            this.currency = _data["currency"];
+            this.category = _data["category"] ? CategoryModel.fromJS(_data["category"]) : <any>undefined;
+            if (Array.isArray(_data["skills"])) {
+                this.skills = [] as any;
+                for (let item of _data["skills"])
+                    this.skills!.push(item);
             }
-            (<any>this).queue = _data["queue"];
-            if (Array.isArray(_data["arguments"])) {
-                (<any>this).arguments = [] as any;
-                for (let item of _data["arguments"])
-                    (<any>this).arguments!.push(item);
+            if (Array.isArray(_data["languages"])) {
+                this.languages = [] as any;
+                for (let item of _data["languages"])
+                    this.languages!.push(item);
             }
+            this.clientName = _data["clientName"];
+            this.clientAvatarUrl = _data["clientAvatarUrl"];
+            this.isClientVerified = _data["isClientVerified"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.deadline = _data["deadline"] ? new Date(_data["deadline"].toString()) : <any>undefined;
+            this.responsesRangeMin = _data["responsesRangeMin"];
+            this.responsesRangeMax = _data["responsesRangeMax"];
+            this.dailyResponsesMin = _data["dailyResponsesMin"];
+            this.dailyResponsesMax = _data["dailyResponsesMax"];
+            this.confirmedResponses = _data["confirmedResponses"];
         }
     }
 
-    static fromJS(data: any): Job {
+    static fromJS(data: any): JobDetails {
         data = typeof data === 'object' ? data : {};
-        let result = new Job();
+        let result = new JobDetails();
         result.init(data);
         return result;
     }
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["type"] = this.type ? this.type.toJSON() : <any>undefined;
-        data["method"] = this.method ? this.method.toJSON() : <any>undefined;
-        if (Array.isArray(this.args)) {
-            data["args"] = [];
-            for (let item of this.args)
-                data["args"].push(item);
+        data["jobId"] = this.jobId;
+        data["title"] = this.title;
+        data["description"] = this.description;
+        data["status"] = this.status;
+        data["budget"] = this.budget ? this.budget.toJSON() : <any>undefined;
+        data["currency"] = this.currency;
+        data["category"] = this.category ? this.category.toJSON() : <any>undefined;
+        if (Array.isArray(this.skills)) {
+            data["skills"] = [];
+            for (let item of this.skills)
+                data["skills"].push(item);
         }
-        data["queue"] = this.queue;
-        if (Array.isArray(this.arguments)) {
-            data["arguments"] = [];
-            for (let item of this.arguments)
-                data["arguments"].push(item);
+        if (Array.isArray(this.languages)) {
+            data["languages"] = [];
+            for (let item of this.languages)
+                data["languages"].push(item);
         }
+        data["clientName"] = this.clientName;
+        data["clientAvatarUrl"] = this.clientAvatarUrl;
+        data["isClientVerified"] = this.isClientVerified;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["deadline"] = this.deadline ? this.deadline.toISOString() : <any>undefined;
+        data["responsesRangeMin"] = this.responsesRangeMin;
+        data["responsesRangeMax"] = this.responsesRangeMax;
+        data["dailyResponsesMin"] = this.dailyResponsesMin;
+        data["dailyResponsesMax"] = this.dailyResponsesMax;
+        data["confirmedResponses"] = this.confirmedResponses;
         return data;
     }
 }
 
-export interface IJob {
-    type?: Type;
-    method?: MethodInfo;
-    args?: any[] | undefined;
-    queue?: string | undefined;
-    arguments?: string[] | undefined;
+export interface IJobDetails {
+    jobId?: string;
+    title?: string | undefined;
+    description?: string | undefined;
+    status?: JobDetailsStatus;
+    budget?: Money;
+    currency?: JobDetailsCurrency;
+    category?: CategoryModel;
+    skills?: string[] | undefined;
+    languages?: string[] | undefined;
+    clientName?: string | undefined;
+    clientAvatarUrl?: string | undefined;
+    isClientVerified?: boolean;
+    createdAt?: Date;
+    deadline?: Date | undefined;
+    responsesRangeMin?: number;
+    responsesRangeMax?: number;
+    dailyResponsesMin?: number;
+    dailyResponsesMax?: number;
+    confirmedResponses?: number;
 }
 
 export class JobEntity implements IJobEntity {
@@ -9242,538 +8613,6 @@ export interface ILoginUserSchema {
     rememberMe?: boolean;
 }
 
-export class MemberInfo implements IMemberInfo {
-    readonly memberType?: MemberInfoMemberType;
-    readonly name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    readonly customAttributes?: CustomAttributeData[] | undefined;
-    readonly isCollectible?: boolean;
-    readonly metadataToken?: number;
-
-    constructor(data?: IMemberInfo) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).memberType = _data["memberType"];
-            (<any>this).name = _data["name"];
-            this.declaringType = _data["declaringType"] ? Type.fromJS(_data["declaringType"]) : <any>undefined;
-            this.reflectedType = _data["reflectedType"] ? Type.fromJS(_data["reflectedType"]) : <any>undefined;
-            this.module = _data["module"] ? Module.fromJS(_data["module"]) : <any>undefined;
-            if (Array.isArray(_data["customAttributes"])) {
-                (<any>this).customAttributes = [] as any;
-                for (let item of _data["customAttributes"])
-                    (<any>this).customAttributes!.push(CustomAttributeData.fromJS(item));
-            }
-            (<any>this).isCollectible = _data["isCollectible"];
-            (<any>this).metadataToken = _data["metadataToken"];
-        }
-    }
-
-    static fromJS(data: any): MemberInfo {
-        data = typeof data === 'object' ? data : {};
-        let result = new MemberInfo();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["memberType"] = this.memberType;
-        data["name"] = this.name;
-        data["declaringType"] = this.declaringType ? this.declaringType.toJSON() : <any>undefined;
-        data["reflectedType"] = this.reflectedType ? this.reflectedType.toJSON() : <any>undefined;
-        data["module"] = this.module ? this.module.toJSON() : <any>undefined;
-        if (Array.isArray(this.customAttributes)) {
-            data["customAttributes"] = [];
-            for (let item of this.customAttributes)
-                data["customAttributes"].push(item.toJSON());
-        }
-        data["isCollectible"] = this.isCollectible;
-        data["metadataToken"] = this.metadataToken;
-        return data;
-    }
-}
-
-export interface IMemberInfo {
-    memberType?: MemberInfoMemberType;
-    name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    customAttributes?: CustomAttributeData[] | undefined;
-    isCollectible?: boolean;
-    metadataToken?: number;
-}
-
-export class MethodBase implements IMethodBase {
-    readonly memberType?: MethodBaseMemberType;
-    readonly name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    readonly customAttributes?: CustomAttributeData[] | undefined;
-    readonly isCollectible?: boolean;
-    readonly metadataToken?: number;
-    readonly attributes?: MethodBaseAttributes;
-    readonly methodImplementationFlags?: MethodBaseMethodImplementationFlags;
-    readonly callingConvention?: MethodBaseCallingConvention;
-    readonly isAbstract?: boolean;
-    readonly isConstructor?: boolean;
-    readonly isFinal?: boolean;
-    readonly isHideBySig?: boolean;
-    readonly isSpecialName?: boolean;
-    readonly isStatic?: boolean;
-    readonly isVirtual?: boolean;
-    readonly isAssembly?: boolean;
-    readonly isFamily?: boolean;
-    readonly isFamilyAndAssembly?: boolean;
-    readonly isFamilyOrAssembly?: boolean;
-    readonly isPrivate?: boolean;
-    readonly isPublic?: boolean;
-    readonly isConstructedGenericMethod?: boolean;
-    readonly isGenericMethod?: boolean;
-    readonly isGenericMethodDefinition?: boolean;
-    readonly containsGenericParameters?: boolean;
-    methodHandle?: RuntimeMethodHandle;
-    readonly isSecurityCritical?: boolean;
-    readonly isSecuritySafeCritical?: boolean;
-    readonly isSecurityTransparent?: boolean;
-
-    constructor(data?: IMethodBase) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).memberType = _data["memberType"];
-            (<any>this).name = _data["name"];
-            this.declaringType = _data["declaringType"] ? Type.fromJS(_data["declaringType"]) : <any>undefined;
-            this.reflectedType = _data["reflectedType"] ? Type.fromJS(_data["reflectedType"]) : <any>undefined;
-            this.module = _data["module"] ? Module.fromJS(_data["module"]) : <any>undefined;
-            if (Array.isArray(_data["customAttributes"])) {
-                (<any>this).customAttributes = [] as any;
-                for (let item of _data["customAttributes"])
-                    (<any>this).customAttributes!.push(CustomAttributeData.fromJS(item));
-            }
-            (<any>this).isCollectible = _data["isCollectible"];
-            (<any>this).metadataToken = _data["metadataToken"];
-            (<any>this).attributes = _data["attributes"];
-            (<any>this).methodImplementationFlags = _data["methodImplementationFlags"];
-            (<any>this).callingConvention = _data["callingConvention"];
-            (<any>this).isAbstract = _data["isAbstract"];
-            (<any>this).isConstructor = _data["isConstructor"];
-            (<any>this).isFinal = _data["isFinal"];
-            (<any>this).isHideBySig = _data["isHideBySig"];
-            (<any>this).isSpecialName = _data["isSpecialName"];
-            (<any>this).isStatic = _data["isStatic"];
-            (<any>this).isVirtual = _data["isVirtual"];
-            (<any>this).isAssembly = _data["isAssembly"];
-            (<any>this).isFamily = _data["isFamily"];
-            (<any>this).isFamilyAndAssembly = _data["isFamilyAndAssembly"];
-            (<any>this).isFamilyOrAssembly = _data["isFamilyOrAssembly"];
-            (<any>this).isPrivate = _data["isPrivate"];
-            (<any>this).isPublic = _data["isPublic"];
-            (<any>this).isConstructedGenericMethod = _data["isConstructedGenericMethod"];
-            (<any>this).isGenericMethod = _data["isGenericMethod"];
-            (<any>this).isGenericMethodDefinition = _data["isGenericMethodDefinition"];
-            (<any>this).containsGenericParameters = _data["containsGenericParameters"];
-            this.methodHandle = _data["methodHandle"] ? RuntimeMethodHandle.fromJS(_data["methodHandle"]) : <any>undefined;
-            (<any>this).isSecurityCritical = _data["isSecurityCritical"];
-            (<any>this).isSecuritySafeCritical = _data["isSecuritySafeCritical"];
-            (<any>this).isSecurityTransparent = _data["isSecurityTransparent"];
-        }
-    }
-
-    static fromJS(data: any): MethodBase {
-        data = typeof data === 'object' ? data : {};
-        let result = new MethodBase();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["memberType"] = this.memberType;
-        data["name"] = this.name;
-        data["declaringType"] = this.declaringType ? this.declaringType.toJSON() : <any>undefined;
-        data["reflectedType"] = this.reflectedType ? this.reflectedType.toJSON() : <any>undefined;
-        data["module"] = this.module ? this.module.toJSON() : <any>undefined;
-        if (Array.isArray(this.customAttributes)) {
-            data["customAttributes"] = [];
-            for (let item of this.customAttributes)
-                data["customAttributes"].push(item.toJSON());
-        }
-        data["isCollectible"] = this.isCollectible;
-        data["metadataToken"] = this.metadataToken;
-        data["attributes"] = this.attributes;
-        data["methodImplementationFlags"] = this.methodImplementationFlags;
-        data["callingConvention"] = this.callingConvention;
-        data["isAbstract"] = this.isAbstract;
-        data["isConstructor"] = this.isConstructor;
-        data["isFinal"] = this.isFinal;
-        data["isHideBySig"] = this.isHideBySig;
-        data["isSpecialName"] = this.isSpecialName;
-        data["isStatic"] = this.isStatic;
-        data["isVirtual"] = this.isVirtual;
-        data["isAssembly"] = this.isAssembly;
-        data["isFamily"] = this.isFamily;
-        data["isFamilyAndAssembly"] = this.isFamilyAndAssembly;
-        data["isFamilyOrAssembly"] = this.isFamilyOrAssembly;
-        data["isPrivate"] = this.isPrivate;
-        data["isPublic"] = this.isPublic;
-        data["isConstructedGenericMethod"] = this.isConstructedGenericMethod;
-        data["isGenericMethod"] = this.isGenericMethod;
-        data["isGenericMethodDefinition"] = this.isGenericMethodDefinition;
-        data["containsGenericParameters"] = this.containsGenericParameters;
-        data["methodHandle"] = this.methodHandle ? this.methodHandle.toJSON() : <any>undefined;
-        data["isSecurityCritical"] = this.isSecurityCritical;
-        data["isSecuritySafeCritical"] = this.isSecuritySafeCritical;
-        data["isSecurityTransparent"] = this.isSecurityTransparent;
-        return data;
-    }
-}
-
-export interface IMethodBase {
-    memberType?: MethodBaseMemberType;
-    name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    customAttributes?: CustomAttributeData[] | undefined;
-    isCollectible?: boolean;
-    metadataToken?: number;
-    attributes?: MethodBaseAttributes;
-    methodImplementationFlags?: MethodBaseMethodImplementationFlags;
-    callingConvention?: MethodBaseCallingConvention;
-    isAbstract?: boolean;
-    isConstructor?: boolean;
-    isFinal?: boolean;
-    isHideBySig?: boolean;
-    isSpecialName?: boolean;
-    isStatic?: boolean;
-    isVirtual?: boolean;
-    isAssembly?: boolean;
-    isFamily?: boolean;
-    isFamilyAndAssembly?: boolean;
-    isFamilyOrAssembly?: boolean;
-    isPrivate?: boolean;
-    isPublic?: boolean;
-    isConstructedGenericMethod?: boolean;
-    isGenericMethod?: boolean;
-    isGenericMethodDefinition?: boolean;
-    containsGenericParameters?: boolean;
-    methodHandle?: RuntimeMethodHandle;
-    isSecurityCritical?: boolean;
-    isSecuritySafeCritical?: boolean;
-    isSecurityTransparent?: boolean;
-}
-
-export class MethodInfo implements IMethodInfo {
-    readonly name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    readonly customAttributes?: CustomAttributeData[] | undefined;
-    readonly isCollectible?: boolean;
-    readonly metadataToken?: number;
-    readonly attributes?: MethodInfoAttributes;
-    readonly methodImplementationFlags?: MethodInfoMethodImplementationFlags;
-    readonly callingConvention?: MethodInfoCallingConvention;
-    readonly isAbstract?: boolean;
-    readonly isConstructor?: boolean;
-    readonly isFinal?: boolean;
-    readonly isHideBySig?: boolean;
-    readonly isSpecialName?: boolean;
-    readonly isStatic?: boolean;
-    readonly isVirtual?: boolean;
-    readonly isAssembly?: boolean;
-    readonly isFamily?: boolean;
-    readonly isFamilyAndAssembly?: boolean;
-    readonly isFamilyOrAssembly?: boolean;
-    readonly isPrivate?: boolean;
-    readonly isPublic?: boolean;
-    readonly isConstructedGenericMethod?: boolean;
-    readonly isGenericMethod?: boolean;
-    readonly isGenericMethodDefinition?: boolean;
-    readonly containsGenericParameters?: boolean;
-    methodHandle?: RuntimeMethodHandle;
-    readonly isSecurityCritical?: boolean;
-    readonly isSecuritySafeCritical?: boolean;
-    readonly isSecurityTransparent?: boolean;
-    readonly memberType?: MethodInfoMemberType;
-    returnParameter?: ParameterInfo;
-    returnType?: Type;
-    returnTypeCustomAttributes?: ICustomAttributeProvider;
-
-    constructor(data?: IMethodInfo) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).name = _data["name"];
-            this.declaringType = _data["declaringType"] ? Type.fromJS(_data["declaringType"]) : <any>undefined;
-            this.reflectedType = _data["reflectedType"] ? Type.fromJS(_data["reflectedType"]) : <any>undefined;
-            this.module = _data["module"] ? Module.fromJS(_data["module"]) : <any>undefined;
-            if (Array.isArray(_data["customAttributes"])) {
-                (<any>this).customAttributes = [] as any;
-                for (let item of _data["customAttributes"])
-                    (<any>this).customAttributes!.push(CustomAttributeData.fromJS(item));
-            }
-            (<any>this).isCollectible = _data["isCollectible"];
-            (<any>this).metadataToken = _data["metadataToken"];
-            (<any>this).attributes = _data["attributes"];
-            (<any>this).methodImplementationFlags = _data["methodImplementationFlags"];
-            (<any>this).callingConvention = _data["callingConvention"];
-            (<any>this).isAbstract = _data["isAbstract"];
-            (<any>this).isConstructor = _data["isConstructor"];
-            (<any>this).isFinal = _data["isFinal"];
-            (<any>this).isHideBySig = _data["isHideBySig"];
-            (<any>this).isSpecialName = _data["isSpecialName"];
-            (<any>this).isStatic = _data["isStatic"];
-            (<any>this).isVirtual = _data["isVirtual"];
-            (<any>this).isAssembly = _data["isAssembly"];
-            (<any>this).isFamily = _data["isFamily"];
-            (<any>this).isFamilyAndAssembly = _data["isFamilyAndAssembly"];
-            (<any>this).isFamilyOrAssembly = _data["isFamilyOrAssembly"];
-            (<any>this).isPrivate = _data["isPrivate"];
-            (<any>this).isPublic = _data["isPublic"];
-            (<any>this).isConstructedGenericMethod = _data["isConstructedGenericMethod"];
-            (<any>this).isGenericMethod = _data["isGenericMethod"];
-            (<any>this).isGenericMethodDefinition = _data["isGenericMethodDefinition"];
-            (<any>this).containsGenericParameters = _data["containsGenericParameters"];
-            this.methodHandle = _data["methodHandle"] ? RuntimeMethodHandle.fromJS(_data["methodHandle"]) : <any>undefined;
-            (<any>this).isSecurityCritical = _data["isSecurityCritical"];
-            (<any>this).isSecuritySafeCritical = _data["isSecuritySafeCritical"];
-            (<any>this).isSecurityTransparent = _data["isSecurityTransparent"];
-            (<any>this).memberType = _data["memberType"];
-            this.returnParameter = _data["returnParameter"] ? ParameterInfo.fromJS(_data["returnParameter"]) : <any>undefined;
-            this.returnType = _data["returnType"] ? Type.fromJS(_data["returnType"]) : <any>undefined;
-            this.returnTypeCustomAttributes = _data["returnTypeCustomAttributes"] ? ICustomAttributeProvider.fromJS(_data["returnTypeCustomAttributes"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): MethodInfo {
-        data = typeof data === 'object' ? data : {};
-        let result = new MethodInfo();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["declaringType"] = this.declaringType ? this.declaringType.toJSON() : <any>undefined;
-        data["reflectedType"] = this.reflectedType ? this.reflectedType.toJSON() : <any>undefined;
-        data["module"] = this.module ? this.module.toJSON() : <any>undefined;
-        if (Array.isArray(this.customAttributes)) {
-            data["customAttributes"] = [];
-            for (let item of this.customAttributes)
-                data["customAttributes"].push(item.toJSON());
-        }
-        data["isCollectible"] = this.isCollectible;
-        data["metadataToken"] = this.metadataToken;
-        data["attributes"] = this.attributes;
-        data["methodImplementationFlags"] = this.methodImplementationFlags;
-        data["callingConvention"] = this.callingConvention;
-        data["isAbstract"] = this.isAbstract;
-        data["isConstructor"] = this.isConstructor;
-        data["isFinal"] = this.isFinal;
-        data["isHideBySig"] = this.isHideBySig;
-        data["isSpecialName"] = this.isSpecialName;
-        data["isStatic"] = this.isStatic;
-        data["isVirtual"] = this.isVirtual;
-        data["isAssembly"] = this.isAssembly;
-        data["isFamily"] = this.isFamily;
-        data["isFamilyAndAssembly"] = this.isFamilyAndAssembly;
-        data["isFamilyOrAssembly"] = this.isFamilyOrAssembly;
-        data["isPrivate"] = this.isPrivate;
-        data["isPublic"] = this.isPublic;
-        data["isConstructedGenericMethod"] = this.isConstructedGenericMethod;
-        data["isGenericMethod"] = this.isGenericMethod;
-        data["isGenericMethodDefinition"] = this.isGenericMethodDefinition;
-        data["containsGenericParameters"] = this.containsGenericParameters;
-        data["methodHandle"] = this.methodHandle ? this.methodHandle.toJSON() : <any>undefined;
-        data["isSecurityCritical"] = this.isSecurityCritical;
-        data["isSecuritySafeCritical"] = this.isSecuritySafeCritical;
-        data["isSecurityTransparent"] = this.isSecurityTransparent;
-        data["memberType"] = this.memberType;
-        data["returnParameter"] = this.returnParameter ? this.returnParameter.toJSON() : <any>undefined;
-        data["returnType"] = this.returnType ? this.returnType.toJSON() : <any>undefined;
-        data["returnTypeCustomAttributes"] = this.returnTypeCustomAttributes ? this.returnTypeCustomAttributes.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IMethodInfo {
-    name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    customAttributes?: CustomAttributeData[] | undefined;
-    isCollectible?: boolean;
-    metadataToken?: number;
-    attributes?: MethodInfoAttributes;
-    methodImplementationFlags?: MethodInfoMethodImplementationFlags;
-    callingConvention?: MethodInfoCallingConvention;
-    isAbstract?: boolean;
-    isConstructor?: boolean;
-    isFinal?: boolean;
-    isHideBySig?: boolean;
-    isSpecialName?: boolean;
-    isStatic?: boolean;
-    isVirtual?: boolean;
-    isAssembly?: boolean;
-    isFamily?: boolean;
-    isFamilyAndAssembly?: boolean;
-    isFamilyOrAssembly?: boolean;
-    isPrivate?: boolean;
-    isPublic?: boolean;
-    isConstructedGenericMethod?: boolean;
-    isGenericMethod?: boolean;
-    isGenericMethodDefinition?: boolean;
-    containsGenericParameters?: boolean;
-    methodHandle?: RuntimeMethodHandle;
-    isSecurityCritical?: boolean;
-    isSecuritySafeCritical?: boolean;
-    isSecurityTransparent?: boolean;
-    memberType?: MethodInfoMemberType;
-    returnParameter?: ParameterInfo;
-    returnType?: Type;
-    returnTypeCustomAttributes?: ICustomAttributeProvider;
-}
-
-export class Module implements IModule {
-    assembly?: Assembly;
-    readonly fullyQualifiedName?: string | undefined;
-    readonly name?: string | undefined;
-    readonly mdStreamVersion?: number;
-    readonly moduleVersionId?: string;
-    readonly scopeName?: string | undefined;
-    moduleHandle?: ModuleHandle;
-    readonly customAttributes?: CustomAttributeData[] | undefined;
-    readonly metadataToken?: number;
-
-    constructor(data?: IModule) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.assembly = _data["assembly"] ? Assembly.fromJS(_data["assembly"]) : <any>undefined;
-            (<any>this).fullyQualifiedName = _data["fullyQualifiedName"];
-            (<any>this).name = _data["name"];
-            (<any>this).mdStreamVersion = _data["mdStreamVersion"];
-            (<any>this).moduleVersionId = _data["moduleVersionId"];
-            (<any>this).scopeName = _data["scopeName"];
-            this.moduleHandle = _data["moduleHandle"] ? ModuleHandle.fromJS(_data["moduleHandle"]) : <any>undefined;
-            if (Array.isArray(_data["customAttributes"])) {
-                (<any>this).customAttributes = [] as any;
-                for (let item of _data["customAttributes"])
-                    (<any>this).customAttributes!.push(CustomAttributeData.fromJS(item));
-            }
-            (<any>this).metadataToken = _data["metadataToken"];
-        }
-    }
-
-    static fromJS(data: any): Module {
-        data = typeof data === 'object' ? data : {};
-        let result = new Module();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["assembly"] = this.assembly ? this.assembly.toJSON() : <any>undefined;
-        data["fullyQualifiedName"] = this.fullyQualifiedName;
-        data["name"] = this.name;
-        data["mdStreamVersion"] = this.mdStreamVersion;
-        data["moduleVersionId"] = this.moduleVersionId;
-        data["scopeName"] = this.scopeName;
-        data["moduleHandle"] = this.moduleHandle ? this.moduleHandle.toJSON() : <any>undefined;
-        if (Array.isArray(this.customAttributes)) {
-            data["customAttributes"] = [];
-            for (let item of this.customAttributes)
-                data["customAttributes"].push(item.toJSON());
-        }
-        data["metadataToken"] = this.metadataToken;
-        return data;
-    }
-}
-
-export interface IModule {
-    assembly?: Assembly;
-    fullyQualifiedName?: string | undefined;
-    name?: string | undefined;
-    mdStreamVersion?: number;
-    moduleVersionId?: string;
-    scopeName?: string | undefined;
-    moduleHandle?: ModuleHandle;
-    customAttributes?: CustomAttributeData[] | undefined;
-    metadataToken?: number;
-}
-
-export class ModuleHandle implements IModuleHandle {
-    readonly mdStreamVersion?: number;
-
-    constructor(data?: IModuleHandle) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).mdStreamVersion = _data["mdStreamVersion"];
-        }
-    }
-
-    static fromJS(data: any): ModuleHandle {
-        data = typeof data === 'object' ? data : {};
-        let result = new ModuleHandle();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["mdStreamVersion"] = this.mdStreamVersion;
-        return data;
-    }
-}
-
-export interface IModuleHandle {
-    mdStreamVersion?: number;
-}
-
 export class Money implements IMoney {
     amount!: number;
     currency!: MoneyCurrency;
@@ -9892,106 +8731,6 @@ export interface INotificationEntity {
     type?: NotificationEntityType;
     data?: string | undefined;
     icon?: FileEntity;
-}
-
-export class ParameterInfo implements IParameterInfo {
-    readonly attributes?: ParameterInfoAttributes;
-    member?: MemberInfo;
-    readonly name?: string | undefined;
-    parameterType?: Type;
-    readonly position?: number;
-    readonly isIn?: boolean;
-    readonly isLcid?: boolean;
-    readonly isOptional?: boolean;
-    readonly isOut?: boolean;
-    readonly isRetval?: boolean;
-    readonly defaultValue?: any | undefined;
-    readonly rawDefaultValue?: any | undefined;
-    readonly hasDefaultValue?: boolean;
-    readonly customAttributes?: CustomAttributeData[] | undefined;
-    readonly metadataToken?: number;
-
-    constructor(data?: IParameterInfo) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).attributes = _data["attributes"];
-            this.member = _data["member"] ? MemberInfo.fromJS(_data["member"]) : <any>undefined;
-            (<any>this).name = _data["name"];
-            this.parameterType = _data["parameterType"] ? Type.fromJS(_data["parameterType"]) : <any>undefined;
-            (<any>this).position = _data["position"];
-            (<any>this).isIn = _data["isIn"];
-            (<any>this).isLcid = _data["isLcid"];
-            (<any>this).isOptional = _data["isOptional"];
-            (<any>this).isOut = _data["isOut"];
-            (<any>this).isRetval = _data["isRetval"];
-            (<any>this).defaultValue = _data["defaultValue"];
-            (<any>this).rawDefaultValue = _data["rawDefaultValue"];
-            (<any>this).hasDefaultValue = _data["hasDefaultValue"];
-            if (Array.isArray(_data["customAttributes"])) {
-                (<any>this).customAttributes = [] as any;
-                for (let item of _data["customAttributes"])
-                    (<any>this).customAttributes!.push(CustomAttributeData.fromJS(item));
-            }
-            (<any>this).metadataToken = _data["metadataToken"];
-        }
-    }
-
-    static fromJS(data: any): ParameterInfo {
-        data = typeof data === 'object' ? data : {};
-        let result = new ParameterInfo();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["attributes"] = this.attributes;
-        data["member"] = this.member ? this.member.toJSON() : <any>undefined;
-        data["name"] = this.name;
-        data["parameterType"] = this.parameterType ? this.parameterType.toJSON() : <any>undefined;
-        data["position"] = this.position;
-        data["isIn"] = this.isIn;
-        data["isLcid"] = this.isLcid;
-        data["isOptional"] = this.isOptional;
-        data["isOut"] = this.isOut;
-        data["isRetval"] = this.isRetval;
-        data["defaultValue"] = this.defaultValue;
-        data["rawDefaultValue"] = this.rawDefaultValue;
-        data["hasDefaultValue"] = this.hasDefaultValue;
-        if (Array.isArray(this.customAttributes)) {
-            data["customAttributes"] = [];
-            for (let item of this.customAttributes)
-                data["customAttributes"].push(item.toJSON());
-        }
-        data["metadataToken"] = this.metadataToken;
-        return data;
-    }
-}
-
-export interface IParameterInfo {
-    attributes?: ParameterInfoAttributes;
-    member?: MemberInfo;
-    name?: string | undefined;
-    parameterType?: Type;
-    position?: number;
-    isIn?: boolean;
-    isLcid?: boolean;
-    isOptional?: boolean;
-    isOut?: boolean;
-    isRetval?: boolean;
-    defaultValue?: any | undefined;
-    rawDefaultValue?: any | undefined;
-    hasDefaultValue?: boolean;
-    customAttributes?: CustomAttributeData[] | undefined;
-    metadataToken?: number;
 }
 
 export class PaymentSystemEntity implements IPaymentSystemEntity {
@@ -10152,106 +8891,6 @@ export interface IPortfolioProjectEntity {
     hidden?: boolean;
     userId?: string;
     user?: UserEntity;
-}
-
-export class PropertyInfo implements IPropertyInfo {
-    readonly name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    readonly customAttributes?: CustomAttributeData[] | undefined;
-    readonly isCollectible?: boolean;
-    readonly metadataToken?: number;
-    readonly memberType?: PropertyInfoMemberType;
-    propertyType?: Type;
-    readonly attributes?: PropertyInfoAttributes;
-    readonly isSpecialName?: boolean;
-    readonly canRead?: boolean;
-    readonly canWrite?: boolean;
-    getMethod?: MethodInfo;
-    setMethod?: MethodInfo;
-
-    constructor(data?: IPropertyInfo) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).name = _data["name"];
-            this.declaringType = _data["declaringType"] ? Type.fromJS(_data["declaringType"]) : <any>undefined;
-            this.reflectedType = _data["reflectedType"] ? Type.fromJS(_data["reflectedType"]) : <any>undefined;
-            this.module = _data["module"] ? Module.fromJS(_data["module"]) : <any>undefined;
-            if (Array.isArray(_data["customAttributes"])) {
-                (<any>this).customAttributes = [] as any;
-                for (let item of _data["customAttributes"])
-                    (<any>this).customAttributes!.push(CustomAttributeData.fromJS(item));
-            }
-            (<any>this).isCollectible = _data["isCollectible"];
-            (<any>this).metadataToken = _data["metadataToken"];
-            (<any>this).memberType = _data["memberType"];
-            this.propertyType = _data["propertyType"] ? Type.fromJS(_data["propertyType"]) : <any>undefined;
-            (<any>this).attributes = _data["attributes"];
-            (<any>this).isSpecialName = _data["isSpecialName"];
-            (<any>this).canRead = _data["canRead"];
-            (<any>this).canWrite = _data["canWrite"];
-            this.getMethod = _data["getMethod"] ? MethodInfo.fromJS(_data["getMethod"]) : <any>undefined;
-            this.setMethod = _data["setMethod"] ? MethodInfo.fromJS(_data["setMethod"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): PropertyInfo {
-        data = typeof data === 'object' ? data : {};
-        let result = new PropertyInfo();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["declaringType"] = this.declaringType ? this.declaringType.toJSON() : <any>undefined;
-        data["reflectedType"] = this.reflectedType ? this.reflectedType.toJSON() : <any>undefined;
-        data["module"] = this.module ? this.module.toJSON() : <any>undefined;
-        if (Array.isArray(this.customAttributes)) {
-            data["customAttributes"] = [];
-            for (let item of this.customAttributes)
-                data["customAttributes"].push(item.toJSON());
-        }
-        data["isCollectible"] = this.isCollectible;
-        data["metadataToken"] = this.metadataToken;
-        data["memberType"] = this.memberType;
-        data["propertyType"] = this.propertyType ? this.propertyType.toJSON() : <any>undefined;
-        data["attributes"] = this.attributes;
-        data["isSpecialName"] = this.isSpecialName;
-        data["canRead"] = this.canRead;
-        data["canWrite"] = this.canWrite;
-        data["getMethod"] = this.getMethod ? this.getMethod.toJSON() : <any>undefined;
-        data["setMethod"] = this.setMethod ? this.setMethod.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IPropertyInfo {
-    name?: string | undefined;
-    declaringType?: Type;
-    reflectedType?: Type;
-    module?: Module;
-    customAttributes?: CustomAttributeData[] | undefined;
-    isCollectible?: boolean;
-    metadataToken?: number;
-    memberType?: PropertyInfoMemberType;
-    propertyType?: Type;
-    attributes?: PropertyInfoAttributes;
-    isSpecialName?: boolean;
-    canRead?: boolean;
-    canWrite?: boolean;
-    getMethod?: MethodInfo;
-    setMethod?: MethodInfo;
 }
 
 export class ProposalEntity implements IProposalEntity {
@@ -10682,114 +9321,6 @@ export interface IResolveDisputeCommand {
     blockUntil?: Date | undefined;
 }
 
-export class RuntimeFieldHandle implements IRuntimeFieldHandle {
-    value?: IntPtr;
-
-    constructor(data?: IRuntimeFieldHandle) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.value = _data["value"] ? IntPtr.fromJS(_data["value"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): RuntimeFieldHandle {
-        data = typeof data === 'object' ? data : {};
-        let result = new RuntimeFieldHandle();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["value"] = this.value ? this.value.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IRuntimeFieldHandle {
-    value?: IntPtr;
-}
-
-export class RuntimeMethodHandle implements IRuntimeMethodHandle {
-    value?: IntPtr;
-
-    constructor(data?: IRuntimeMethodHandle) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.value = _data["value"] ? IntPtr.fromJS(_data["value"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): RuntimeMethodHandle {
-        data = typeof data === 'object' ? data : {};
-        let result = new RuntimeMethodHandle();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["value"] = this.value ? this.value.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IRuntimeMethodHandle {
-    value?: IntPtr;
-}
-
-export class RuntimeTypeHandle implements IRuntimeTypeHandle {
-    value?: IntPtr;
-
-    constructor(data?: IRuntimeTypeHandle) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.value = _data["value"] ? IntPtr.fromJS(_data["value"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): RuntimeTypeHandle {
-        data = typeof data === 'object' ? data : {};
-        let result = new RuntimeTypeHandle();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["value"] = this.value ? this.value.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IRuntimeTypeHandle {
-    value?: IntPtr;
-}
-
 export class SelectContestWinnerCommand implements ISelectContestWinnerCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
@@ -10938,6 +9469,46 @@ export interface ISkillEntity {
     name?: string | undefined;
 }
 
+export class SkillModel implements ISkillModel {
+    id?: string;
+    name?: string | undefined;
+
+    constructor(data?: ISkillModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): SkillModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new SkillModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface ISkillModel {
+    id?: string;
+    name?: string | undefined;
+}
+
 export class StartContestCommand implements IStartContestCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
@@ -11080,46 +9651,6 @@ export interface IStartWorkSessionCommand {
     commandId?: string | undefined;
     timestamp?: Date;
     contractId?: string;
-}
-
-export class StructLayoutAttribute implements IStructLayoutAttribute {
-    readonly typeId?: any | undefined;
-    readonly value?: StructLayoutAttributeValue;
-
-    constructor(data?: IStructLayoutAttribute) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).typeId = _data["typeId"];
-            (<any>this).value = _data["value"];
-        }
-    }
-
-    static fromJS(data: any): StructLayoutAttribute {
-        data = typeof data === 'object' ? data : {};
-        let result = new StructLayoutAttribute();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["typeId"] = this.typeId;
-        data["value"] = this.value;
-        return data;
-    }
-}
-
-export interface IStructLayoutAttribute {
-    typeId?: any | undefined;
-    value?: StructLayoutAttributeValue;
 }
 
 export class SubmitContestEntryCommand implements ISubmitContestEntryCommand {
@@ -11848,794 +10379,6 @@ export interface ITransactionProviderEntity {
     feePercent: number;
     systems: PaymentSystemEntity[];
     logo: FileEntity;
-}
-
-export class Type implements IType {
-    readonly name?: string | undefined;
-    readonly customAttributes?: CustomAttributeData[] | undefined;
-    readonly isCollectible?: boolean;
-    readonly metadataToken?: number;
-    readonly isInterface?: boolean;
-    readonly memberType?: TypeMemberType;
-    readonly namespace?: string | undefined;
-    readonly assemblyQualifiedName?: string | undefined;
-    readonly fullName?: string | undefined;
-    assembly?: Assembly;
-    module?: Module;
-    readonly isNested?: boolean;
-    declaringType?: Type;
-    declaringMethod?: MethodBase;
-    reflectedType?: Type;
-    underlyingSystemType?: Type;
-    readonly isTypeDefinition?: boolean;
-    readonly isArray?: boolean;
-    readonly isByRef?: boolean;
-    readonly isPointer?: boolean;
-    readonly isConstructedGenericType?: boolean;
-    readonly isGenericParameter?: boolean;
-    readonly isGenericTypeParameter?: boolean;
-    readonly isGenericMethodParameter?: boolean;
-    readonly isGenericType?: boolean;
-    readonly isGenericTypeDefinition?: boolean;
-    readonly isSZArray?: boolean;
-    readonly isVariableBoundArray?: boolean;
-    readonly isByRefLike?: boolean;
-    readonly isFunctionPointer?: boolean;
-    readonly isUnmanagedFunctionPointer?: boolean;
-    readonly hasElementType?: boolean;
-    readonly genericTypeArguments?: Type[] | undefined;
-    readonly genericParameterPosition?: number;
-    readonly genericParameterAttributes?: TypeGenericParameterAttributes;
-    readonly attributes?: TypeAttributes;
-    readonly isAbstract?: boolean;
-    readonly isImport?: boolean;
-    readonly isSealed?: boolean;
-    readonly isSpecialName?: boolean;
-    readonly isClass?: boolean;
-    readonly isNestedAssembly?: boolean;
-    readonly isNestedFamANDAssem?: boolean;
-    readonly isNestedFamily?: boolean;
-    readonly isNestedFamORAssem?: boolean;
-    readonly isNestedPrivate?: boolean;
-    readonly isNestedPublic?: boolean;
-    readonly isNotPublic?: boolean;
-    readonly isPublic?: boolean;
-    readonly isAutoLayout?: boolean;
-    readonly isExplicitLayout?: boolean;
-    readonly isLayoutSequential?: boolean;
-    readonly isAnsiClass?: boolean;
-    readonly isAutoClass?: boolean;
-    readonly isUnicodeClass?: boolean;
-    readonly isCOMObject?: boolean;
-    readonly isContextful?: boolean;
-    readonly isEnum?: boolean;
-    readonly isMarshalByRef?: boolean;
-    readonly isPrimitive?: boolean;
-    readonly isValueType?: boolean;
-    readonly isSignatureType?: boolean;
-    readonly isSecurityCritical?: boolean;
-    readonly isSecuritySafeCritical?: boolean;
-    readonly isSecurityTransparent?: boolean;
-    structLayoutAttribute?: StructLayoutAttribute;
-    typeInitializer?: ConstructorInfo;
-    typeHandle?: RuntimeTypeHandle;
-    readonly guid?: string;
-    baseType?: Type;
-    readonly isSerializable?: boolean;
-    readonly containsGenericParameters?: boolean;
-    readonly isVisible?: boolean;
-
-    constructor(data?: IType) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).name = _data["name"];
-            if (Array.isArray(_data["customAttributes"])) {
-                (<any>this).customAttributes = [] as any;
-                for (let item of _data["customAttributes"])
-                    (<any>this).customAttributes!.push(CustomAttributeData.fromJS(item));
-            }
-            (<any>this).isCollectible = _data["isCollectible"];
-            (<any>this).metadataToken = _data["metadataToken"];
-            (<any>this).isInterface = _data["isInterface"];
-            (<any>this).memberType = _data["memberType"];
-            (<any>this).namespace = _data["namespace"];
-            (<any>this).assemblyQualifiedName = _data["assemblyQualifiedName"];
-            (<any>this).fullName = _data["fullName"];
-            this.assembly = _data["assembly"] ? Assembly.fromJS(_data["assembly"]) : <any>undefined;
-            this.module = _data["module"] ? Module.fromJS(_data["module"]) : <any>undefined;
-            (<any>this).isNested = _data["isNested"];
-            this.declaringType = _data["declaringType"] ? Type.fromJS(_data["declaringType"]) : <any>undefined;
-            this.declaringMethod = _data["declaringMethod"] ? MethodBase.fromJS(_data["declaringMethod"]) : <any>undefined;
-            this.reflectedType = _data["reflectedType"] ? Type.fromJS(_data["reflectedType"]) : <any>undefined;
-            this.underlyingSystemType = _data["underlyingSystemType"] ? Type.fromJS(_data["underlyingSystemType"]) : <any>undefined;
-            (<any>this).isTypeDefinition = _data["isTypeDefinition"];
-            (<any>this).isArray = _data["isArray"];
-            (<any>this).isByRef = _data["isByRef"];
-            (<any>this).isPointer = _data["isPointer"];
-            (<any>this).isConstructedGenericType = _data["isConstructedGenericType"];
-            (<any>this).isGenericParameter = _data["isGenericParameter"];
-            (<any>this).isGenericTypeParameter = _data["isGenericTypeParameter"];
-            (<any>this).isGenericMethodParameter = _data["isGenericMethodParameter"];
-            (<any>this).isGenericType = _data["isGenericType"];
-            (<any>this).isGenericTypeDefinition = _data["isGenericTypeDefinition"];
-            (<any>this).isSZArray = _data["isSZArray"];
-            (<any>this).isVariableBoundArray = _data["isVariableBoundArray"];
-            (<any>this).isByRefLike = _data["isByRefLike"];
-            (<any>this).isFunctionPointer = _data["isFunctionPointer"];
-            (<any>this).isUnmanagedFunctionPointer = _data["isUnmanagedFunctionPointer"];
-            (<any>this).hasElementType = _data["hasElementType"];
-            if (Array.isArray(_data["genericTypeArguments"])) {
-                (<any>this).genericTypeArguments = [] as any;
-                for (let item of _data["genericTypeArguments"])
-                    (<any>this).genericTypeArguments!.push(Type.fromJS(item));
-            }
-            (<any>this).genericParameterPosition = _data["genericParameterPosition"];
-            (<any>this).genericParameterAttributes = _data["genericParameterAttributes"];
-            (<any>this).attributes = _data["attributes"];
-            (<any>this).isAbstract = _data["isAbstract"];
-            (<any>this).isImport = _data["isImport"];
-            (<any>this).isSealed = _data["isSealed"];
-            (<any>this).isSpecialName = _data["isSpecialName"];
-            (<any>this).isClass = _data["isClass"];
-            (<any>this).isNestedAssembly = _data["isNestedAssembly"];
-            (<any>this).isNestedFamANDAssem = _data["isNestedFamANDAssem"];
-            (<any>this).isNestedFamily = _data["isNestedFamily"];
-            (<any>this).isNestedFamORAssem = _data["isNestedFamORAssem"];
-            (<any>this).isNestedPrivate = _data["isNestedPrivate"];
-            (<any>this).isNestedPublic = _data["isNestedPublic"];
-            (<any>this).isNotPublic = _data["isNotPublic"];
-            (<any>this).isPublic = _data["isPublic"];
-            (<any>this).isAutoLayout = _data["isAutoLayout"];
-            (<any>this).isExplicitLayout = _data["isExplicitLayout"];
-            (<any>this).isLayoutSequential = _data["isLayoutSequential"];
-            (<any>this).isAnsiClass = _data["isAnsiClass"];
-            (<any>this).isAutoClass = _data["isAutoClass"];
-            (<any>this).isUnicodeClass = _data["isUnicodeClass"];
-            (<any>this).isCOMObject = _data["isCOMObject"];
-            (<any>this).isContextful = _data["isContextful"];
-            (<any>this).isEnum = _data["isEnum"];
-            (<any>this).isMarshalByRef = _data["isMarshalByRef"];
-            (<any>this).isPrimitive = _data["isPrimitive"];
-            (<any>this).isValueType = _data["isValueType"];
-            (<any>this).isSignatureType = _data["isSignatureType"];
-            (<any>this).isSecurityCritical = _data["isSecurityCritical"];
-            (<any>this).isSecuritySafeCritical = _data["isSecuritySafeCritical"];
-            (<any>this).isSecurityTransparent = _data["isSecurityTransparent"];
-            this.structLayoutAttribute = _data["structLayoutAttribute"] ? StructLayoutAttribute.fromJS(_data["structLayoutAttribute"]) : <any>undefined;
-            this.typeInitializer = _data["typeInitializer"] ? ConstructorInfo.fromJS(_data["typeInitializer"]) : <any>undefined;
-            this.typeHandle = _data["typeHandle"] ? RuntimeTypeHandle.fromJS(_data["typeHandle"]) : <any>undefined;
-            (<any>this).guid = _data["guid"];
-            this.baseType = _data["baseType"] ? Type.fromJS(_data["baseType"]) : <any>undefined;
-            (<any>this).isSerializable = _data["isSerializable"];
-            (<any>this).containsGenericParameters = _data["containsGenericParameters"];
-            (<any>this).isVisible = _data["isVisible"];
-        }
-    }
-
-    static fromJS(data: any): Type {
-        data = typeof data === 'object' ? data : {};
-        let result = new Type();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        if (Array.isArray(this.customAttributes)) {
-            data["customAttributes"] = [];
-            for (let item of this.customAttributes)
-                data["customAttributes"].push(item.toJSON());
-        }
-        data["isCollectible"] = this.isCollectible;
-        data["metadataToken"] = this.metadataToken;
-        data["isInterface"] = this.isInterface;
-        data["memberType"] = this.memberType;
-        data["namespace"] = this.namespace;
-        data["assemblyQualifiedName"] = this.assemblyQualifiedName;
-        data["fullName"] = this.fullName;
-        data["assembly"] = this.assembly ? this.assembly.toJSON() : <any>undefined;
-        data["module"] = this.module ? this.module.toJSON() : <any>undefined;
-        data["isNested"] = this.isNested;
-        data["declaringType"] = this.declaringType ? this.declaringType.toJSON() : <any>undefined;
-        data["declaringMethod"] = this.declaringMethod ? this.declaringMethod.toJSON() : <any>undefined;
-        data["reflectedType"] = this.reflectedType ? this.reflectedType.toJSON() : <any>undefined;
-        data["underlyingSystemType"] = this.underlyingSystemType ? this.underlyingSystemType.toJSON() : <any>undefined;
-        data["isTypeDefinition"] = this.isTypeDefinition;
-        data["isArray"] = this.isArray;
-        data["isByRef"] = this.isByRef;
-        data["isPointer"] = this.isPointer;
-        data["isConstructedGenericType"] = this.isConstructedGenericType;
-        data["isGenericParameter"] = this.isGenericParameter;
-        data["isGenericTypeParameter"] = this.isGenericTypeParameter;
-        data["isGenericMethodParameter"] = this.isGenericMethodParameter;
-        data["isGenericType"] = this.isGenericType;
-        data["isGenericTypeDefinition"] = this.isGenericTypeDefinition;
-        data["isSZArray"] = this.isSZArray;
-        data["isVariableBoundArray"] = this.isVariableBoundArray;
-        data["isByRefLike"] = this.isByRefLike;
-        data["isFunctionPointer"] = this.isFunctionPointer;
-        data["isUnmanagedFunctionPointer"] = this.isUnmanagedFunctionPointer;
-        data["hasElementType"] = this.hasElementType;
-        if (Array.isArray(this.genericTypeArguments)) {
-            data["genericTypeArguments"] = [];
-            for (let item of this.genericTypeArguments)
-                data["genericTypeArguments"].push(item.toJSON());
-        }
-        data["genericParameterPosition"] = this.genericParameterPosition;
-        data["genericParameterAttributes"] = this.genericParameterAttributes;
-        data["attributes"] = this.attributes;
-        data["isAbstract"] = this.isAbstract;
-        data["isImport"] = this.isImport;
-        data["isSealed"] = this.isSealed;
-        data["isSpecialName"] = this.isSpecialName;
-        data["isClass"] = this.isClass;
-        data["isNestedAssembly"] = this.isNestedAssembly;
-        data["isNestedFamANDAssem"] = this.isNestedFamANDAssem;
-        data["isNestedFamily"] = this.isNestedFamily;
-        data["isNestedFamORAssem"] = this.isNestedFamORAssem;
-        data["isNestedPrivate"] = this.isNestedPrivate;
-        data["isNestedPublic"] = this.isNestedPublic;
-        data["isNotPublic"] = this.isNotPublic;
-        data["isPublic"] = this.isPublic;
-        data["isAutoLayout"] = this.isAutoLayout;
-        data["isExplicitLayout"] = this.isExplicitLayout;
-        data["isLayoutSequential"] = this.isLayoutSequential;
-        data["isAnsiClass"] = this.isAnsiClass;
-        data["isAutoClass"] = this.isAutoClass;
-        data["isUnicodeClass"] = this.isUnicodeClass;
-        data["isCOMObject"] = this.isCOMObject;
-        data["isContextful"] = this.isContextful;
-        data["isEnum"] = this.isEnum;
-        data["isMarshalByRef"] = this.isMarshalByRef;
-        data["isPrimitive"] = this.isPrimitive;
-        data["isValueType"] = this.isValueType;
-        data["isSignatureType"] = this.isSignatureType;
-        data["isSecurityCritical"] = this.isSecurityCritical;
-        data["isSecuritySafeCritical"] = this.isSecuritySafeCritical;
-        data["isSecurityTransparent"] = this.isSecurityTransparent;
-        data["structLayoutAttribute"] = this.structLayoutAttribute ? this.structLayoutAttribute.toJSON() : <any>undefined;
-        data["typeInitializer"] = this.typeInitializer ? this.typeInitializer.toJSON() : <any>undefined;
-        data["typeHandle"] = this.typeHandle ? this.typeHandle.toJSON() : <any>undefined;
-        data["guid"] = this.guid;
-        data["baseType"] = this.baseType ? this.baseType.toJSON() : <any>undefined;
-        data["isSerializable"] = this.isSerializable;
-        data["containsGenericParameters"] = this.containsGenericParameters;
-        data["isVisible"] = this.isVisible;
-        return data;
-    }
-}
-
-export interface IType {
-    name?: string | undefined;
-    customAttributes?: CustomAttributeData[] | undefined;
-    isCollectible?: boolean;
-    metadataToken?: number;
-    isInterface?: boolean;
-    memberType?: TypeMemberType;
-    namespace?: string | undefined;
-    assemblyQualifiedName?: string | undefined;
-    fullName?: string | undefined;
-    assembly?: Assembly;
-    module?: Module;
-    isNested?: boolean;
-    declaringType?: Type;
-    declaringMethod?: MethodBase;
-    reflectedType?: Type;
-    underlyingSystemType?: Type;
-    isTypeDefinition?: boolean;
-    isArray?: boolean;
-    isByRef?: boolean;
-    isPointer?: boolean;
-    isConstructedGenericType?: boolean;
-    isGenericParameter?: boolean;
-    isGenericTypeParameter?: boolean;
-    isGenericMethodParameter?: boolean;
-    isGenericType?: boolean;
-    isGenericTypeDefinition?: boolean;
-    isSZArray?: boolean;
-    isVariableBoundArray?: boolean;
-    isByRefLike?: boolean;
-    isFunctionPointer?: boolean;
-    isUnmanagedFunctionPointer?: boolean;
-    hasElementType?: boolean;
-    genericTypeArguments?: Type[] | undefined;
-    genericParameterPosition?: number;
-    genericParameterAttributes?: TypeGenericParameterAttributes;
-    attributes?: TypeAttributes;
-    isAbstract?: boolean;
-    isImport?: boolean;
-    isSealed?: boolean;
-    isSpecialName?: boolean;
-    isClass?: boolean;
-    isNestedAssembly?: boolean;
-    isNestedFamANDAssem?: boolean;
-    isNestedFamily?: boolean;
-    isNestedFamORAssem?: boolean;
-    isNestedPrivate?: boolean;
-    isNestedPublic?: boolean;
-    isNotPublic?: boolean;
-    isPublic?: boolean;
-    isAutoLayout?: boolean;
-    isExplicitLayout?: boolean;
-    isLayoutSequential?: boolean;
-    isAnsiClass?: boolean;
-    isAutoClass?: boolean;
-    isUnicodeClass?: boolean;
-    isCOMObject?: boolean;
-    isContextful?: boolean;
-    isEnum?: boolean;
-    isMarshalByRef?: boolean;
-    isPrimitive?: boolean;
-    isValueType?: boolean;
-    isSignatureType?: boolean;
-    isSecurityCritical?: boolean;
-    isSecuritySafeCritical?: boolean;
-    isSecurityTransparent?: boolean;
-    structLayoutAttribute?: StructLayoutAttribute;
-    typeInitializer?: ConstructorInfo;
-    typeHandle?: RuntimeTypeHandle;
-    guid?: string;
-    baseType?: Type;
-    isSerializable?: boolean;
-    containsGenericParameters?: boolean;
-    isVisible?: boolean;
-}
-
-export class TypeInfo implements ITypeInfo {
-    readonly name?: string | undefined;
-    readonly customAttributes?: CustomAttributeData[] | undefined;
-    readonly isCollectible?: boolean;
-    readonly metadataToken?: number;
-    readonly isInterface?: boolean;
-    readonly memberType?: TypeInfoMemberType;
-    readonly namespace?: string | undefined;
-    readonly assemblyQualifiedName?: string | undefined;
-    readonly fullName?: string | undefined;
-    assembly?: Assembly;
-    module?: Module;
-    readonly isNested?: boolean;
-    declaringType?: Type;
-    declaringMethod?: MethodBase;
-    reflectedType?: Type;
-    underlyingSystemType?: Type;
-    readonly isTypeDefinition?: boolean;
-    readonly isArray?: boolean;
-    readonly isByRef?: boolean;
-    readonly isPointer?: boolean;
-    readonly isConstructedGenericType?: boolean;
-    readonly isGenericParameter?: boolean;
-    readonly isGenericTypeParameter?: boolean;
-    readonly isGenericMethodParameter?: boolean;
-    readonly isGenericType?: boolean;
-    readonly isGenericTypeDefinition?: boolean;
-    readonly isSZArray?: boolean;
-    readonly isVariableBoundArray?: boolean;
-    readonly isByRefLike?: boolean;
-    readonly isFunctionPointer?: boolean;
-    readonly isUnmanagedFunctionPointer?: boolean;
-    readonly hasElementType?: boolean;
-    readonly genericTypeArguments?: Type[] | undefined;
-    readonly genericParameterPosition?: number;
-    readonly genericParameterAttributes?: TypeInfoGenericParameterAttributes;
-    readonly attributes?: TypeInfoAttributes;
-    readonly isAbstract?: boolean;
-    readonly isImport?: boolean;
-    readonly isSealed?: boolean;
-    readonly isSpecialName?: boolean;
-    readonly isClass?: boolean;
-    readonly isNestedAssembly?: boolean;
-    readonly isNestedFamANDAssem?: boolean;
-    readonly isNestedFamily?: boolean;
-    readonly isNestedFamORAssem?: boolean;
-    readonly isNestedPrivate?: boolean;
-    readonly isNestedPublic?: boolean;
-    readonly isNotPublic?: boolean;
-    readonly isPublic?: boolean;
-    readonly isAutoLayout?: boolean;
-    readonly isExplicitLayout?: boolean;
-    readonly isLayoutSequential?: boolean;
-    readonly isAnsiClass?: boolean;
-    readonly isAutoClass?: boolean;
-    readonly isUnicodeClass?: boolean;
-    readonly isCOMObject?: boolean;
-    readonly isContextful?: boolean;
-    readonly isEnum?: boolean;
-    readonly isMarshalByRef?: boolean;
-    readonly isPrimitive?: boolean;
-    readonly isValueType?: boolean;
-    readonly isSignatureType?: boolean;
-    readonly isSecurityCritical?: boolean;
-    readonly isSecuritySafeCritical?: boolean;
-    readonly isSecurityTransparent?: boolean;
-    structLayoutAttribute?: StructLayoutAttribute;
-    typeInitializer?: ConstructorInfo;
-    typeHandle?: RuntimeTypeHandle;
-    readonly guid?: string;
-    baseType?: Type;
-    readonly isSerializable?: boolean;
-    readonly containsGenericParameters?: boolean;
-    readonly isVisible?: boolean;
-    readonly genericTypeParameters?: Type[] | undefined;
-    readonly declaredConstructors?: ConstructorInfo[] | undefined;
-    readonly declaredEvents?: EventInfo[] | undefined;
-    readonly declaredFields?: FieldInfo[] | undefined;
-    readonly declaredMembers?: MemberInfo[] | undefined;
-    readonly declaredMethods?: MethodInfo[] | undefined;
-    readonly declaredNestedTypes?: TypeInfo[] | undefined;
-    readonly declaredProperties?: PropertyInfo[] | undefined;
-    readonly implementedInterfaces?: Type[] | undefined;
-
-    constructor(data?: ITypeInfo) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            (<any>this).name = _data["name"];
-            if (Array.isArray(_data["customAttributes"])) {
-                (<any>this).customAttributes = [] as any;
-                for (let item of _data["customAttributes"])
-                    (<any>this).customAttributes!.push(CustomAttributeData.fromJS(item));
-            }
-            (<any>this).isCollectible = _data["isCollectible"];
-            (<any>this).metadataToken = _data["metadataToken"];
-            (<any>this).isInterface = _data["isInterface"];
-            (<any>this).memberType = _data["memberType"];
-            (<any>this).namespace = _data["namespace"];
-            (<any>this).assemblyQualifiedName = _data["assemblyQualifiedName"];
-            (<any>this).fullName = _data["fullName"];
-            this.assembly = _data["assembly"] ? Assembly.fromJS(_data["assembly"]) : <any>undefined;
-            this.module = _data["module"] ? Module.fromJS(_data["module"]) : <any>undefined;
-            (<any>this).isNested = _data["isNested"];
-            this.declaringType = _data["declaringType"] ? Type.fromJS(_data["declaringType"]) : <any>undefined;
-            this.declaringMethod = _data["declaringMethod"] ? MethodBase.fromJS(_data["declaringMethod"]) : <any>undefined;
-            this.reflectedType = _data["reflectedType"] ? Type.fromJS(_data["reflectedType"]) : <any>undefined;
-            this.underlyingSystemType = _data["underlyingSystemType"] ? Type.fromJS(_data["underlyingSystemType"]) : <any>undefined;
-            (<any>this).isTypeDefinition = _data["isTypeDefinition"];
-            (<any>this).isArray = _data["isArray"];
-            (<any>this).isByRef = _data["isByRef"];
-            (<any>this).isPointer = _data["isPointer"];
-            (<any>this).isConstructedGenericType = _data["isConstructedGenericType"];
-            (<any>this).isGenericParameter = _data["isGenericParameter"];
-            (<any>this).isGenericTypeParameter = _data["isGenericTypeParameter"];
-            (<any>this).isGenericMethodParameter = _data["isGenericMethodParameter"];
-            (<any>this).isGenericType = _data["isGenericType"];
-            (<any>this).isGenericTypeDefinition = _data["isGenericTypeDefinition"];
-            (<any>this).isSZArray = _data["isSZArray"];
-            (<any>this).isVariableBoundArray = _data["isVariableBoundArray"];
-            (<any>this).isByRefLike = _data["isByRefLike"];
-            (<any>this).isFunctionPointer = _data["isFunctionPointer"];
-            (<any>this).isUnmanagedFunctionPointer = _data["isUnmanagedFunctionPointer"];
-            (<any>this).hasElementType = _data["hasElementType"];
-            if (Array.isArray(_data["genericTypeArguments"])) {
-                (<any>this).genericTypeArguments = [] as any;
-                for (let item of _data["genericTypeArguments"])
-                    (<any>this).genericTypeArguments!.push(Type.fromJS(item));
-            }
-            (<any>this).genericParameterPosition = _data["genericParameterPosition"];
-            (<any>this).genericParameterAttributes = _data["genericParameterAttributes"];
-            (<any>this).attributes = _data["attributes"];
-            (<any>this).isAbstract = _data["isAbstract"];
-            (<any>this).isImport = _data["isImport"];
-            (<any>this).isSealed = _data["isSealed"];
-            (<any>this).isSpecialName = _data["isSpecialName"];
-            (<any>this).isClass = _data["isClass"];
-            (<any>this).isNestedAssembly = _data["isNestedAssembly"];
-            (<any>this).isNestedFamANDAssem = _data["isNestedFamANDAssem"];
-            (<any>this).isNestedFamily = _data["isNestedFamily"];
-            (<any>this).isNestedFamORAssem = _data["isNestedFamORAssem"];
-            (<any>this).isNestedPrivate = _data["isNestedPrivate"];
-            (<any>this).isNestedPublic = _data["isNestedPublic"];
-            (<any>this).isNotPublic = _data["isNotPublic"];
-            (<any>this).isPublic = _data["isPublic"];
-            (<any>this).isAutoLayout = _data["isAutoLayout"];
-            (<any>this).isExplicitLayout = _data["isExplicitLayout"];
-            (<any>this).isLayoutSequential = _data["isLayoutSequential"];
-            (<any>this).isAnsiClass = _data["isAnsiClass"];
-            (<any>this).isAutoClass = _data["isAutoClass"];
-            (<any>this).isUnicodeClass = _data["isUnicodeClass"];
-            (<any>this).isCOMObject = _data["isCOMObject"];
-            (<any>this).isContextful = _data["isContextful"];
-            (<any>this).isEnum = _data["isEnum"];
-            (<any>this).isMarshalByRef = _data["isMarshalByRef"];
-            (<any>this).isPrimitive = _data["isPrimitive"];
-            (<any>this).isValueType = _data["isValueType"];
-            (<any>this).isSignatureType = _data["isSignatureType"];
-            (<any>this).isSecurityCritical = _data["isSecurityCritical"];
-            (<any>this).isSecuritySafeCritical = _data["isSecuritySafeCritical"];
-            (<any>this).isSecurityTransparent = _data["isSecurityTransparent"];
-            this.structLayoutAttribute = _data["structLayoutAttribute"] ? StructLayoutAttribute.fromJS(_data["structLayoutAttribute"]) : <any>undefined;
-            this.typeInitializer = _data["typeInitializer"] ? ConstructorInfo.fromJS(_data["typeInitializer"]) : <any>undefined;
-            this.typeHandle = _data["typeHandle"] ? RuntimeTypeHandle.fromJS(_data["typeHandle"]) : <any>undefined;
-            (<any>this).guid = _data["guid"];
-            this.baseType = _data["baseType"] ? Type.fromJS(_data["baseType"]) : <any>undefined;
-            (<any>this).isSerializable = _data["isSerializable"];
-            (<any>this).containsGenericParameters = _data["containsGenericParameters"];
-            (<any>this).isVisible = _data["isVisible"];
-            if (Array.isArray(_data["genericTypeParameters"])) {
-                (<any>this).genericTypeParameters = [] as any;
-                for (let item of _data["genericTypeParameters"])
-                    (<any>this).genericTypeParameters!.push(Type.fromJS(item));
-            }
-            if (Array.isArray(_data["declaredConstructors"])) {
-                (<any>this).declaredConstructors = [] as any;
-                for (let item of _data["declaredConstructors"])
-                    (<any>this).declaredConstructors!.push(ConstructorInfo.fromJS(item));
-            }
-            if (Array.isArray(_data["declaredEvents"])) {
-                (<any>this).declaredEvents = [] as any;
-                for (let item of _data["declaredEvents"])
-                    (<any>this).declaredEvents!.push(EventInfo.fromJS(item));
-            }
-            if (Array.isArray(_data["declaredFields"])) {
-                (<any>this).declaredFields = [] as any;
-                for (let item of _data["declaredFields"])
-                    (<any>this).declaredFields!.push(FieldInfo.fromJS(item));
-            }
-            if (Array.isArray(_data["declaredMembers"])) {
-                (<any>this).declaredMembers = [] as any;
-                for (let item of _data["declaredMembers"])
-                    (<any>this).declaredMembers!.push(MemberInfo.fromJS(item));
-            }
-            if (Array.isArray(_data["declaredMethods"])) {
-                (<any>this).declaredMethods = [] as any;
-                for (let item of _data["declaredMethods"])
-                    (<any>this).declaredMethods!.push(MethodInfo.fromJS(item));
-            }
-            if (Array.isArray(_data["declaredNestedTypes"])) {
-                (<any>this).declaredNestedTypes = [] as any;
-                for (let item of _data["declaredNestedTypes"])
-                    (<any>this).declaredNestedTypes!.push(TypeInfo.fromJS(item));
-            }
-            if (Array.isArray(_data["declaredProperties"])) {
-                (<any>this).declaredProperties = [] as any;
-                for (let item of _data["declaredProperties"])
-                    (<any>this).declaredProperties!.push(PropertyInfo.fromJS(item));
-            }
-            if (Array.isArray(_data["implementedInterfaces"])) {
-                (<any>this).implementedInterfaces = [] as any;
-                for (let item of _data["implementedInterfaces"])
-                    (<any>this).implementedInterfaces!.push(Type.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): TypeInfo {
-        data = typeof data === 'object' ? data : {};
-        let result = new TypeInfo();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        if (Array.isArray(this.customAttributes)) {
-            data["customAttributes"] = [];
-            for (let item of this.customAttributes)
-                data["customAttributes"].push(item.toJSON());
-        }
-        data["isCollectible"] = this.isCollectible;
-        data["metadataToken"] = this.metadataToken;
-        data["isInterface"] = this.isInterface;
-        data["memberType"] = this.memberType;
-        data["namespace"] = this.namespace;
-        data["assemblyQualifiedName"] = this.assemblyQualifiedName;
-        data["fullName"] = this.fullName;
-        data["assembly"] = this.assembly ? this.assembly.toJSON() : <any>undefined;
-        data["module"] = this.module ? this.module.toJSON() : <any>undefined;
-        data["isNested"] = this.isNested;
-        data["declaringType"] = this.declaringType ? this.declaringType.toJSON() : <any>undefined;
-        data["declaringMethod"] = this.declaringMethod ? this.declaringMethod.toJSON() : <any>undefined;
-        data["reflectedType"] = this.reflectedType ? this.reflectedType.toJSON() : <any>undefined;
-        data["underlyingSystemType"] = this.underlyingSystemType ? this.underlyingSystemType.toJSON() : <any>undefined;
-        data["isTypeDefinition"] = this.isTypeDefinition;
-        data["isArray"] = this.isArray;
-        data["isByRef"] = this.isByRef;
-        data["isPointer"] = this.isPointer;
-        data["isConstructedGenericType"] = this.isConstructedGenericType;
-        data["isGenericParameter"] = this.isGenericParameter;
-        data["isGenericTypeParameter"] = this.isGenericTypeParameter;
-        data["isGenericMethodParameter"] = this.isGenericMethodParameter;
-        data["isGenericType"] = this.isGenericType;
-        data["isGenericTypeDefinition"] = this.isGenericTypeDefinition;
-        data["isSZArray"] = this.isSZArray;
-        data["isVariableBoundArray"] = this.isVariableBoundArray;
-        data["isByRefLike"] = this.isByRefLike;
-        data["isFunctionPointer"] = this.isFunctionPointer;
-        data["isUnmanagedFunctionPointer"] = this.isUnmanagedFunctionPointer;
-        data["hasElementType"] = this.hasElementType;
-        if (Array.isArray(this.genericTypeArguments)) {
-            data["genericTypeArguments"] = [];
-            for (let item of this.genericTypeArguments)
-                data["genericTypeArguments"].push(item.toJSON());
-        }
-        data["genericParameterPosition"] = this.genericParameterPosition;
-        data["genericParameterAttributes"] = this.genericParameterAttributes;
-        data["attributes"] = this.attributes;
-        data["isAbstract"] = this.isAbstract;
-        data["isImport"] = this.isImport;
-        data["isSealed"] = this.isSealed;
-        data["isSpecialName"] = this.isSpecialName;
-        data["isClass"] = this.isClass;
-        data["isNestedAssembly"] = this.isNestedAssembly;
-        data["isNestedFamANDAssem"] = this.isNestedFamANDAssem;
-        data["isNestedFamily"] = this.isNestedFamily;
-        data["isNestedFamORAssem"] = this.isNestedFamORAssem;
-        data["isNestedPrivate"] = this.isNestedPrivate;
-        data["isNestedPublic"] = this.isNestedPublic;
-        data["isNotPublic"] = this.isNotPublic;
-        data["isPublic"] = this.isPublic;
-        data["isAutoLayout"] = this.isAutoLayout;
-        data["isExplicitLayout"] = this.isExplicitLayout;
-        data["isLayoutSequential"] = this.isLayoutSequential;
-        data["isAnsiClass"] = this.isAnsiClass;
-        data["isAutoClass"] = this.isAutoClass;
-        data["isUnicodeClass"] = this.isUnicodeClass;
-        data["isCOMObject"] = this.isCOMObject;
-        data["isContextful"] = this.isContextful;
-        data["isEnum"] = this.isEnum;
-        data["isMarshalByRef"] = this.isMarshalByRef;
-        data["isPrimitive"] = this.isPrimitive;
-        data["isValueType"] = this.isValueType;
-        data["isSignatureType"] = this.isSignatureType;
-        data["isSecurityCritical"] = this.isSecurityCritical;
-        data["isSecuritySafeCritical"] = this.isSecuritySafeCritical;
-        data["isSecurityTransparent"] = this.isSecurityTransparent;
-        data["structLayoutAttribute"] = this.structLayoutAttribute ? this.structLayoutAttribute.toJSON() : <any>undefined;
-        data["typeInitializer"] = this.typeInitializer ? this.typeInitializer.toJSON() : <any>undefined;
-        data["typeHandle"] = this.typeHandle ? this.typeHandle.toJSON() : <any>undefined;
-        data["guid"] = this.guid;
-        data["baseType"] = this.baseType ? this.baseType.toJSON() : <any>undefined;
-        data["isSerializable"] = this.isSerializable;
-        data["containsGenericParameters"] = this.containsGenericParameters;
-        data["isVisible"] = this.isVisible;
-        if (Array.isArray(this.genericTypeParameters)) {
-            data["genericTypeParameters"] = [];
-            for (let item of this.genericTypeParameters)
-                data["genericTypeParameters"].push(item.toJSON());
-        }
-        if (Array.isArray(this.declaredConstructors)) {
-            data["declaredConstructors"] = [];
-            for (let item of this.declaredConstructors)
-                data["declaredConstructors"].push(item.toJSON());
-        }
-        if (Array.isArray(this.declaredEvents)) {
-            data["declaredEvents"] = [];
-            for (let item of this.declaredEvents)
-                data["declaredEvents"].push(item.toJSON());
-        }
-        if (Array.isArray(this.declaredFields)) {
-            data["declaredFields"] = [];
-            for (let item of this.declaredFields)
-                data["declaredFields"].push(item.toJSON());
-        }
-        if (Array.isArray(this.declaredMembers)) {
-            data["declaredMembers"] = [];
-            for (let item of this.declaredMembers)
-                data["declaredMembers"].push(item.toJSON());
-        }
-        if (Array.isArray(this.declaredMethods)) {
-            data["declaredMethods"] = [];
-            for (let item of this.declaredMethods)
-                data["declaredMethods"].push(item.toJSON());
-        }
-        if (Array.isArray(this.declaredNestedTypes)) {
-            data["declaredNestedTypes"] = [];
-            for (let item of this.declaredNestedTypes)
-                data["declaredNestedTypes"].push(item.toJSON());
-        }
-        if (Array.isArray(this.declaredProperties)) {
-            data["declaredProperties"] = [];
-            for (let item of this.declaredProperties)
-                data["declaredProperties"].push(item.toJSON());
-        }
-        if (Array.isArray(this.implementedInterfaces)) {
-            data["implementedInterfaces"] = [];
-            for (let item of this.implementedInterfaces)
-                data["implementedInterfaces"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface ITypeInfo {
-    name?: string | undefined;
-    customAttributes?: CustomAttributeData[] | undefined;
-    isCollectible?: boolean;
-    metadataToken?: number;
-    isInterface?: boolean;
-    memberType?: TypeInfoMemberType;
-    namespace?: string | undefined;
-    assemblyQualifiedName?: string | undefined;
-    fullName?: string | undefined;
-    assembly?: Assembly;
-    module?: Module;
-    isNested?: boolean;
-    declaringType?: Type;
-    declaringMethod?: MethodBase;
-    reflectedType?: Type;
-    underlyingSystemType?: Type;
-    isTypeDefinition?: boolean;
-    isArray?: boolean;
-    isByRef?: boolean;
-    isPointer?: boolean;
-    isConstructedGenericType?: boolean;
-    isGenericParameter?: boolean;
-    isGenericTypeParameter?: boolean;
-    isGenericMethodParameter?: boolean;
-    isGenericType?: boolean;
-    isGenericTypeDefinition?: boolean;
-    isSZArray?: boolean;
-    isVariableBoundArray?: boolean;
-    isByRefLike?: boolean;
-    isFunctionPointer?: boolean;
-    isUnmanagedFunctionPointer?: boolean;
-    hasElementType?: boolean;
-    genericTypeArguments?: Type[] | undefined;
-    genericParameterPosition?: number;
-    genericParameterAttributes?: TypeInfoGenericParameterAttributes;
-    attributes?: TypeInfoAttributes;
-    isAbstract?: boolean;
-    isImport?: boolean;
-    isSealed?: boolean;
-    isSpecialName?: boolean;
-    isClass?: boolean;
-    isNestedAssembly?: boolean;
-    isNestedFamANDAssem?: boolean;
-    isNestedFamily?: boolean;
-    isNestedFamORAssem?: boolean;
-    isNestedPrivate?: boolean;
-    isNestedPublic?: boolean;
-    isNotPublic?: boolean;
-    isPublic?: boolean;
-    isAutoLayout?: boolean;
-    isExplicitLayout?: boolean;
-    isLayoutSequential?: boolean;
-    isAnsiClass?: boolean;
-    isAutoClass?: boolean;
-    isUnicodeClass?: boolean;
-    isCOMObject?: boolean;
-    isContextful?: boolean;
-    isEnum?: boolean;
-    isMarshalByRef?: boolean;
-    isPrimitive?: boolean;
-    isValueType?: boolean;
-    isSignatureType?: boolean;
-    isSecurityCritical?: boolean;
-    isSecuritySafeCritical?: boolean;
-    isSecurityTransparent?: boolean;
-    structLayoutAttribute?: StructLayoutAttribute;
-    typeInitializer?: ConstructorInfo;
-    typeHandle?: RuntimeTypeHandle;
-    guid?: string;
-    baseType?: Type;
-    isSerializable?: boolean;
-    containsGenericParameters?: boolean;
-    isVisible?: boolean;
-    genericTypeParameters?: Type[] | undefined;
-    declaredConstructors?: ConstructorInfo[] | undefined;
-    declaredEvents?: EventInfo[] | undefined;
-    declaredFields?: FieldInfo[] | undefined;
-    declaredMembers?: MemberInfo[] | undefined;
-    declaredMethods?: MethodInfo[] | undefined;
-    declaredNestedTypes?: TypeInfo[] | undefined;
-    declaredProperties?: PropertyInfo[] | undefined;
-    implementedInterfaces?: Type[] | undefined;
 }
 
 export class UpdateCategoryCommand implements IUpdateCategoryCommand {
@@ -13796,12 +11539,6 @@ export interface IWorkSessionEntity {
     autoApproved?: boolean;
 }
 
-export enum AssemblySecurityRuleSet {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-}
-
 export enum BalanceOperationCommandBalanceOperationType {
     Freeze = "Freeze",
     Unfreeze = "Unfreeze",
@@ -13881,68 +11618,6 @@ export enum CommandResultStatus {
     _511 = 511,
 }
 
-export enum ConstructorInfoAttributes {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _5 = 5,
-    _6 = 6,
-    _7 = 7,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _256 = 256,
-    _512 = 512,
-    _1024 = 1024,
-    _2048 = 2048,
-    _4096 = 4096,
-    _8192 = 8192,
-    _16384 = 16384,
-    _32768 = 32768,
-    _53248 = 53248,
-}
-
-export enum ConstructorInfoMethodImplementationFlags {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _256 = 256,
-    _512 = 512,
-    _4096 = 4096,
-    _65535 = 65535,
-}
-
-export enum ConstructorInfoCallingConvention {
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _32 = 32,
-    _64 = 64,
-}
-
-export enum ConstructorInfoMemberType {
-    _1 = 1,
-    _2 = 2,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _191 = 191,
-}
-
 export enum ContestEntityStatus {
     Draft = "Draft",
     Moderation = "Moderation",
@@ -14019,58 +11694,6 @@ export enum CreateNotificationCommandType {
     Staff = "Staff",
 }
 
-export enum EventInfoMemberType {
-    _1 = 1,
-    _2 = 2,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _191 = 191,
-}
-
-export enum EventInfoAttributes {
-    _0 = 0,
-    _512 = 512,
-    _1024 = 1024,
-}
-
-export enum FieldInfoMemberType {
-    _1 = 1,
-    _2 = 2,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _191 = 191,
-}
-
-export enum FieldInfoAttributes {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _5 = 5,
-    _6 = 6,
-    _7 = 7,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _256 = 256,
-    _512 = 512,
-    _1024 = 1024,
-    _4096 = 4096,
-    _8192 = 8192,
-    _32768 = 32768,
-    _38144 = 38144,
-}
-
 export enum FreelancerProfileEntityAvailability {
     Open = "Open",
     Busy = "Busy",
@@ -14114,8 +11737,25 @@ export enum GetJobsListQuerySortType {
 }
 
 export enum GetJobsListQuerySortOption {
-    _0 = 0,
-    _1 = 1,
+    Date = "Date",
+    Recomended = "Recomended",
+}
+
+export enum JobDetailsStatus {
+    Open = "Open",
+    Expired = "Expired",
+    Closed = "Closed",
+    Accepted = "Accepted",
+    InContract = "InContract",
+    Draft = "Draft",
+    Completed = "Completed",
+    WaitingFreelancerApproval = "WaitingFreelancerApproval",
+}
+
+export enum JobDetailsCurrency {
+    RussianRuble = "RussianRuble",
+    Dollar = "Dollar",
+    Euro = "Euro",
 }
 
 export enum JobEntityStatus {
@@ -14140,142 +11780,6 @@ export enum JobEntityBudgetType {
     Fixed = "Fixed",
 }
 
-export enum MemberInfoMemberType {
-    _1 = 1,
-    _2 = 2,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _191 = 191,
-}
-
-export enum MethodBaseMemberType {
-    _1 = 1,
-    _2 = 2,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _191 = 191,
-}
-
-export enum MethodBaseAttributes {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _5 = 5,
-    _6 = 6,
-    _7 = 7,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _256 = 256,
-    _512 = 512,
-    _1024 = 1024,
-    _2048 = 2048,
-    _4096 = 4096,
-    _8192 = 8192,
-    _16384 = 16384,
-    _32768 = 32768,
-    _53248 = 53248,
-}
-
-export enum MethodBaseMethodImplementationFlags {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _256 = 256,
-    _512 = 512,
-    _4096 = 4096,
-    _65535 = 65535,
-}
-
-export enum MethodBaseCallingConvention {
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _32 = 32,
-    _64 = 64,
-}
-
-export enum MethodInfoAttributes {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _5 = 5,
-    _6 = 6,
-    _7 = 7,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _256 = 256,
-    _512 = 512,
-    _1024 = 1024,
-    _2048 = 2048,
-    _4096 = 4096,
-    _8192 = 8192,
-    _16384 = 16384,
-    _32768 = 32768,
-    _53248 = 53248,
-}
-
-export enum MethodInfoMethodImplementationFlags {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _256 = 256,
-    _512 = 512,
-    _4096 = 4096,
-    _65535 = 65535,
-}
-
-export enum MethodInfoCallingConvention {
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _32 = 32,
-    _64 = 64,
-}
-
-export enum MethodInfoMemberType {
-    _1 = 1,
-    _2 = 2,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _191 = 191,
-}
-
 export enum MoneyCurrency {
     RussianRuble = "RussianRuble",
     Dollar = "Dollar",
@@ -14286,43 +11790,6 @@ export enum NotificationEntityType {
     System = "System",
     Payment = "Payment",
     Other = "Other",
-}
-
-export enum ParameterInfoAttributes {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _4096 = 4096,
-    _8192 = 8192,
-    _16384 = 16384,
-    _32768 = 32768,
-    _61440 = 61440,
-}
-
-export enum PropertyInfoMemberType {
-    _1 = 1,
-    _2 = 2,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _191 = 191,
-}
-
-export enum PropertyInfoAttributes {
-    _0 = 0,
-    _512 = 512,
-    _1024 = 1024,
-    _4096 = 4096,
-    _8192 = 8192,
-    _16384 = 16384,
-    _32768 = 32768,
-    _62464 = 62464,
 }
 
 export enum ProposalEntityStatus {
@@ -14367,12 +11834,6 @@ export enum StartPaymentFlowCommandType {
     Penalty = "Penalty",
 }
 
-export enum StructLayoutAttributeValue {
-    _0 = 0,
-    _2 = 2,
-    _3 = 3,
-}
-
 export enum TicketEntityStatus {
     Open = "Open",
     Closed = "Closed",
@@ -14403,110 +11864,6 @@ export enum TransactionEntityFlow {
     Incoming = "Incoming",
     Outgoing = "Outgoing",
     Internal = "Internal",
-}
-
-export enum TypeMemberType {
-    _1 = 1,
-    _2 = 2,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _191 = 191,
-}
-
-export enum TypeGenericParameterAttributes {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _28 = 28,
-}
-
-export enum TypeAttributes {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _5 = 5,
-    _6 = 6,
-    _7 = 7,
-    _8 = 8,
-    _16 = 16,
-    _24 = 24,
-    _32 = 32,
-    _128 = 128,
-    _256 = 256,
-    _1024 = 1024,
-    _2048 = 2048,
-    _4096 = 4096,
-    _8192 = 8192,
-    _16384 = 16384,
-    _65536 = 65536,
-    _131072 = 131072,
-    _196608 = 196608,
-    _262144 = 262144,
-    _264192 = 264192,
-    _1048576 = 1048576,
-    _12582912 = 12582912,
-}
-
-export enum TypeInfoMemberType {
-    _1 = 1,
-    _2 = 2,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _32 = 32,
-    _64 = 64,
-    _128 = 128,
-    _191 = 191,
-}
-
-export enum TypeInfoGenericParameterAttributes {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _8 = 8,
-    _16 = 16,
-    _28 = 28,
-}
-
-export enum TypeInfoAttributes {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _5 = 5,
-    _6 = 6,
-    _7 = 7,
-    _8 = 8,
-    _16 = 16,
-    _24 = 24,
-    _32 = 32,
-    _128 = 128,
-    _256 = 256,
-    _1024 = 1024,
-    _2048 = 2048,
-    _4096 = 4096,
-    _8192 = 8192,
-    _16384 = 16384,
-    _65536 = 65536,
-    _131072 = 131072,
-    _196608 = 196608,
-    _262144 = 262144,
-    _264192 = 264192,
-    _1048576 = 1048576,
-    _12582912 = 12582912,
 }
 
 export enum UpdateClientProfileCommandEmployerType {
