@@ -33,7 +33,11 @@ if (app.Environment.IsDevelopment())
     await app.InitialiseEventStoreDatabaseAsync(); 
 }
 app.UseEventDispatcher(); 
-app.UseStaticFiles(); 
+app.UseStaticFiles();
+
+if (app.Environment.IsProduction())
+    app.UseResponseCompression(); 
+
 app.UseRouting();
 
 app.UseCors("FLsurf");
