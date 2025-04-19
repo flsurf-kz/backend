@@ -10,6 +10,7 @@ namespace Flsurf.Application.Freelance.Interfaces
         UpdateJobHandler UpdateJob();
         DeleteJobHandler DeleteJob();
         GetJobHandler GetJob();
+        GetRawJobHandler GetRawJob();
         GetJobsListHandler GetJobsList();
         GetClientOrderInfoHandler GetClientOrderInfo(); // если нужно
         BookmarkJobHandler BookmarkJob(); 

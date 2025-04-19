@@ -3,6 +3,8 @@ using System.Data.Common;
 using System.Data;
 using Microsoft.Data.Sqlite;
 using Flsurf.Infrastructure.Data;
+using Flsurf.Infrastructure.EventStore;
+using Flsurf.Presentation.Web.Services;
 
 namespace Tests.Application.IntegrationTests
 {
@@ -32,7 +34,11 @@ namespace Tests.Application.IntegrationTests
 
             var context = new ApplicationDbContext(
                 options, 
-                eventDispatcher: EventDispatcherMockFactory.Create().Object);
+                eventDispatcher: EventDispatcherMockFactory.Create().Object,
+                new EventStore(
+                    new EventStoreContext(
+                        new DbContextOptionsBuilder<EventStoreContext>().UseSqlite(_connection).Options), 
+                    null));
 
             context.Database.Migrate();
         }

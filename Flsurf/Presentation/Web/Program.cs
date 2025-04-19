@@ -6,6 +6,7 @@ using Flsurf.Application;
 using Flsurf.Infrastructure.Data;
 using Flsurf.Infrastructure.EventStore;
 using Flsurf.Infrastructure.BackgroundJobs;
+using Flsurf.Presentation.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,10 +33,16 @@ if (app.Environment.IsDevelopment())
     await app.InitialiseEventStoreDatabaseAsync(); 
 }
 app.UseEventDispatcher(); 
-app.UseStaticFiles(); 
+app.UseStaticFiles();
+
+if (app.Environment.IsProduction())
+    app.UseResponseCompression(); 
+
 app.UseRouting();
 
 app.UseCors("FLsurf");
+
+app.UseAntiforgery();
 
 // Õ≈ Ã≈Õﬂ“‹, ÀŒÀ
 app.UseAuthentication();
@@ -44,8 +51,16 @@ app.UseAuthorization();
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
 
-app.UseHangfireDashboard();
-
+if (app.Environment.IsProduction())
+{
+    app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    {
+        Authorization = new[] { new CookieDashboardAuthorization() }
+    });
+} else
+{
+    app.UseHangfireDashboard("/hangfire"); 
+}
 BackgroundJobsRegister.RegisterInfrastructureBGJobs();
 
 app.UseWebSockets(new WebSocketOptions() { 

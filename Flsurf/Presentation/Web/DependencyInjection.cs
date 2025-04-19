@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Flsurf.Infrastructure.Data;
 using System;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace Flsurf.Presentation.Web
 {
@@ -78,14 +79,22 @@ namespace Flsurf.Presentation.Web
             {
                 options.AddPolicy("FLsurf", builder =>
                 {
-                    // CHANGE TODO, WHEN IN PRODUCTION 
+                    if (environment.IsDevelopment())
+                    {
+                        builder.SetIsOriginAllowed(_ => true); 
+                    } else
+                    {
+                        builder.WithOrigins("https://flsurf.ru"); 
+                    }
                     builder
-                        .SetIsOriginAllowed(_ => true)
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
                 });
             });
+
+            services.Configure<FormOptions>(o => o.MultipartBodyLengthLimit = 100 * 1024 * 1024);
+
             services.AddMemoryCache();
 
             services.AddHealthChecks();
@@ -142,6 +151,13 @@ namespace Flsurf.Presentation.Web
             services.AddScoped<IUser, CurrentUser>();
 
             services.AddHostedService<SwaggerFileUpdater>();
+
+            services.AddAntiforgery(o =>
+            {
+                o.Cookie.Name = "__Host-flsurf_csrf";
+                o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                o.HeaderName = "X-CSRF-TOKEN";
+            });
 
             return services;
         }

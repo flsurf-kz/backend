@@ -3,6 +3,7 @@ using Flsurf.Application.Common.Extensions;
 using Flsurf.Application.Freelance.Commands.Job;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
+using Flsurf.Application.Freelance.Queries.Responses;
 using Flsurf.Domain.Freelance.Entities;
 using Hangfire.Common;
 using Microsoft.AspNetCore.Authorization;
@@ -48,13 +49,22 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpGet("{id}", Name = "GetJob")]
-        public async Task<ActionResult<Job>> GetJob(Guid id)
+        public async Task<ActionResult<JobDetails>> GetJob(Guid id)
         {
             var query = new GetJobQuery { JobId = id };
             var handler = _jobService.GetJob();
             var job = await handler.Handle(query);
             if (job == null)
                 return NotFound("Вакансия не найдена");
+            return Ok(job);
+        }
+
+        [HttpGet("{id}/raw", Name = "GetRawJob")]
+        public async Task<ActionResult<JobEntity>> GetJobRaw(Guid id)
+        {
+            var query = new GetRawJobQuery { JobId = id };
+            var handler = _jobService.GetRawJob();
+            var job = await handler.Handle(query);
             return Ok(job);
         }
 
