@@ -18,9 +18,11 @@ namespace Flsurf.Domain.User.Entities
         [ForeignKey(nameof(UserEntity))]
         [Required]
         public Guid ToUserId { get; set; }
+        [Required]
         public NotificationTypes Type { get; set; } = NotificationTypes.Other;
         [Column(TypeName = "jsonb")]
         public string? Data { get; set; } = string.Empty;
+        [Required]
         public bool Hidden { get; set; } = false; 
         public FileEntity? Icon { get; set; } = null!; 
 

@@ -3,6 +3,7 @@ using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.Messanging.Entities;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Domain.User.Events;
+using Flsurf.Domain.User.ValueObjects;
 using Flsurf.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
@@ -44,7 +45,9 @@ namespace Flsurf.Domain.User.Entities
         }
         [Required, JsonIgnore]
         public string HashedPassword { get; set; } = null!;
+        [Required]
         public UserRoles Role { get; set; } = UserRoles.User;
+        [Required]
         public UserTypes Type { get; set; } = UserTypes.NonUser; 
         [Required]
         [EmailAddress(ErrorMessage = "Email address is not correct")]
@@ -56,6 +59,7 @@ namespace Flsurf.Domain.User.Entities
         public bool IsOnline { get; set; } = false;
         [JsonIgnore]
         public ICollection<WarningEntity> Warnings { get; set; } = [];
+        [Required]
         public bool IsSuperadmin { get; set; } = false;
         [Phone]
         public string? Phone { get; set; } 
@@ -80,9 +84,12 @@ namespace Flsurf.Domain.User.Entities
                 );
             }
         }
+        [Required]
         public bool Blocked { get; set; } = false;
         public Countries? Location { get; set; }
+        [Required]
         public bool IsExternalUser { get; private set; } = false; 
+        public TaxInformation? TaxInfo { get; set; }
 
         public static UserEntity Create(
             string fullname,
