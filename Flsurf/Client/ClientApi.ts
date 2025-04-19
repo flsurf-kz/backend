@@ -509,11 +509,10 @@ export interface IClient {
     handleTransaction(body?: HandleTransactionCommand | undefined): Promise<CommandResult>;
 
     /**
-     * @param start (optional) 
-     * @param end (optional) 
+     * @param body (optional) 
      * @return Success
      */
-    getTransactionsList(start?: number | undefined, end?: number | undefined): Promise<TransactionEntity[]>;
+    getTransactionsList(body?: GetTransactionsListQuery | undefined): Promise<TransactionEntity[]>;
 
     /**
      * @return Success
@@ -570,6 +569,11 @@ export interface IClient {
      * @return Success
      */
     getWallet(walletId: string): Promise<WalletEntity>;
+
+    /**
+     * @return Success
+     */
+    getMyWallet(): Promise<WalletEntity>;
 
     /**
      * @param body (optional) 
@@ -4245,25 +4249,20 @@ export class Client implements IClient {
     }
 
     /**
-     * @param start (optional) 
-     * @param end (optional) 
+     * @param body (optional) 
      * @return Success
      */
-    getTransactionsList(start?: number | undefined, end?: number | undefined): Promise<TransactionEntity[]> {
-        let url_ = this.baseUrl + "/api/transaction/list?";
-        if (start === null)
-            throw new Error("The parameter 'start' cannot be null.");
-        else if (start !== undefined)
-            url_ += "start=" + encodeURIComponent("" + start) + "&";
-        if (end === null)
-            throw new Error("The parameter 'end' cannot be null.");
-        else if (end !== undefined)
-            url_ += "end=" + encodeURIComponent("" + end) + "&";
+    getTransactionsList(body?: GetTransactionsListQuery | undefined): Promise<TransactionEntity[]> {
+        let url_ = this.baseUrl + "/api/transaction/list";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_: RequestInit = {
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "text/plain"
             }
         };
@@ -4699,6 +4698,43 @@ export class Client implements IClient {
     }
 
     protected processGetWallet(response: Response): Promise<WalletEntity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = WalletEntity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<WalletEntity>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getMyWallet(): Promise<WalletEntity> {
+        let url_ = this.baseUrl + "/api/wallet/my";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetMyWallet(_response);
+        });
+    }
+
+    protected processGetMyWallet(response: Response): Promise<WalletEntity> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -8024,6 +8060,94 @@ export interface IGetTicketsDto {
     isAssignedToMe?: boolean | undefined;
 }
 
+export class GetTransactionsListQuery implements IGetTransactionsListQuery {
+    readonly queryId?: string | undefined;
+    readonly timestamp?: Date;
+    start?: number;
+    ends?: number;
+    fromDate?: Date | undefined;
+    toDate?: Date | undefined;
+    operation?: GetTransactionsListQueryOperation | undefined;
+    flow?: GetTransactionsListQueryFlow | undefined;
+    transactionProvider?: string | undefined;
+    walletId?: string | undefined;
+    priceRange?: number[] | undefined;
+    status?: GetTransactionsListQueryStatus | undefined;
+
+    constructor(data?: IGetTransactionsListQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).queryId = _data["queryId"];
+            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
+            this.start = _data["start"];
+            this.ends = _data["ends"];
+            this.fromDate = _data["fromDate"] ? new Date(_data["fromDate"].toString()) : <any>undefined;
+            this.toDate = _data["toDate"] ? new Date(_data["toDate"].toString()) : <any>undefined;
+            this.operation = _data["operation"];
+            this.flow = _data["flow"];
+            this.transactionProvider = _data["transactionProvider"];
+            this.walletId = _data["walletId"];
+            if (Array.isArray(_data["priceRange"])) {
+                this.priceRange = [] as any;
+                for (let item of _data["priceRange"])
+                    this.priceRange!.push(item);
+            }
+            this.status = _data["status"];
+        }
+    }
+
+    static fromJS(data: any): GetTransactionsListQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetTransactionsListQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["queryId"] = this.queryId;
+        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
+        data["start"] = this.start;
+        data["ends"] = this.ends;
+        data["fromDate"] = this.fromDate ? this.fromDate.toISOString() : <any>undefined;
+        data["toDate"] = this.toDate ? this.toDate.toISOString() : <any>undefined;
+        data["operation"] = this.operation;
+        data["flow"] = this.flow;
+        data["transactionProvider"] = this.transactionProvider;
+        data["walletId"] = this.walletId;
+        if (Array.isArray(this.priceRange)) {
+            data["priceRange"] = [];
+            for (let item of this.priceRange)
+                data["priceRange"].push(item);
+        }
+        data["status"] = this.status;
+        return data;
+    }
+}
+
+export interface IGetTransactionsListQuery {
+    queryId?: string | undefined;
+    timestamp?: Date;
+    start?: number;
+    ends?: number;
+    fromDate?: Date | undefined;
+    toDate?: Date | undefined;
+    operation?: GetTransactionsListQueryOperation | undefined;
+    flow?: GetTransactionsListQueryFlow | undefined;
+    transactionProvider?: string | undefined;
+    walletId?: string | undefined;
+    priceRange?: number[] | undefined;
+    status?: GetTransactionsListQueryStatus | undefined;
+}
+
 export class HandleTransactionCommand implements IHandleTransactionCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
@@ -10017,6 +10141,58 @@ export interface ITaskEntity {
     isInRevision?: boolean;
 }
 
+export class TaxInformation implements ITaxInformation {
+    legalName?: string | undefined;
+    taxId?: string | undefined;
+    country?: string | undefined;
+    vatNumber?: string | undefined;
+    vatValidTo?: Date | undefined;
+
+    constructor(data?: ITaxInformation) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.legalName = _data["legalName"];
+            this.taxId = _data["taxId"];
+            this.country = _data["country"];
+            this.vatNumber = _data["vatNumber"];
+            this.vatValidTo = _data["vatValidTo"] ? new Date(_data["vatValidTo"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): TaxInformation {
+        data = typeof data === 'object' ? data : {};
+        let result = new TaxInformation();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["legalName"] = this.legalName;
+        data["taxId"] = this.taxId;
+        data["country"] = this.country;
+        data["vatNumber"] = this.vatNumber;
+        data["vatValidTo"] = this.vatValidTo ? formatDate(this.vatValidTo) : <any>undefined;
+        return data;
+    }
+}
+
+export interface ITaxInformation {
+    legalName?: string | undefined;
+    taxId?: string | undefined;
+    country?: string | undefined;
+    vatNumber?: string | undefined;
+    vatValidTo?: Date | undefined;
+}
+
 export class TicketCommentEntity implements ITicketCommentEntity {
     id!: string;
     createdById!: string;
@@ -11233,6 +11409,7 @@ export class UserEntity implements IUserEntity {
     blocked!: boolean;
     location?: UserEntityLocation | undefined;
     readonly isExternalUser!: boolean;
+    taxInfo?: TaxInformation;
 
     constructor(data?: IUserEntity) {
         if (data) {
@@ -11264,6 +11441,7 @@ export class UserEntity implements IUserEntity {
             this.blocked = _data["blocked"];
             this.location = _data["location"];
             (<any>this).isExternalUser = _data["isExternalUser"];
+            this.taxInfo = _data["taxInfo"] ? TaxInformation.fromJS(_data["taxInfo"]) : <any>undefined;
         }
     }
 
@@ -11295,6 +11473,7 @@ export class UserEntity implements IUserEntity {
         data["blocked"] = this.blocked;
         data["location"] = this.location;
         data["isExternalUser"] = this.isExternalUser;
+        data["taxInfo"] = this.taxInfo ? this.taxInfo.toJSON() : <any>undefined;
         return data;
     }
 }
@@ -11319,6 +11498,7 @@ export interface IUserEntity {
     blocked: boolean;
     location?: UserEntityLocation | undefined;
     isExternalUser: boolean;
+    taxInfo?: TaxInformation;
 }
 
 export class WalletEntity implements IWalletEntity {
@@ -11809,6 +11989,32 @@ export enum GetJobsListQuerySortOption {
     Recomended = "Recomended",
 }
 
+export enum GetTransactionsListQueryOperation {
+    Deposit = "Deposit",
+    Withdrawal = "Withdrawal",
+    Transfer = "Transfer",
+    Refund = "Refund",
+    SystemAdjustment = "SystemAdjustment",
+    Bonus = "Bonus",
+    Penalty = "Penalty",
+}
+
+export enum GetTransactionsListQueryFlow {
+    Incoming = "Incoming",
+    Outgoing = "Outgoing",
+    Internal = "Internal",
+}
+
+export enum GetTransactionsListQueryStatus {
+    Pending = "Pending",
+    Processing = "Processing",
+    Completed = "Completed",
+    Failed = "Failed",
+    Cancelled = "Cancelled",
+    Expired = "Expired",
+    Reversed = "Reversed",
+}
+
 export enum JobDetailsStatus {
     Open = "Open",
     Expired = "Expired",
@@ -11990,6 +12196,12 @@ export enum WorkSessionEntityStatus {
     Pending = "Pending",
     Approved = "Approved",
     Rejected = "Rejected",
+}
+
+function formatDate(d: Date) {
+    return d.getFullYear() + '-' + 
+        (d.getMonth() < 9 ? ('0' + (d.getMonth()+1)) : (d.getMonth()+1)) + '-' +
+        (d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate());
 }
 
 export interface FileParameter {

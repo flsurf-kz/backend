@@ -18,38 +18,46 @@ namespace Flsurf.Application.Payment.Queries
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public TransactionType? Operation { get; set; }
+        public TransactionFlow? Flow { get; set; }
         public string? TransactionProvider { get; set; }
-        [Required]
-        public Guid WalletId { get; set; }
+        public Guid? WalletId { get; set; }
+        public decimal[]? PriceRange { get; set; }
+        public TransactionStatus? Status { get; set; }
     }
 
     public class GetTransactionsList : IQueryHandler<GetTransactionsListQuery, ICollection<TransactionEntity>>
     {
         private IApplicationDbContext _context;
-        private IUser _user;
         private IPermissionService _permService;
 
-        public GetTransactionsList(IApplicationDbContext dbContext, IUser user, IPermissionService permService)
+        public GetTransactionsList(IApplicationDbContext dbContext, IPermissionService permService)
         {
-            _user = user;
             _context = dbContext;
             _permService = permService;
         }
 
         public async Task<ICollection<TransactionEntity>> Handle(GetTransactionsListQuery dto)
         {
-            var wallet = await _context.Wallets
-                .Include(x => x.User)
-                .FirstOrDefaultAsync(x => x.Id == dto.WalletId);
-
-            Guard.Against.Null(wallet, message: "Wallet does not exists");
-
             var owner = await _permService.GetCurrentUser();
+
+            var query = _context.Wallets
+                .Include(x => x.User)
+                .AsQueryable();
+
+            if (dto.WalletId == null)
+                query = query.Where(x => x.UserId == owner.Id);
+            else
+                query = query.Where(x => x.Id == dto.WalletId); 
+
+            var wallet = await query.FirstOrDefaultAsync();
+
+            if (wallet == null)
+                return []; 
 
             await _permService.EnforceCheckPermission(
                 ZedPaymentUser
                     .WithId(owner.Id)
-                    .CanReadWallet(ZedWallet.WithId(dto.WalletId)));
+                    .CanReadWallet(ZedWallet.WithId(wallet.Id)));
 
             var result = await _context.Transactions
                 .IncludeStandard()
@@ -57,7 +65,10 @@ namespace Flsurf.Application.Payment.Queries
                     fromDate: dto.FromDate,
                     toDate: dto.ToDate,
                     operation: dto.Operation,
-                    providerName: dto.TransactionProvider)
+                    providerName: dto.TransactionProvider, 
+                    pricesRange: dto.PriceRange, 
+                    flow: dto.Flow, 
+                    status: dto.Status)
                 .ToListAsync();
 
             return result;

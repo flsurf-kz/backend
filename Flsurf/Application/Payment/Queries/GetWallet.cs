@@ -16,7 +16,7 @@ namespace Flsurf.Application.Payment.Queries
         public Guid? UserId { get; set; }
     }
 
-    public class GetWallet : IQueryHandler<GetWalletQuery, WalletEntity>
+    public class GetWallet : IQueryHandler<GetWalletQuery, WalletEntity?>
     {
         private readonly IApplicationDbContext _context;
         private readonly IPermissionService _permService;
@@ -27,13 +27,14 @@ namespace Flsurf.Application.Payment.Queries
             _permService = permService;
         }
 
-        public async Task<WalletEntity> Handle(GetWalletQuery dto)
+        public async Task<WalletEntity?> Handle(GetWalletQuery dto)
         {
             var wallet = await _context.Wallets
                 .IncludeStandard()
                 .FirstOrDefaultAsync(x => x.Id == dto.WalletId || x.UserId == dto.UserId);
 
-            Guard.Against.Null(wallet, message: "Wallet does not exists");
+            if (wallet == null)
+                return wallet; 
 
             await _permService.EnforceCheckPermission(
                 ZedPaymentUser

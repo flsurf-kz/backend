@@ -32,12 +32,11 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         // Получение списка транзакций
-        [HttpGet("list", Name = "GetTransactionsList")]
+        [HttpPost("list", Name = "GetTransactionsList")]
         [Authorize]
         public async Task<ActionResult<ICollection<TransactionEntity>>> GetTransactionsList(
-            [FromQuery] int start = 0, [FromQuery] int end = 10)
+            [FromBody] GetTransactionsListQuery query)
         {
-            var query = new GetTransactionsListQuery { Start = start, Ends = end };
             var handler = _transactionService.GetTransactionsList();
             var transactions = await handler.Handle(query);
             return Ok(transactions);

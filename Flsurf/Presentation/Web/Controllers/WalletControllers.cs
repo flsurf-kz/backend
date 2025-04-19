@@ -4,6 +4,7 @@ using Flsurf.Application.Payment.Interfaces;
 using Flsurf.Application.Payment.Queries;
 using Flsurf.Application.Payment.UseCases;
 using Flsurf.Domain.Payment.Entities;
+using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,9 +16,11 @@ namespace Flsurf.Presentation.Web.Controllers
     public class WalletController : ControllerBase
     {
         private readonly IWalletService _walletService;
+        private readonly IPermissionService _permService; 
 
-        public WalletController(IWalletService walletService)
+        public WalletController(IWalletService walletService, IPermissionService permService)
         {
+            _permService = permService; 
             _walletService = walletService;
         }
 
@@ -41,8 +44,16 @@ namespace Flsurf.Presentation.Web.Controllers
             var query = new GetWalletQuery { WalletId = walletId };
             var handler = _walletService.GetWallet();
             var wallet = await handler.Handle(query);
-            if (wallet == null)
-                return NotFound("Кошелёк не найден");
+            return Ok(wallet);
+        }
+
+        [HttpGet("my", Name = "GetMyWallet")]
+        public async Task<ActionResult<WalletEntity>> GetMyWallet()
+        {
+            var user = await _permService.GetCurrentUser(); 
+            var query = new GetWalletQuery { UserId = user.Id };
+            var handler = _walletService.GetWallet();
+            var wallet = await handler.Handle(query);
             return Ok(wallet);
         }
 
