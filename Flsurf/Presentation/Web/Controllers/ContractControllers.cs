@@ -122,10 +122,8 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpGet("list", Name = "GetContractsList")]
-        public async Task<ActionResult<ICollection<ContractEntity>>> GetContractsList(
-            [FromQuery] int start = 0, [FromQuery] int end = 10)
+        public async Task<ActionResult<ICollection<ContractEntity>>> GetContractsList([FromBody] GetContractsListQuery query)
         {
-            var query = new GetContractsListQuery { Start = start, Ends = end };
             var handler = _contractService.GetContractsList();
             var contracts = await handler.Handle(query);
             return Ok(contracts);

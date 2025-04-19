@@ -227,11 +227,10 @@ export interface IClient {
     getContract(id: string): Promise<ContractEntity>;
 
     /**
-     * @param start (optional) 
-     * @param end (optional) 
+     * @param body (optional) 
      * @return Success
      */
-    getContractsList(start?: number | undefined, end?: number | undefined): Promise<ContractEntity[]>;
+    getContractsList(body?: GetContractsListQuery | undefined): Promise<ContractEntity[]>;
 
     /**
      * @param file (optional) 
@@ -2177,25 +2176,20 @@ export class Client implements IClient {
     }
 
     /**
-     * @param start (optional) 
-     * @param end (optional) 
+     * @param body (optional) 
      * @return Success
      */
-    getContractsList(start?: number | undefined, end?: number | undefined): Promise<ContractEntity[]> {
-        let url_ = this.baseUrl + "/api/contract/list?";
-        if (start === null)
-            throw new Error("The parameter 'start' cannot be null.");
-        else if (start !== undefined)
-            url_ += "start=" + encodeURIComponent("" + start) + "&";
-        if (end === null)
-            throw new Error("The parameter 'end' cannot be null.");
-        else if (end !== undefined)
-            url_ += "end=" + encodeURIComponent("" + end) + "&";
+    getContractsList(body?: GetContractsListQuery | undefined): Promise<ContractEntity[]> {
+        let url_ = this.baseUrl + "/api/contract/list";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_: RequestInit = {
+            body: content_,
             method: "GET",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "text/plain"
             }
         };
@@ -7880,6 +7874,66 @@ export interface IGatewayResultCommand {
     metadata?: { [key: string]: string; } | undefined;
 }
 
+export class GetContractsListQuery implements IGetContractsListQuery {
+    readonly queryId?: string | undefined;
+    readonly timestamp?: Date;
+    userId?: string | undefined;
+    isClient?: boolean | undefined;
+    status?: GetContractsListQueryStatus | undefined;
+    start?: number;
+    ends?: number;
+
+    constructor(data?: IGetContractsListQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).queryId = _data["queryId"];
+            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
+            this.userId = _data["userId"];
+            this.isClient = _data["isClient"];
+            this.status = _data["status"];
+            this.start = _data["start"];
+            this.ends = _data["ends"];
+        }
+    }
+
+    static fromJS(data: any): GetContractsListQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetContractsListQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["queryId"] = this.queryId;
+        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
+        data["userId"] = this.userId;
+        data["isClient"] = this.isClient;
+        data["status"] = this.status;
+        data["start"] = this.start;
+        data["ends"] = this.ends;
+        return data;
+    }
+}
+
+export interface IGetContractsListQuery {
+    queryId?: string | undefined;
+    timestamp?: Date;
+    userId?: string | undefined;
+    isClient?: boolean | undefined;
+    status?: GetContractsListQueryStatus | undefined;
+    start?: number;
+    ends?: number;
+}
+
 export class GetJobsListQuery implements IGetJobsListQuery {
     readonly queryId?: string | undefined;
     readonly timestamp?: Date;
@@ -11952,6 +12006,18 @@ export enum GatewayResultCommandCurrency {
     RussianRuble = "RussianRuble",
     Dollar = "Dollar",
     Euro = "Euro",
+}
+
+export enum GetContractsListQueryStatus {
+    PendingApproval = "PendingApproval",
+    Active = "Active",
+    Paused = "Paused",
+    Completed = "Completed",
+    Disputed = "Disputed",
+    Cancelled = "Cancelled",
+    Expired = "Expired",
+    Closed = "Closed",
+    PendingFinishApproval = "PendingFinishApproval",
 }
 
 export enum Levels {
