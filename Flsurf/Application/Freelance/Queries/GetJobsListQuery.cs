@@ -29,6 +29,9 @@ namespace Flsurf.Application.Freelance.Queries
         public JobStatus[]? Statuses { get; set; } 
         public SortByTypes? SortType { get; set; }
         public SortOption? SortOption { get; set; }
+
+        public Guid? ClientId { get; set; }
+        public Guid? FreelancerId { get; set; }
     }
 
 }

@@ -72,19 +72,10 @@ namespace Flsurf.Presentation.Web.Controllers
             return Ok(session);
         }
 
-        [HttpGet("list", Name = "GetSessionList")]
+        [HttpPost("list", Name = "GetSessionList")]
         public async Task<ActionResult<ICollection<WorkSessionEntity>>> GetSessionList(
-            [FromQuery] Guid contractId,
-            [FromQuery] int start = 0,
-            [FromQuery] int end = 10
-        )
+            [FromBody] GetWorkSessionListQuery query)
         {
-            var query = new GetWorkSessionListQuery()
-            {
-                ContractId = contractId,
-                Start = start,
-                Ends = end
-            };
             var handler = _workSessionService.GetWorkSessionsList();
             var sessions = await handler.Handle(query);
             return Ok(sessions);

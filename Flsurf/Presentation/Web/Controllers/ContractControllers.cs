@@ -121,7 +121,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return Ok(contract);
         }
 
-        [HttpGet("list", Name = "GetContractsList")]
+        [HttpPost("list", Name = "GetContractsList")]
         public async Task<ActionResult<ICollection<ContractEntity>>> GetContractsList([FromBody] GetContractsListQuery query)
         {
             var handler = _contractService.GetContractsList();

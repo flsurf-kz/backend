@@ -616,12 +616,10 @@ export interface IClient {
     getSession(id: string): Promise<WorkSessionEntity>;
 
     /**
-     * @param contractId (optional) 
-     * @param start (optional) 
-     * @param end (optional) 
+     * @param body (optional) 
      * @return Success
      */
-    getSessionList(contractId?: string | undefined, start?: number | undefined, end?: number | undefined): Promise<WorkSessionEntity[]>;
+    getSessionList(body?: GetWorkSessionListQuery | undefined): Promise<WorkSessionEntity[]>;
 }
 
 export class Client implements IClient {
@@ -2187,7 +2185,7 @@ export class Client implements IClient {
 
         let options_: RequestInit = {
             body: content_,
-            method: "GET",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "text/plain"
@@ -5039,30 +5037,20 @@ export class Client implements IClient {
     }
 
     /**
-     * @param contractId (optional) 
-     * @param start (optional) 
-     * @param end (optional) 
+     * @param body (optional) 
      * @return Success
      */
-    getSessionList(contractId?: string | undefined, start?: number | undefined, end?: number | undefined): Promise<WorkSessionEntity[]> {
-        let url_ = this.baseUrl + "/api/work-session/list?";
-        if (contractId === null)
-            throw new Error("The parameter 'contractId' cannot be null.");
-        else if (contractId !== undefined)
-            url_ += "contractId=" + encodeURIComponent("" + contractId) + "&";
-        if (start === null)
-            throw new Error("The parameter 'start' cannot be null.");
-        else if (start !== undefined)
-            url_ += "start=" + encodeURIComponent("" + start) + "&";
-        if (end === null)
-            throw new Error("The parameter 'end' cannot be null.");
-        else if (end !== undefined)
-            url_ += "end=" + encodeURIComponent("" + end) + "&";
+    getSessionList(body?: GetWorkSessionListQuery | undefined): Promise<WorkSessionEntity[]> {
+        let url_ = this.baseUrl + "/api/work-session/list";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_: RequestInit = {
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "text/plain"
             }
         };
@@ -7955,6 +7943,8 @@ export class GetJobsListQuery implements IGetJobsListQuery {
     statuses?: Statuses[] | undefined;
     sortType?: GetJobsListQuerySortType | undefined;
     sortOption?: GetJobsListQuerySortOption | undefined;
+    clientId?: string | undefined;
+    freelancerId?: string | undefined;
 
     constructor(data?: IGetJobsListQuery) {
         if (data) {
@@ -7995,6 +7985,8 @@ export class GetJobsListQuery implements IGetJobsListQuery {
             }
             this.sortType = _data["sortType"];
             this.sortOption = _data["sortOption"];
+            this.clientId = _data["clientId"];
+            this.freelancerId = _data["freelancerId"];
         }
     }
 
@@ -8035,6 +8027,8 @@ export class GetJobsListQuery implements IGetJobsListQuery {
         }
         data["sortType"] = this.sortType;
         data["sortOption"] = this.sortOption;
+        data["clientId"] = this.clientId;
+        data["freelancerId"] = this.freelancerId;
         return data;
     }
 }
@@ -8060,6 +8054,8 @@ export interface IGetJobsListQuery {
     statuses?: Statuses[] | undefined;
     sortType?: GetJobsListQuerySortType | undefined;
     sortOption?: GetJobsListQuerySortOption | undefined;
+    clientId?: string | undefined;
+    freelancerId?: string | undefined;
 }
 
 export class GetTicketsDto implements IGetTicketsDto {
@@ -8200,6 +8196,70 @@ export interface IGetTransactionsListQuery {
     walletId?: string | undefined;
     priceRange?: number[] | undefined;
     status?: GetTransactionsListQueryStatus | undefined;
+}
+
+export class GetWorkSessionListQuery implements IGetWorkSessionListQuery {
+    readonly queryId?: string | undefined;
+    readonly timestamp?: Date;
+    contractId!: string;
+    start?: number;
+    ends?: number;
+    startDate?: Date | undefined;
+    endDate?: Date | undefined;
+    status?: GetWorkSessionListQueryStatus | undefined;
+
+    constructor(data?: IGetWorkSessionListQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).queryId = _data["queryId"];
+            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
+            this.contractId = _data["contractId"];
+            this.start = _data["start"];
+            this.ends = _data["ends"];
+            this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            this.status = _data["status"];
+        }
+    }
+
+    static fromJS(data: any): GetWorkSessionListQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetWorkSessionListQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["queryId"] = this.queryId;
+        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
+        data["contractId"] = this.contractId;
+        data["start"] = this.start;
+        data["ends"] = this.ends;
+        data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        data["status"] = this.status;
+        return data;
+    }
+}
+
+export interface IGetWorkSessionListQuery {
+    queryId?: string | undefined;
+    timestamp?: Date;
+    contractId: string;
+    start?: number;
+    ends?: number;
+    startDate?: Date | undefined;
+    endDate?: Date | undefined;
+    status?: GetWorkSessionListQueryStatus | undefined;
 }
 
 export class HandleTransactionCommand implements IHandleTransactionCommand {
@@ -12079,6 +12139,12 @@ export enum GetTransactionsListQueryStatus {
     Cancelled = "Cancelled",
     Expired = "Expired",
     Reversed = "Reversed",
+}
+
+export enum GetWorkSessionListQueryStatus {
+    Pending = "Pending",
+    Approved = "Approved",
+    Rejected = "Rejected",
 }
 
 export enum JobDetailsStatus {
