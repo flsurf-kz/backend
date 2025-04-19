@@ -10,6 +10,23 @@
         public string? QrLinkUrl { get; set; } = string.Empty;
     }
 
+    public record InitPaymentResult(
+        bool Success,
+        string ProviderPaymentId,
+        string? RedirectUrl,
+        string? QrUrl,
+        string? ClientSecret);
+
+    public record PaymentInitRequest(
+        string ProviderPaymentMethodToken,
+        decimal Amount,
+        string Currency,
+        string OrderId,
+        string Description,
+        string SuccessReturnUrl);
+
+    public record RefundResult(bool Success, string Message);
+
     public class PaymentPayload
     {
         public decimal Amount { get; set; }
@@ -17,8 +34,15 @@
         public string OrderId { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Custom { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public Dictionary<string, string> AdditionalInfo { get; set; } = new();
     }
+
+    public record CardMeta(
+        string Brand,
+        string Last4,
+        int ExpMonth,
+        int ExpYear);
 
     public enum PaymentStatus
     {

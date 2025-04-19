@@ -4,19 +4,33 @@
     {
         public TestPaymentAdapter() { }
 
-        public Task<PaymentResult> InitPayment(PaymentPayload payload)
+        // Инициирует платеж и возвращает результат операции.
+        // В параметры можно включить сумму, валюту, описание платежа и дополнительные параметры, 
+        // специфичные для каждой платежной системы.
+        public Task<InitPaymentResult> InitPayment(PaymentInitRequest req)
         {
-            return Task.FromResult(new PaymentResult() { });
+            return Task.FromResult(new InitPaymentResult(true, "", null, null, null) { }); 
         }
 
-        public Task<PaymentStatus> CheckPaymentStatus(string paymentId)
+
+        // Метод для проверки статуса платежа, если это требуется по логике платежной системы.
+        // Может возвращать статус платежа в удобочитаемом формате.
+        public Task<PaymentStatus> GetStatusAsync(string providerPaymentId)
         {
-            return Task.FromResult(PaymentStatus.Completed);
+            return Task.FromResult(PaymentStatus.Pending); 
         }
 
-        public Task<PaymentResult> RefundPayment(string paymentId, decimal amount)
+        // Опциональный метод для возврата средств, если такая возможность поддерживается платежной системой.
+        // Возвращает результат операции возврата.
+        public Task<RefundResult> RefundAsync(string providerPaymentId,
+                                       decimal amount)
         {
-            return Task.FromResult(new PaymentResult() { });
+            return Task.FromResult(new RefundResult(true, ""));
+        }
+
+        public Task<CardMeta?> FetchCardMetaAsync(string paymentMethodToken)
+        {
+            return Task.FromResult(new CardMeta("kaspi", "4444", 10, 26)); 
         }
     }
 }

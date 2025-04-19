@@ -9,9 +9,8 @@ namespace Flsurf.Application.Payment.Interfaces
         HandleTransaction HandleTransaction();
         GetTransactionsList GetTransactionsList();
         GetTransactionProviders GetTransactionProviders();
-        HandleDepositGatewayResult HandleDepositGatewayResult();
+        HandleGatewayResultHandler HandleGatewayResult();
         RefundTransaction RefundTransaction(); 
-        HandleWithdrawalGatewayResult HandleWithdrawlGatewayResult();
         StartPaymentFlowHandler StartPaymentFlow();
     }
 }

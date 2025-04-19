@@ -383,6 +383,12 @@ export interface IClient {
      * @param body (optional) 
      * @return Success
      */
+    hideNotifications(body?: HideNotificationsCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     createPortfolioProject(body?: AddPortfolioProjectCommand | undefined): Promise<CommandResult>;
 
     /**
@@ -424,7 +430,7 @@ export interface IClient {
      * @param searchQuery (optional) 
      * @return Success
      */
-    getSkills(searchQuery?: string | undefined): Promise<SkillEntity[]>;
+    getSkills(searchQuery?: string | undefined): Promise<SkillModel[]>;
 
     /**
      * @return Success
@@ -513,19 +519,13 @@ export interface IClient {
      * @param body (optional) 
      * @return Success
      */
-    handleDepositGatewayResult(body?: GatewayResultCommand | undefined): Promise<CommandResult>;
+    handleGatewayWebhook(body?: GatewayResultCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
      * @return Success
      */
     refundTransaction(body?: RefundTransactionCommand | undefined): Promise<CommandResult>;
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    handleWithdrawalGatewayResult(body?: GatewayResultCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
@@ -3289,6 +3289,48 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
+    hideNotifications(body?: HideNotificationsCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/notification/hide";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processHideNotifications(_response);
+        });
+    }
+
+    protected processHideNotifications(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     createPortfolioProject(body?: AddPortfolioProjectCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/portfolio-project/create";
         url_ = url_.replace(/[?&]$/, "");
@@ -3585,7 +3627,7 @@ export class Client implements IClient {
      * @param searchQuery (optional) 
      * @return Success
      */
-    getSkills(searchQuery?: string | undefined): Promise<SkillEntity[]> {
+    getSkills(searchQuery?: string | undefined): Promise<SkillModel[]> {
         let url_ = this.baseUrl + "/api/skill/list?";
         if (searchQuery === null)
             throw new Error("The parameter 'searchQuery' cannot be null.");
@@ -3605,7 +3647,7 @@ export class Client implements IClient {
         });
     }
 
-    protected processGetSkills(response: Response): Promise<SkillEntity[]> {
+    protected processGetSkills(response: Response): Promise<SkillModel[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -3615,7 +3657,7 @@ export class Client implements IClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(SkillEntity.fromJS(item));
+                    result200!.push(SkillModel.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -3627,7 +3669,7 @@ export class Client implements IClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<SkillEntity[]>(null as any);
+        return Promise.resolve<SkillModel[]>(null as any);
     }
 
     /**
@@ -4259,8 +4301,8 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    handleDepositGatewayResult(body?: GatewayResultCommand | undefined): Promise<CommandResult> {
-        let url_ = this.baseUrl + "/api/transaction/deposit-result";
+    handleGatewayWebhook(body?: GatewayResultCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/transaction/gateway-webhook";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -4275,11 +4317,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processHandleDepositGatewayResult(_response);
+            return this.processHandleGatewayWebhook(_response);
         });
     }
 
-    protected processHandleDepositGatewayResult(response: Response): Promise<CommandResult> {
+    protected processHandleGatewayWebhook(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4322,48 +4364,6 @@ export class Client implements IClient {
     }
 
     protected processRefundTransaction(response: Response): Promise<CommandResult> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = CommandResult.fromJS(resultData200);
-            return result200;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<CommandResult>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    handleWithdrawalGatewayResult(body?: GatewayResultCommand | undefined): Promise<CommandResult> {
-        let url_ = this.baseUrl + "/api/transaction/withdrawal-result";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: RequestInit = {
-            body: content_,
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processHandleWithdrawalGatewayResult(_response);
-        });
-    }
-
-    protected processHandleWithdrawalGatewayResult(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -8781,6 +8781,58 @@ export interface IHideJobCommand {
     jobId?: string;
 }
 
+export class HideNotificationsCommand implements IHideNotificationsCommand {
+    readonly commandId?: string | undefined;
+    readonly timestamp?: Date;
+    notificationIds?: string[] | undefined;
+
+    constructor(data?: IHideNotificationsCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).commandId = _data["commandId"];
+            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
+            if (Array.isArray(_data["notificationIds"])) {
+                this.notificationIds = [] as any;
+                for (let item of _data["notificationIds"])
+                    this.notificationIds!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): HideNotificationsCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new HideNotificationsCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["commandId"] = this.commandId;
+        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
+        if (Array.isArray(this.notificationIds)) {
+            data["notificationIds"] = [];
+            for (let item of this.notificationIds)
+                data["notificationIds"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IHideNotificationsCommand {
+    commandId?: string | undefined;
+    timestamp?: Date;
+    notificationIds?: string[] | undefined;
+}
+
 export class ICustomAttributeProvider implements IICustomAttributeProvider {
 
     constructor(data?: IICustomAttributeProvider) {
@@ -9826,6 +9878,7 @@ export class NotificationEntity implements INotificationEntity {
     toUserId!: string;
     type?: NotificationEntityType;
     data?: string | undefined;
+    hidden?: boolean;
     icon?: FileEntity;
 
     constructor(data?: INotificationEntity) {
@@ -9850,6 +9903,7 @@ export class NotificationEntity implements INotificationEntity {
             this.toUserId = _data["toUserId"];
             this.type = _data["type"];
             this.data = _data["data"];
+            this.hidden = _data["hidden"];
             this.icon = _data["icon"] ? FileEntity.fromJS(_data["icon"]) : <any>undefined;
         }
     }
@@ -9874,6 +9928,7 @@ export class NotificationEntity implements INotificationEntity {
         data["toUserId"] = this.toUserId;
         data["type"] = this.type;
         data["data"] = this.data;
+        data["hidden"] = this.hidden;
         data["icon"] = this.icon ? this.icon.toJSON() : <any>undefined;
         return data;
     }
@@ -9891,6 +9946,7 @@ export interface INotificationEntity {
     toUserId: string;
     type?: NotificationEntityType;
     data?: string | undefined;
+    hidden?: boolean;
     icon?: FileEntity;
 }
 
@@ -10938,6 +10994,46 @@ export interface ISkillEntity {
     name?: string | undefined;
 }
 
+export class SkillModel implements ISkillModel {
+    id?: string;
+    name?: string | undefined;
+
+    constructor(data?: ISkillModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): SkillModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new SkillModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        return data;
+    }
+}
+
+export interface ISkillModel {
+    id?: string;
+    name?: string | undefined;
+}
+
 export class StartContestCommand implements IStartContestCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
@@ -10989,6 +11085,8 @@ export class StartPaymentFlowCommand implements IStartPaymentFlowCommand {
     flow?: StartPaymentFlowCommandFlow;
     type?: StartPaymentFlowCommandType;
     providerId?: string;
+    paymentMethodId?: string | undefined;
+    oneTimeToken?: string | undefined;
 
     constructor(data?: IStartPaymentFlowCommand) {
         if (data) {
@@ -11007,6 +11105,8 @@ export class StartPaymentFlowCommand implements IStartPaymentFlowCommand {
             this.flow = _data["flow"];
             this.type = _data["type"];
             this.providerId = _data["providerId"];
+            this.paymentMethodId = _data["paymentMethodId"];
+            this.oneTimeToken = _data["oneTimeToken"];
         }
     }
 
@@ -11025,6 +11125,8 @@ export class StartPaymentFlowCommand implements IStartPaymentFlowCommand {
         data["flow"] = this.flow;
         data["type"] = this.type;
         data["providerId"] = this.providerId;
+        data["paymentMethodId"] = this.paymentMethodId;
+        data["oneTimeToken"] = this.oneTimeToken;
         return data;
     }
 }
@@ -11036,6 +11138,8 @@ export interface IStartPaymentFlowCommand {
     flow?: StartPaymentFlowCommandFlow;
     type?: StartPaymentFlowCommandType;
     providerId?: string;
+    paymentMethodId?: string | undefined;
+    oneTimeToken?: string | undefined;
 }
 
 export class StartWorkSessionCommand implements IStartWorkSessionCommand {
@@ -11726,6 +11830,7 @@ export class TransactionPropsEntity implements ITransactionPropsEntity {
     readonly paymentUrl?: string | undefined;
     readonly successUrl?: string | undefined;
     readonly paymentGateway?: string | undefined;
+    readonly providerPaymentId?: string | undefined;
     feeContext?: FeeContext;
 
     constructor(data?: ITransactionPropsEntity) {
@@ -11742,6 +11847,7 @@ export class TransactionPropsEntity implements ITransactionPropsEntity {
             (<any>this).paymentUrl = _data["paymentUrl"];
             (<any>this).successUrl = _data["successUrl"];
             (<any>this).paymentGateway = _data["paymentGateway"];
+            (<any>this).providerPaymentId = _data["providerPaymentId"];
             this.feeContext = _data["feeContext"] ? FeeContext.fromJS(_data["feeContext"]) : <any>undefined;
         }
     }
@@ -11758,6 +11864,7 @@ export class TransactionPropsEntity implements ITransactionPropsEntity {
         data["paymentUrl"] = this.paymentUrl;
         data["successUrl"] = this.successUrl;
         data["paymentGateway"] = this.paymentGateway;
+        data["providerPaymentId"] = this.providerPaymentId;
         data["feeContext"] = this.feeContext ? this.feeContext.toJSON() : <any>undefined;
         return data;
     }
@@ -11767,6 +11874,7 @@ export interface ITransactionPropsEntity {
     paymentUrl?: string | undefined;
     successUrl?: string | undefined;
     paymentGateway?: string | undefined;
+    providerPaymentId?: string | undefined;
     feeContext?: FeeContext;
 }
 
@@ -14114,8 +14222,8 @@ export enum GetJobsListQuerySortType {
 }
 
 export enum GetJobsListQuerySortOption {
-    _0 = 0,
-    _1 = 1,
+    Date = "Date",
+    Recomended = "Recomended",
 }
 
 export enum JobEntityStatus {

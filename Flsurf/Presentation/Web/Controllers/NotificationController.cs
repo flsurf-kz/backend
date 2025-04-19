@@ -45,5 +45,12 @@ namespace Flsurf.Presentation.Web.Controllers
             var result = await _userService.CreateNotifications().Handle(model);
             return result.MapResult(this);
         }
+
+        [HttpPut("hide", Name = "HideNotifications")]
+        public async Task<ActionResult<CommandResult>> HideNotifcations([FromBody] HideNotificationsCommand command)
+        {
+            var result = await _userService.HideNotifications().Handle(command);
+            return result.MapResult(this);
+        } 
     }
 }

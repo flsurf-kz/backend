@@ -21,6 +21,7 @@ namespace Flsurf.Application.Common.Interfaces
         DbSet<PaymentSystemEntity> PaymentSystems { get; set; }
         DbSet<TransactionEntity> Transactions { get; set; }
         DbSet<WalletEntity> Wallets { get; set; }
+        DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
 
         // Staff 
         DbSet<TicketEntity> Tickets { get; set; }

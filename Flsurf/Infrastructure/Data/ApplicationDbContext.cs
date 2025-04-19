@@ -29,6 +29,8 @@ namespace Flsurf.Infrastructure.Data
         public DbSet<PaymentSystemEntity> PaymentSystems { get; set; }
         public DbSet<TransactionEntity> Transactions { get; set; }
         public DbSet<WalletEntity> Wallets { get; set; }
+        public DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
+
 
         // Staff 
         public DbSet<TicketEntity> Tickets { get; set; }

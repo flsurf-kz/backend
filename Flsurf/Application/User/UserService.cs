@@ -66,5 +66,10 @@ namespace Flsurf.Application.User
         {
             return ServiceProvider.GetRequiredService<BlockUserHandler>();
         }
+
+        public HideNotifications HideNotifications()
+        {
+            return ServiceProvider.GetRequiredService<HideNotifications>(); 
+        }
     }
 }

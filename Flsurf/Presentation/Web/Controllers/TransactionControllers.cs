@@ -54,11 +54,11 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         // Обработка результата от шлюза депозита
-        [HttpPost("deposit-result", Name = "HandleDepositGatewayResult")]
+        [HttpPost("gateway-webhook", Name = "HandleGatewayWebhook")]
         [Authorize]
         public async Task<ActionResult<CommandResult>> HandleDepositGatewayResult([FromBody] GatewayResultCommand command)
         {
-            var handler = _transactionService.HandleDepositGatewayResult();
+            var handler = _transactionService.HandleGatewayResult();
             var result = await handler.Handle(command);
             return result.MapResult(this);
         }
@@ -69,16 +69,6 @@ namespace Flsurf.Presentation.Web.Controllers
         public async Task<ActionResult<CommandResult>> RefundTransaction([FromBody] RefundTransactionCommand command)
         {
             var handler = _transactionService.RefundTransaction();
-            var result = await handler.Handle(command);
-            return result.MapResult(this);
-        }
-
-        // Обработка результата от шлюза вывода средств
-        [HttpPost("withdrawal-result", Name = "HandleWithdrawalGatewayResult")]
-        [Authorize]
-        public async Task<ActionResult<CommandResult>> HandleWithdrawalGatewayResult([FromBody] GatewayResultCommand command)
-        {
-            var handler = _transactionService.HandleWithdrawlGatewayResult();
             var result = await handler.Handle(command);
             return result.MapResult(this);
         }

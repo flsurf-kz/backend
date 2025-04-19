@@ -203,7 +203,7 @@ namespace Flsurf.Domain.Payment.Entities
             AddDomainEvent(new WalletAmountFrozen(this, amount, frozenUntil));
         }
 
-        // ❄️ Размораживание средств без контекста 
+        // ❄️ Размораживание средств без контекста  
         private void UnfreezeAmount(Money amount) 
         {
             EnsureNotBlocked();

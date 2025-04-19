@@ -18,5 +18,6 @@ namespace Flsurf.Application.User.Interfaces
         BlockUserHandler BlockUser();
         FindOrCreateExternalUser FindOrCreateExternalUser();
         CreateNotificationHandler CreateNotifications();
+        HideNotifications HideNotifications();
     }
 }

@@ -4,6 +4,10 @@ using Flsurf.Application.Files.Dto;
 using Flsurf.Domain.Files.Entities;
 using Flsurf.Infrastructure.Adapters.FileStorage;
 using Microsoft.EntityFrameworkCore;
+using MimeDetective;
+using MimeDetective.Definitions;
+using System.Net;
+using System.Security;
 
 namespace Flsurf.Application.Files.UseCases
 {

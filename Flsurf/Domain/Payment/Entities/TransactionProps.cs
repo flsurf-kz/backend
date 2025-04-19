@@ -10,6 +10,7 @@ namespace Flsurf.Domain.Payment.Entities
         public string PaymentUrl { get; private set; } = string.Empty;
         public string SuccessUrl { get; private set; } = string.Empty;
         public string PaymentGateway { get; private set; } = string.Empty;
+        public string ProviderPaymentId { get; private set; } = string.Empty; 
         public FeeContext FeeContext { get; private set; } = default!; 
 
         public TransactionPropsEntity() { }  // Для EF CORE 
@@ -18,16 +19,20 @@ namespace Flsurf.Domain.Payment.Entities
             string paymentUrl,
             string successUrl,
             string paymentGateway,
-            FeeContext feeContext)
+            FeeContext feeContext, 
+            string providerPaymentId)
         {
             return new TransactionPropsEntity
             {
                 PaymentUrl = paymentUrl,
                 SuccessUrl = successUrl,
                 PaymentGateway = paymentGateway,
-                FeeContext = feeContext
+                FeeContext = feeContext,
+                ProviderPaymentId = providerPaymentId, 
             };
         }
+
+        public void SetProviderPaymentId(string paymentId) => ProviderPaymentId = paymentId; 
 
         protected override IEnumerable<object> GetEqualityComponents()
         {

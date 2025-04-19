@@ -21,7 +21,7 @@ namespace Flsurf.Domain.Payment.Entities
         public TransactionType Type { get; private set; }
         public TransactionFlow Flow { get; private set; }
 
-        public TransactionPropsEntity? Props { get; private set; }
+        public TransactionPropsEntity? Props { get; set; }
         public DateTime? FrozenUntil { get; private set; }
         public string? Comment { get; private set; }
         public DateTime? CompletedAt { get; set; }
@@ -112,6 +112,8 @@ namespace Flsurf.Domain.Payment.Entities
 
             Status = TransactionStatus.Cancelled;
         }
+
+        public void SetComment(string comment) => Comment = comment; 
 
         public void ConfirmFromGateway()
         {

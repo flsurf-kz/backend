@@ -21,6 +21,7 @@ namespace Flsurf.Domain.User.Entities
         public NotificationTypes Type { get; set; } = NotificationTypes.Other;
         [Column(TypeName = "jsonb")]
         public string? Data { get; set; } = string.Empty;
+        public bool Hidden { get; set; } = false; 
         public FileEntity? Icon { get; set; } = null!; 
 
         public static NotificationEntity CreateFromSystem(

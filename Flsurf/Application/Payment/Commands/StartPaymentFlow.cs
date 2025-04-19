@@ -1,5 +1,7 @@
 ﻿using Flsurf.Application.Common.cqrs;
+using Flsurf.Application.Common.Exceptions;
 using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Payment.Interfaces;
 using Flsurf.Domain.Payment.Entities;
 using Flsurf.Domain.Payment.Enums;
 using Flsurf.Domain.Payment.Policies;
@@ -7,6 +9,7 @@ using Flsurf.Domain.Payment.ValueObjects;
 using Flsurf.Infrastructure.Adapters.Payment;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Flsurf.Application.Payment.Commands
 {
@@ -16,90 +19,86 @@ namespace Flsurf.Application.Payment.Commands
         public TransactionFlow Flow { get; set; }
         public TransactionType Type { get; set; }
         public Guid ProviderId { get; set; }
+
+        // ①  Если пополняем через сохранённую карту
+        public Guid? PaymentMethodId { get; init; }
+
+        // ②  Если пользователь ввёл карту и получил token «на лету»
+        public string? OneTimeToken { get; init; }
     }
 
-    public class StartPaymentFlowHandler : ICommandHandler<StartPaymentFlowCommand>
+    public class StartPaymentFlowHandler
+    : ICommandHandler<StartPaymentFlowCommand>
     {
-        private readonly IApplicationDbContext _context;
-        private readonly IPaymentAdapterFactory _paymentAdapterResolver; // через DI
-        private readonly IPermissionService _permService; 
+        private readonly IApplicationDbContext _db;
+        private readonly IPaymentAdapterFactory _adapters;
+        private readonly IPermissionService _perm;
+        private readonly IUrlBuilder _url;   // сервис, собирающий фронт‑URL
 
-        public StartPaymentFlowHandler(IApplicationDbContext context, IPaymentAdapterFactory paymentAdapterResolver, IPermissionService permService)
+        public StartPaymentFlowHandler(IApplicationDbContext db,
+                                       IPaymentAdapterFactory adapters,
+                                       IPermissionService perm,
+                                       IUrlBuilder url)
         {
-            _permService = permService; 
-            _context = context;
-            _paymentAdapterResolver = paymentAdapterResolver;
+            _db = db;
+            _adapters = adapters;
+            _perm = perm;
+            _url = url;
         }
 
-        public async Task<CommandResult> Handle(StartPaymentFlowCommand command)
+        public async Task<CommandResult> Handle(StartPaymentFlowCommand c)
         {
-            var currentUser = await _permService.GetCurrentUser(); 
-
-            var wallet = await _context.Wallets
+            var user = await _perm.GetCurrentUser();
+            var wallet = await _db.Wallets
                 .Include(w => w.Transactions)
-                .FirstOrDefaultAsync(w => w.UserId == currentUser.Id);
+                .FirstAsync(w => w.UserId == user.Id);
 
-            // мало вероятно конечно, но возможен при ошибках в бд
-            if (wallet == null)
-                throw new NullReferenceException("Критическая ошибка! Нету кошелка у авторизованного пользвателя!");
-
-            var provider = await _context.TransactionProviders
+            var provider = await _db.TransactionProviders
                 .Include(p => p.Systems)
-                .FirstOrDefaultAsync(p => p.Id == command.ProviderId);
+                .FirstAsync(p => p.Id == c.ProviderId);
+            var system = provider.GetActiveSystems().First()
+                           ?? throw new DomainException("ПС неактивна");
 
-            if (provider == null)
-                return CommandResult.NotFound("Платежный провайдер не найден", command.ProviderId);
+            var adapter = _adapters.GetPaymentAdapter(system.Name);
 
-            var system = provider.GetActiveSystems().FirstOrDefault();
-            if (system == null)
-                return CommandResult.BadRequest("У провайдера нет активных платёжных систем");
+            // token?
+            string? token = null;
+            if (c.PaymentMethodId is { } pmId)
+                token = (await _db.PaymentMethods
+                           .FirstAsync(x => x.Id == pmId && x.UserId == user.Id)).Token;
+            else if (!string.IsNullOrEmpty(c.OneTimeToken))
+                token = c.OneTimeToken;
 
-            var adapter = _paymentAdapterResolver.GetPaymentAdapter(system.Name);
-            if (adapter == null)
-                return CommandResult.BadRequest($"Не найден адаптер для платежной системы: {system.Name}");
-
-            var transactionId = Guid.NewGuid();
-
-            var payload = new PaymentPayload
-            {
-                Amount = command.Amount.Amount,
-                Currency = command.Amount.Currency.ToString(),
-                OrderId = transactionId.ToString(),
-                Name = $"Оплата через {provider.Name}",
-                Custom = $"User:{wallet.UserId}",
-                AdditionalInfo = new()
-                {
-                    { "WalletId", wallet.Id.ToString() },
-                    { "TransactionType", command.Type.ToString() }
-                }
-            };
-
-            var paymentResult = await adapter.InitPayment(payload);
-
-            if (!paymentResult.Success)
-                return CommandResult.BadRequest($"Ошибка шлюза: {paymentResult.Message}");
-
-            var props = TransactionPropsEntity.CreateGatewayProps(
-                paymentUrl: paymentResult.LinkUrl,
-                successUrl: $"https://flsurf.ru/payment/success?tx={transactionId}",
-                paymentGateway: system.Name,
-                feeContext: new FeeContext()
-            );
-
+            var txId = Guid.NewGuid();
             var tx = TransactionEntity.CreateWithProvider(
-                walletId: wallet.Id,
-                amount: command.Amount,
-                flow: command.Flow,
-                type: command.Type,
-                props: props,
+                wallet.Id, c.Amount, c.Flow, c.Type,
+                props: TransactionPropsEntity.CreateGatewayProps(
+                    paymentUrl: "", successUrl: _url.Success(txId),
+                    paymentGateway: system.Name, feeContext: new FeeContext(), ""),
                 provider: provider,
-                feePolicy: new StandardFeePolicy(0, provider.FeePercent)
-            );
+                feePolicy: new StandardFeePolicy(0, provider.FeePercent));
+            tx.Id = txId;
 
-            tx.Id = transactionId;
-            tx.Provider = provider;
+            var init = await adapter.InitPayment(
+                new PaymentInitRequest(token ?? string.Empty,
+                                       c.Amount.Amount,
+                                       c.Amount.Currency.ToString(),
+                                       txId.ToString(),
+                                       $"Deposit {user.Id}",
+                                       _url.Success(txId)));
 
-            await _context.SaveChangesAsync();
+            if (!init.Success)
+                return CommandResult.BadRequest("Gateway error");
+
+            tx.Props = TransactionPropsEntity.CreateGatewayProps(
+                init.RedirectUrl ?? string.Empty,
+                _url.Success(txId),
+                system.Name,
+                new FeeContext(),
+                init.ProviderPaymentId);
+
+            _db.Transactions.Add(tx);
+            await _db.SaveChangesAsync();
 
             return CommandResult.Success(tx.Id);
         }

@@ -6,21 +6,19 @@ namespace Flsurf.Infrastructure.Adapters.Payment
     {
         private readonly Dictionary<PaymentProviders, IPaymentAdapter> Adapters = new();
 
-        public PaymentAdapterFactory(IHttpClientFactory httpClient)
+        public PaymentAdapterFactory(IHttpClientFactory httpClient, IConfiguration config)
         {
-            // Регистрация доступных адаптеров
-            Adapters.Add(PaymentProviders.BankCardRu, new PayPalychPaymentAdapter(
-                httpClient.CreateClient("paypalych"),
-                new PayPalychConfiguration()
-                {
-                    ShopId = "1234567",
-                    HostUrl = "lol",
-                    SuccessUrl = "/api/payment/payout/paypalych"
-                }
-            ));
-            //Adapters.Add(PaymentProviders.Balance, new BalancePaymentAdapter());
+            Adapters.Add(
+                PaymentProviders.BankCardRu,
+                new StripePaymentAdapter(
+                    httpClient.CreateClient("stripe"),
+                    new StripeConfig() { 
+                        SecretKey = config["Payments:Stripe:SecretKey"] 
+                            ?? throw new NullReferenceException("Нету secretkey для страйпа")
+                    }
+                )
+            ); 
             Adapters.Add(PaymentProviders.Test, new TestPaymentAdapter());
-            // Добавьте другие адаптеры здесь
         }
 
         public IPaymentAdapter GetPaymentAdapter(string providerId)
