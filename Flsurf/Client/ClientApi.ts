@@ -8201,7 +8201,8 @@ export interface IGetTransactionsListQuery {
 export class GetWorkSessionListQuery implements IGetWorkSessionListQuery {
     readonly queryId?: string | undefined;
     readonly timestamp?: Date;
-    contractId!: string;
+    userId?: string | undefined;
+    contractId?: string | undefined;
     start?: number;
     ends?: number;
     startDate?: Date | undefined;
@@ -8221,6 +8222,7 @@ export class GetWorkSessionListQuery implements IGetWorkSessionListQuery {
         if (_data) {
             (<any>this).queryId = _data["queryId"];
             (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
+            this.userId = _data["userId"];
             this.contractId = _data["contractId"];
             this.start = _data["start"];
             this.ends = _data["ends"];
@@ -8241,6 +8243,7 @@ export class GetWorkSessionListQuery implements IGetWorkSessionListQuery {
         data = typeof data === 'object' ? data : {};
         data["queryId"] = this.queryId;
         data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
+        data["userId"] = this.userId;
         data["contractId"] = this.contractId;
         data["start"] = this.start;
         data["ends"] = this.ends;
@@ -8254,7 +8257,8 @@ export class GetWorkSessionListQuery implements IGetWorkSessionListQuery {
 export interface IGetWorkSessionListQuery {
     queryId?: string | undefined;
     timestamp?: Date;
-    contractId: string;
+    userId?: string | undefined;
+    contractId?: string | undefined;
     start?: number;
     ends?: number;
     startDate?: Date | undefined;

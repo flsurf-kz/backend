@@ -17,26 +17,41 @@ namespace Flsurf.Application.Freelance.Queries
 
         public async Task<List<WorkSessionEntity>> Handle(GetWorkSessionListQuery query)
         {
-            // 🔐 Получаем текущего пользователя
             var user = await _permService.GetCurrentUser();
 
-            // 🔎 Проверяем, может ли пользователь читать снэпшоты работы
-            var hasPermission = await _permService.CheckPermission(
-                ZedFreelancerUser.WithId(user.Id).CanReadContract(ZedContract.WithId(query.ContractId)));
-
-            if (!hasPermission) throw new AccessDenied("User has no access to work snapshots");
-
-            // 🔥 Получаем снэпшоты работы
             var snapshotsQuery = _dbContext.WorkSessions
-                .Where(ws => ws.ContractId == query.ContractId) // Фильтр по контракту
-                .OrderByDescending(ws => ws.CreatedAt); // Сортировка по дате создания (новые сначала)
-
-            // 🔥 Пагинация
-            var snapshots = await snapshotsQuery
+                .Include(x => x.Files)
+                .Include(x => x.Contract)
+                .Include(x => x.Freelancer)
+                .OrderByDescending(ws => ws.CreatedAt)
                 .Paginate(query.Start, query.Ends)
-                .ToListAsync();
+                .AsQueryable();
+            if (query.UserId == null && query.ContractId == null)
+                query.UserId = user.Id;  // ленивый путь конечо но похер
 
-            return snapshots;
+            if (query.UserId != null && user.Id == query.UserId)
+            {
+                snapshotsQuery = snapshotsQuery.Where(x => x.FreelancerId == user.Id); 
+            } 
+            else if (query.UserId != null && user.Id != query.UserId)
+            {
+                await _permService.EnforceCheckPermission(
+                    ZedFreelancerUser.WithId(query.UserId.Value)
+                        .CanReadWorkSessions());
+
+                snapshotsQuery = snapshotsQuery.Where(x => x.FreelancerId == query.UserId); 
+            }
+            else if (query.ContractId != null)
+            {
+                var hasPermission = await _permService.CheckPermission(
+                    ZedFreelancerUser.WithId(user.Id).CanReadContract(ZedContract.WithId((Guid)query.ContractId)));
+
+                if (!hasPermission) throw new AccessDenied("User has no access to work snapshots");
+
+                snapshotsQuery = snapshotsQuery.Where(ws => ws.ContractId == query.ContractId); 
+            } 
+
+            return await snapshotsQuery.ToListAsync();
         }
     }
 
