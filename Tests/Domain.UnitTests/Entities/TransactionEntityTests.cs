@@ -87,7 +87,7 @@ namespace Tests.Domain.UnitTests.Entities
                 paymentUrl: "https://pay.com/start",
                 successUrl: "https://site.com/success",
                 paymentGateway: "TestGateway",
-                feeContext: new FeeContext {  });
+                feeContext: new FeeContext {  }, "");
 
             var tx = TransactionEntity.CreateWithProvider(
                 _walletId, _amount, TransactionFlow.Incoming,
