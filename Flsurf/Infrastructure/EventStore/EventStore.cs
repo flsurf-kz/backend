@@ -9,11 +9,13 @@ namespace Flsurf.Infrastructure.EventStore
     {
         private readonly IEventStoreContext _context;
         private readonly IUser _user;
+        private ILogger<EventStore> _logger;
 
-        public EventStore(IEventStoreContext context, IUser user)
+        public EventStore(IEventStoreContext context, IUser user, ILogger<EventStore> logger)
         {
             _context = context;
             _user = user;
+            _logger = logger;
         }
 
         public async Task StoreEvent<TEvent>(TEvent @event, bool isIntegrationEvent) where TEvent : BaseEvent
@@ -27,11 +29,13 @@ namespace Flsurf.Infrastructure.EventStore
                 }
             };
 
+            _logger.LogInformation("saving typeof: {tevent}, real type: {typeofType}, event itself {@event}", @event.GetType().Name, @event.GetType().FullName, @event); 
+
             var storedEvent = new StoredEvent
             {
                 EventId = Guid.NewGuid(),
                 ByUserId = _user.Id,
-                EventType = typeof(TEvent).FullName ?? typeof(TEvent).Name, // можно FullName для точного соответствия
+                EventType = @event.GetType().FullName ?? @event.GetType().Name, // можно FullName для точного соответствия
                 Data = JsonConvert.SerializeObject(@event, jsonOptions),
                 IsIntegrationEvent = isIntegrationEvent
             };

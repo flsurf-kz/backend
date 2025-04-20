@@ -108,7 +108,7 @@ namespace Flsurf.Domain.User.Entities
 
             user.HashedPassword = hashedPassword;
 
-            user.AddDomainEvent(new UserCreated(user));
+            user.AddDomainEvent(new UserCreated(user.Id));
 
             return user;
         }
@@ -126,7 +126,7 @@ namespace Flsurf.Domain.User.Entities
             };
             user.HashedPassword = passwordService.HashPassword(user, Guid.NewGuid().ToString()); // Генерируем случайный пароль
 
-            user.AddDomainEvent(new UserCreated(user));
+            user.AddDomainEvent(new UserCreated(user.Id));
             return user;
         }
 
@@ -134,7 +134,7 @@ namespace Flsurf.Domain.User.Entities
         {
             Blocked = block;
 
-            AddDomainEvent(new UserBlocked(this));
+            AddDomainEvent(new UserBlocked(this.Id));
         }
 
         public void UpdatePassword(string oldPassword, string newPassword, PasswordService passwordService)

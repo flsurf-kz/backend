@@ -11,6 +11,8 @@ namespace Flsurf.Application.Common.Interfaces
 {
     public interface IApplicationDbContext
     {
+        ChangeTracker ChangeTracker { get; }
+
         // User 
         DbSet<UserEntity> Users { get; set; }
         DbSet<WarningEntity> UserWarnings { get; set; }

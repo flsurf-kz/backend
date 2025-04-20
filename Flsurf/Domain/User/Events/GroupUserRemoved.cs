@@ -2,9 +2,9 @@
 
 namespace Flsurf.Domain.User.Events
 {
-    public class GroupUserRemoved(GroupEntity group, UserEntity user) : BaseEvent
+    public class GroupUserRemoved(Guid groupId, Guid userId) : BaseEvent
     {
-        public Guid GroupId { get; } = group.Id;
-        public Guid UserId { get; } = user.Id;
+        public Guid GroupId { get; } = groupId;
+        public Guid UserId { get; } = userId;
     }
 }

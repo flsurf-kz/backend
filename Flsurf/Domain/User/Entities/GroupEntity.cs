@@ -29,7 +29,7 @@ namespace Flsurf.Domain.User.Entities
         {
             Users.Add(user);
 
-            AddDomainEvent(new GroupUserAdded(this, user));
+            AddDomainEvent(new GroupUserAdded(this.Id, user.Id));
         }
 
         public UserEntity? RemoveUser(Guid userId)
@@ -42,7 +42,7 @@ namespace Flsurf.Domain.User.Entities
 
             Users.Remove(user);
 
-            AddDomainEvent(new GroupUserRemoved(this, user)); 
+            AddDomainEvent(new GroupUserRemoved(this.Id, user.Id)); 
             return user;
         }
     }

@@ -82,6 +82,7 @@ namespace Flsurf.Infrastructure.EventDispatcher
 
                     // 4. Если всё ок, помечаем обработанным
                     storedEvent.Processed = true;
+                    eventStoreContext.Events.Update(storedEvent);
                 }
                 catch (Exception ex)
                 {

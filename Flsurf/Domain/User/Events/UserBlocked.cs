@@ -2,8 +2,8 @@
 
 namespace Flsurf.Domain.User.Events
 {
-    public class UserBlocked(UserEntity user) : DomainEvent
+    public class UserBlocked(Guid user) : DomainEvent
     {
-        public Guid UserId { get; } = user.Id;
+        public Guid UserId { get; } = user;
     }
 }

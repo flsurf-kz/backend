@@ -24,7 +24,12 @@ namespace Flsurf.Application.User.EventHandlers
 
         public async Task HandleEvent(UserCreated eventValue, IApplicationDbContext _context)
         {
-            var user = await _context.Users.FirstAsync(x => x.Id == eventValue.UserId); 
+            var user = _context.ChangeTracker
+                          .Entries<UserEntity>()
+                          .First(e => e.Entity.Id == eventValue.UserId)
+                          .Entity;
+            if (user == null)
+                throw new Exception("CRITICAL: WTF?? Why user does not exists"); 
 
             var wallet = WalletEntity.Create(user);
             _context.Wallets.Add(wallet);

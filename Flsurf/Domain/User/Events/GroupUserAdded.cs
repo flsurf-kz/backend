@@ -2,9 +2,9 @@
 
 namespace Flsurf.Domain.User.Events
 {
-    public class GroupUserAdded(GroupEntity group, UserEntity user) : BaseEvent
+    public class GroupUserAdded(Guid groupId, Guid user) : BaseEvent
     {
-        public Guid GroupId { get; } = group.Id;
-        public Guid UserId { get; } = user.Id;
+        public Guid GroupId { get; } = groupId;
+        public Guid UserId { get; } = user;
     }
 }
