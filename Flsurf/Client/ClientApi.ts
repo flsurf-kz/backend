@@ -587,6 +587,16 @@ export interface IClient {
     blockWallet(body?: BlockWalletCommand | undefined): Promise<CommandResult>;
 
     /**
+     * @return Success
+     */
+    getPaymentMethods(): Promise<PaymentMethodDto[]>;
+
+    /**
+     * @return Success
+     */
+    getPaymentMethodsByUser(userId: string): Promise<PaymentMethodDto[]>;
+
+    /**
      * @param body (optional) 
      * @return Success
      */
@@ -4835,6 +4845,97 @@ export class Client implements IClient {
             });
         }
         return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPaymentMethods(): Promise<PaymentMethodDto[]> {
+        let url_ = this.baseUrl + "/api/wallet/payment-methods";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetPaymentMethods(_response);
+        });
+    }
+
+    protected processGetPaymentMethods(response: Response): Promise<PaymentMethodDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(PaymentMethodDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<PaymentMethodDto[]>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getPaymentMethodsByUser(userId: string): Promise<PaymentMethodDto[]> {
+        let url_ = this.baseUrl + "/api/wallet/payment-methods/{userId}";
+        if (userId === undefined || userId === null)
+            throw new Error("The parameter 'userId' must be defined.");
+        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetPaymentMethodsByUser(_response);
+        });
+    }
+
+    protected processGetPaymentMethodsByUser(response: Response): Promise<PaymentMethodDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(PaymentMethodDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<PaymentMethodDto[]>(null as any);
     }
 
     /**
@@ -9124,6 +9225,66 @@ export interface INotificationEntity {
     data?: string | undefined;
     hidden: boolean;
     icon?: FileEntity;
+}
+
+export class PaymentMethodDto implements IPaymentMethodDto {
+    id?: string;
+    providerId?: string;
+    brand?: string | undefined;
+    maskedPan?: string | undefined;
+    expMonth?: number;
+    expYear?: number;
+    isDefault?: boolean;
+
+    constructor(data?: IPaymentMethodDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.providerId = _data["providerId"];
+            this.brand = _data["brand"];
+            this.maskedPan = _data["maskedPan"];
+            this.expMonth = _data["expMonth"];
+            this.expYear = _data["expYear"];
+            this.isDefault = _data["isDefault"];
+        }
+    }
+
+    static fromJS(data: any): PaymentMethodDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PaymentMethodDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["providerId"] = this.providerId;
+        data["brand"] = this.brand;
+        data["maskedPan"] = this.maskedPan;
+        data["expMonth"] = this.expMonth;
+        data["expYear"] = this.expYear;
+        data["isDefault"] = this.isDefault;
+        return data;
+    }
+}
+
+export interface IPaymentMethodDto {
+    id?: string;
+    providerId?: string;
+    brand?: string | undefined;
+    maskedPan?: string | undefined;
+    expMonth?: number;
+    expYear?: number;
+    isDefault?: boolean;
 }
 
 export class PaymentSystemEntity implements IPaymentSystemEntity {

@@ -2,6 +2,7 @@
 using Flsurf.Application.Common.Extensions;
 using Flsurf.Application.Payment.Interfaces;
 using Flsurf.Application.Payment.Queries;
+using Flsurf.Application.Payment.Queries.Models;
 using Flsurf.Application.Payment.UseCases;
 using Flsurf.Domain.Payment.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
@@ -66,6 +67,22 @@ namespace Flsurf.Presentation.Web.Controllers
             var handler = _walletService.BlockWallet();
             var result = await handler.Handle(command);
             return result.MapResult(this);
+        }
+
+        [HttpGet("payment-methods", Name = "GetPaymentMethods")]
+        public async Task<ActionResult<List<PaymentMethodDto>>> GetPaymentMethods()
+        {
+            var query = new GetPaymentMethodsQuery { };
+            var result = await _walletService.GetPaymentMethods().Handle(query); 
+            return result; 
+        }
+
+        [HttpGet("payment-methods/{userId}", Name = "GetPaymentMethodsByUser")]
+        public async Task<ActionResult<List<PaymentMethodDto>>> GetPaymentMethods(Guid userId)
+        {
+            var query = new GetPaymentMethodsQuery { UserId = userId};
+            var result = await _walletService.GetPaymentMethods().Handle(query);
+            return result;
         }
     }
 }
