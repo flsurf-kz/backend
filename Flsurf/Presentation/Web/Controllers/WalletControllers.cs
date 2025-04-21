@@ -1,5 +1,6 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Extensions;
+using Flsurf.Application.Payment.Commands;
 using Flsurf.Application.Payment.Interfaces;
 using Flsurf.Application.Payment.Queries;
 using Flsurf.Application.Payment.Queries.Models;
@@ -83,6 +84,14 @@ namespace Flsurf.Presentation.Web.Controllers
             var query = new GetPaymentMethodsQuery { UserId = userId};
             var result = await _walletService.GetPaymentMethods().Handle(query);
             return result;
+        }
+
+        [HttpPost("payment-methos/", Name = "AddPaymentMethod")]
+        public async Task<ActionResult<CommandResult>> AddPaymentMethod([FromBody] AddPaymentMethodCommand command)
+        {
+            var result = await _walletService.AddPaymentMethod().Handle(command);
+
+            return result; 
         }
     }
 }

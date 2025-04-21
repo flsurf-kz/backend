@@ -600,6 +600,12 @@ export interface IClient {
      * @param body (optional) 
      * @return Success
      */
+    addPaymentMethod(body?: AddPaymentMethodCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     startSession(body?: StartWorkSessionCommand | undefined): Promise<CommandResult>;
 
     /**
@@ -4942,6 +4948,48 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
+    addPaymentMethod(body?: AddPaymentMethodCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/wallet/payment-methos";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddPaymentMethod(_response);
+        });
+    }
+
+    protected processAddPaymentMethod(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     startSession(body?: StartWorkSessionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/work-session/start";
         url_ = url_.replace(/[?&]$/, "");
@@ -5280,6 +5328,58 @@ export interface IAcceptDisputeCommand {
     commandId?: string | undefined;
     timestamp?: Date;
     disputeId?: string;
+}
+
+export class AddPaymentMethodCommand implements IAddPaymentMethodCommand {
+    readonly commandId?: string | undefined;
+    readonly timestamp?: Date;
+    providerId?: string;
+    paymentMethodToken?: string | undefined;
+    makeDefault?: boolean;
+
+    constructor(data?: IAddPaymentMethodCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).commandId = _data["commandId"];
+            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
+            this.providerId = _data["providerId"];
+            this.paymentMethodToken = _data["paymentMethodToken"];
+            this.makeDefault = _data["makeDefault"];
+        }
+    }
+
+    static fromJS(data: any): AddPaymentMethodCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddPaymentMethodCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["commandId"] = this.commandId;
+        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
+        data["providerId"] = this.providerId;
+        data["paymentMethodToken"] = this.paymentMethodToken;
+        data["makeDefault"] = this.makeDefault;
+        return data;
+    }
+}
+
+export interface IAddPaymentMethodCommand {
+    commandId?: string | undefined;
+    timestamp?: Date;
+    providerId?: string;
+    paymentMethodToken?: string | undefined;
+    makeDefault?: boolean;
 }
 
 export class AddPortfolioProjectCommand implements IAddPortfolioProjectCommand {
