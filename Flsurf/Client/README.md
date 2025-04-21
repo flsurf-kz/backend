@@ -1,4 +1,4 @@
-Если ты изменил API или любые контроллеры то действуешь по этому алгоритму: 
+If you changed some stuff here, then run this commands: 
 
 ```shell
 
@@ -11,4 +11,4 @@ $ npm version patch
 
 ```
 
-Потом делаешь коммит и пушишь измнения ВМЕСТЕ с измнениями в кодовой базе! 
+Then you do commit, and push with all staged stuff
