@@ -64,7 +64,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result;
         }
 
-        [HttpPut("{userId}/taxinfo")]
+        [HttpPut("{userId}/taxinfo", Name = "UpdateTaxInfo")]
         public async Task<ActionResult<CommandResult>> UpdateTaxInfo(Guid userId, [FromBody] UpdateTaxSettingsCommand command)
         {
             var result = await UserService.UpdateTaxSettings()

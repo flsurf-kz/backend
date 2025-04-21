@@ -562,7 +562,7 @@ export interface IClient {
      * @param body (optional) 
      * @return Success
      */
-    taxinfo(userId: string, body?: UpdateTaxSettingsCommand | undefined): Promise<CommandResult>;
+    updateTaxInfo(userId: string, body?: UpdateTaxSettingsCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
@@ -4635,7 +4635,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
-    taxinfo(userId: string, body?: UpdateTaxSettingsCommand | undefined): Promise<CommandResult> {
+    updateTaxInfo(userId: string, body?: UpdateTaxSettingsCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/user/{userId}/taxinfo";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -4654,11 +4654,11 @@ export class Client implements IClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processTaxinfo(_response);
+            return this.processUpdateTaxInfo(_response);
         });
     }
 
-    protected processTaxinfo(response: Response): Promise<CommandResult> {
+    protected processUpdateTaxInfo(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {

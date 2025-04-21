@@ -12,9 +12,9 @@ namespace Flsurf.Domain.User.ValueObjects
 
         // Доменный конструктор
         public BankDetails(
-            [property: Required, MaxLength(20)] string bic,
-            [property: Required, MaxLength(34)] string accountNumber,
-            [property: Required, MaxLength(200)] string bankName)
+            [Required, MaxLength(20)] string bic,
+            [Required, MaxLength(34)] string accountNumber,
+            [Required, MaxLength(200)] string bankName)
         {
             Bic = bic;
             AccountNumber = accountNumber;

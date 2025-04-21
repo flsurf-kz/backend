@@ -33937,7 +33937,7 @@
           "Summary": null,
           "Description": null,
           "ExternalDocs": null,
-          "OperationId": null,
+          "OperationId": "UpdateTaxInfo",
           "Parameters": [
             {
               "UnresolvedReference": false,
