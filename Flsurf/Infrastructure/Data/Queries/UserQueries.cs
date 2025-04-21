@@ -8,6 +8,8 @@ namespace Flsurf.Infrastructure.Data.Queries
         public static IQueryable<UserEntity> IncludeStandard(this IQueryable<UserEntity> query)
         {
             return query
+                .Include(x => x.TaxInfo)
+                .Include(x => x.Warnings)
                 .Include(x => x.Avatar);
         }
     }

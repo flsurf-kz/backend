@@ -562,6 +562,12 @@ export interface IClient {
      * @param body (optional) 
      * @return Success
      */
+    taxinfo(userId: string, body?: UpdateTaxSettingsCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     balanceOperation(body?: BalanceOperationCommand | undefined): Promise<CommandResult>;
 
     /**
@@ -4629,6 +4635,51 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return Success
      */
+    taxinfo(userId: string, body?: UpdateTaxSettingsCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/user/{userId}/taxinfo";
+        if (userId === undefined || userId === null)
+            throw new Error("The parameter 'userId' must be defined.");
+        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processTaxinfo(_response);
+        });
+    }
+
+    protected processTaxinfo(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
     balanceOperation(body?: BalanceOperationCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/wallet/balance-operation";
         url_ = url_.replace(/[?&]$/, "");
@@ -5349,6 +5400,50 @@ export interface IBalanceOperationCommand {
     balanceOperationType?: BalanceOperationCommandBalanceOperationType;
 }
 
+export class BankDetails implements IBankDetails {
+    bic!: string;
+    accountNumber!: string;
+    bankName!: string;
+
+    constructor(data?: IBankDetails) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.bic = _data["bic"];
+            this.accountNumber = _data["accountNumber"];
+            this.bankName = _data["bankName"];
+        }
+    }
+
+    static fromJS(data: any): BankDetails {
+        data = typeof data === 'object' ? data : {};
+        let result = new BankDetails();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["bic"] = this.bic;
+        data["accountNumber"] = this.accountNumber;
+        data["bankName"] = this.bankName;
+        return data;
+    }
+}
+
+export interface IBankDetails {
+    bic: string;
+    accountNumber: string;
+    bankName: string;
+}
+
 export class BlockWalletCommand implements IBlockWalletCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
@@ -5443,10 +5538,10 @@ export interface IBookmarkJobCommand {
 
 export class CategoryEntity implements ICategoryEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
     slug?: string | undefined;
     parentCategoryId?: string | undefined;
@@ -5510,10 +5605,10 @@ export class CategoryEntity implements ICategoryEntity {
 
 export interface ICategoryEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
     slug?: string | undefined;
     parentCategoryId?: string | undefined;
@@ -5885,10 +5980,10 @@ export interface ICompleteTaskCommand {
 
 export class ContestEntity implements IContestEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     employerId?: string;
     employer?: UserEntity;
     title?: string | undefined;
@@ -5973,10 +6068,10 @@ export class ContestEntity implements IContestEntity {
 
 export interface IContestEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     employerId?: string;
     employer?: UserEntity;
     title?: string | undefined;
@@ -5993,10 +6088,10 @@ export interface IContestEntity {
 
 export class ContractEntity implements IContractEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     freelancerId?: string;
     freelancer?: UserEntity;
     employerId?: string;
@@ -6116,10 +6211,10 @@ export class ContractEntity implements IContractEntity {
 
 export interface IContractEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     freelancerId?: string;
     freelancer?: UserEntity;
     employerId?: string;
@@ -7560,10 +7655,10 @@ export interface IFreelancerFinishContractCommand {
 
 export class FreelancerProfileEntity implements IFreelancerProfileEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     userId?: string;
     user?: UserEntity;
     skills?: SkillEntity[] | undefined;
@@ -7661,10 +7756,10 @@ export class FreelancerProfileEntity implements IFreelancerProfileEntity {
 
 export interface IFreelancerProfileEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     userId?: string;
     user?: UserEntity;
     skills?: SkillEntity[] | undefined;
@@ -7680,10 +7775,10 @@ export interface IFreelancerProfileEntity {
 
 export class FreelancerTeamEntity implements IFreelancerTeamEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
     participants?: UserEntity[] | undefined;
     readonly closed?: boolean;
@@ -7756,10 +7851,10 @@ export class FreelancerTeamEntity implements IFreelancerTeamEntity {
 
 export interface IFreelancerTeamEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
     participants?: UserEntity[] | undefined;
     closed?: boolean;
@@ -8624,10 +8719,10 @@ export interface IJobDetails {
 
 export class JobEntity implements IJobEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     employerId?: string;
     employer?: UserEntity;
     title?: string | undefined;
@@ -8746,10 +8841,10 @@ export class JobEntity implements IJobEntity {
 
 export interface IJobEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     employerId?: string;
     employer?: UserEntity;
     title?: string | undefined;
@@ -8772,10 +8867,10 @@ export interface IJobEntity {
 
 export class JobReviewEntity implements IJobReviewEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     reviewerId!: string;
     reviewer!: UserEntity;
     targetId!: string;
@@ -8848,10 +8943,10 @@ export class JobReviewEntity implements IJobReviewEntity {
 
 export interface IJobReviewEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     reviewerId: string;
     reviewer: UserEntity;
     targetId: string;
@@ -8949,10 +9044,10 @@ export interface IMoney {
 
 export class NotificationEntity implements INotificationEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     title!: string;
     text!: string;
     fromUserId?: string | undefined;
@@ -9017,10 +9112,10 @@ export class NotificationEntity implements INotificationEntity {
 
 export interface INotificationEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     title: string;
     text: string;
     fromUserId?: string | undefined;
@@ -9033,10 +9128,10 @@ export interface INotificationEntity {
 
 export class PaymentSystemEntity implements IPaymentSystemEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name!: string;
     isActive?: boolean;
 
@@ -9083,20 +9178,20 @@ export class PaymentSystemEntity implements IPaymentSystemEntity {
 
 export interface IPaymentSystemEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name: string;
     isActive?: boolean;
 }
 
 export class PortfolioProjectEntity implements IPortfolioProjectEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
     userRole?: string | undefined;
     skills?: SkillEntity[] | undefined;
@@ -9177,10 +9272,10 @@ export class PortfolioProjectEntity implements IPortfolioProjectEntity {
 
 export interface IPortfolioProjectEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
     userRole?: string | undefined;
     skills?: SkillEntity[] | undefined;
@@ -9193,10 +9288,10 @@ export interface IPortfolioProjectEntity {
 
 export class ProposalEntity implements IProposalEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     jobId?: string;
     job?: JobEntity;
     freelancerId?: string;
@@ -9269,10 +9364,10 @@ export class ProposalEntity implements IProposalEntity {
 
 export interface IProposalEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     jobId?: string;
     job?: JobEntity;
     freelancerId?: string;
@@ -9713,10 +9808,10 @@ export interface ISendResetCodeCommand {
 
 export class SkillEntity implements ISkillEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
 
     constructor(data?: ISkillEntity) {
@@ -9760,10 +9855,10 @@ export class SkillEntity implements ISkillEntity {
 
 export interface ISkillEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
 }
 
@@ -10165,10 +10260,10 @@ export interface ISuspendClientProfileCommand {
 
 export class TaskEntity implements ITaskEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     contractId?: string;
     contract?: ContractEntity;
     readonly taskTitle?: string | undefined;
@@ -10242,10 +10337,10 @@ export class TaskEntity implements ITaskEntity {
 
 export interface ITaskEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     contractId?: string;
     contract?: ContractEntity;
     taskTitle?: string | undefined;
@@ -10260,11 +10355,13 @@ export interface ITaskEntity {
 }
 
 export class TaxInformation implements ITaxInformation {
-    legalName?: string | undefined;
-    taxId?: string | undefined;
-    country?: string | undefined;
+    countryIso!: string;
+    localIdNumber!: string;
+    legalStatus!: TaxInformationLegalStatus;
+    taxRegime!: TaxInformationTaxRegime;
+    vatRegistered?: boolean;
     vatNumber?: string | undefined;
-    vatValidTo?: Date | undefined;
+    bankDetails!: BankDetails;
 
     constructor(data?: ITaxInformation) {
         if (data) {
@@ -10273,15 +10370,20 @@ export class TaxInformation implements ITaxInformation {
                     (<any>this)[property] = (<any>data)[property];
             }
         }
+        if (!data) {
+            this.bankDetails = new BankDetails();
+        }
     }
 
     init(_data?: any) {
         if (_data) {
-            this.legalName = _data["legalName"];
-            this.taxId = _data["taxId"];
-            this.country = _data["country"];
+            this.countryIso = _data["countryIso"];
+            this.localIdNumber = _data["localIdNumber"];
+            this.legalStatus = _data["legalStatus"];
+            this.taxRegime = _data["taxRegime"];
+            this.vatRegistered = _data["vatRegistered"];
             this.vatNumber = _data["vatNumber"];
-            this.vatValidTo = _data["vatValidTo"] ? new Date(_data["vatValidTo"].toString()) : <any>undefined;
+            this.bankDetails = _data["bankDetails"] ? BankDetails.fromJS(_data["bankDetails"]) : new BankDetails();
         }
     }
 
@@ -10294,29 +10396,33 @@ export class TaxInformation implements ITaxInformation {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["legalName"] = this.legalName;
-        data["taxId"] = this.taxId;
-        data["country"] = this.country;
+        data["countryIso"] = this.countryIso;
+        data["localIdNumber"] = this.localIdNumber;
+        data["legalStatus"] = this.legalStatus;
+        data["taxRegime"] = this.taxRegime;
+        data["vatRegistered"] = this.vatRegistered;
         data["vatNumber"] = this.vatNumber;
-        data["vatValidTo"] = this.vatValidTo ? formatDate(this.vatValidTo) : <any>undefined;
+        data["bankDetails"] = this.bankDetails ? this.bankDetails.toJSON() : <any>undefined;
         return data;
     }
 }
 
 export interface ITaxInformation {
-    legalName?: string | undefined;
-    taxId?: string | undefined;
-    country?: string | undefined;
+    countryIso: string;
+    localIdNumber: string;
+    legalStatus: TaxInformationLegalStatus;
+    taxRegime: TaxInformationTaxRegime;
+    vatRegistered?: boolean;
     vatNumber?: string | undefined;
-    vatValidTo?: Date | undefined;
+    bankDetails: BankDetails;
 }
 
 export class TicketCommentEntity implements ITicketCommentEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     createdBy!: UserEntity;
     text!: string;
     parentCommentId?: string | undefined;
@@ -10387,10 +10493,10 @@ export class TicketCommentEntity implements ITicketCommentEntity {
 
 export interface ITicketCommentEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     createdBy: UserEntity;
     text: string;
     parentCommentId?: string | undefined;
@@ -10401,10 +10507,10 @@ export interface ITicketCommentEntity {
 
 export class TicketEntity implements ITicketEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     text!: string;
     subject!: string;
     files?: FileEntity[] | undefined;
@@ -10491,10 +10597,10 @@ export class TicketEntity implements ITicketEntity {
 
 export interface ITicketEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     text: string;
     subject: string;
     files?: FileEntity[] | undefined;
@@ -10509,10 +10615,10 @@ export interface ITicketEntity {
 
 export class TransactionEntity implements ITransactionEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     readonly walletId?: string;
     antoganistTransactionId?: string | undefined;
     rawAmount?: Money;
@@ -10592,10 +10698,10 @@ export class TransactionEntity implements ITransactionEntity {
 
 export interface ITransactionEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     walletId?: string;
     antoganistTransactionId?: string | undefined;
     rawAmount?: Money;
@@ -10665,10 +10771,10 @@ export interface ITransactionPropsEntity {
 
 export class TransactionProviderEntity implements ITransactionProviderEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name!: string;
     feePercent!: number;
     systems!: PaymentSystemEntity[];
@@ -10733,10 +10839,10 @@ export class TransactionProviderEntity implements ITransactionProviderEntity {
 
 export interface ITransactionProviderEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name: string;
     feePercent: number;
     systems: PaymentSystemEntity[];
@@ -11427,6 +11533,86 @@ export interface IUpdateTaskCommand {
     priority?: number | undefined;
 }
 
+export class UpdateTaxSettingsCommand implements IUpdateTaxSettingsCommand {
+    readonly commandId?: string | undefined;
+    readonly timestamp?: Date;
+    userId!: string;
+    countryIso!: string;
+    localIdNumber!: string;
+    legalStatus!: UpdateTaxSettingsCommandLegalStatus;
+    taxRegime!: UpdateTaxSettingsCommandTaxRegime;
+    vatRegistered?: boolean;
+    vatNumber?: string | undefined;
+    bankBic!: string;
+    bankAccountNumber!: string;
+    bankName!: string;
+
+    constructor(data?: IUpdateTaxSettingsCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).commandId = _data["commandId"];
+            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
+            this.userId = _data["userId"];
+            this.countryIso = _data["countryIso"];
+            this.localIdNumber = _data["localIdNumber"];
+            this.legalStatus = _data["legalStatus"];
+            this.taxRegime = _data["taxRegime"];
+            this.vatRegistered = _data["vatRegistered"];
+            this.vatNumber = _data["vatNumber"];
+            this.bankBic = _data["bankBic"];
+            this.bankAccountNumber = _data["bankAccountNumber"];
+            this.bankName = _data["bankName"];
+        }
+    }
+
+    static fromJS(data: any): UpdateTaxSettingsCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateTaxSettingsCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["commandId"] = this.commandId;
+        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
+        data["userId"] = this.userId;
+        data["countryIso"] = this.countryIso;
+        data["localIdNumber"] = this.localIdNumber;
+        data["legalStatus"] = this.legalStatus;
+        data["taxRegime"] = this.taxRegime;
+        data["vatRegistered"] = this.vatRegistered;
+        data["vatNumber"] = this.vatNumber;
+        data["bankBic"] = this.bankBic;
+        data["bankAccountNumber"] = this.bankAccountNumber;
+        data["bankName"] = this.bankName;
+        return data;
+    }
+}
+
+export interface IUpdateTaxSettingsCommand {
+    commandId?: string | undefined;
+    timestamp?: Date;
+    userId: string;
+    countryIso: string;
+    localIdNumber: string;
+    legalStatus: UpdateTaxSettingsCommandLegalStatus;
+    taxRegime: UpdateTaxSettingsCommandTaxRegime;
+    vatRegistered?: boolean;
+    vatNumber?: string | undefined;
+    bankBic: string;
+    bankAccountNumber: string;
+    bankName: string;
+}
+
 export class UpdateUserCommand implements IUpdateUserCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
@@ -11509,10 +11695,10 @@ export interface IUpdateUserCommand {
 
 export class UserEntity implements IUserEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name!: string;
     surname!: string;
     fullname!: string;
@@ -11598,10 +11784,10 @@ export class UserEntity implements IUserEntity {
 
 export interface IUserEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     name: string;
     surname: string;
     fullname: string;
@@ -11621,10 +11807,10 @@ export interface IUserEntity {
 
 export class WalletEntity implements IWalletEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     readonly userId!: string;
     user!: UserEntity;
     readonly currency!: WalletEntityCurrency;
@@ -11695,10 +11881,10 @@ export class WalletEntity implements IWalletEntity {
 
 export interface IWalletEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     userId: string;
     user: UserEntity;
     currency: WalletEntityCurrency;
@@ -11791,10 +11977,10 @@ export interface IWithdrawProposalCommand {
 
 export class WorkSessionEntity implements IWorkSessionEntity {
     id!: string;
-    createdById!: string;
+    createdById?: string | undefined;
     createdAt!: Date;
-    lastModifiedById!: string;
-    lastModifiedAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     files?: FileEntity[] | undefined;
     contractId?: string;
     contract?: ContractEntity;
@@ -11885,10 +12071,10 @@ export class WorkSessionEntity implements IWorkSessionEntity {
 
 export interface IWorkSessionEntity {
     id: string;
-    createdById: string;
+    createdById?: string | undefined;
     createdAt: Date;
-    lastModifiedById: string;
-    lastModifiedAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
     files?: FileEntity[] | undefined;
     contractId?: string;
     contract?: ContractEntity;
@@ -12244,6 +12430,21 @@ export enum StartPaymentFlowCommandType {
     Penalty = "Penalty",
 }
 
+export enum TaxInformationLegalStatus {
+    _0 = 0,
+    _1 = 1,
+    _2 = 2,
+}
+
+export enum TaxInformationTaxRegime {
+    _0 = 0,
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+    _4 = 4,
+    _5 = 5,
+}
+
 export enum TicketEntityStatus {
     Open = "Open",
     Closed = "Closed",
@@ -12285,6 +12486,21 @@ export enum UpdateFreelancerProfileCommandAvailability {
     Open = "Open",
     Busy = "Busy",
     Vacation = "Vacation",
+}
+
+export enum UpdateTaxSettingsCommandLegalStatus {
+    _0 = 0,
+    _1 = 1,
+    _2 = 2,
+}
+
+export enum UpdateTaxSettingsCommandTaxRegime {
+    _0 = 0,
+    _1 = 1,
+    _2 = 2,
+    _3 = 3,
+    _4 = 4,
+    _5 = 5,
 }
 
 export enum UpdateUserCommandRole {
@@ -12332,12 +12548,6 @@ export enum WorkSessionEntityStatus {
     Pending = "Pending",
     Approved = "Approved",
     Rejected = "Rejected",
-}
-
-function formatDate(d: Date) {
-    return d.getFullYear() + '-' + 
-        (d.getMonth() < 9 ? ('0' + (d.getMonth()+1)) : (d.getMonth()+1)) + '-' +
-        (d.getDate() < 10 ? ('0' + d.getDate()) : d.getDate());
 }
 
 export interface FileParameter {

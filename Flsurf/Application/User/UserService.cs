@@ -71,5 +71,10 @@ namespace Flsurf.Application.User
         {
             return ServiceProvider.GetRequiredService<HideNotifications>(); 
         }
+
+        public UpdateTaxSettingsHandler UpdateTaxSettings()
+        {
+            return ServiceProvider.GetRequiredService<UpdateTaxSettingsHandler>(); 
+        }
     }
 }

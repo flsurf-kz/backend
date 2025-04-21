@@ -9,6 +9,7 @@ using Flsurf.Application.User.Dto;
 using Flsurf.Application.User.Queries;
 using Flsurf.Application.User.Commands;
 using Flsurf.Application.Common.Extensions;
+using Flsurf.Application.Common.cqrs;
 
 namespace Flsurf.Presentation.Web.Controllers
 {
@@ -61,6 +62,15 @@ namespace Flsurf.Presentation.Web.Controllers
                 .GetUser().Handle(new GetUserQuery() { UserId = userId });
 
             return result;
+        }
+
+        [HttpPut("{userId}/taxinfo")]
+        public async Task<ActionResult<CommandResult>> UpdateTaxInfo(Guid userId, [FromBody] UpdateTaxSettingsCommand command)
+        {
+            var result = await UserService.UpdateTaxSettings()
+                .Handle(command);
+
+            return result.MapResult(this); 
         }
     }
 }

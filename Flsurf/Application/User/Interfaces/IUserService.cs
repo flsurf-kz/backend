@@ -19,5 +19,6 @@ namespace Flsurf.Application.User.Interfaces
         FindOrCreateExternalUser FindOrCreateExternalUser();
         CreateNotificationHandler CreateNotifications();
         HideNotifications HideNotifications();
+        UpdateTaxSettingsHandler UpdateTaxSettings(); 
     }
 }
