@@ -1,5 +1,8 @@
-﻿namespace Flsurf.Domain.User.Enums
+﻿using System.Text.Json.Serialization;
+
+namespace Flsurf.Domain.User.Enums
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum LegalStatus
     {
         Individual,
@@ -7,6 +10,7 @@
         Entity
     }
 
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum TaxRegime
     {
         OSNO,           // основная (RU)

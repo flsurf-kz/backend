@@ -12431,18 +12431,18 @@ export enum StartPaymentFlowCommandType {
 }
 
 export enum TaxInformationLegalStatus {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
+    Individual = "Individual",
+    SoleProprietor = "SoleProprietor",
+    Entity = "Entity",
 }
 
 export enum TaxInformationTaxRegime {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _5 = 5,
+    OSNO = "OSNO",
+    USN_Income6 = "USN_Income6",
+    USN_Profit15 = "USN_Profit15",
+    Patent = "Patent",
+    Simplified = "Simplified",
+    General = "General",
 }
 
 export enum TicketEntityStatus {
@@ -12489,18 +12489,18 @@ export enum UpdateFreelancerProfileCommandAvailability {
 }
 
 export enum UpdateTaxSettingsCommandLegalStatus {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
+    Individual = "Individual",
+    SoleProprietor = "SoleProprietor",
+    Entity = "Entity",
 }
 
 export enum UpdateTaxSettingsCommandTaxRegime {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
-    _3 = 3,
-    _4 = 4,
-    _5 = 5,
+    OSNO = "OSNO",
+    USN_Income6 = "USN_Income6",
+    USN_Profit15 = "USN_Profit15",
+    Patent = "Patent",
+    Simplified = "Simplified",
+    General = "General",
 }
 
 export enum UpdateUserCommandRole {
