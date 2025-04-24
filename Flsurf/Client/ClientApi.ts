@@ -267,6 +267,16 @@ export interface IClient {
     getFreelancerProfile(userId: string): Promise<FreelancerProfileEntity>;
 
     /**
+     * @return Success
+     */
+    getMyFreelancerStats(): Promise<FreelancerStatsDto>;
+
+    /**
+     * @return Success
+     */
+    getFreelancerStats(userId: string): Promise<FreelancerStatsDto>;
+
+    /**
      * @param start (optional) 
      * @param end (optional) 
      * @param skills (optional) 
@@ -410,7 +420,12 @@ export interface IClient {
     /**
      * @return Success
      */
-    getPortfolioProjects(): Promise<PortfolioProjectEntity[]>;
+    getPortfolioProjects(userId: string): Promise<PortfolioProjectEntity[]>;
+
+    /**
+     * @return Success
+     */
+    getMyPortfolioProjects(): Promise<PortfolioProjectEntity[]>;
 
     /**
      * @param body (optional) 
@@ -2492,6 +2507,83 @@ export class Client implements IClient {
     }
 
     /**
+     * @return Success
+     */
+    getMyFreelancerStats(): Promise<FreelancerStatsDto> {
+        let url_ = this.baseUrl + "/api/freelancer-profile/stats";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetMyFreelancerStats(_response);
+        });
+    }
+
+    protected processGetMyFreelancerStats(response: Response): Promise<FreelancerStatsDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FreelancerStatsDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FreelancerStatsDto>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getFreelancerStats(userId: string): Promise<FreelancerStatsDto> {
+        let url_ = this.baseUrl + "/api/freelancer-profile/{userId}/stats";
+        if (userId === undefined || userId === null)
+            throw new Error("The parameter 'userId' must be defined.");
+        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetFreelancerStats(_response);
+        });
+    }
+
+    protected processGetFreelancerStats(response: Response): Promise<FreelancerStatsDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FreelancerStatsDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FreelancerStatsDto>(null as any);
+    }
+
+    /**
      * @param start (optional) 
      * @param end (optional) 
      * @param skills (optional) 
@@ -3519,8 +3611,11 @@ export class Client implements IClient {
     /**
      * @return Success
      */
-    getPortfolioProjects(): Promise<PortfolioProjectEntity[]> {
-        let url_ = this.baseUrl + "/api/portfolio-project/list";
+    getPortfolioProjects(userId: string): Promise<PortfolioProjectEntity[]> {
+        let url_ = this.baseUrl + "/api/portfolio-project/list/{userid}";
+        if (userId === undefined || userId === null)
+            throw new Error("The parameter 'userId' must be defined.");
+        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -3536,6 +3631,50 @@ export class Client implements IClient {
     }
 
     protected processGetPortfolioProjects(response: Response): Promise<PortfolioProjectEntity[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(PortfolioProjectEntity.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<PortfolioProjectEntity[]>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getMyPortfolioProjects(): Promise<PortfolioProjectEntity[]> {
+        let url_ = this.baseUrl + "/api/portfolio-project/list/my";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetMyPortfolioProjects(_response);
+        });
+    }
+
+    protected processGetMyPortfolioProjects(response: Response): Promise<PortfolioProjectEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -7974,6 +8113,70 @@ export interface IFreelancerProfileEntity {
     reviews?: JobReviewEntity[] | undefined;
 }
 
+export class FreelancerStatsDto implements IFreelancerStatsDto {
+    earningsLast12Months?: number;
+    jobSuccessScore?: number;
+    profileViews?: ProfileViewDto[] | undefined;
+    proposals?: ProposalsDto;
+    longTermClients?: number;
+    shortTermClients?: number;
+
+    constructor(data?: IFreelancerStatsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.earningsLast12Months = _data["earningsLast12Months"];
+            this.jobSuccessScore = _data["jobSuccessScore"];
+            if (Array.isArray(_data["profileViews"])) {
+                this.profileViews = [] as any;
+                for (let item of _data["profileViews"])
+                    this.profileViews!.push(ProfileViewDto.fromJS(item));
+            }
+            this.proposals = _data["proposals"] ? ProposalsDto.fromJS(_data["proposals"]) : <any>undefined;
+            this.longTermClients = _data["longTermClients"];
+            this.shortTermClients = _data["shortTermClients"];
+        }
+    }
+
+    static fromJS(data: any): FreelancerStatsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new FreelancerStatsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["earningsLast12Months"] = this.earningsLast12Months;
+        data["jobSuccessScore"] = this.jobSuccessScore;
+        if (Array.isArray(this.profileViews)) {
+            data["profileViews"] = [];
+            for (let item of this.profileViews)
+                data["profileViews"].push(item.toJSON());
+        }
+        data["proposals"] = this.proposals ? this.proposals.toJSON() : <any>undefined;
+        data["longTermClients"] = this.longTermClients;
+        data["shortTermClients"] = this.shortTermClients;
+        return data;
+    }
+}
+
+export interface IFreelancerStatsDto {
+    earningsLast12Months?: number;
+    jobSuccessScore?: number;
+    profileViews?: ProfileViewDto[] | undefined;
+    proposals?: ProposalsDto;
+    longTermClients?: number;
+    shortTermClients?: number;
+}
+
 export class FreelancerTeamEntity implements IFreelancerTeamEntity {
     id!: string;
     createdById?: string | undefined;
@@ -9547,6 +9750,46 @@ export interface IPortfolioProjectEntity {
     user?: UserEntity;
 }
 
+export class ProfileViewDto implements IProfileViewDto {
+    date?: string | undefined;
+    count?: number;
+
+    constructor(data?: IProfileViewDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.date = _data["date"];
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): ProfileViewDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProfileViewDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["date"] = this.date;
+        data["count"] = this.count;
+        return data;
+    }
+}
+
+export interface IProfileViewDto {
+    date?: string | undefined;
+    count?: number;
+}
+
 export class ProposalEntity implements IProposalEntity {
     id!: string;
     createdById?: string | undefined;
@@ -9637,6 +9880,50 @@ export interface IProposalEntity {
     coverLetter?: string | undefined;
     status?: ProposalEntityStatus;
     files?: FileEntity[] | undefined;
+}
+
+export class ProposalsDto implements IProposalsDto {
+    sent?: number;
+    viewed?: number;
+    hires?: number;
+
+    constructor(data?: IProposalsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.sent = _data["sent"];
+            this.viewed = _data["viewed"];
+            this.hires = _data["hires"];
+        }
+    }
+
+    static fromJS(data: any): ProposalsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProposalsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["sent"] = this.sent;
+        data["viewed"] = this.viewed;
+        data["hires"] = this.hires;
+        return data;
+    }
+}
+
+export interface IProposalsDto {
+    sent?: number;
+    viewed?: number;
+    hires?: number;
 }
 
 export class ReactToTaskCommand implements IReactToTaskCommand {

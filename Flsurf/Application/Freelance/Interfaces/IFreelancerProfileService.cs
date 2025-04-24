@@ -13,5 +13,6 @@ namespace Flsurf.Application.Freelance.Interfaces
         // Запросы
         GetFreelancerProfileHandler GetFreelancerProfile();
         GetFreelancerProfileListHandler GetFreelancerProfileList();
+        GetFreelancerStatsHandler GetFreelancerStats();
     }
 }

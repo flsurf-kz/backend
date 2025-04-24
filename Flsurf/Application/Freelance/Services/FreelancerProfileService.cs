@@ -27,5 +27,8 @@ namespace Flsurf.Application.Freelance.Services
 
         public GetFreelancerProfileListHandler GetFreelancerProfileList() =>
             _serviceProvider.GetRequiredService<GetFreelancerProfileListHandler>();
+
+        public GetFreelancerStatsHandler GetFreelancerStats() =>
+            _serviceProvider.GetRequiredService<GetFreelancerStatsHandler>();
     }
 }
