@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Flsurf.Presentation.Web.Services;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Flsurf.Domain.Files.Entities
@@ -17,7 +18,7 @@ namespace Flsurf.Domain.Files.Entities
         [Required, MaxLength(128)]
         public string? MimeType { get; set; }
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public string? OriginalDownloadUrl { get; set; }
 
         // Assuming Size is meant to be a numeric type, not GUID.

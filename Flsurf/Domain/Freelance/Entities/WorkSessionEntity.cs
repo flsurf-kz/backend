@@ -24,7 +24,7 @@ namespace Flsurf.Domain.Freelance.Entities
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         // тут не будет трекинга актива, это просто флаг внутри тех стороны а не для бизнес логики
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public bool IsActive { get; set; } = false; 
 
         public string? Comment { get; set; } = string.Empty;

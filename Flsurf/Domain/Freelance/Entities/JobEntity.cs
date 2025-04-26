@@ -30,9 +30,8 @@ namespace Flsurf.Domain.Freelance.Entities
         public BudgetType BudgetType { get; set; }
         public DateTime? PublicationDate { get; set; } // when job status is public 
         public bool PaymentVerified { get; set; } = false;
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public ContractEntity? Contract { get; set; } 
-        [JsonIgnore]
         [ForeignKey("Contract")]
         public Guid? ContractId { get; private set; }
         public ICollection<FileEntity> Files { get; private set; } = [];
@@ -49,6 +48,9 @@ namespace Flsurf.Domain.Freelance.Entities
             ICollection<FileEntity> files, 
             CategoryEntity category)
         {
+            if (budget.Amount == 0)
+                throw new DomainException("Произошел пиздец"); 
+
             return new JobEntity()
             {
                 Payout = budget,

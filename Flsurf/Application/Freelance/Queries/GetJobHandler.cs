@@ -16,6 +16,7 @@ namespace Flsurf.Application.Freelance.Queries
             var job = await _dbContext.Jobs
                 .Include(j => j.Employer) // Загружаем клиента
                 .Where(j => j.Id == query.JobId)
+                .AsNoTracking()
                 .Select(j => new JobDetails
                 {
                     JobId = j.Id,

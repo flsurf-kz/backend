@@ -23,9 +23,9 @@ namespace Flsurf.Domain.Freelance.Entities
         [ForeignKey("Owner")]
         public Guid OwnerId { get; set; }
 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public ICollection<FreelancerTeamInvitation> Invitations { get; set; } = [];
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public ICollection<ContractEntity> AssignedContracts { get; set; } = []; 
 
         /// <summary>

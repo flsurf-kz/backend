@@ -1,5 +1,6 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.Models;
 using Flsurf.Application.Files.Dto;
 using Flsurf.Application.Files.UseCases;
 using Flsurf.Application.Freelance.Permissions;
@@ -19,7 +20,9 @@ namespace Flsurf.Application.Freelance.Commands.Job
         public string Description { get; set; } = string.Empty;
         public ICollection<Guid> RequiredSkillIds { get; set; } = [];
         public Guid CategoryId { get; set; }
+        [GreaterThanZero]
         public decimal? Budget { get; set; }
+        [GreaterThanZero]
         public decimal? HourlyRate { get; set; }
         public int? Duration { get; set; }
         public BudgetType BudgetType { get; set; }

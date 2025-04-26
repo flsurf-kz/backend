@@ -81,6 +81,7 @@ namespace Flsurf.Application.User.EventHandlers
         {
             var command = new Freelance.Commands.ClientProfile.CreateClientProfileCommand
             {
+                UserId = user.Id, 
                 CompanyName = string.Empty,
                 EmployerType = ClientType.Indivdual,
                 PhoneNumber = user.Phone ?? DEFAULT_PHONE_NUMBER

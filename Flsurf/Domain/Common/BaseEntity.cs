@@ -9,10 +9,10 @@ namespace Flsurf.Domain.Common
         [Key, Required, JsonPropertyOrder(100)]
         public Guid Id { get; set; }
 
-        [JsonIgnore, NotMapped]
+        [Newtonsoft.Json.JsonIgnore, NotMapped]
         private readonly List<BaseEvent> _domainEvents = new();
 
-        [NotMapped, JsonIgnore]
+        [NotMapped, Newtonsoft.Json.JsonIgnore]
         public IReadOnlyCollection<BaseEvent> DomainEvents => _domainEvents.AsReadOnly();
 
         public BaseEntity()
