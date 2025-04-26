@@ -46,9 +46,18 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpGet("list", Name = "GetPortfolioProjects")]
+        [HttpGet("list/{userid}", Name = "GetPortfolioProjects")]
         [Authorize]
-        public async Task<ActionResult<ICollection<PortfolioProjectEntity>>> GetPortfolioProjects()
+        public async Task<ActionResult<ICollection<PortfolioProjectEntity>>> GetPortfolioProjects(Guid userId)
+        {
+            var handler = _portfolioProjectService.GetPortfolioProjects();
+            var projects = await handler.Handle(new GetPortfolioProjectsQuery() { FreelancerId = userId });
+            return Ok(projects);
+        }
+
+        [HttpGet("list/my", Name = "GetMyPortfolioProjects")]
+        [Authorize]
+        public async Task<ActionResult<ICollection<PortfolioProjectEntity>>> GetMyPortfolioProjects()
         {
             var handler = _portfolioProjectService.GetPortfolioProjects();
             var projects = await handler.Handle(new GetPortfolioProjectsQuery());

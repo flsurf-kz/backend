@@ -17,6 +17,9 @@ namespace Flsurf.Application.Freelance.Queries
         {
             // 🔥 Получаем текущего пользователя
             var currentUser = await _permService.GetCurrentUser();
+            if (query.FreelancerId == null)
+                query.FreelancerId = currentUser.Id; 
+
             bool isOwner = currentUser.Id == query.FreelancerId;
 
             // 🔥 Запрос проектов (общедоступные + черновики, если владелец)

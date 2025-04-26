@@ -3,6 +3,7 @@ using Flsurf.Application.Common.Extensions;
 using Flsurf.Application.Freelance.Commands.FreelancerProfile;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
+using Flsurf.Application.Freelance.Queries.Responses;
 using Flsurf.Domain.Freelance.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,9 +54,30 @@ namespace Flsurf.Presentation.Web.Controllers
             var handler = _freelancerProfileService.GetFreelancerProfile();
             var profile = await handler.Handle(query);
             if (profile == null)
-                return NotFound("Профиль не найден");
+                return NotFound(profile);
             return Ok(profile);
         }
+
+        [HttpGet("stats", Name = "GetMyFreelancerStats")]
+        public async Task<ActionResult<FreelancerStatsDto>> GetMyFreelancerStats()
+        {
+            var handler = _freelancerProfileService.GetFreelancerStats();
+
+            var stats = await handler.Handle(new GetFreelancerStatsQuery());
+
+            return stats; 
+        }
+
+        [HttpGet("{userId}/stats", Name = "GetFreelancerStats")]
+        public async Task<ActionResult<FreelancerStatsDto>> GetMyFreelancerStats(Guid userId)
+        {
+            var handler = _freelancerProfileService.GetFreelancerStats();
+
+            var stats = await handler.Handle(new GetFreelancerStatsQuery() { UserId = userId });
+
+            return stats;
+        }
+
 
         [HttpGet("list", Name = "GetFreelancerProfileList")]
         public async Task<ActionResult<ICollection<FreelancerProfileEntity>>> GetFreelancerProfileList(
