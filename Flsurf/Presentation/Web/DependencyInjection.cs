@@ -20,6 +20,8 @@ using System.Threading.RateLimiting;
 using System.Net;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
+using Microsoft.Extensions.Options;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Flsurf.Presentation.Web
 {
@@ -161,6 +163,8 @@ namespace Flsurf.Presentation.Web
             {
                 o.Cookie.Name = "__Host-flsurf_csrf";
                 o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                o.Cookie.SameSite = SameSiteMode.Strict;
+                o.Cookie.HttpOnly = true;
                 o.HeaderName = "X-CSRF-TOKEN";
             });
 
