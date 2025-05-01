@@ -51,5 +51,11 @@ namespace Flsurf.Application.Freelance.Services
 
         public GetBookmarksListHandler GetBookmarksList() =>
             _serviceProvider.GetRequiredService<GetBookmarksListHandler>();
+
+        public ReactToSentJobHandler ReactToSentJob() => 
+            _serviceProvider.GetRequiredService<ReactToSentJobHandler>();
+
+        public SendDraftJobToModerationHandler SendDraftJobToModeration() => 
+            _serviceProvider.GetRequiredService<SendDraftJobToModerationHandler>();
     }
 }

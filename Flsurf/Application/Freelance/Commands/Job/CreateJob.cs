@@ -32,8 +32,13 @@ namespace Flsurf.Application.Freelance.Commands.Job
     }
 
     // TODO FIX THIS
-    public class CreateJobHandler(IApplicationDbContext dbContext, IPermissionService permService, UploadFiles uploadFiles) : ICommandHandler<CreateJobCommand>
+    public class CreateJobHandler(
+        IApplicationDbContext dbContext,
+        IPermissionService permService, 
+        UploadFiles uploadFiles, 
+        IWebHostEnvironment environment) : ICommandHandler<CreateJobCommand>
     {
+        private readonly IWebHostEnvironment env = environment; 
         private readonly IApplicationDbContext _dbContext = dbContext;
         private readonly UploadFiles _uploadFiles = uploadFiles;
         private readonly IPermissionService _permService = permService;
@@ -69,6 +74,11 @@ namespace Flsurf.Application.Freelance.Commands.Job
                     user, command.Title, command.Description, new Money(command.Budget ?? 0), false, command.Level, skills, files, category)
                 : JobEntity.CreateHourly(
                     user, command.Title, command.Description, new Money(command.HourlyRate ?? 0), false, command.Level, skills, files, category);
+
+            if (env.IsDevelopment())
+            {
+                job.Status = JobStatus.Open; 
+            }
 
             _dbContext.Jobs.Add(job);
             await _dbContext.SaveChangesAsync();

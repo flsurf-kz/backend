@@ -19,5 +19,7 @@ namespace Flsurf.Application.Freelance.Interfaces
         UpdateProposalHandler UpdateProposal();
         WithdrawProposalHandler WithdrawProposal();
         GetBookmarksListHandler GetBookmarksList(); // если закладки относятся к вакансиям
+        ReactToSentJobHandler ReactToSentJob();
+        SendDraftJobToModerationHandler SendDraftJobToModeration(); 
     }
 }
