@@ -1,36 +1,48 @@
-﻿namespace Flsurf.Infrastructure.Adapters.FileStorage
+﻿using System.Text.RegularExpressions;
+
+namespace Flsurf.Infrastructure.Adapters.FileStorage
 {
     public class LocalFileStorageAdapter : IFileStorageAdapter
     {
         private readonly string _baseDirectory;
+        private static readonly Regex _fileNameRegex =
+            new(@"^[\w\-. ]+$", RegexOptions.Compiled);          // допустимые символы
+        private static readonly HashSet<string> _allowedExt =
+            new(StringComparer.OrdinalIgnoreCase) { ".jpg", ".png", ".pdf" /* … */ };
 
         public LocalFileStorageAdapter(string baseDirectory)
         {
-            _baseDirectory = baseDirectory;
+            _baseDirectory = Path.GetFullPath(baseDirectory);
+            Directory.CreateDirectory(_baseDirectory);          // гарантируем существование
         }
 
-        public async Task UploadFileAsync(string path, Stream fileStream)
+        public async Task UploadFileAsync(string relativePath, Stream fileStream)
         {
-            var fullPath = Path.Combine(_baseDirectory, path);
-            var directory = Path.GetDirectoryName(fullPath);
-            if (!Directory.Exists(directory) && !string.IsNullOrEmpty(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
+            var fullPath = GetSafePath(relativePath);
 
-            using var file = new FileStream(fullPath, FileMode.Create, FileAccess.Write);
-            await fileStream.CopyToAsync(file);
+            var directory = Path.GetDirectoryName(fullPath)!;
+            Directory.CreateDirectory(directory);
+
+            await using var file = new FileStream(fullPath, FileMode.CreateNew,
+                                                  FileAccess.Write, FileShare.None,
+                                                  64 * 1024, useAsync: true);
+            await fileStream.CopyToAsync(file, 64 * 1024);
         }
 
-        public Task<Stream> DownloadFileAsync(string path)
+        public async Task<Stream> DownloadFileAsync(string relativePath)
         {
-            var fullPath = Path.Combine(_baseDirectory, path);
-            return Task.FromResult<Stream>(new FileStream(fullPath, FileMode.Open, FileAccess.Read));
+            var fullPath = GetSafePath(relativePath);
+
+            if (!File.Exists(fullPath))
+                throw new FileNotFoundException("File not found.");
+
+            return new FileStream(fullPath, FileMode.Open, FileAccess.Read,
+                                  FileShare.Read, 64 * 1024, useAsync: true);
         }
 
-        public Task DeleteFileAsync(string path)
+        public Task DeleteFileAsync(string relativePath)
         {
-            var fullPath = Path.Combine(_baseDirectory, path);
+            var fullPath = GetSafePath(relativePath);
             File.Delete(fullPath);
             return Task.CompletedTask;
         }
@@ -45,6 +57,26 @@
         public Task Configure()
         {
             return Task.CompletedTask;
+        }
+
+        private string GetSafePath(string relativePath)
+        {
+            // 1) базовая валидация имени
+            var fileName = Path.GetFileName(relativePath);
+            if (!_fileNameRegex.IsMatch(fileName))
+                throw new ArgumentException("Invalid characters in file name.");
+
+            // 2) whitelist расширений
+            var ext = Path.GetExtension(fileName);
+            if (!_allowedExt.Contains(ext))
+                throw new ArgumentException("File type not allowed.");
+
+            // 3) нормализуем и проверяем, что путь остаётся внутри baseDir
+            var fullPath = Path.GetFullPath(Path.Combine(_baseDirectory, relativePath));
+            if (!fullPath.StartsWith(_baseDirectory, StringComparison.Ordinal))
+                throw new UnauthorizedAccessException("Path traversal attempt detected.");
+
+            return fullPath;
         }
     }
 }
