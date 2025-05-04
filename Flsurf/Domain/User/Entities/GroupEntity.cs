@@ -9,7 +9,7 @@ namespace Flsurf.Domain.User.Entities
     {
         [Required]
         public string Name { get; set; } = null!;
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public ICollection<UserEntity> Users { get; set; } = [];
 
         public static GroupEntity Create(string name)

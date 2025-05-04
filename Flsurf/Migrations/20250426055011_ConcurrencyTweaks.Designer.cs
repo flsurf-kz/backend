@@ -3,6 +3,7 @@ using System;
 using Flsurf.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Flsurf.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250426055011_ConcurrencyTweaks")]
+    partial class ConcurrencyTweaks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -545,39 +548,6 @@ namespace Flsurf.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("FreelancerProfiles");
-                });
-
-            modelBuilder.Entity("Flsurf.Domain.Freelance.Entities.FreelancerProfileViewEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedById")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("FreelancerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("LastModifiedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("LastModifiedById")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ViewedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FreelancerProfileViews");
                 });
 
             modelBuilder.Entity("Flsurf.Domain.Freelance.Entities.FreelancerTeamEntity", b =>

@@ -39,8 +39,11 @@ namespace Flsurf.Domain.Payment.Entities
         public WalletBlockReason BlockReason { get; private set; } = WalletBlockReason.None;
 
         // Загрузка всей коллекции идет только при операциях с кошёлкем 
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public ICollection<TransactionEntity> Transactions { get; private set; } = new List<TransactionEntity>();
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
 
 
         public static WalletEntity Create(UserEntity user)

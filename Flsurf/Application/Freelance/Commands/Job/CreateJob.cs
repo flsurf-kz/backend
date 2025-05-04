@@ -1,5 +1,6 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.Models;
 using Flsurf.Application.Files.Dto;
 using Flsurf.Application.Files.UseCases;
 using Flsurf.Application.Freelance.Permissions;
@@ -19,7 +20,9 @@ namespace Flsurf.Application.Freelance.Commands.Job
         public string Description { get; set; } = string.Empty;
         public ICollection<Guid> RequiredSkillIds { get; set; } = [];
         public Guid CategoryId { get; set; }
+        [GreaterThanZero]
         public decimal? Budget { get; set; }
+        [GreaterThanZero]
         public decimal? HourlyRate { get; set; }
         public int? Duration { get; set; }
         public BudgetType BudgetType { get; set; }
@@ -29,8 +32,13 @@ namespace Flsurf.Application.Freelance.Commands.Job
     }
 
     // TODO FIX THIS
-    public class CreateJobHandler(IApplicationDbContext dbContext, IPermissionService permService, UploadFiles uploadFiles) : ICommandHandler<CreateJobCommand>
+    public class CreateJobHandler(
+        IApplicationDbContext dbContext,
+        IPermissionService permService, 
+        UploadFiles uploadFiles, 
+        IWebHostEnvironment environment) : ICommandHandler<CreateJobCommand>
     {
+        private readonly IWebHostEnvironment env = environment; 
         private readonly IApplicationDbContext _dbContext = dbContext;
         private readonly UploadFiles _uploadFiles = uploadFiles;
         private readonly IPermissionService _permService = permService;
@@ -66,6 +74,11 @@ namespace Flsurf.Application.Freelance.Commands.Job
                     user, command.Title, command.Description, new Money(command.Budget ?? 0), false, command.Level, skills, files, category)
                 : JobEntity.CreateHourly(
                     user, command.Title, command.Description, new Money(command.HourlyRate ?? 0), false, command.Level, skills, files, category);
+
+            if (env.IsDevelopment())
+            {
+                job.Status = JobStatus.Open; 
+            }
 
             _dbContext.Jobs.Add(job);
             await _dbContext.SaveChangesAsync();

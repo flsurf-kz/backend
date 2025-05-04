@@ -24,7 +24,7 @@ namespace Flsurf.Domain.Freelance.Entities
         public bool IsResultPublic { get; set; } = true; 
         public bool IsEntriesPublic { get; set; } = false;
         public ICollection<FileEntity> Files { get; set; } = [];
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public ICollection<ContestEntryEntity> ContestEntries { get; set; } = []; 
 
         public void SelectWinner(ContestEntryEntity entry)

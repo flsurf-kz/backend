@@ -13,6 +13,7 @@ namespace Flsurf.Presentation.Web.Controllers
 {
     [ApiController]
     [Route("api/job")]
+    [Authorize]
     public class JobController : ControllerBase
     {
         private readonly IJobService _jobService;
@@ -26,6 +27,22 @@ namespace Flsurf.Presentation.Web.Controllers
         public async Task<ActionResult<CommandResult>> CreateJob([FromBody] CreateJobCommand command)
         {
             var handler = _jobService.CreateJob();
+            var result = await handler.Handle(command);
+            return result.MapResult(this);
+        }
+
+        [HttpPost("react-sent-job", Name = "ReactToSentJob")]
+        public async Task<ActionResult<CommandResult>> ReactToSentJob([FromBody] ReactToSentJobCommand command)
+        {
+            var handler = _jobService.ReactToSentJob();
+            var result = await handler.Handle(command);
+            return result.MapResult(this);
+        }
+
+        [HttpPost("sent-draft-to-mod", Name = "SentDraftToMod")]
+        public async Task<ActionResult<CommandResult>> SentDraftToMod([FromBody] SendDraftJobToModerationCommand command)
+        {
+            var handler = _jobService.SendDraftJobToModeration();
             var result = await handler.Handle(command);
             return result.MapResult(this);
         }

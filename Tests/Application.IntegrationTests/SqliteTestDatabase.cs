@@ -38,6 +38,7 @@ namespace Tests.Application.IntegrationTests
                 new EventStore(
                     new EventStoreContext(
                         new DbContextOptionsBuilder<EventStoreContext>().UseSqlite(_connection).Options), 
+                    null, 
                     null));
 
             context.Database.Migrate();

@@ -16,6 +16,12 @@ using Flsurf.Infrastructure.Data;
 using System;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Http.Features;
+using System.Threading.RateLimiting;
+using System.Net;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Converters;
+using Microsoft.Extensions.Options;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Flsurf.Presentation.Web
 {
@@ -62,7 +68,7 @@ namespace Flsurf.Presentation.Web
                         new string[] {}
                     }
                 });
-            });
+            }).AddSwaggerGenNewtonsoftSupport();
 
             services.AddHangfire(config =>
                 config
@@ -147,6 +153,7 @@ namespace Flsurf.Presentation.Web
                 options.CallbackPath = "/signin-google";
             }); 
             services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
+            services.AddRouting();
             services.AddHttpContextAccessor();
             services.AddScoped<IUser, CurrentUser>();
 
@@ -156,7 +163,40 @@ namespace Flsurf.Presentation.Web
             {
                 o.Cookie.Name = "__Host-flsurf_csrf";
                 o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                o.Cookie.SameSite = SameSiteMode.Strict;
+                o.Cookie.HttpOnly = true;
                 o.HeaderName = "X-CSRF-TOKEN";
+            });
+
+            services.AddControllers()
+                .AddNewtonsoftJson(opts =>
+                {
+                    // Внутри фабрики можем получить доступ к IHttpContextAccessor и LinkGenerator
+                    var sp = services.BuildServiceProvider();
+                    var httpAcc = sp.GetRequiredService<IHttpContextAccessor>();
+
+                    // Регистрируем конвертер только для FileEntity
+                    opts.SerializerSettings.Converters.Add(
+                        new FileEntityJsonConverter(httpAcc, environment)
+                    );
+                    opts.SerializerSettings.Converters.Add(new StringEnumConverter());
+                });
+
+            services.AddRateLimiter(options =>
+            {
+                options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, IPAddress>(context =>
+                {
+                    // лимитируем по IP
+                    var ip = context.Connection.RemoteIpAddress ?? IPAddress.Loopback;
+                    return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 60,           // 60 запросов
+                        Window = TimeSpan.FromMinutes(1),
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = 0
+                    });
+                });
+                options.RejectionStatusCode = 429;
             });
 
             return services;

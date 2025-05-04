@@ -1,6 +1,5 @@
 ﻿using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.Freelance.Enums;
-using Flsurf.Domain.Messanging.Entities;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Domain.User.Events;
 using Flsurf.Domain.User.ValueObjects;
@@ -8,9 +7,6 @@ using Flsurf.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data;
-using System.Text.Json.Serialization;
-using YamlDotNet.Core.Tokens;
 
 namespace Flsurf.Domain.User.Entities
 {
@@ -43,7 +39,7 @@ namespace Flsurf.Domain.User.Entities
                 }
             }
         }
-        [Required, JsonIgnore]
+        [Required, Newtonsoft.Json.JsonIgnore]
         public string HashedPassword { get; set; } = null!;
         [Required]
         public UserRoles Role { get; set; } = UserRoles.User;
@@ -57,7 +53,7 @@ namespace Flsurf.Domain.User.Entities
         public FileEntity? Avatar { get; set; }
         [Required]
         public bool IsOnline { get; set; } = false;
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public ICollection<WarningEntity> Warnings { get; set; } = [];
         [Required]
         public bool IsSuperadmin { get; set; } = false;

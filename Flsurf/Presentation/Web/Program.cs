@@ -11,11 +11,11 @@ using Flsurf.Presentation.Web.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructureServices(builder.Configuration, builder.Environment);
-builder.Services.AddWebServices(builder.Configuration, builder.Environment, builder.Logging); 
 builder.Services.AddDomainServices();
 builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddWebServices(builder.Configuration, builder.Environment, builder.Logging);
 
-builder.Services.AddControllers();
+
 
 var app = builder.Build();
 

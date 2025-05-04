@@ -5,7 +5,9 @@ using Flsurf.Application.Files.UseCases;
 using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Freelance.Enums;
+using Flsurf.Domain.User.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
@@ -22,17 +24,22 @@ namespace Flsurf.Application.Freelance.Commands.ClientProfile
         public ClientType EmployerType { get; set; }
         [Phone]
         public string PhoneNumber { get; set; } = string.Empty;
+        public Guid UserId { get; set; }
     }
 
     public class CreateClientProfileHandler(
         IApplicationDbContext dbContext,
-        IPermissionService permService, 
         UploadFile uploadFile)
         : ICommandHandler<CreateClientProfileCommand>
     {
         public async Task<CommandResult> Handle(CreateClientProfileCommand command)
         {
-            var user = await permService.GetCurrentUser();
+            var user = await dbContext.Users
+                .IncludeStandard()
+                .FirstOrDefaultAsync(x => x.Id == command.UserId);
+
+            if (user == null)
+                return CommandResult.NotFound("Пользватель не найден", command.UserId); 
 
             if (user.Type != Domain.User.Enums.UserTypes.NonUser)
             {

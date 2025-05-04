@@ -12,330 +12,330 @@ export interface IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     login(body?: LoginUserSchema | undefined): Promise<CommandResult>;
 
     /**
-     * @return Success
+     * @return OK
      */
     logout(): Promise<void>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     register(body?: RegisterUserSchema | undefined): Promise<CommandResult>;
 
     /**
-     * @return Success
+     * @return OK
      */
     externalLogin(provider: string): Promise<void>;
 
     /**
-     * @return Success
+     * @return OK
      */
     externalLoginCallback(): Promise<void>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     sendResetPasswordCode(body?: SendResetCodeCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     resetPassword(body?: ResetPasswordCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createCategory(body?: CreateCategoryCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateCategory(body?: UpdateCategoryCommand | undefined): Promise<CommandResult>;
 
     /**
-     * @return Success
+     * @return OK
      */
     deleteCategory(categoryId: string): Promise<CommandResult>;
 
     /**
      * @param searchQuery (optional) 
-     * @return Success
+     * @return OK
      */
     getCategories(searchQuery?: string | undefined): Promise<CategoryEntity[]>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getChats(): Promise<ChatEntity[]>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createChat(body?: CreateChatDto | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     closeChat(body?: CloseChatDto | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     bookmarkChat(body?: BookmarkChatDto | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateChat(body?: UpdateChatDto | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     markAsRead(body?: MarkAsReadDto | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     inviteMember(body?: InviteMemberDto | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     kickMember(body?: KickMemberDto | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     getChat(chatId: string, body?: string | undefined): Promise<ChatEntity>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getChatUnreadCounter(chatId: string): Promise<number>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getUnreadCounter(): Promise<number>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getClientOrderInfo(userId: string): Promise<ClientJobInfo>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createClientProfile(body?: CreateClientProfileCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     suspendClientProfile(body?: SuspendClientProfileCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateClientProfile(body?: UpdateClientProfileCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createContest(body?: CreateContestCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     approveContest(body?: ApproveContestCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     startContest(body?: StartContestCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     endContest(body?: EndContestCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteContest(body?: DeleteContestCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     selectContestWinner(body?: SelectContestWinnerCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     submitContestEntry(body?: SubmitContestEntryCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteContestEntry(body?: DeleteContestEntryCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateContest(body?: UpdateContestCommand | undefined): Promise<CommandResult>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getContest(id: string): Promise<ContestEntity>;
 
     /**
      * @param start (optional) 
      * @param end (optional) 
-     * @return Success
+     * @return OK
      */
     getContestList(start?: number | undefined, end?: number | undefined): Promise<ContestEntity[]>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createContract(body?: CreateContractCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     clientAcceptFinishContract(body?: ClientAcceptFinishContractCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     clientCloseContract(body?: ClientCloseContractCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     clientRejectContractCompletion(body?: ClientRejectContractCompletionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     freelancerAcceptContract(body?: FreelancerAcceptContractCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     freelancerFinishContract(body?: FreelancerFinishContractCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     acceptDispute(body?: AcceptDisputeCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     initiateDispute(body?: InitiateDisputeCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     resolveDispute(body?: ResolveDisputeCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     forceContractCancel(body?: ForceContractCancelCommand | undefined): Promise<CommandResult>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getContract(id: string): Promise<ContractEntity>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     getContractsList(body?: GetContractsListQuery | undefined): Promise<ContractEntity[]>;
 
     /**
      * @param file (optional) 
-     * @return Success
+     * @return OK
      */
     uploadFile(file?: FileParameter | undefined): Promise<FileEntity>;
 
     /**
-     * @return Success
+     * @return OK
      */
     downloadFile(fileId: string): Promise<void>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createFreelancerProfile(body?: CreateFreelancerProfileCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateFreelancerProfile(body?: UpdateFreelancerProfileCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     hideFreelancerProfile(body?: HideFreelancerProfileCommand | undefined): Promise<CommandResult>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getFreelancerProfile(userId: string): Promise<FreelancerProfileEntity>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getMyFreelancerStats(): Promise<FreelancerStatsDto>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getFreelancerStats(userId: string): Promise<FreelancerStatsDto>;
 
@@ -347,413 +347,425 @@ export interface IClient {
      * @param maxCost (optional) 
      * @param minReviews (optional) 
      * @param maxReviews (optional) 
-     * @return Success
+     * @return OK
      */
     getFreelancerProfileList(start?: number | undefined, end?: number | undefined, skills?: string[] | undefined, minCost?: number | undefined, maxCost?: number | undefined, minReviews?: number | undefined, maxReviews?: number | undefined): Promise<FreelancerProfileEntity[]>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createFreelancerTeam(body?: CreateFreelancerTeamCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateFreelancerTeam(body?: UpdateFreelancerTeamCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteFreelancerTeam(body?: DeleteFreelancerTeamCommand | undefined): Promise<CommandResult>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getFreelancerTeams(): Promise<FreelancerTeamEntity[]>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createJob(body?: CreateJobCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
+     */
+    reactToSentJob(body?: ReactToSentJobCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    sentDraftToMod(body?: SendDraftJobToModerationCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
      */
     updateJob(body?: UpdateJobCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteJob(body?: DeleteJobCommand | undefined): Promise<CommandResult>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getJob(id: string): Promise<JobDetails>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getRawJob(id: string): Promise<JobEntity>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     getJobsList(body?: GetJobsListQuery | undefined): Promise<JobEntity[]>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     bookmarkJob(body?: BookmarkJobCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     hideJob(body?: HideJobCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     submitProposal(body?: SubmitProposalCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateProposal(body?: UpdateProposalCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     withdrawProposal(body?: WithdrawProposalCommand | undefined): Promise<CommandResult>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getBookmarksList(): Promise<JobEntity[]>;
 
     /**
      * @param starts (optional) 
      * @param ends (optional) 
-     * @return Success
+     * @return OK
      */
     getMessages(chatId: string, starts?: number | undefined, ends?: number | undefined): Promise<MessageEntity[]>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     sendMessage(body?: SendMessageDto | undefined): Promise<MessageEntity>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateMessage(body?: UpdateMessageDto | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteMessage(body?: DeleteMessageDto | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     pinMessage(body?: PinMessageDto | undefined): Promise<boolean>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getThreadMessages(messageId: string): Promise<MessageThreadDto[]>;
 
     /**
      * @param start (optional) 
      * @param ends (optional) 
-     * @return Success
+     * @return OK
      */
     getNotifications(userId: string, start?: number | undefined, ends?: number | undefined): Promise<NotificationEntity[]>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createNotification(body?: CreateNotificationCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     hideNotifications(body?: HideNotificationsCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createPortfolioProject(body?: AddPortfolioProjectCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updatePortfolioProject(body?: UpdatePortfolioProjectCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deletePortfolioProject(body?: DeletePortfolioProjectCommand | undefined): Promise<CommandResult>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getPortfolioProjects(userId: string): Promise<PortfolioProjectEntity[]>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getMyPortfolioProjects(): Promise<PortfolioProjectEntity[]>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createSkills(body?: CreateSkillsCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateSkills(body?: UpdateSkillsCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteSkills(body?: DeleteSkillsCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param searchQuery (optional) 
-     * @return Success
+     * @return OK
      */
     getSkills(searchQuery?: string | undefined): Promise<SkillModel[]>;
 
     /**
-     * @return Success
+     * @return OK
      */
     blockUser(userId: string): Promise<boolean>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     warnUser(userId: string, body?: WarnUserScheme | undefined): Promise<boolean>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createTicket(body?: CreateTicketDto | undefined): Promise<TicketEntity>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     getTickets(body?: GetTicketsDto | undefined): Promise<TicketEntity[]>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getTicket(ticketId: string): Promise<TicketEntity>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createTask(body?: CreateTaskCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     completeTask(body?: CompleteTaskCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     reactToTask(body?: ReactToTaskCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateTask(body?: UpdateTaskCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteTask(body?: DeleteTaskCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param start (optional) 
      * @param end (optional) 
-     * @return Success
+     * @return OK
      */
     getTasks(contractId: string, start?: number | undefined, end?: number | undefined): Promise<TransactionEntity[]>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     handleTransaction(body?: HandleTransactionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     getTransactionsList(body?: GetTransactionsListQuery | undefined): Promise<TransactionEntity[]>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getTransactionProviders(): Promise<TransactionProviderEntity[]>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     handleGatewayWebhook(body?: GatewayResultCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     refundTransaction(body?: RefundTransactionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     startPaymentFlow(body?: StartPaymentFlowCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateUser(userId: string, body?: UpdateUserCommand | undefined): Promise<boolean>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getUserById(userId: string): Promise<UserEntity>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateMe(body?: UpdateUserCommand | undefined): Promise<boolean>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getMe(): Promise<UserEntity>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateTaxInfo(userId: string, body?: UpdateTaxSettingsCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     balanceOperation(body?: BalanceOperationCommand | undefined): Promise<CommandResult>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getWallet(walletId: string): Promise<WalletEntity>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getMyWallet(): Promise<WalletEntity>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     blockWallet(body?: BlockWalletCommand | undefined): Promise<CommandResult>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getPaymentMethods(): Promise<PaymentMethodDto[]>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getPaymentMethodsByUser(userId: string): Promise<PaymentMethodDto[]>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     addPaymentMethod(body?: AddPaymentMethodCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     startSession(body?: StartWorkSessionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     submitSession(body?: SubmitWorkSessionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     endSession(body?: EndWorkSessionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     approveSession(body?: ApproveWorkSessionCommand | undefined): Promise<CommandResult>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     reactSession(body?: ReactToWorkSessionCommand | undefined): Promise<CommandResult>;
 
     /**
-     * @return Success
+     * @return OK
      */
     getSession(id: string): Promise<WorkSessionEntity>;
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     getSessionList(body?: GetWorkSessionListQuery | undefined): Promise<WorkSessionEntity[]>;
 }
@@ -770,7 +782,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     login(body?: LoginUserSchema | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/auth/login";
@@ -782,7 +794,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -811,7 +823,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     logout(): Promise<void> {
         let url_ = this.baseUrl + "/api/auth/logout";
@@ -845,7 +857,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     register(body?: RegisterUserSchema | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/auth/register";
@@ -857,7 +869,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -886,7 +898,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     externalLogin(provider: string): Promise<void> {
         let url_ = this.baseUrl + "/api/auth/external-login/{provider}";
@@ -922,7 +934,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     externalLoginCallback(): Promise<void> {
         let url_ = this.baseUrl + "/api/auth/external-login-callback";
@@ -956,7 +968,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     sendResetPasswordCode(body?: SendResetCodeCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/auth/send-reset-code";
@@ -968,7 +980,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -998,7 +1010,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     resetPassword(body?: ResetPasswordCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/auth/reset-password";
@@ -1010,7 +1022,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1040,7 +1052,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createCategory(body?: CreateCategoryCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/category/create";
@@ -1052,7 +1064,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1082,7 +1094,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateCategory(body?: UpdateCategoryCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/category/update";
@@ -1094,7 +1106,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1123,7 +1135,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     deleteCategory(categoryId: string): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/category/{categoryId}";
@@ -1164,7 +1176,7 @@ export class Client implements IClient {
 
     /**
      * @param searchQuery (optional) 
-     * @return Success
+     * @return OK
      */
     getCategories(searchQuery?: string | undefined): Promise<CategoryEntity[]> {
         let url_ = this.baseUrl + "/api/category/list?";
@@ -1212,7 +1224,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getChats(): Promise<ChatEntity[]> {
         let url_ = this.baseUrl + "/api/chat/list";
@@ -1257,7 +1269,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createChat(body?: CreateChatDto | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/chat/create";
@@ -1269,7 +1281,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1299,7 +1311,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     closeChat(body?: CloseChatDto | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/chat/close";
@@ -1311,7 +1323,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1341,7 +1353,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     bookmarkChat(body?: BookmarkChatDto | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/chat/bookmark";
@@ -1353,7 +1365,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1383,7 +1395,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateChat(body?: UpdateChatDto | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/chat/update";
@@ -1395,7 +1407,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1425,7 +1437,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     markAsRead(body?: MarkAsReadDto | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/chat/mark-as-read";
@@ -1437,7 +1449,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1467,7 +1479,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     inviteMember(body?: InviteMemberDto | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/chat/invite";
@@ -1479,7 +1491,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1509,7 +1521,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     kickMember(body?: KickMemberDto | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/chat/kick";
@@ -1521,7 +1533,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1551,7 +1563,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     getChat(chatId: string, body?: string | undefined): Promise<ChatEntity> {
         let url_ = this.baseUrl + "/api/chat/{chatId}";
@@ -1566,7 +1578,7 @@ export class Client implements IClient {
             body: content_,
             method: "GET",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1595,7 +1607,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getChatUnreadCounter(chatId: string): Promise<number> {
         let url_ = this.baseUrl + "/api/chat/{chatId}/unread";
@@ -1636,7 +1648,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getUnreadCounter(): Promise<number> {
         let url_ = this.baseUrl + "/api/chat/unread";
@@ -1674,7 +1686,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getClientOrderInfo(userId: string): Promise<ClientJobInfo> {
         let url_ = this.baseUrl + "/api/client-profile/order-info/{userId}";
@@ -1715,7 +1727,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createClientProfile(body?: CreateClientProfileCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/client-profile/create";
@@ -1727,7 +1739,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1757,7 +1769,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     suspendClientProfile(body?: SuspendClientProfileCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/client-profile/suspend";
@@ -1769,7 +1781,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1799,7 +1811,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateClientProfile(body?: UpdateClientProfileCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/client-profile/update";
@@ -1811,7 +1823,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1841,7 +1853,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createContest(body?: CreateContestCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/create";
@@ -1853,7 +1865,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1883,7 +1895,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     approveContest(body?: ApproveContestCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/approve";
@@ -1895,7 +1907,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1925,7 +1937,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     startContest(body?: StartContestCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/start";
@@ -1937,7 +1949,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -1967,7 +1979,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     endContest(body?: EndContestCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/end";
@@ -1979,7 +1991,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2009,7 +2021,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteContest(body?: DeleteContestCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/delete";
@@ -2021,7 +2033,7 @@ export class Client implements IClient {
             body: content_,
             method: "DELETE",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2051,7 +2063,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     selectContestWinner(body?: SelectContestWinnerCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/select-winner";
@@ -2063,7 +2075,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2093,7 +2105,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     submitContestEntry(body?: SubmitContestEntryCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/submit-entry";
@@ -2105,7 +2117,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2135,7 +2147,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteContestEntry(body?: DeleteContestEntryCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/delete-entry";
@@ -2147,7 +2159,7 @@ export class Client implements IClient {
             body: content_,
             method: "DELETE",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2177,7 +2189,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateContest(body?: UpdateContestCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contest/update";
@@ -2189,7 +2201,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2218,7 +2230,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getContest(id: string): Promise<ContestEntity> {
         let url_ = this.baseUrl + "/api/contest/{id}";
@@ -2260,7 +2272,7 @@ export class Client implements IClient {
     /**
      * @param start (optional) 
      * @param end (optional) 
-     * @return Success
+     * @return OK
      */
     getContestList(start?: number | undefined, end?: number | undefined): Promise<ContestEntity[]> {
         let url_ = this.baseUrl + "/api/contest/list?";
@@ -2313,7 +2325,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createContract(body?: CreateContractCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/create";
@@ -2325,7 +2337,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2355,7 +2367,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     clientAcceptFinishContract(body?: ClientAcceptFinishContractCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/client-accept-finish";
@@ -2367,7 +2379,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2397,7 +2409,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     clientCloseContract(body?: ClientCloseContractCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/client-close";
@@ -2409,7 +2421,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2439,7 +2451,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     clientRejectContractCompletion(body?: ClientRejectContractCompletionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/client-reject-completion";
@@ -2451,7 +2463,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2481,7 +2493,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     freelancerAcceptContract(body?: FreelancerAcceptContractCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/freelancer-accept";
@@ -2493,7 +2505,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2523,7 +2535,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     freelancerFinishContract(body?: FreelancerFinishContractCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/freelancer-finish";
@@ -2535,7 +2547,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2565,7 +2577,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     acceptDispute(body?: AcceptDisputeCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/accept-dispute";
@@ -2577,7 +2589,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2607,7 +2619,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     initiateDispute(body?: InitiateDisputeCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/initiate-dispute";
@@ -2619,7 +2631,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2649,7 +2661,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     resolveDispute(body?: ResolveDisputeCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/resolve-dispute";
@@ -2661,7 +2673,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2691,7 +2703,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     forceContractCancel(body?: ForceContractCancelCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/contract/force-cancel";
@@ -2703,7 +2715,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2732,7 +2744,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getContract(id: string): Promise<ContractEntity> {
         let url_ = this.baseUrl + "/api/contract/{id}";
@@ -2773,7 +2785,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     getContractsList(body?: GetContractsListQuery | undefined): Promise<ContractEntity[]> {
         let url_ = this.baseUrl + "/api/contract/list";
@@ -2785,7 +2797,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2822,7 +2834,7 @@ export class Client implements IClient {
 
     /**
      * @param file (optional) 
-     * @return Success
+     * @return OK
      */
     uploadFile(file?: FileParameter | undefined): Promise<FileEntity> {
         let url_ = this.baseUrl + "/api/files/upload";
@@ -2866,7 +2878,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     downloadFile(fileId: string): Promise<void> {
         let url_ = this.baseUrl + "/api/files/download/{fileId}";
@@ -2903,7 +2915,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createFreelancerProfile(body?: CreateFreelancerProfileCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/freelancer-profile/create";
@@ -2915,7 +2927,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2945,7 +2957,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateFreelancerProfile(body?: UpdateFreelancerProfileCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/freelancer-profile/update";
@@ -2957,7 +2969,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -2987,7 +2999,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     hideFreelancerProfile(body?: HideFreelancerProfileCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/freelancer-profile/hide";
@@ -2999,7 +3011,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -3028,7 +3040,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getFreelancerProfile(userId: string): Promise<FreelancerProfileEntity> {
         let url_ = this.baseUrl + "/api/freelancer-profile/{userId}";
@@ -3068,7 +3080,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getMyFreelancerStats(): Promise<FreelancerStatsDto> {
         let url_ = this.baseUrl + "/api/freelancer-profile/stats";
@@ -3105,7 +3117,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getFreelancerStats(userId: string): Promise<FreelancerStatsDto> {
         let url_ = this.baseUrl + "/api/freelancer-profile/{userId}/stats";
@@ -3152,7 +3164,7 @@ export class Client implements IClient {
      * @param maxCost (optional) 
      * @param minReviews (optional) 
      * @param maxReviews (optional) 
-     * @return Success
+     * @return OK
      */
     getFreelancerProfileList(start?: number | undefined, end?: number | undefined, skills?: string[] | undefined, minCost?: number | undefined, maxCost?: number | undefined, minReviews?: number | undefined, maxReviews?: number | undefined): Promise<FreelancerProfileEntity[]> {
         let url_ = this.baseUrl + "/api/freelancer-profile/list?";
@@ -3225,7 +3237,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createFreelancerTeam(body?: CreateFreelancerTeamCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/freelancer-team/create";
@@ -3237,7 +3249,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -3267,7 +3279,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateFreelancerTeam(body?: UpdateFreelancerTeamCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/freelancer-team/update";
@@ -3279,7 +3291,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -3309,7 +3321,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteFreelancerTeam(body?: DeleteFreelancerTeamCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/freelancer-team/delete";
@@ -3321,7 +3333,7 @@ export class Client implements IClient {
             body: content_,
             method: "DELETE",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -3350,7 +3362,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getFreelancerTeams(): Promise<FreelancerTeamEntity[]> {
         let url_ = this.baseUrl + "/api/freelancer-team/list";
@@ -3395,7 +3407,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createJob(body?: CreateJobCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/job/create";
@@ -3407,7 +3419,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -3437,7 +3449,91 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
+     */
+    reactToSentJob(body?: ReactToSentJobCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/job/react-sent-job";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processReactToSentJob(_response);
+        });
+    }
+
+    protected processReactToSentJob(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    sentDraftToMod(body?: SendDraftJobToModerationCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/job/sent-draft-to-mod";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processSentDraftToMod(_response);
+        });
+    }
+
+    protected processSentDraftToMod(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
      */
     updateJob(body?: UpdateJobCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/job/update";
@@ -3449,7 +3545,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -3479,7 +3575,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteJob(body?: DeleteJobCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/job/delete";
@@ -3491,7 +3587,7 @@ export class Client implements IClient {
             body: content_,
             method: "DELETE",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -3520,7 +3616,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getJob(id: string): Promise<JobDetails> {
         let url_ = this.baseUrl + "/api/job/{id}";
@@ -3560,7 +3656,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getRawJob(id: string): Promise<JobEntity> {
         let url_ = this.baseUrl + "/api/job/{id}/raw";
@@ -3601,7 +3697,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     getJobsList(body?: GetJobsListQuery | undefined): Promise<JobEntity[]> {
         let url_ = this.baseUrl + "/api/job/list";
@@ -3613,7 +3709,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -3650,7 +3746,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     bookmarkJob(body?: BookmarkJobCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/job/bookmark";
@@ -3662,7 +3758,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -3692,7 +3788,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     hideJob(body?: HideJobCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/job/hide";
@@ -3704,7 +3800,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -3734,7 +3830,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     submitProposal(body?: SubmitProposalCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/job/submit-proposal";
@@ -3746,7 +3842,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -3776,7 +3872,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateProposal(body?: UpdateProposalCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/job/update-proposal";
@@ -3788,7 +3884,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -3818,7 +3914,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     withdrawProposal(body?: WithdrawProposalCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/job/withdraw-proposal";
@@ -3830,7 +3926,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -3859,7 +3955,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getBookmarksList(): Promise<JobEntity[]> {
         let url_ = this.baseUrl + "/api/job/bookmarks";
@@ -3905,7 +4001,7 @@ export class Client implements IClient {
     /**
      * @param starts (optional) 
      * @param ends (optional) 
-     * @return Success
+     * @return OK
      */
     getMessages(chatId: string, starts?: number | undefined, ends?: number | undefined): Promise<MessageEntity[]> {
         let url_ = this.baseUrl + "/api/message/list?";
@@ -3962,7 +4058,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     sendMessage(body?: SendMessageDto | undefined): Promise<MessageEntity> {
         let url_ = this.baseUrl + "/api/message/send";
@@ -3974,7 +4070,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4004,7 +4100,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateMessage(body?: UpdateMessageDto | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/message/update";
@@ -4016,7 +4112,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4046,7 +4142,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteMessage(body?: DeleteMessageDto | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/message/delete";
@@ -4058,7 +4154,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4088,7 +4184,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     pinMessage(body?: PinMessageDto | undefined): Promise<boolean> {
         let url_ = this.baseUrl + "/api/message/pin";
@@ -4100,7 +4196,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4130,7 +4226,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getThreadMessages(messageId: string): Promise<MessageThreadDto[]> {
         let url_ = this.baseUrl + "/api/message/{messageId}/thread";
@@ -4179,7 +4275,7 @@ export class Client implements IClient {
     /**
      * @param start (optional) 
      * @param ends (optional) 
-     * @return Success
+     * @return OK
      */
     getNotifications(userId: string, start?: number | undefined, ends?: number | undefined): Promise<NotificationEntity[]> {
         let url_ = this.baseUrl + "/api/notification/user/{userId}?";
@@ -4235,7 +4331,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createNotification(body?: CreateNotificationCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/notification";
@@ -4247,7 +4343,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4277,7 +4373,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     hideNotifications(body?: HideNotificationsCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/notification/hide";
@@ -4289,7 +4385,7 @@ export class Client implements IClient {
             body: content_,
             method: "PUT",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4319,7 +4415,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createPortfolioProject(body?: AddPortfolioProjectCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/portfolio-project/create";
@@ -4331,7 +4427,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4361,7 +4457,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updatePortfolioProject(body?: UpdatePortfolioProjectCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/portfolio-project/update";
@@ -4373,7 +4469,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4403,7 +4499,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deletePortfolioProject(body?: DeletePortfolioProjectCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/portfolio-project/delete";
@@ -4415,7 +4511,7 @@ export class Client implements IClient {
             body: content_,
             method: "DELETE",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4444,7 +4540,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getPortfolioProjects(userId: string): Promise<PortfolioProjectEntity[]> {
         let url_ = this.baseUrl + "/api/portfolio-project/list/{userid}";
@@ -4491,7 +4587,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getMyPortfolioProjects(): Promise<PortfolioProjectEntity[]> {
         let url_ = this.baseUrl + "/api/portfolio-project/list/my";
@@ -4536,7 +4632,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createSkills(body?: CreateSkillsCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/skill/create";
@@ -4548,7 +4644,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4578,7 +4674,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateSkills(body?: UpdateSkillsCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/skill/update";
@@ -4590,7 +4686,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4620,7 +4716,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteSkills(body?: DeleteSkillsCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/skill/delete";
@@ -4632,7 +4728,7 @@ export class Client implements IClient {
             body: content_,
             method: "DELETE",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4662,7 +4758,7 @@ export class Client implements IClient {
 
     /**
      * @param searchQuery (optional) 
-     * @return Success
+     * @return OK
      */
     getSkills(searchQuery?: string | undefined): Promise<SkillModel[]> {
         let url_ = this.baseUrl + "/api/skill/list?";
@@ -4710,7 +4806,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     blockUser(userId: string): Promise<boolean> {
         let url_ = this.baseUrl + "/api/stuff/user/{userId}/block";
@@ -4752,7 +4848,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     warnUser(userId: string, body?: WarnUserScheme | undefined): Promise<boolean> {
         let url_ = this.baseUrl + "/api/stuff/user/{userId}/warn";
@@ -4767,7 +4863,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4798,7 +4894,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createTicket(body?: CreateTicketDto | undefined): Promise<TicketEntity> {
         let url_ = this.baseUrl + "/api/stuff/ticket";
@@ -4810,7 +4906,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4840,7 +4936,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     getTickets(body?: GetTicketsDto | undefined): Promise<TicketEntity[]> {
         let url_ = this.baseUrl + "/api/stuff/ticket";
@@ -4852,7 +4948,7 @@ export class Client implements IClient {
             body: content_,
             method: "GET",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4888,7 +4984,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getTicket(ticketId: string): Promise<TicketEntity> {
         let url_ = this.baseUrl + "/api/stuff/ticket/{ticketId}";
@@ -4929,7 +5025,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     createTask(body?: CreateTaskCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/task/create";
@@ -4941,7 +5037,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4971,7 +5067,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     completeTask(body?: CompleteTaskCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/task/complete";
@@ -4983,7 +5079,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5013,7 +5109,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     reactToTask(body?: ReactToTaskCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/task/react";
@@ -5025,7 +5121,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5055,7 +5151,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateTask(body?: UpdateTaskCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/task/update";
@@ -5067,7 +5163,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5097,7 +5193,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     deleteTask(body?: DeleteTaskCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/task/delete";
@@ -5109,7 +5205,7 @@ export class Client implements IClient {
             body: content_,
             method: "DELETE",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5140,7 +5236,7 @@ export class Client implements IClient {
     /**
      * @param start (optional) 
      * @param end (optional) 
-     * @return Success
+     * @return OK
      */
     getTasks(contractId: string, start?: number | undefined, end?: number | undefined): Promise<TransactionEntity[]> {
         let url_ = this.baseUrl + "/api/task/list/{contractId}?";
@@ -5196,7 +5292,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     handleTransaction(body?: HandleTransactionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/transaction/handle";
@@ -5208,7 +5304,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5238,7 +5334,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     getTransactionsList(body?: GetTransactionsListQuery | undefined): Promise<TransactionEntity[]> {
         let url_ = this.baseUrl + "/api/transaction/list";
@@ -5250,7 +5346,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5286,7 +5382,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getTransactionProviders(): Promise<TransactionProviderEntity[]> {
         let url_ = this.baseUrl + "/api/transaction/providers";
@@ -5331,7 +5427,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     handleGatewayWebhook(body?: GatewayResultCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/transaction/gateway-webhook";
@@ -5343,7 +5439,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5373,7 +5469,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     refundTransaction(body?: RefundTransactionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/transaction/refund";
@@ -5385,7 +5481,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5415,7 +5511,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     startPaymentFlow(body?: StartPaymentFlowCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/transaction/start";
@@ -5427,7 +5523,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5457,7 +5553,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateUser(userId: string, body?: UpdateUserCommand | undefined): Promise<boolean> {
         let url_ = this.baseUrl + "/api/user/{userId}";
@@ -5472,7 +5568,7 @@ export class Client implements IClient {
             body: content_,
             method: "PATCH",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5502,7 +5598,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getUserById(userId: string): Promise<UserEntity> {
         let url_ = this.baseUrl + "/api/user/{userId}";
@@ -5543,7 +5639,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateMe(body?: UpdateUserCommand | undefined): Promise<boolean> {
         let url_ = this.baseUrl + "/api/user/me";
@@ -5555,7 +5651,7 @@ export class Client implements IClient {
             body: content_,
             method: "PATCH",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5585,7 +5681,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getMe(): Promise<UserEntity> {
         let url_ = this.baseUrl + "/api/user/me";
@@ -5623,7 +5719,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     updateTaxInfo(userId: string, body?: UpdateTaxSettingsCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/user/{userId}/taxinfo";
@@ -5638,7 +5734,7 @@ export class Client implements IClient {
             body: content_,
             method: "PUT",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5668,7 +5764,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     balanceOperation(body?: BalanceOperationCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/wallet/balance-operation";
@@ -5680,7 +5776,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5709,7 +5805,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getWallet(walletId: string): Promise<WalletEntity> {
         let url_ = this.baseUrl + "/api/wallet/{walletId}";
@@ -5749,7 +5845,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getMyWallet(): Promise<WalletEntity> {
         let url_ = this.baseUrl + "/api/wallet/my";
@@ -5787,7 +5883,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     blockWallet(body?: BlockWalletCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/wallet/block";
@@ -5799,7 +5895,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5828,7 +5924,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getPaymentMethods(): Promise<PaymentMethodDto[]> {
         let url_ = this.baseUrl + "/api/wallet/payment-methods";
@@ -5872,7 +5968,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getPaymentMethodsByUser(userId: string): Promise<PaymentMethodDto[]> {
         let url_ = this.baseUrl + "/api/wallet/payment-methods/{userId}";
@@ -5920,7 +6016,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     addPaymentMethod(body?: AddPaymentMethodCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/wallet/payment-methos";
@@ -5932,7 +6028,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -5962,7 +6058,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     startSession(body?: StartWorkSessionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/work-session/start";
@@ -5974,7 +6070,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -6004,7 +6100,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     submitSession(body?: SubmitWorkSessionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/work-session/submit";
@@ -6016,7 +6112,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -6046,7 +6142,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     endSession(body?: EndWorkSessionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/work-session/end";
@@ -6058,7 +6154,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -6088,7 +6184,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     approveSession(body?: ApproveWorkSessionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/work-session/approve";
@@ -6100,7 +6196,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -6130,7 +6226,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     reactSession(body?: ReactToWorkSessionCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/work-session/react";
@@ -6142,7 +6238,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -6171,7 +6267,7 @@ export class Client implements IClient {
     }
 
     /**
-     * @return Success
+     * @return OK
      */
     getSession(id: string): Promise<WorkSessionEntity> {
         let url_ = this.baseUrl + "/api/work-session/{id}";
@@ -6212,7 +6308,7 @@ export class Client implements IClient {
 
     /**
      * @param body (optional) 
-     * @return Success
+     * @return OK
      */
     getSessionList(body?: GetWorkSessionListQuery | undefined): Promise<WorkSessionEntity[]> {
         let url_ = this.baseUrl + "/api/work-session/list";
@@ -6224,7 +6320,7 @@ export class Client implements IClient {
             body: content_,
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -6261,8 +6357,6 @@ export class Client implements IClient {
 }
 
 export class AcceptDisputeCommand implements IAcceptDisputeCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     disputeId?: string;
 
     constructor(data?: IAcceptDisputeCommand) {
@@ -6276,8 +6370,6 @@ export class AcceptDisputeCommand implements IAcceptDisputeCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.disputeId = _data["disputeId"];
         }
     }
@@ -6291,22 +6383,16 @@ export class AcceptDisputeCommand implements IAcceptDisputeCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["disputeId"] = this.disputeId;
         return data;
     }
 }
 
 export interface IAcceptDisputeCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     disputeId?: string;
 }
 
 export class AddPaymentMethodCommand implements IAddPaymentMethodCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     providerId?: string;
     paymentMethodToken?: string | undefined;
     makeDefault?: boolean;
@@ -6322,8 +6408,6 @@ export class AddPaymentMethodCommand implements IAddPaymentMethodCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.providerId = _data["providerId"];
             this.paymentMethodToken = _data["paymentMethodToken"];
             this.makeDefault = _data["makeDefault"];
@@ -6339,8 +6423,6 @@ export class AddPaymentMethodCommand implements IAddPaymentMethodCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["providerId"] = this.providerId;
         data["paymentMethodToken"] = this.paymentMethodToken;
         data["makeDefault"] = this.makeDefault;
@@ -6349,16 +6431,12 @@ export class AddPaymentMethodCommand implements IAddPaymentMethodCommand {
 }
 
 export interface IAddPaymentMethodCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     providerId?: string;
     paymentMethodToken?: string | undefined;
     makeDefault?: boolean;
 }
 
 export class AddPortfolioProjectCommand implements IAddPortfolioProjectCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     name?: string | undefined;
     userRole?: string | undefined;
     skills?: string[] | undefined;
@@ -6376,8 +6454,6 @@ export class AddPortfolioProjectCommand implements IAddPortfolioProjectCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.name = _data["name"];
             this.userRole = _data["userRole"];
             if (Array.isArray(_data["skills"])) {
@@ -6403,8 +6479,6 @@ export class AddPortfolioProjectCommand implements IAddPortfolioProjectCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["name"] = this.name;
         data["userRole"] = this.userRole;
         if (Array.isArray(this.skills)) {
@@ -6423,8 +6497,6 @@ export class AddPortfolioProjectCommand implements IAddPortfolioProjectCommand {
 }
 
 export interface IAddPortfolioProjectCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     name?: string | undefined;
     userRole?: string | undefined;
     skills?: string[] | undefined;
@@ -6433,8 +6505,6 @@ export interface IAddPortfolioProjectCommand {
 }
 
 export class ApproveContestCommand implements IApproveContestCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contestId?: string;
 
     constructor(data?: IApproveContestCommand) {
@@ -6448,8 +6518,6 @@ export class ApproveContestCommand implements IApproveContestCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contestId = _data["contestId"];
         }
     }
@@ -6463,22 +6531,16 @@ export class ApproveContestCommand implements IApproveContestCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contestId"] = this.contestId;
         return data;
     }
 }
 
 export interface IApproveContestCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contestId?: string;
 }
 
 export class ApproveWorkSessionCommand implements IApproveWorkSessionCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     sessionId?: string;
 
     constructor(data?: IApproveWorkSessionCommand) {
@@ -6492,8 +6554,6 @@ export class ApproveWorkSessionCommand implements IApproveWorkSessionCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.sessionId = _data["sessionId"];
         }
     }
@@ -6507,22 +6567,16 @@ export class ApproveWorkSessionCommand implements IApproveWorkSessionCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["sessionId"] = this.sessionId;
         return data;
     }
 }
 
 export interface IApproveWorkSessionCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     sessionId?: string;
 }
 
 export class BalanceOperationCommand implements IBalanceOperationCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     readonly walletId!: string;
     balance!: Money;
     readonly balanceOperationType?: BalanceOperationCommandBalanceOperationType;
@@ -6541,8 +6595,6 @@ export class BalanceOperationCommand implements IBalanceOperationCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             (<any>this).walletId = _data["walletId"];
             this.balance = _data["balance"] ? Money.fromJS(_data["balance"]) : new Money();
             (<any>this).balanceOperationType = _data["balanceOperationType"];
@@ -6558,8 +6610,6 @@ export class BalanceOperationCommand implements IBalanceOperationCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["walletId"] = this.walletId;
         data["balance"] = this.balance ? this.balance.toJSON() : <any>undefined;
         data["balanceOperationType"] = this.balanceOperationType;
@@ -6568,8 +6618,6 @@ export class BalanceOperationCommand implements IBalanceOperationCommand {
 }
 
 export interface IBalanceOperationCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     walletId: string;
     balance: Money;
     balanceOperationType?: BalanceOperationCommandBalanceOperationType;
@@ -6620,8 +6668,6 @@ export interface IBankDetails {
 }
 
 export class BlockWalletCommand implements IBlockWalletCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     walletId!: string;
     reason!: BlockWalletCommandReason;
 
@@ -6636,8 +6682,6 @@ export class BlockWalletCommand implements IBlockWalletCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.walletId = _data["walletId"];
             this.reason = _data["reason"];
         }
@@ -6652,8 +6696,6 @@ export class BlockWalletCommand implements IBlockWalletCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["walletId"] = this.walletId;
         data["reason"] = this.reason;
         return data;
@@ -6661,8 +6703,6 @@ export class BlockWalletCommand implements IBlockWalletCommand {
 }
 
 export interface IBlockWalletCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     walletId: string;
     reason: BlockWalletCommandReason;
 }
@@ -6704,8 +6744,6 @@ export interface IBookmarkChatDto {
 }
 
 export class BookmarkJobCommand implements IBookmarkJobCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     jobId?: string;
 
     constructor(data?: IBookmarkJobCommand) {
@@ -6719,8 +6757,6 @@ export class BookmarkJobCommand implements IBookmarkJobCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.jobId = _data["jobId"];
         }
     }
@@ -6734,30 +6770,26 @@ export class BookmarkJobCommand implements IBookmarkJobCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["jobId"] = this.jobId;
         return data;
     }
 }
 
 export interface IBookmarkJobCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     jobId?: string;
 }
 
 export class CategoryEntity implements ICategoryEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
     slug?: string | undefined;
     parentCategoryId?: string | undefined;
     parentCategory?: CategoryEntity;
     subCategories?: CategoryEntity[] | undefined;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: ICategoryEntity) {
         if (data) {
@@ -6770,11 +6802,6 @@ export class CategoryEntity implements ICategoryEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.name = _data["name"];
             this.slug = _data["slug"];
             this.parentCategoryId = _data["parentCategoryId"];
@@ -6784,6 +6811,11 @@ export class CategoryEntity implements ICategoryEntity {
                 for (let item of _data["subCategories"])
                     this.subCategories!.push(CategoryEntity.fromJS(item));
             }
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -6796,11 +6828,6 @@ export class CategoryEntity implements ICategoryEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["name"] = this.name;
         data["slug"] = this.slug;
         data["parentCategoryId"] = this.parentCategoryId;
@@ -6810,21 +6837,26 @@ export class CategoryEntity implements ICategoryEntity {
             for (let item of this.subCategories)
                 data["subCategories"].push(item.toJSON());
         }
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface ICategoryEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
     slug?: string | undefined;
     parentCategoryId?: string | undefined;
     parentCategory?: CategoryEntity;
     subCategories?: CategoryEntity[] | undefined;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class CategoryModel implements ICategoryModel {
@@ -6858,11 +6890,6 @@ export interface ICategoryModel {
 }
 
 export class ChatEntity implements IChatEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     readonly ownerId?: string;
     owner?: UserEntity;
     participants?: UserEntity[] | undefined;
@@ -6872,6 +6899,12 @@ export class ChatEntity implements IChatEntity {
     isTextingAllowed?: boolean;
     finishedAt?: Date | undefined;
     contracts?: ContractEntity[] | undefined;
+    readRecords?: MessageReadEntity[] | undefined;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: IChatEntity) {
         if (data) {
@@ -6884,11 +6917,6 @@ export class ChatEntity implements IChatEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             (<any>this).ownerId = _data["ownerId"];
             this.owner = _data["owner"] ? UserEntity.fromJS(_data["owner"]) : <any>undefined;
             if (Array.isArray(_data["participants"])) {
@@ -6906,6 +6934,16 @@ export class ChatEntity implements IChatEntity {
                 for (let item of _data["contracts"])
                     this.contracts!.push(ContractEntity.fromJS(item));
             }
+            if (Array.isArray(_data["readRecords"])) {
+                this.readRecords = [] as any;
+                for (let item of _data["readRecords"])
+                    this.readRecords!.push(MessageReadEntity.fromJS(item));
+            }
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -6918,11 +6956,6 @@ export class ChatEntity implements IChatEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["ownerId"] = this.ownerId;
         data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
         if (Array.isArray(this.participants)) {
@@ -6940,16 +6973,21 @@ export class ChatEntity implements IChatEntity {
             for (let item of this.contracts)
                 data["contracts"].push(item.toJSON());
         }
+        if (Array.isArray(this.readRecords)) {
+            data["readRecords"] = [];
+            for (let item of this.readRecords)
+                data["readRecords"].push(item.toJSON());
+        }
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IChatEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     ownerId?: string;
     owner?: UserEntity;
     participants?: UserEntity[] | undefined;
@@ -6959,11 +6997,15 @@ export interface IChatEntity {
     isTextingAllowed?: boolean;
     finishedAt?: Date | undefined;
     contracts?: ContractEntity[] | undefined;
+    readRecords?: MessageReadEntity[] | undefined;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class ClientAcceptFinishContractCommand implements IClientAcceptFinishContractCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     readonly contractId?: string;
 
     constructor(data?: IClientAcceptFinishContractCommand) {
@@ -6977,8 +7019,6 @@ export class ClientAcceptFinishContractCommand implements IClientAcceptFinishCon
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             (<any>this).contractId = _data["contractId"];
         }
     }
@@ -6992,22 +7032,16 @@ export class ClientAcceptFinishContractCommand implements IClientAcceptFinishCon
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contractId"] = this.contractId;
         return data;
     }
 }
 
 export interface IClientAcceptFinishContractCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contractId?: string;
 }
 
 export class ClientCloseContractCommand implements IClientCloseContractCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contractId?: string;
     reason?: string | undefined;
 
@@ -7022,8 +7056,6 @@ export class ClientCloseContractCommand implements IClientCloseContractCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contractId = _data["contractId"];
             this.reason = _data["reason"];
         }
@@ -7038,8 +7070,6 @@ export class ClientCloseContractCommand implements IClientCloseContractCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contractId"] = this.contractId;
         data["reason"] = this.reason;
         return data;
@@ -7047,8 +7077,6 @@ export class ClientCloseContractCommand implements IClientCloseContractCommand {
 }
 
 export interface IClientCloseContractCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contractId?: string;
     reason?: string | undefined;
 }
@@ -7142,8 +7170,6 @@ export interface IClientJobInfo {
 }
 
 export class ClientRejectContractCompletionCommand implements IClientRejectContractCompletionCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contractId?: string;
     reason?: string | undefined;
 
@@ -7158,8 +7184,6 @@ export class ClientRejectContractCompletionCommand implements IClientRejectContr
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contractId = _data["contractId"];
             this.reason = _data["reason"];
         }
@@ -7174,8 +7198,6 @@ export class ClientRejectContractCompletionCommand implements IClientRejectContr
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contractId"] = this.contractId;
         data["reason"] = this.reason;
         return data;
@@ -7183,8 +7205,6 @@ export class ClientRejectContractCompletionCommand implements IClientRejectContr
 }
 
 export interface IClientRejectContractCompletionCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contractId?: string;
     reason?: string | undefined;
 }
@@ -7286,8 +7306,6 @@ export interface ICommandResult {
 }
 
 export class CompleteTaskCommand implements ICompleteTaskCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     taskId?: string;
 
     constructor(data?: ICompleteTaskCommand) {
@@ -7301,8 +7319,6 @@ export class CompleteTaskCommand implements ICompleteTaskCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.taskId = _data["taskId"];
         }
     }
@@ -7316,25 +7332,16 @@ export class CompleteTaskCommand implements ICompleteTaskCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["taskId"] = this.taskId;
         return data;
     }
 }
 
 export interface ICompleteTaskCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     taskId?: string;
 }
 
 export class ContestEntity implements IContestEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     employerId?: string;
     employer?: UserEntity;
     title?: string | undefined;
@@ -7347,6 +7354,11 @@ export class ContestEntity implements IContestEntity {
     isResultPublic?: boolean;
     isEntriesPublic?: boolean;
     files?: FileEntity[] | undefined;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: IContestEntity) {
         if (data) {
@@ -7359,11 +7371,6 @@ export class ContestEntity implements IContestEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.employerId = _data["employerId"];
             this.employer = _data["employer"] ? UserEntity.fromJS(_data["employer"]) : <any>undefined;
             this.title = _data["title"];
@@ -7380,6 +7387,11 @@ export class ContestEntity implements IContestEntity {
                 for (let item of _data["files"])
                     this.files!.push(FileEntity.fromJS(item));
             }
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -7392,11 +7404,6 @@ export class ContestEntity implements IContestEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["employerId"] = this.employerId;
         data["employer"] = this.employer ? this.employer.toJSON() : <any>undefined;
         data["title"] = this.title;
@@ -7413,16 +7420,16 @@ export class ContestEntity implements IContestEntity {
             for (let item of this.files)
                 data["files"].push(item.toJSON());
         }
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IContestEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     employerId?: string;
     employer?: UserEntity;
     title?: string | undefined;
@@ -7435,14 +7442,14 @@ export interface IContestEntity {
     isResultPublic?: boolean;
     isEntriesPublic?: boolean;
     files?: FileEntity[] | undefined;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class ContractEntity implements IContractEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     freelancerId?: string;
     freelancer?: UserEntity;
     employerId?: string;
@@ -7464,6 +7471,11 @@ export class ContractEntity implements IContractEntity {
     contractTerms?: string | undefined;
     bonus?: number | undefined;
     disputeId?: string | undefined;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: IContractEntity) {
         if (data) {
@@ -7476,11 +7488,6 @@ export class ContractEntity implements IContractEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.freelancerId = _data["freelancerId"];
             this.freelancer = _data["freelancer"] ? UserEntity.fromJS(_data["freelancer"]) : <any>undefined;
             this.employerId = _data["employerId"];
@@ -7510,6 +7517,11 @@ export class ContractEntity implements IContractEntity {
             this.contractTerms = _data["contractTerms"];
             this.bonus = _data["bonus"];
             this.disputeId = _data["disputeId"];
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -7522,11 +7534,6 @@ export class ContractEntity implements IContractEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["freelancerId"] = this.freelancerId;
         data["freelancer"] = this.freelancer ? this.freelancer.toJSON() : <any>undefined;
         data["employerId"] = this.employerId;
@@ -7556,16 +7563,16 @@ export class ContractEntity implements IContractEntity {
         data["contractTerms"] = this.contractTerms;
         data["bonus"] = this.bonus;
         data["disputeId"] = this.disputeId;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IContractEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     freelancerId?: string;
     freelancer?: UserEntity;
     employerId?: string;
@@ -7587,12 +7594,15 @@ export interface IContractEntity {
     contractTerms?: string | undefined;
     bonus?: number | undefined;
     disputeId?: string | undefined;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class CreateCategoryCommand implements ICreateCategoryCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
-    name?: string | undefined;
+    name!: string | undefined;
     slug?: string | undefined;
     tags?: string | undefined;
     parentCategoryId?: string | undefined;
@@ -7608,8 +7618,6 @@ export class CreateCategoryCommand implements ICreateCategoryCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.name = _data["name"];
             this.slug = _data["slug"];
             this.tags = _data["tags"];
@@ -7626,8 +7634,6 @@ export class CreateCategoryCommand implements ICreateCategoryCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["name"] = this.name;
         data["slug"] = this.slug;
         data["tags"] = this.tags;
@@ -7637,9 +7643,7 @@ export class CreateCategoryCommand implements ICreateCategoryCommand {
 }
 
 export interface ICreateCategoryCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
-    name?: string | undefined;
+    name: string | undefined;
     slug?: string | undefined;
     tags?: string | undefined;
     parentCategoryId?: string | undefined;
@@ -7702,8 +7706,6 @@ export interface ICreateChatDto {
 }
 
 export class CreateClientProfileCommand implements ICreateClientProfileCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     companyName!: string;
     companyDescription?: string | undefined;
     companyWebsite?: string | undefined;
@@ -7711,6 +7713,7 @@ export class CreateClientProfileCommand implements ICreateClientProfileCommand {
     companyLogo?: CreateFileDto;
     employerType?: CreateClientProfileCommandEmployerType;
     phoneNumber?: string | undefined;
+    userId?: string;
 
     constructor(data?: ICreateClientProfileCommand) {
         if (data) {
@@ -7723,8 +7726,6 @@ export class CreateClientProfileCommand implements ICreateClientProfileCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.companyName = _data["companyName"];
             this.companyDescription = _data["companyDescription"];
             this.companyWebsite = _data["companyWebsite"];
@@ -7732,6 +7733,7 @@ export class CreateClientProfileCommand implements ICreateClientProfileCommand {
             this.companyLogo = _data["companyLogo"] ? CreateFileDto.fromJS(_data["companyLogo"]) : <any>undefined;
             this.employerType = _data["employerType"];
             this.phoneNumber = _data["phoneNumber"];
+            this.userId = _data["userId"];
         }
     }
 
@@ -7744,8 +7746,6 @@ export class CreateClientProfileCommand implements ICreateClientProfileCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["companyName"] = this.companyName;
         data["companyDescription"] = this.companyDescription;
         data["companyWebsite"] = this.companyWebsite;
@@ -7753,13 +7753,12 @@ export class CreateClientProfileCommand implements ICreateClientProfileCommand {
         data["companyLogo"] = this.companyLogo ? this.companyLogo.toJSON() : <any>undefined;
         data["employerType"] = this.employerType;
         data["phoneNumber"] = this.phoneNumber;
+        data["userId"] = this.userId;
         return data;
     }
 }
 
 export interface ICreateClientProfileCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     companyName: string;
     companyDescription?: string | undefined;
     companyWebsite?: string | undefined;
@@ -7767,11 +7766,10 @@ export interface ICreateClientProfileCommand {
     companyLogo?: CreateFileDto;
     employerType?: CreateClientProfileCommandEmployerType;
     phoneNumber?: string | undefined;
+    userId?: string;
 }
 
 export class CreateContestCommand implements ICreateContestCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     title!: string;
     description!: string;
     prizePool!: number;
@@ -7788,8 +7786,6 @@ export class CreateContestCommand implements ICreateContestCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.title = _data["title"];
             this.description = _data["description"];
             this.prizePool = _data["prizePool"];
@@ -7806,8 +7802,6 @@ export class CreateContestCommand implements ICreateContestCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["title"] = this.title;
         data["description"] = this.description;
         data["prizePool"] = this.prizePool;
@@ -7817,8 +7811,6 @@ export class CreateContestCommand implements ICreateContestCommand {
 }
 
 export interface ICreateContestCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     title: string;
     description: string;
     prizePool: number;
@@ -7826,8 +7818,6 @@ export interface ICreateContestCommand {
 }
 
 export class CreateContractCommand implements ICreateContractCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     freelancerId?: string;
     jobId?: string;
     budget?: number | undefined;
@@ -7848,8 +7838,6 @@ export class CreateContractCommand implements ICreateContractCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.freelancerId = _data["freelancerId"];
             this.jobId = _data["jobId"];
             this.budget = _data["budget"];
@@ -7870,8 +7858,6 @@ export class CreateContractCommand implements ICreateContractCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["freelancerId"] = this.freelancerId;
         data["jobId"] = this.jobId;
         data["budget"] = this.budget;
@@ -7885,8 +7871,6 @@ export class CreateContractCommand implements ICreateContractCommand {
 }
 
 export interface ICreateContractCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     freelancerId?: string;
     jobId?: string;
     budget?: number | undefined;
@@ -7902,7 +7886,7 @@ export class CreateFileDto implements ICreateFileDto {
     fileId?: string | undefined;
     name?: string | undefined;
     mimeType?: string | undefined;
-    stream?: string;
+    stream?: string | undefined;
 
     constructor(data?: ICreateFileDto) {
         if (data) {
@@ -7946,12 +7930,10 @@ export interface ICreateFileDto {
     fileId?: string | undefined;
     name?: string | undefined;
     mimeType?: string | undefined;
-    stream?: string;
+    stream?: string | undefined;
 }
 
 export class CreateFreelancerProfileCommand implements ICreateFreelancerProfileCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     userId?: string | undefined;
     experience?: string | undefined;
     hourlyRate?: number;
@@ -7968,8 +7950,6 @@ export class CreateFreelancerProfileCommand implements ICreateFreelancerProfileC
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.userId = _data["userId"];
             this.experience = _data["experience"];
             this.hourlyRate = _data["hourlyRate"];
@@ -7986,8 +7966,6 @@ export class CreateFreelancerProfileCommand implements ICreateFreelancerProfileC
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["userId"] = this.userId;
         data["experience"] = this.experience;
         data["hourlyRate"] = this.hourlyRate;
@@ -7997,8 +7975,6 @@ export class CreateFreelancerProfileCommand implements ICreateFreelancerProfileC
 }
 
 export interface ICreateFreelancerProfileCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     userId?: string | undefined;
     experience?: string | undefined;
     hourlyRate?: number;
@@ -8006,9 +7982,7 @@ export interface ICreateFreelancerProfileCommand {
 }
 
 export class CreateFreelancerTeamCommand implements ICreateFreelancerTeamCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
-    name?: string | undefined;
+    name!: string | undefined;
     description?: string | undefined;
 
     constructor(data?: ICreateFreelancerTeamCommand) {
@@ -8022,8 +7996,6 @@ export class CreateFreelancerTeamCommand implements ICreateFreelancerTeamCommand
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.name = _data["name"];
             this.description = _data["description"];
         }
@@ -8038,8 +8010,6 @@ export class CreateFreelancerTeamCommand implements ICreateFreelancerTeamCommand
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["name"] = this.name;
         data["description"] = this.description;
         return data;
@@ -8047,15 +8017,11 @@ export class CreateFreelancerTeamCommand implements ICreateFreelancerTeamCommand
 }
 
 export interface ICreateFreelancerTeamCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
-    name?: string | undefined;
+    name: string | undefined;
     description?: string | undefined;
 }
 
 export class CreateJobCommand implements ICreateJobCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     title?: string | undefined;
     description?: string | undefined;
     requiredSkillIds?: string[] | undefined;
@@ -8079,8 +8045,6 @@ export class CreateJobCommand implements ICreateJobCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.title = _data["title"];
             this.description = _data["description"];
             if (Array.isArray(_data["requiredSkillIds"])) {
@@ -8112,8 +8076,6 @@ export class CreateJobCommand implements ICreateJobCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["title"] = this.title;
         data["description"] = this.description;
         if (Array.isArray(this.requiredSkillIds)) {
@@ -8138,8 +8100,6 @@ export class CreateJobCommand implements ICreateJobCommand {
 }
 
 export interface ICreateJobCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     title?: string | undefined;
     description?: string | undefined;
     requiredSkillIds?: string[] | undefined;
@@ -8154,8 +8114,6 @@ export interface ICreateJobCommand {
 }
 
 export class CreateNotificationCommand implements ICreateNotificationCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     title!: string;
     text!: string;
     data!: { [key: string]: string; };
@@ -8177,8 +8135,6 @@ export class CreateNotificationCommand implements ICreateNotificationCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.title = _data["title"];
             this.text = _data["text"];
             if (_data["data"]) {
@@ -8203,8 +8159,6 @@ export class CreateNotificationCommand implements ICreateNotificationCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["title"] = this.title;
         data["text"] = this.text;
         if (this.data) {
@@ -8222,8 +8176,6 @@ export class CreateNotificationCommand implements ICreateNotificationCommand {
 }
 
 export interface ICreateNotificationCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     title: string;
     text: string;
     data: { [key: string]: string; };
@@ -8233,8 +8185,6 @@ export interface ICreateNotificationCommand {
 }
 
 export class CreateSkillsCommand implements ICreateSkillsCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     skillNames?: string[] | undefined;
 
     constructor(data?: ICreateSkillsCommand) {
@@ -8248,8 +8198,6 @@ export class CreateSkillsCommand implements ICreateSkillsCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             if (Array.isArray(_data["skillNames"])) {
                 this.skillNames = [] as any;
                 for (let item of _data["skillNames"])
@@ -8267,8 +8215,6 @@ export class CreateSkillsCommand implements ICreateSkillsCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         if (Array.isArray(this.skillNames)) {
             data["skillNames"] = [];
             for (let item of this.skillNames)
@@ -8279,14 +8225,10 @@ export class CreateSkillsCommand implements ICreateSkillsCommand {
 }
 
 export interface ICreateSkillsCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     skillNames?: string[] | undefined;
 }
 
 export class CreateTaskCommand implements ICreateTaskCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contractId?: string;
     title?: string | undefined;
     description?: string | undefined;
@@ -8303,8 +8245,6 @@ export class CreateTaskCommand implements ICreateTaskCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contractId = _data["contractId"];
             this.title = _data["title"];
             this.description = _data["description"];
@@ -8321,8 +8261,6 @@ export class CreateTaskCommand implements ICreateTaskCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contractId"] = this.contractId;
         data["title"] = this.title;
         data["description"] = this.description;
@@ -8332,8 +8270,6 @@ export class CreateTaskCommand implements ICreateTaskCommand {
 }
 
 export interface ICreateTaskCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contractId?: string;
     title?: string | undefined;
     description?: string | undefined;
@@ -8405,8 +8341,6 @@ export interface ICreateTicketDto {
 }
 
 export class DeleteContestCommand implements IDeleteContestCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contestId?: string;
 
     constructor(data?: IDeleteContestCommand) {
@@ -8420,8 +8354,6 @@ export class DeleteContestCommand implements IDeleteContestCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contestId = _data["contestId"];
         }
     }
@@ -8435,22 +8367,16 @@ export class DeleteContestCommand implements IDeleteContestCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contestId"] = this.contestId;
         return data;
     }
 }
 
 export interface IDeleteContestCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contestId?: string;
 }
 
 export class DeleteContestEntryCommand implements IDeleteContestEntryCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contestEntryId?: string;
 
     constructor(data?: IDeleteContestEntryCommand) {
@@ -8464,8 +8390,6 @@ export class DeleteContestEntryCommand implements IDeleteContestEntryCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contestEntryId = _data["contestEntryId"];
         }
     }
@@ -8479,22 +8403,16 @@ export class DeleteContestEntryCommand implements IDeleteContestEntryCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contestEntryId"] = this.contestEntryId;
         return data;
     }
 }
 
 export interface IDeleteContestEntryCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contestEntryId?: string;
 }
 
 export class DeleteFreelancerTeamCommand implements IDeleteFreelancerTeamCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     teamId?: string;
 
     constructor(data?: IDeleteFreelancerTeamCommand) {
@@ -8508,8 +8426,6 @@ export class DeleteFreelancerTeamCommand implements IDeleteFreelancerTeamCommand
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.teamId = _data["teamId"];
         }
     }
@@ -8523,22 +8439,16 @@ export class DeleteFreelancerTeamCommand implements IDeleteFreelancerTeamCommand
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["teamId"] = this.teamId;
         return data;
     }
 }
 
 export interface IDeleteFreelancerTeamCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     teamId?: string;
 }
 
 export class DeleteJobCommand implements IDeleteJobCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     jobId?: string;
 
     constructor(data?: IDeleteJobCommand) {
@@ -8552,8 +8462,6 @@ export class DeleteJobCommand implements IDeleteJobCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.jobId = _data["jobId"];
         }
     }
@@ -8567,16 +8475,12 @@ export class DeleteJobCommand implements IDeleteJobCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["jobId"] = this.jobId;
         return data;
     }
 }
 
 export interface IDeleteJobCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     jobId?: string;
 }
 
@@ -8617,8 +8521,6 @@ export interface IDeleteMessageDto {
 }
 
 export class DeletePortfolioProjectCommand implements IDeletePortfolioProjectCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     projectId?: string;
 
     constructor(data?: IDeletePortfolioProjectCommand) {
@@ -8632,8 +8534,6 @@ export class DeletePortfolioProjectCommand implements IDeletePortfolioProjectCom
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.projectId = _data["projectId"];
         }
     }
@@ -8647,22 +8547,16 @@ export class DeletePortfolioProjectCommand implements IDeletePortfolioProjectCom
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["projectId"] = this.projectId;
         return data;
     }
 }
 
 export interface IDeletePortfolioProjectCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     projectId?: string;
 }
 
 export class DeleteSkillsCommand implements IDeleteSkillsCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     skillIds?: string[] | undefined;
     skillNames?: string[] | undefined;
 
@@ -8677,8 +8571,6 @@ export class DeleteSkillsCommand implements IDeleteSkillsCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             if (Array.isArray(_data["skillIds"])) {
                 this.skillIds = [] as any;
                 for (let item of _data["skillIds"])
@@ -8701,8 +8593,6 @@ export class DeleteSkillsCommand implements IDeleteSkillsCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         if (Array.isArray(this.skillIds)) {
             data["skillIds"] = [];
             for (let item of this.skillIds)
@@ -8718,15 +8608,11 @@ export class DeleteSkillsCommand implements IDeleteSkillsCommand {
 }
 
 export interface IDeleteSkillsCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     skillIds?: string[] | undefined;
     skillNames?: string[] | undefined;
 }
 
 export class DeleteTaskCommand implements IDeleteTaskCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     taskId?: string;
 
     constructor(data?: IDeleteTaskCommand) {
@@ -8740,8 +8626,6 @@ export class DeleteTaskCommand implements IDeleteTaskCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.taskId = _data["taskId"];
         }
     }
@@ -8755,22 +8639,16 @@ export class DeleteTaskCommand implements IDeleteTaskCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["taskId"] = this.taskId;
         return data;
     }
 }
 
 export interface IDeleteTaskCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     taskId?: string;
 }
 
 export class EndContestCommand implements IEndContestCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contestId?: string;
 
     constructor(data?: IEndContestCommand) {
@@ -8784,8 +8662,6 @@ export class EndContestCommand implements IEndContestCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contestId = _data["contestId"];
         }
     }
@@ -8799,22 +8675,16 @@ export class EndContestCommand implements IEndContestCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contestId"] = this.contestId;
         return data;
     }
 }
 
 export interface IEndContestCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contestId?: string;
 }
 
 export class EndWorkSessionCommand implements IEndWorkSessionCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     sessionId?: string;
     selectedFiles?: CreateFileDto[] | undefined;
 
@@ -8829,8 +8699,6 @@ export class EndWorkSessionCommand implements IEndWorkSessionCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.sessionId = _data["sessionId"];
             if (Array.isArray(_data["selectedFiles"])) {
                 this.selectedFiles = [] as any;
@@ -8849,8 +8717,6 @@ export class EndWorkSessionCommand implements IEndWorkSessionCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["sessionId"] = this.sessionId;
         if (Array.isArray(this.selectedFiles)) {
             data["selectedFiles"] = [];
@@ -8862,8 +8728,6 @@ export class EndWorkSessionCommand implements IEndWorkSessionCommand {
 }
 
 export interface IEndWorkSessionCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     sessionId?: string;
     selectedFiles?: CreateFileDto[] | undefined;
 }
@@ -8961,8 +8825,6 @@ export interface IFileEntity {
 }
 
 export class ForceContractCancelCommand implements IForceContractCancelCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contractId?: string;
     reason?: string | undefined;
 
@@ -8977,8 +8839,6 @@ export class ForceContractCancelCommand implements IForceContractCancelCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contractId = _data["contractId"];
             this.reason = _data["reason"];
         }
@@ -8993,8 +8853,6 @@ export class ForceContractCancelCommand implements IForceContractCancelCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contractId"] = this.contractId;
         data["reason"] = this.reason;
         return data;
@@ -9002,15 +8860,11 @@ export class ForceContractCancelCommand implements IForceContractCancelCommand {
 }
 
 export interface IForceContractCancelCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contractId?: string;
     reason?: string | undefined;
 }
 
 export class FreelancerAcceptContractCommand implements IFreelancerAcceptContractCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contractId?: string;
 
     constructor(data?: IFreelancerAcceptContractCommand) {
@@ -9024,8 +8878,6 @@ export class FreelancerAcceptContractCommand implements IFreelancerAcceptContrac
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contractId = _data["contractId"];
         }
     }
@@ -9039,22 +8891,16 @@ export class FreelancerAcceptContractCommand implements IFreelancerAcceptContrac
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contractId"] = this.contractId;
         return data;
     }
 }
 
 export interface IFreelancerAcceptContractCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contractId?: string;
 }
 
 export class FreelancerFinishContractCommand implements IFreelancerFinishContractCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contractId?: string;
 
     constructor(data?: IFreelancerFinishContractCommand) {
@@ -9068,8 +8914,6 @@ export class FreelancerFinishContractCommand implements IFreelancerFinishContrac
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contractId = _data["contractId"];
         }
     }
@@ -9083,25 +8927,16 @@ export class FreelancerFinishContractCommand implements IFreelancerFinishContrac
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contractId"] = this.contractId;
         return data;
     }
 }
 
 export interface IFreelancerFinishContractCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contractId?: string;
 }
 
 export class FreelancerProfileEntity implements IFreelancerProfileEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     userId?: string;
     user?: UserEntity;
     skills?: SkillEntity[] | undefined;
@@ -9113,6 +8948,11 @@ export class FreelancerProfileEntity implements IFreelancerProfileEntity {
     rating?: number;
     isHidden?: boolean;
     reviews?: JobReviewEntity[] | undefined;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: IFreelancerProfileEntity) {
         if (data) {
@@ -9125,11 +8965,6 @@ export class FreelancerProfileEntity implements IFreelancerProfileEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.userId = _data["userId"];
             this.user = _data["user"] ? UserEntity.fromJS(_data["user"]) : <any>undefined;
             if (Array.isArray(_data["skills"])) {
@@ -9153,6 +8988,11 @@ export class FreelancerProfileEntity implements IFreelancerProfileEntity {
                 for (let item of _data["reviews"])
                     this.reviews!.push(JobReviewEntity.fromJS(item));
             }
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -9165,11 +9005,6 @@ export class FreelancerProfileEntity implements IFreelancerProfileEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["userId"] = this.userId;
         data["user"] = this.user ? this.user.toJSON() : <any>undefined;
         if (Array.isArray(this.skills)) {
@@ -9193,16 +9028,16 @@ export class FreelancerProfileEntity implements IFreelancerProfileEntity {
             for (let item of this.reviews)
                 data["reviews"].push(item.toJSON());
         }
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IFreelancerProfileEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     userId?: string;
     user?: UserEntity;
     skills?: SkillEntity[] | undefined;
@@ -9214,6 +9049,11 @@ export interface IFreelancerProfileEntity {
     rating?: number;
     isHidden?: boolean;
     reviews?: JobReviewEntity[] | undefined;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class FreelancerStatsDto implements IFreelancerStatsDto {
@@ -9281,11 +9121,6 @@ export interface IFreelancerStatsDto {
 }
 
 export class FreelancerTeamEntity implements IFreelancerTeamEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
     participants?: UserEntity[] | undefined;
     readonly closed?: boolean;
@@ -9294,6 +9129,11 @@ export class FreelancerTeamEntity implements IFreelancerTeamEntity {
     avatar?: FileEntity;
     owner?: UserEntity;
     ownerId?: string;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: IFreelancerTeamEntity) {
         if (data) {
@@ -9306,11 +9146,6 @@ export class FreelancerTeamEntity implements IFreelancerTeamEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.name = _data["name"];
             if (Array.isArray(_data["participants"])) {
                 this.participants = [] as any;
@@ -9323,6 +9158,11 @@ export class FreelancerTeamEntity implements IFreelancerTeamEntity {
             this.avatar = _data["avatar"] ? FileEntity.fromJS(_data["avatar"]) : <any>undefined;
             this.owner = _data["owner"] ? UserEntity.fromJS(_data["owner"]) : <any>undefined;
             this.ownerId = _data["ownerId"];
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -9335,11 +9175,6 @@ export class FreelancerTeamEntity implements IFreelancerTeamEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["name"] = this.name;
         if (Array.isArray(this.participants)) {
             data["participants"] = [];
@@ -9352,16 +9187,16 @@ export class FreelancerTeamEntity implements IFreelancerTeamEntity {
         data["avatar"] = this.avatar ? this.avatar.toJSON() : <any>undefined;
         data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
         data["ownerId"] = this.ownerId;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IFreelancerTeamEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
     participants?: UserEntity[] | undefined;
     closed?: boolean;
@@ -9370,11 +9205,14 @@ export interface IFreelancerTeamEntity {
     avatar?: FileEntity;
     owner?: UserEntity;
     ownerId?: string;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class GatewayResultCommand implements IGatewayResultCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     success!: boolean;
     gatewayTransactionId!: string;
     internalTransactionId!: string;
@@ -9397,8 +9235,6 @@ export class GatewayResultCommand implements IGatewayResultCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.success = _data["success"];
             this.gatewayTransactionId = _data["gatewayTransactionId"];
             this.internalTransactionId = _data["internalTransactionId"];
@@ -9427,8 +9263,6 @@ export class GatewayResultCommand implements IGatewayResultCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["success"] = this.success;
         data["gatewayTransactionId"] = this.gatewayTransactionId;
         data["internalTransactionId"] = this.internalTransactionId;
@@ -9450,8 +9284,6 @@ export class GatewayResultCommand implements IGatewayResultCommand {
 }
 
 export interface IGatewayResultCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     success: boolean;
     gatewayTransactionId: string;
     internalTransactionId: string;
@@ -9465,8 +9297,6 @@ export interface IGatewayResultCommand {
 }
 
 export class GetContractsListQuery implements IGetContractsListQuery {
-    readonly queryId?: string | undefined;
-    readonly timestamp?: Date;
     userId?: string | undefined;
     isClient?: boolean | undefined;
     status?: GetContractsListQueryStatus | undefined;
@@ -9484,8 +9314,6 @@ export class GetContractsListQuery implements IGetContractsListQuery {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).queryId = _data["queryId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.userId = _data["userId"];
             this.isClient = _data["isClient"];
             this.status = _data["status"];
@@ -9503,8 +9331,6 @@ export class GetContractsListQuery implements IGetContractsListQuery {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["queryId"] = this.queryId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["userId"] = this.userId;
         data["isClient"] = this.isClient;
         data["status"] = this.status;
@@ -9515,8 +9341,6 @@ export class GetContractsListQuery implements IGetContractsListQuery {
 }
 
 export interface IGetContractsListQuery {
-    queryId?: string | undefined;
-    timestamp?: Date;
     userId?: string | undefined;
     isClient?: boolean | undefined;
     status?: GetContractsListQueryStatus | undefined;
@@ -9525,8 +9349,6 @@ export interface IGetContractsListQuery {
 }
 
 export class GetJobsListQuery implements IGetJobsListQuery {
-    readonly queryId?: string | undefined;
-    readonly timestamp?: Date;
     start?: number;
     ends?: number;
     search?: string | undefined;
@@ -9559,8 +9381,6 @@ export class GetJobsListQuery implements IGetJobsListQuery {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).queryId = _data["queryId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.start = _data["start"];
             this.ends = _data["ends"];
             this.search = _data["search"];
@@ -9601,8 +9421,6 @@ export class GetJobsListQuery implements IGetJobsListQuery {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["queryId"] = this.queryId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["start"] = this.start;
         data["ends"] = this.ends;
         data["search"] = this.search;
@@ -9636,8 +9454,6 @@ export class GetJobsListQuery implements IGetJobsListQuery {
 }
 
 export interface IGetJobsListQuery {
-    queryId?: string | undefined;
-    timestamp?: Date;
     start?: number;
     ends?: number;
     search?: string | undefined;
@@ -9661,11 +9477,11 @@ export interface IGetJobsListQuery {
 }
 
 export class GetTicketsDto implements IGetTicketsDto {
-    start?: number;
-    ends?: number;
     userId?: string | undefined;
     subject?: string | undefined;
     isAssignedToMe?: boolean | undefined;
+    start?: number;
+    ends?: number;
 
     constructor(data?: IGetTicketsDto) {
         if (data) {
@@ -9678,11 +9494,11 @@ export class GetTicketsDto implements IGetTicketsDto {
 
     init(_data?: any) {
         if (_data) {
-            this.start = _data["start"];
-            this.ends = _data["ends"];
             this.userId = _data["userId"];
             this.subject = _data["subject"];
             this.isAssignedToMe = _data["isAssignedToMe"];
+            this.start = _data["start"];
+            this.ends = _data["ends"];
         }
     }
 
@@ -9695,26 +9511,24 @@ export class GetTicketsDto implements IGetTicketsDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["start"] = this.start;
-        data["ends"] = this.ends;
         data["userId"] = this.userId;
         data["subject"] = this.subject;
         data["isAssignedToMe"] = this.isAssignedToMe;
+        data["start"] = this.start;
+        data["ends"] = this.ends;
         return data;
     }
 }
 
 export interface IGetTicketsDto {
-    start?: number;
-    ends?: number;
     userId?: string | undefined;
     subject?: string | undefined;
     isAssignedToMe?: boolean | undefined;
+    start?: number;
+    ends?: number;
 }
 
 export class GetTransactionsListQuery implements IGetTransactionsListQuery {
-    readonly queryId?: string | undefined;
-    readonly timestamp?: Date;
     start?: number;
     ends?: number;
     fromDate?: Date | undefined;
@@ -9737,8 +9551,6 @@ export class GetTransactionsListQuery implements IGetTransactionsListQuery {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).queryId = _data["queryId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.start = _data["start"];
             this.ends = _data["ends"];
             this.fromDate = _data["fromDate"] ? new Date(_data["fromDate"].toString()) : <any>undefined;
@@ -9765,8 +9577,6 @@ export class GetTransactionsListQuery implements IGetTransactionsListQuery {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["queryId"] = this.queryId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["start"] = this.start;
         data["ends"] = this.ends;
         data["fromDate"] = this.fromDate ? this.fromDate.toISOString() : <any>undefined;
@@ -9786,8 +9596,6 @@ export class GetTransactionsListQuery implements IGetTransactionsListQuery {
 }
 
 export interface IGetTransactionsListQuery {
-    queryId?: string | undefined;
-    timestamp?: Date;
     start?: number;
     ends?: number;
     fromDate?: Date | undefined;
@@ -9801,8 +9609,6 @@ export interface IGetTransactionsListQuery {
 }
 
 export class GetWorkSessionListQuery implements IGetWorkSessionListQuery {
-    readonly queryId?: string | undefined;
-    readonly timestamp?: Date;
     userId?: string | undefined;
     contractId?: string | undefined;
     start?: number;
@@ -9822,8 +9628,6 @@ export class GetWorkSessionListQuery implements IGetWorkSessionListQuery {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).queryId = _data["queryId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.userId = _data["userId"];
             this.contractId = _data["contractId"];
             this.start = _data["start"];
@@ -9843,8 +9647,6 @@ export class GetWorkSessionListQuery implements IGetWorkSessionListQuery {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["queryId"] = this.queryId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["userId"] = this.userId;
         data["contractId"] = this.contractId;
         data["start"] = this.start;
@@ -9857,8 +9659,6 @@ export class GetWorkSessionListQuery implements IGetWorkSessionListQuery {
 }
 
 export interface IGetWorkSessionListQuery {
-    queryId?: string | undefined;
-    timestamp?: Date;
     userId?: string | undefined;
     contractId?: string | undefined;
     start?: number;
@@ -9869,8 +9669,6 @@ export interface IGetWorkSessionListQuery {
 }
 
 export class HandleTransactionCommand implements IHandleTransactionCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     transactionId!: string;
 
     constructor(data?: IHandleTransactionCommand) {
@@ -9884,8 +9682,6 @@ export class HandleTransactionCommand implements IHandleTransactionCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.transactionId = _data["transactionId"];
         }
     }
@@ -9899,22 +9695,16 @@ export class HandleTransactionCommand implements IHandleTransactionCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["transactionId"] = this.transactionId;
         return data;
     }
 }
 
 export interface IHandleTransactionCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     transactionId: string;
 }
 
 export class HideFreelancerProfileCommand implements IHideFreelancerProfileCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     userId?: string;
 
     constructor(data?: IHideFreelancerProfileCommand) {
@@ -9928,8 +9718,6 @@ export class HideFreelancerProfileCommand implements IHideFreelancerProfileComma
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.userId = _data["userId"];
         }
     }
@@ -9943,22 +9731,16 @@ export class HideFreelancerProfileCommand implements IHideFreelancerProfileComma
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["userId"] = this.userId;
         return data;
     }
 }
 
 export interface IHideFreelancerProfileCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     userId?: string;
 }
 
 export class HideJobCommand implements IHideJobCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     jobId?: string;
 
     constructor(data?: IHideJobCommand) {
@@ -9972,8 +9754,6 @@ export class HideJobCommand implements IHideJobCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.jobId = _data["jobId"];
         }
     }
@@ -9987,22 +9767,16 @@ export class HideJobCommand implements IHideJobCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["jobId"] = this.jobId;
         return data;
     }
 }
 
 export interface IHideJobCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     jobId?: string;
 }
 
 export class HideNotificationsCommand implements IHideNotificationsCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     notificationIds?: string[] | undefined;
 
     constructor(data?: IHideNotificationsCommand) {
@@ -10016,8 +9790,6 @@ export class HideNotificationsCommand implements IHideNotificationsCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             if (Array.isArray(_data["notificationIds"])) {
                 this.notificationIds = [] as any;
                 for (let item of _data["notificationIds"])
@@ -10035,8 +9807,6 @@ export class HideNotificationsCommand implements IHideNotificationsCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         if (Array.isArray(this.notificationIds)) {
             data["notificationIds"] = [];
             for (let item of this.notificationIds)
@@ -10047,14 +9817,10 @@ export class HideNotificationsCommand implements IHideNotificationsCommand {
 }
 
 export interface IHideNotificationsCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     notificationIds?: string[] | undefined;
 }
 
 export class InitiateDisputeCommand implements IInitiateDisputeCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contractId?: string;
     reason?: string | undefined;
 
@@ -10069,8 +9835,6 @@ export class InitiateDisputeCommand implements IInitiateDisputeCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contractId = _data["contractId"];
             this.reason = _data["reason"];
         }
@@ -10085,8 +9849,6 @@ export class InitiateDisputeCommand implements IInitiateDisputeCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contractId"] = this.contractId;
         data["reason"] = this.reason;
         return data;
@@ -10094,8 +9856,6 @@ export class InitiateDisputeCommand implements IInitiateDisputeCommand {
 }
 
 export interface IInitiateDisputeCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contractId?: string;
     reason?: string | undefined;
 }
@@ -10265,11 +10025,6 @@ export interface IJobDetails {
 }
 
 export class JobEntity implements IJobEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     employerId?: string;
     employer?: UserEntity;
     title?: string | undefined;
@@ -10286,8 +10041,14 @@ export class JobEntity implements IJobEntity {
     budgetType?: JobEntityBudgetType;
     publicationDate?: Date | undefined;
     paymentVerified?: boolean;
+    readonly contractId?: string | undefined;
     readonly files?: FileEntity[] | undefined;
     isHidden?: boolean;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: IJobEntity) {
         if (data) {
@@ -10300,11 +10061,6 @@ export class JobEntity implements IJobEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.employerId = _data["employerId"];
             this.employer = _data["employer"] ? UserEntity.fromJS(_data["employer"]) : <any>undefined;
             this.title = _data["title"];
@@ -10329,12 +10085,18 @@ export class JobEntity implements IJobEntity {
             this.budgetType = _data["budgetType"];
             this.publicationDate = _data["publicationDate"] ? new Date(_data["publicationDate"].toString()) : <any>undefined;
             this.paymentVerified = _data["paymentVerified"];
+            (<any>this).contractId = _data["contractId"];
             if (Array.isArray(_data["files"])) {
                 (<any>this).files = [] as any;
                 for (let item of _data["files"])
                     (<any>this).files!.push(FileEntity.fromJS(item));
             }
             this.isHidden = _data["isHidden"];
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -10347,11 +10109,6 @@ export class JobEntity implements IJobEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["employerId"] = this.employerId;
         data["employer"] = this.employer ? this.employer.toJSON() : <any>undefined;
         data["title"] = this.title;
@@ -10376,22 +10133,23 @@ export class JobEntity implements IJobEntity {
         data["budgetType"] = this.budgetType;
         data["publicationDate"] = this.publicationDate ? this.publicationDate.toISOString() : <any>undefined;
         data["paymentVerified"] = this.paymentVerified;
+        data["contractId"] = this.contractId;
         if (Array.isArray(this.files)) {
             data["files"] = [];
             for (let item of this.files)
                 data["files"].push(item.toJSON());
         }
         data["isHidden"] = this.isHidden;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IJobEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     employerId?: string;
     employer?: UserEntity;
     title?: string | undefined;
@@ -10408,16 +10166,17 @@ export interface IJobEntity {
     budgetType?: JobEntityBudgetType;
     publicationDate?: Date | undefined;
     paymentVerified?: boolean;
+    contractId?: string | undefined;
     files?: FileEntity[] | undefined;
     isHidden?: boolean;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class JobReviewEntity implements IJobReviewEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     reviewerId!: string;
     reviewer!: UserEntity;
     targetId!: string;
@@ -10427,6 +10186,11 @@ export class JobReviewEntity implements IJobReviewEntity {
     readonly rating!: number;
     comment!: string;
     reviewDate!: Date;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: IJobReviewEntity) {
         if (data) {
@@ -10444,11 +10208,6 @@ export class JobReviewEntity implements IJobReviewEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.reviewerId = _data["reviewerId"];
             this.reviewer = _data["reviewer"] ? UserEntity.fromJS(_data["reviewer"]) : new UserEntity();
             this.targetId = _data["targetId"];
@@ -10458,6 +10217,11 @@ export class JobReviewEntity implements IJobReviewEntity {
             (<any>this).rating = _data["rating"];
             this.comment = _data["comment"];
             this.reviewDate = _data["reviewDate"] ? new Date(_data["reviewDate"].toString()) : <any>undefined;
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -10470,11 +10234,6 @@ export class JobReviewEntity implements IJobReviewEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["reviewerId"] = this.reviewerId;
         data["reviewer"] = this.reviewer ? this.reviewer.toJSON() : <any>undefined;
         data["targetId"] = this.targetId;
@@ -10484,16 +10243,16 @@ export class JobReviewEntity implements IJobReviewEntity {
         data["rating"] = this.rating;
         data["comment"] = this.comment;
         data["reviewDate"] = this.reviewDate ? this.reviewDate.toISOString() : <any>undefined;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IJobReviewEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     reviewerId: string;
     reviewer: UserEntity;
     targetId: string;
@@ -10503,6 +10262,11 @@ export interface IJobReviewEntity {
     rating: number;
     comment: string;
     reviewDate: Date;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class KickMemberDto implements IKickMemberDto {
@@ -10626,11 +10390,6 @@ export interface IMarkAsReadDto {
 }
 
 export class MessageEntity implements IMessageEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     senderId?: string;
     sender?: UserEntity;
     text?: string | undefined;
@@ -10641,6 +10400,11 @@ export class MessageEntity implements IMessageEntity {
     isPinned?: boolean;
     replyedToMessageId?: string | undefined;
     files?: FileEntity[] | undefined;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: IMessageEntity) {
         if (data) {
@@ -10653,11 +10417,6 @@ export class MessageEntity implements IMessageEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.senderId = _data["senderId"];
             this.sender = _data["sender"] ? UserEntity.fromJS(_data["sender"]) : <any>undefined;
             this.text = _data["text"];
@@ -10672,6 +10431,11 @@ export class MessageEntity implements IMessageEntity {
                 for (let item of _data["files"])
                     this.files!.push(FileEntity.fromJS(item));
             }
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -10684,11 +10448,6 @@ export class MessageEntity implements IMessageEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["senderId"] = this.senderId;
         data["sender"] = this.sender ? this.sender.toJSON() : <any>undefined;
         data["text"] = this.text;
@@ -10703,16 +10462,16 @@ export class MessageEntity implements IMessageEntity {
             for (let item of this.files)
                 data["files"].push(item.toJSON());
         }
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IMessageEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     senderId?: string;
     sender?: UserEntity;
     text?: string | undefined;
@@ -10723,6 +10482,79 @@ export interface IMessageEntity {
     isPinned?: boolean;
     replyedToMessageId?: string | undefined;
     files?: FileEntity[] | undefined;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
+}
+
+export class MessageReadEntity implements IMessageReadEntity {
+    readonly readById?: string;
+    readBy?: UserEntity;
+    readonly chatId?: string;
+    readonly readAt?: Date;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
+
+    constructor(data?: IMessageReadEntity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).readById = _data["readById"];
+            this.readBy = _data["readBy"] ? UserEntity.fromJS(_data["readBy"]) : <any>undefined;
+            (<any>this).chatId = _data["chatId"];
+            (<any>this).readAt = _data["readAt"] ? new Date(_data["readAt"].toString()) : <any>undefined;
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): MessageReadEntity {
+        data = typeof data === 'object' ? data : {};
+        let result = new MessageReadEntity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["readById"] = this.readById;
+        data["readBy"] = this.readBy ? this.readBy.toJSON() : <any>undefined;
+        data["chatId"] = this.chatId;
+        data["readAt"] = this.readAt ? this.readAt.toISOString() : <any>undefined;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
+        return data;
+    }
+}
+
+export interface IMessageReadEntity {
+    readById?: string;
+    readBy?: UserEntity;
+    chatId?: string;
+    readAt?: Date;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class MessageThreadDto implements IMessageThreadDto {
@@ -10806,11 +10638,6 @@ export interface IMoney {
 }
 
 export class NotificationEntity implements INotificationEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     title!: string;
     text!: string;
     fromUserId?: string | undefined;
@@ -10819,6 +10646,11 @@ export class NotificationEntity implements INotificationEntity {
     data?: string | undefined;
     hidden!: boolean;
     icon?: FileEntity;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: INotificationEntity) {
         if (data) {
@@ -10831,11 +10663,6 @@ export class NotificationEntity implements INotificationEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.title = _data["title"];
             this.text = _data["text"];
             this.fromUserId = _data["fromUserId"];
@@ -10844,6 +10671,11 @@ export class NotificationEntity implements INotificationEntity {
             this.data = _data["data"];
             this.hidden = _data["hidden"];
             this.icon = _data["icon"] ? FileEntity.fromJS(_data["icon"]) : <any>undefined;
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -10856,11 +10688,6 @@ export class NotificationEntity implements INotificationEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["title"] = this.title;
         data["text"] = this.text;
         data["fromUserId"] = this.fromUserId;
@@ -10869,16 +10696,16 @@ export class NotificationEntity implements INotificationEntity {
         data["data"] = this.data;
         data["hidden"] = this.hidden;
         data["icon"] = this.icon ? this.icon.toJSON() : <any>undefined;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface INotificationEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     title: string;
     text: string;
     fromUserId?: string | undefined;
@@ -10887,6 +10714,11 @@ export interface INotificationEntity {
     data?: string | undefined;
     hidden: boolean;
     icon?: FileEntity;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class PaymentMethodDto implements IPaymentMethodDto {
@@ -10950,13 +10782,13 @@ export interface IPaymentMethodDto {
 }
 
 export class PaymentSystemEntity implements IPaymentSystemEntity {
-    id!: string;
+    name!: string;
+    isActive?: boolean;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
     lastModifiedAt?: Date | undefined;
-    name!: string;
-    isActive?: boolean;
+    id!: string;
 
     constructor(data?: IPaymentSystemEntity) {
         if (data) {
@@ -10969,13 +10801,13 @@ export class PaymentSystemEntity implements IPaymentSystemEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
+            this.name = _data["name"];
+            this.isActive = _data["isActive"];
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
             this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
-            this.name = _data["name"];
-            this.isActive = _data["isActive"];
+            this.id = _data["id"];
         }
     }
 
@@ -10988,25 +10820,25 @@ export class PaymentSystemEntity implements IPaymentSystemEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
+        data["name"] = this.name;
+        data["isActive"] = this.isActive;
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["lastModifiedById"] = this.lastModifiedById;
         data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
-        data["name"] = this.name;
-        data["isActive"] = this.isActive;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IPaymentSystemEntity {
-    id: string;
+    name: string;
+    isActive?: boolean;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;
     lastModifiedAt?: Date | undefined;
-    name: string;
-    isActive?: boolean;
+    id: string;
 }
 
 export class PinMessageDto implements IPinMessageDto {
@@ -11046,11 +10878,6 @@ export interface IPinMessageDto {
 }
 
 export class PortfolioProjectEntity implements IPortfolioProjectEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
     userRole?: string | undefined;
     skills?: SkillEntity[] | undefined;
@@ -11059,6 +10886,11 @@ export class PortfolioProjectEntity implements IPortfolioProjectEntity {
     hidden?: boolean;
     userId?: string;
     user?: UserEntity;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: IPortfolioProjectEntity) {
         if (data) {
@@ -11071,11 +10903,6 @@ export class PortfolioProjectEntity implements IPortfolioProjectEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.name = _data["name"];
             this.userRole = _data["userRole"];
             if (Array.isArray(_data["skills"])) {
@@ -11092,6 +10919,11 @@ export class PortfolioProjectEntity implements IPortfolioProjectEntity {
             this.hidden = _data["hidden"];
             this.userId = _data["userId"];
             this.user = _data["user"] ? UserEntity.fromJS(_data["user"]) : <any>undefined;
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -11104,11 +10936,6 @@ export class PortfolioProjectEntity implements IPortfolioProjectEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["name"] = this.name;
         data["userRole"] = this.userRole;
         if (Array.isArray(this.skills)) {
@@ -11125,16 +10952,16 @@ export class PortfolioProjectEntity implements IPortfolioProjectEntity {
         data["hidden"] = this.hidden;
         data["userId"] = this.userId;
         data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IPortfolioProjectEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     name?: string | undefined;
     userRole?: string | undefined;
     skills?: SkillEntity[] | undefined;
@@ -11143,6 +10970,11 @@ export interface IPortfolioProjectEntity {
     hidden?: boolean;
     userId?: string;
     user?: UserEntity;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class ProfileViewDto implements IProfileViewDto {
@@ -11186,11 +11018,6 @@ export interface IProfileViewDto {
 }
 
 export class ProposalEntity implements IProposalEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     jobId?: string;
     job?: JobEntity;
     freelancerId?: string;
@@ -11199,6 +11026,11 @@ export class ProposalEntity implements IProposalEntity {
     coverLetter?: string | undefined;
     status?: ProposalEntityStatus;
     files?: FileEntity[] | undefined;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: IProposalEntity) {
         if (data) {
@@ -11211,11 +11043,6 @@ export class ProposalEntity implements IProposalEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.jobId = _data["jobId"];
             this.job = _data["job"] ? JobEntity.fromJS(_data["job"]) : <any>undefined;
             this.freelancerId = _data["freelancerId"];
@@ -11228,6 +11055,11 @@ export class ProposalEntity implements IProposalEntity {
                 for (let item of _data["files"])
                     this.files!.push(FileEntity.fromJS(item));
             }
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -11240,11 +11072,6 @@ export class ProposalEntity implements IProposalEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["jobId"] = this.jobId;
         data["job"] = this.job ? this.job.toJSON() : <any>undefined;
         data["freelancerId"] = this.freelancerId;
@@ -11257,16 +11084,16 @@ export class ProposalEntity implements IProposalEntity {
             for (let item of this.files)
                 data["files"].push(item.toJSON());
         }
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IProposalEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     jobId?: string;
     job?: JobEntity;
     freelancerId?: string;
@@ -11275,6 +11102,11 @@ export interface IProposalEntity {
     coverLetter?: string | undefined;
     status?: ProposalEntityStatus;
     files?: FileEntity[] | undefined;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class ProposalsDto implements IProposalsDto {
@@ -11321,9 +11153,47 @@ export interface IProposalsDto {
     hires?: number;
 }
 
+export class ReactToSentJobCommand implements IReactToSentJobCommand {
+    jobId?: string;
+    reaction?: ReactToSentJobCommandReaction;
+
+    constructor(data?: IReactToSentJobCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.jobId = _data["jobId"];
+            this.reaction = _data["reaction"];
+        }
+    }
+
+    static fromJS(data: any): ReactToSentJobCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ReactToSentJobCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["jobId"] = this.jobId;
+        data["reaction"] = this.reaction;
+        return data;
+    }
+}
+
+export interface IReactToSentJobCommand {
+    jobId?: string;
+    reaction?: ReactToSentJobCommandReaction;
+}
+
 export class ReactToTaskCommand implements IReactToTaskCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     taskId?: string;
     approve?: boolean;
     newTitle?: string | undefined;
@@ -11340,8 +11210,6 @@ export class ReactToTaskCommand implements IReactToTaskCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.taskId = _data["taskId"];
             this.approve = _data["approve"];
             this.newTitle = _data["newTitle"];
@@ -11358,8 +11226,6 @@ export class ReactToTaskCommand implements IReactToTaskCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["taskId"] = this.taskId;
         data["approve"] = this.approve;
         data["newTitle"] = this.newTitle;
@@ -11369,8 +11235,6 @@ export class ReactToTaskCommand implements IReactToTaskCommand {
 }
 
 export interface IReactToTaskCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     taskId?: string;
     approve?: boolean;
     newTitle?: string | undefined;
@@ -11378,8 +11242,6 @@ export interface IReactToTaskCommand {
 }
 
 export class ReactToWorkSessionCommand implements IReactToWorkSessionCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     workSessionId?: string;
     isApproved?: boolean;
     clientComment?: string | undefined;
@@ -11395,8 +11257,6 @@ export class ReactToWorkSessionCommand implements IReactToWorkSessionCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.workSessionId = _data["workSessionId"];
             this.isApproved = _data["isApproved"];
             this.clientComment = _data["clientComment"];
@@ -11412,8 +11272,6 @@ export class ReactToWorkSessionCommand implements IReactToWorkSessionCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["workSessionId"] = this.workSessionId;
         data["isApproved"] = this.isApproved;
         data["clientComment"] = this.clientComment;
@@ -11422,16 +11280,12 @@ export class ReactToWorkSessionCommand implements IReactToWorkSessionCommand {
 }
 
 export interface IReactToWorkSessionCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     workSessionId?: string;
     isApproved?: boolean;
     clientComment?: string | undefined;
 }
 
 export class RefundTransactionCommand implements IRefundTransactionCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     transactionId!: string;
     isContractCancellation?: boolean;
 
@@ -11446,8 +11300,6 @@ export class RefundTransactionCommand implements IRefundTransactionCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.transactionId = _data["transactionId"];
             this.isContractCancellation = _data["isContractCancellation"];
         }
@@ -11462,8 +11314,6 @@ export class RefundTransactionCommand implements IRefundTransactionCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["transactionId"] = this.transactionId;
         data["isContractCancellation"] = this.isContractCancellation;
         return data;
@@ -11471,8 +11321,6 @@ export class RefundTransactionCommand implements IRefundTransactionCommand {
 }
 
 export interface IRefundTransactionCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     transactionId: string;
     isContractCancellation?: boolean;
 }
@@ -11538,8 +11386,6 @@ export interface IRegisterUserSchema {
 }
 
 export class ResetPasswordCommand implements IResetPasswordCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     code!: string;
     email!: string;
     newPassword!: string;
@@ -11555,8 +11401,6 @@ export class ResetPasswordCommand implements IResetPasswordCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.code = _data["code"];
             this.email = _data["email"];
             this.newPassword = _data["newPassword"];
@@ -11572,8 +11416,6 @@ export class ResetPasswordCommand implements IResetPasswordCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["code"] = this.code;
         data["email"] = this.email;
         data["newPassword"] = this.newPassword;
@@ -11582,16 +11424,12 @@ export class ResetPasswordCommand implements IResetPasswordCommand {
 }
 
 export interface IResetPasswordCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     code: string;
     email: string;
     newPassword: string;
 }
 
 export class ResolveDisputeCommand implements IResolveDisputeCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     disputeId?: string;
     strategy?: ResolveDisputeCommandStrategy;
     moderatorComment?: string | undefined;
@@ -11611,8 +11449,6 @@ export class ResolveDisputeCommand implements IResolveDisputeCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.disputeId = _data["disputeId"];
             this.strategy = _data["strategy"];
             this.moderatorComment = _data["moderatorComment"];
@@ -11632,8 +11468,6 @@ export class ResolveDisputeCommand implements IResolveDisputeCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["disputeId"] = this.disputeId;
         data["strategy"] = this.strategy;
         data["moderatorComment"] = this.moderatorComment;
@@ -11646,8 +11480,6 @@ export class ResolveDisputeCommand implements IResolveDisputeCommand {
 }
 
 export interface IResolveDisputeCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     disputeId?: string;
     strategy?: ResolveDisputeCommandStrategy;
     moderatorComment?: string | undefined;
@@ -11658,8 +11490,6 @@ export interface IResolveDisputeCommand {
 }
 
 export class SelectContestWinnerCommand implements ISelectContestWinnerCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contestId!: string;
     entryId!: string;
 
@@ -11674,8 +11504,6 @@ export class SelectContestWinnerCommand implements ISelectContestWinnerCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contestId = _data["contestId"];
             this.entryId = _data["entryId"];
         }
@@ -11690,8 +11518,6 @@ export class SelectContestWinnerCommand implements ISelectContestWinnerCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contestId"] = this.contestId;
         data["entryId"] = this.entryId;
         return data;
@@ -11699,10 +11525,44 @@ export class SelectContestWinnerCommand implements ISelectContestWinnerCommand {
 }
 
 export interface ISelectContestWinnerCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contestId: string;
     entryId: string;
+}
+
+export class SendDraftJobToModerationCommand implements ISendDraftJobToModerationCommand {
+    jobId?: string;
+
+    constructor(data?: ISendDraftJobToModerationCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.jobId = _data["jobId"];
+        }
+    }
+
+    static fromJS(data: any): SendDraftJobToModerationCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new SendDraftJobToModerationCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["jobId"] = this.jobId;
+        return data;
+    }
+}
+
+export interface ISendDraftJobToModerationCommand {
+    jobId?: string;
 }
 
 export class SendMessageDto implements ISendMessageDto {
@@ -11762,8 +11622,6 @@ export interface ISendMessageDto {
 }
 
 export class SendResetCodeCommand implements ISendResetCodeCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     email!: string;
 
     constructor(data?: ISendResetCodeCommand) {
@@ -11777,8 +11635,6 @@ export class SendResetCodeCommand implements ISendResetCodeCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.email = _data["email"];
         }
     }
@@ -11792,26 +11648,23 @@ export class SendResetCodeCommand implements ISendResetCodeCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["email"] = this.email;
         return data;
     }
 }
 
 export interface ISendResetCodeCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     email: string;
 }
 
 export class SkillEntity implements ISkillEntity {
-    id!: string;
+    name?: string | undefined;
+    jobs?: JobEntity[] | undefined;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
     lastModifiedAt?: Date | undefined;
-    name?: string | undefined;
+    id!: string;
 
     constructor(data?: ISkillEntity) {
         if (data) {
@@ -11824,12 +11677,17 @@ export class SkillEntity implements ISkillEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
+            this.name = _data["name"];
+            if (Array.isArray(_data["jobs"])) {
+                this.jobs = [] as any;
+                for (let item of _data["jobs"])
+                    this.jobs!.push(JobEntity.fromJS(item));
+            }
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
             this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
-            this.name = _data["name"];
+            this.id = _data["id"];
         }
     }
 
@@ -11842,23 +11700,29 @@ export class SkillEntity implements ISkillEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
+        data["name"] = this.name;
+        if (Array.isArray(this.jobs)) {
+            data["jobs"] = [];
+            for (let item of this.jobs)
+                data["jobs"].push(item.toJSON());
+        }
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["lastModifiedById"] = this.lastModifiedById;
         data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
-        data["name"] = this.name;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface ISkillEntity {
-    id: string;
+    name?: string | undefined;
+    jobs?: JobEntity[] | undefined;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;
     lastModifiedAt?: Date | undefined;
-    name?: string | undefined;
+    id: string;
 }
 
 export class SkillModel implements ISkillModel {
@@ -11902,8 +11766,6 @@ export interface ISkillModel {
 }
 
 export class StartContestCommand implements IStartContestCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contestId?: string;
 
     constructor(data?: IStartContestCommand) {
@@ -11917,8 +11779,6 @@ export class StartContestCommand implements IStartContestCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contestId = _data["contestId"];
         }
     }
@@ -11932,22 +11792,16 @@ export class StartContestCommand implements IStartContestCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contestId"] = this.contestId;
         return data;
     }
 }
 
 export interface IStartContestCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contestId?: string;
 }
 
 export class StartPaymentFlowCommand implements IStartPaymentFlowCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     amount?: Money;
     flow?: StartPaymentFlowCommandFlow;
     type?: StartPaymentFlowCommandType;
@@ -11966,8 +11820,6 @@ export class StartPaymentFlowCommand implements IStartPaymentFlowCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.amount = _data["amount"] ? Money.fromJS(_data["amount"]) : <any>undefined;
             this.flow = _data["flow"];
             this.type = _data["type"];
@@ -11986,8 +11838,6 @@ export class StartPaymentFlowCommand implements IStartPaymentFlowCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["amount"] = this.amount ? this.amount.toJSON() : <any>undefined;
         data["flow"] = this.flow;
         data["type"] = this.type;
@@ -11999,8 +11849,6 @@ export class StartPaymentFlowCommand implements IStartPaymentFlowCommand {
 }
 
 export interface IStartPaymentFlowCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     amount?: Money;
     flow?: StartPaymentFlowCommandFlow;
     type?: StartPaymentFlowCommandType;
@@ -12010,8 +11858,6 @@ export interface IStartPaymentFlowCommand {
 }
 
 export class StartWorkSessionCommand implements IStartWorkSessionCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contractId?: string;
 
     constructor(data?: IStartWorkSessionCommand) {
@@ -12025,8 +11871,6 @@ export class StartWorkSessionCommand implements IStartWorkSessionCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contractId = _data["contractId"];
         }
     }
@@ -12040,22 +11884,16 @@ export class StartWorkSessionCommand implements IStartWorkSessionCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contractId"] = this.contractId;
         return data;
     }
 }
 
 export interface IStartWorkSessionCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contractId?: string;
 }
 
 export class SubmitContestEntryCommand implements ISubmitContestEntryCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contestId?: string;
     description?: string | undefined;
     submissionFiles?: CreateFileDto[] | undefined;
@@ -12071,8 +11909,6 @@ export class SubmitContestEntryCommand implements ISubmitContestEntryCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contestId = _data["contestId"];
             this.description = _data["description"];
             if (Array.isArray(_data["submissionFiles"])) {
@@ -12092,8 +11928,6 @@ export class SubmitContestEntryCommand implements ISubmitContestEntryCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contestId"] = this.contestId;
         data["description"] = this.description;
         if (Array.isArray(this.submissionFiles)) {
@@ -12106,16 +11940,12 @@ export class SubmitContestEntryCommand implements ISubmitContestEntryCommand {
 }
 
 export interface ISubmitContestEntryCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contestId?: string;
     description?: string | undefined;
     submissionFiles?: CreateFileDto[] | undefined;
 }
 
 export class SubmitProposalCommand implements ISubmitProposalCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     jobId?: string;
     coverLetter?: string | undefined;
     proposedRate?: number | undefined;
@@ -12131,8 +11961,6 @@ export class SubmitProposalCommand implements ISubmitProposalCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.jobId = _data["jobId"];
             this.coverLetter = _data["coverLetter"];
             this.proposedRate = _data["proposedRate"];
@@ -12148,8 +11976,6 @@ export class SubmitProposalCommand implements ISubmitProposalCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["jobId"] = this.jobId;
         data["coverLetter"] = this.coverLetter;
         data["proposedRate"] = this.proposedRate;
@@ -12158,16 +11984,12 @@ export class SubmitProposalCommand implements ISubmitProposalCommand {
 }
 
 export interface ISubmitProposalCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     jobId?: string;
     coverLetter?: string | undefined;
     proposedRate?: number | undefined;
 }
 
 export class SubmitWorkSessionCommand implements ISubmitWorkSessionCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     sessionId?: string;
 
     constructor(data?: ISubmitWorkSessionCommand) {
@@ -12181,8 +12003,6 @@ export class SubmitWorkSessionCommand implements ISubmitWorkSessionCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.sessionId = _data["sessionId"];
         }
     }
@@ -12196,22 +12016,16 @@ export class SubmitWorkSessionCommand implements ISubmitWorkSessionCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["sessionId"] = this.sessionId;
         return data;
     }
 }
 
 export interface ISubmitWorkSessionCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     sessionId?: string;
 }
 
 export class SuspendClientProfileCommand implements ISuspendClientProfileCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     clientId?: string;
     reason?: string | undefined;
 
@@ -12226,8 +12040,6 @@ export class SuspendClientProfileCommand implements ISuspendClientProfileCommand
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.clientId = _data["clientId"];
             this.reason = _data["reason"];
         }
@@ -12242,8 +12054,6 @@ export class SuspendClientProfileCommand implements ISuspendClientProfileCommand
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["clientId"] = this.clientId;
         data["reason"] = this.reason;
         return data;
@@ -12251,18 +12061,11 @@ export class SuspendClientProfileCommand implements ISuspendClientProfileCommand
 }
 
 export interface ISuspendClientProfileCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     clientId?: string;
     reason?: string | undefined;
 }
 
 export class TaskEntity implements ITaskEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     contractId?: string;
     contract?: ContractEntity;
     readonly taskTitle?: string | undefined;
@@ -12274,6 +12077,11 @@ export class TaskEntity implements ITaskEntity {
     readonly isCompleted?: boolean;
     readonly isApproved?: boolean;
     readonly isInRevision?: boolean;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: ITaskEntity) {
         if (data) {
@@ -12286,11 +12094,6 @@ export class TaskEntity implements ITaskEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.contractId = _data["contractId"];
             this.contract = _data["contract"] ? ContractEntity.fromJS(_data["contract"]) : <any>undefined;
             (<any>this).taskTitle = _data["taskTitle"];
@@ -12302,6 +12105,11 @@ export class TaskEntity implements ITaskEntity {
             (<any>this).isCompleted = _data["isCompleted"];
             (<any>this).isApproved = _data["isApproved"];
             (<any>this).isInRevision = _data["isInRevision"];
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -12314,11 +12122,6 @@ export class TaskEntity implements ITaskEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["contractId"] = this.contractId;
         data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
         data["taskTitle"] = this.taskTitle;
@@ -12330,16 +12133,16 @@ export class TaskEntity implements ITaskEntity {
         data["isCompleted"] = this.isCompleted;
         data["isApproved"] = this.isApproved;
         data["isInRevision"] = this.isInRevision;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface ITaskEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     contractId?: string;
     contract?: ContractEntity;
     taskTitle?: string | undefined;
@@ -12351,6 +12154,11 @@ export interface ITaskEntity {
     isCompleted?: boolean;
     isApproved?: boolean;
     isInRevision?: boolean;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class TaxInformation implements ITaxInformation {
@@ -12417,17 +12225,17 @@ export interface ITaxInformation {
 }
 
 export class TicketCommentEntity implements ITicketCommentEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     createdBy!: UserEntity;
     text!: string;
     parentCommentId?: string | undefined;
     isDeleted!: boolean;
     ticketId!: string;
     files!: FileEntity[];
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: ITicketCommentEntity) {
         if (data) {
@@ -12444,11 +12252,6 @@ export class TicketCommentEntity implements ITicketCommentEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.createdBy = _data["createdBy"] ? UserEntity.fromJS(_data["createdBy"]) : new UserEntity();
             this.text = _data["text"];
             this.parentCommentId = _data["parentCommentId"];
@@ -12459,6 +12262,11 @@ export class TicketCommentEntity implements ITicketCommentEntity {
                 for (let item of _data["files"])
                     this.files!.push(FileEntity.fromJS(item));
             }
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -12471,11 +12279,6 @@ export class TicketCommentEntity implements ITicketCommentEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
         data["text"] = this.text;
         data["parentCommentId"] = this.parentCommentId;
@@ -12486,30 +12289,30 @@ export class TicketCommentEntity implements ITicketCommentEntity {
             for (let item of this.files)
                 data["files"].push(item.toJSON());
         }
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface ITicketCommentEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     createdBy: UserEntity;
     text: string;
     parentCommentId?: string | undefined;
     isDeleted: boolean;
     ticketId: string;
     files: FileEntity[];
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class TicketEntity implements ITicketEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     text!: string;
     subject!: string;
     files?: FileEntity[] | undefined;
@@ -12520,6 +12323,11 @@ export class TicketEntity implements ITicketEntity {
     readonly comments?: TicketCommentEntity[] | undefined;
     readonly closedById?: string | undefined;
     createdBy?: UserEntity;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: ITicketEntity) {
         if (data) {
@@ -12532,11 +12340,6 @@ export class TicketEntity implements ITicketEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.text = _data["text"];
             this.subject = _data["subject"];
             if (Array.isArray(_data["files"])) {
@@ -12555,6 +12358,11 @@ export class TicketEntity implements ITicketEntity {
             }
             (<any>this).closedById = _data["closedById"];
             this.createdBy = _data["createdBy"] ? UserEntity.fromJS(_data["createdBy"]) : <any>undefined;
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -12567,11 +12375,6 @@ export class TicketEntity implements ITicketEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["text"] = this.text;
         data["subject"] = this.subject;
         if (Array.isArray(this.files)) {
@@ -12590,16 +12393,16 @@ export class TicketEntity implements ITicketEntity {
         }
         data["closedById"] = this.closedById;
         data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface ITicketEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     text: string;
     subject: string;
     files?: FileEntity[] | undefined;
@@ -12610,14 +12413,14 @@ export interface ITicketEntity {
     comments?: TicketCommentEntity[] | undefined;
     closedById?: string | undefined;
     createdBy?: UserEntity;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class TransactionEntity implements ITransactionEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     readonly walletId?: string;
     antoganistTransactionId?: string | undefined;
     rawAmount?: Money;
@@ -12631,6 +12434,11 @@ export class TransactionEntity implements ITransactionEntity {
     readonly comment?: string | undefined;
     completedAt?: Date | undefined;
     provider?: TransactionProviderEntity;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: ITransactionEntity) {
         if (data) {
@@ -12643,11 +12451,6 @@ export class TransactionEntity implements ITransactionEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             (<any>this).walletId = _data["walletId"];
             this.antoganistTransactionId = _data["antoganistTransactionId"];
             this.rawAmount = _data["rawAmount"] ? Money.fromJS(_data["rawAmount"]) : <any>undefined;
@@ -12661,6 +12464,11 @@ export class TransactionEntity implements ITransactionEntity {
             (<any>this).comment = _data["comment"];
             this.completedAt = _data["completedAt"] ? new Date(_data["completedAt"].toString()) : <any>undefined;
             this.provider = _data["provider"] ? TransactionProviderEntity.fromJS(_data["provider"]) : <any>undefined;
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -12673,11 +12481,6 @@ export class TransactionEntity implements ITransactionEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["walletId"] = this.walletId;
         data["antoganistTransactionId"] = this.antoganistTransactionId;
         data["rawAmount"] = this.rawAmount ? this.rawAmount.toJSON() : <any>undefined;
@@ -12691,16 +12494,16 @@ export class TransactionEntity implements ITransactionEntity {
         data["comment"] = this.comment;
         data["completedAt"] = this.completedAt ? this.completedAt.toISOString() : <any>undefined;
         data["provider"] = this.provider ? this.provider.toJSON() : <any>undefined;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface ITransactionEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     walletId?: string;
     antoganistTransactionId?: string | undefined;
     rawAmount?: Money;
@@ -12714,6 +12517,11 @@ export interface ITransactionEntity {
     comment?: string | undefined;
     completedAt?: Date | undefined;
     provider?: TransactionProviderEntity;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class TransactionPropsEntity implements ITransactionPropsEntity {
@@ -12769,15 +12577,15 @@ export interface ITransactionPropsEntity {
 }
 
 export class TransactionProviderEntity implements ITransactionProviderEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     name!: string;
     feePercent!: number;
     systems!: PaymentSystemEntity[];
     logo!: FileEntity;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: ITransactionProviderEntity) {
         if (data) {
@@ -12794,11 +12602,6 @@ export class TransactionProviderEntity implements ITransactionProviderEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.name = _data["name"];
             this.feePercent = _data["feePercent"];
             if (Array.isArray(_data["systems"])) {
@@ -12807,6 +12610,11 @@ export class TransactionProviderEntity implements ITransactionProviderEntity {
                     this.systems!.push(PaymentSystemEntity.fromJS(item));
             }
             this.logo = _data["logo"] ? FileEntity.fromJS(_data["logo"]) : new FileEntity();
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -12819,11 +12627,6 @@ export class TransactionProviderEntity implements ITransactionProviderEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["name"] = this.name;
         data["feePercent"] = this.feePercent;
         if (Array.isArray(this.systems)) {
@@ -12832,25 +12635,28 @@ export class TransactionProviderEntity implements ITransactionProviderEntity {
                 data["systems"].push(item.toJSON());
         }
         data["logo"] = this.logo ? this.logo.toJSON() : <any>undefined;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface ITransactionProviderEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     name: string;
     feePercent: number;
     systems: PaymentSystemEntity[];
     logo: FileEntity;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class UpdateCategoryCommand implements IUpdateCategoryCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     categoryId?: string;
     name?: string | undefined;
 
@@ -12865,8 +12671,6 @@ export class UpdateCategoryCommand implements IUpdateCategoryCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.categoryId = _data["categoryId"];
             this.name = _data["name"];
         }
@@ -12881,8 +12685,6 @@ export class UpdateCategoryCommand implements IUpdateCategoryCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["categoryId"] = this.categoryId;
         data["name"] = this.name;
         return data;
@@ -12890,8 +12692,6 @@ export class UpdateCategoryCommand implements IUpdateCategoryCommand {
 }
 
 export interface IUpdateCategoryCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     categoryId?: string;
     name?: string | undefined;
 }
@@ -12945,8 +12745,6 @@ export interface IUpdateChatDto {
 }
 
 export class UpdateClientProfileCommand implements IUpdateClientProfileCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     clientId?: string;
     companyName?: string | undefined;
     companyDescription?: string | undefined;
@@ -12967,8 +12765,6 @@ export class UpdateClientProfileCommand implements IUpdateClientProfileCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.clientId = _data["clientId"];
             this.companyName = _data["companyName"];
             this.companyDescription = _data["companyDescription"];
@@ -12989,8 +12785,6 @@ export class UpdateClientProfileCommand implements IUpdateClientProfileCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["clientId"] = this.clientId;
         data["companyName"] = this.companyName;
         data["companyDescription"] = this.companyDescription;
@@ -13004,8 +12798,6 @@ export class UpdateClientProfileCommand implements IUpdateClientProfileCommand {
 }
 
 export interface IUpdateClientProfileCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     clientId?: string;
     companyName?: string | undefined;
     companyDescription?: string | undefined;
@@ -13017,8 +12809,6 @@ export interface IUpdateClientProfileCommand {
 }
 
 export class UpdateContestCommand implements IUpdateContestCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     contestId?: string;
     title?: string | undefined;
     description?: string | undefined;
@@ -13035,8 +12825,6 @@ export class UpdateContestCommand implements IUpdateContestCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.contestId = _data["contestId"];
             this.title = _data["title"];
             this.description = _data["description"];
@@ -13053,8 +12841,6 @@ export class UpdateContestCommand implements IUpdateContestCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["contestId"] = this.contestId;
         data["title"] = this.title;
         data["description"] = this.description;
@@ -13064,8 +12850,6 @@ export class UpdateContestCommand implements IUpdateContestCommand {
 }
 
 export interface IUpdateContestCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     contestId?: string;
     title?: string | undefined;
     description?: string | undefined;
@@ -13073,8 +12857,6 @@ export interface IUpdateContestCommand {
 }
 
 export class UpdateFreelancerProfileCommand implements IUpdateFreelancerProfileCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     skills?: string[] | undefined;
     experience?: string | undefined;
     resume?: string | undefined;
@@ -13092,8 +12874,6 @@ export class UpdateFreelancerProfileCommand implements IUpdateFreelancerProfileC
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             if (Array.isArray(_data["skills"])) {
                 this.skills = [] as any;
                 for (let item of _data["skills"])
@@ -13115,8 +12895,6 @@ export class UpdateFreelancerProfileCommand implements IUpdateFreelancerProfileC
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         if (Array.isArray(this.skills)) {
             data["skills"] = [];
             for (let item of this.skills)
@@ -13131,8 +12909,6 @@ export class UpdateFreelancerProfileCommand implements IUpdateFreelancerProfileC
 }
 
 export interface IUpdateFreelancerProfileCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     skills?: string[] | undefined;
     experience?: string | undefined;
     resume?: string | undefined;
@@ -13141,8 +12917,6 @@ export interface IUpdateFreelancerProfileCommand {
 }
 
 export class UpdateFreelancerTeamCommand implements IUpdateFreelancerTeamCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     teamId?: string;
     name?: string | undefined;
     avatarFile?: CreateFileDto;
@@ -13160,8 +12934,6 @@ export class UpdateFreelancerTeamCommand implements IUpdateFreelancerTeamCommand
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.teamId = _data["teamId"];
             this.name = _data["name"];
             this.avatarFile = _data["avatarFile"] ? CreateFileDto.fromJS(_data["avatarFile"]) : <any>undefined;
@@ -13179,8 +12951,6 @@ export class UpdateFreelancerTeamCommand implements IUpdateFreelancerTeamCommand
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["teamId"] = this.teamId;
         data["name"] = this.name;
         data["avatarFile"] = this.avatarFile ? this.avatarFile.toJSON() : <any>undefined;
@@ -13191,8 +12961,6 @@ export class UpdateFreelancerTeamCommand implements IUpdateFreelancerTeamCommand
 }
 
 export interface IUpdateFreelancerTeamCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     teamId?: string;
     name?: string | undefined;
     avatarFile?: CreateFileDto;
@@ -13201,8 +12969,6 @@ export interface IUpdateFreelancerTeamCommand {
 }
 
 export class UpdateJobCommand implements IUpdateJobCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     jobId?: string;
     title?: string | undefined;
     description?: string | undefined;
@@ -13225,8 +12991,6 @@ export class UpdateJobCommand implements IUpdateJobCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.jobId = _data["jobId"];
             this.title = _data["title"];
             this.description = _data["description"];
@@ -13257,8 +13021,6 @@ export class UpdateJobCommand implements IUpdateJobCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["jobId"] = this.jobId;
         data["title"] = this.title;
         data["description"] = this.description;
@@ -13282,8 +13044,6 @@ export class UpdateJobCommand implements IUpdateJobCommand {
 }
 
 export interface IUpdateJobCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     jobId?: string;
     title?: string | undefined;
     description?: string | undefined;
@@ -13349,8 +13109,6 @@ export interface IUpdateMessageDto {
 }
 
 export class UpdatePortfolioProjectCommand implements IUpdatePortfolioProjectCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     projectId?: string;
     name?: string | undefined;
     userRole?: string | undefined;
@@ -13370,8 +13128,6 @@ export class UpdatePortfolioProjectCommand implements IUpdatePortfolioProjectCom
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.projectId = _data["projectId"];
             this.name = _data["name"];
             this.userRole = _data["userRole"];
@@ -13399,8 +13155,6 @@ export class UpdatePortfolioProjectCommand implements IUpdatePortfolioProjectCom
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["projectId"] = this.projectId;
         data["name"] = this.name;
         data["userRole"] = this.userRole;
@@ -13421,8 +13175,6 @@ export class UpdatePortfolioProjectCommand implements IUpdatePortfolioProjectCom
 }
 
 export interface IUpdatePortfolioProjectCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     projectId?: string;
     name?: string | undefined;
     userRole?: string | undefined;
@@ -13433,8 +13185,6 @@ export interface IUpdatePortfolioProjectCommand {
 }
 
 export class UpdateProposalCommand implements IUpdateProposalCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     proposalId?: string;
     coverLetter?: string | undefined;
     proposedRate?: number | undefined;
@@ -13450,8 +13200,6 @@ export class UpdateProposalCommand implements IUpdateProposalCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.proposalId = _data["proposalId"];
             this.coverLetter = _data["coverLetter"];
             this.proposedRate = _data["proposedRate"];
@@ -13467,8 +13215,6 @@ export class UpdateProposalCommand implements IUpdateProposalCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["proposalId"] = this.proposalId;
         data["coverLetter"] = this.coverLetter;
         data["proposedRate"] = this.proposedRate;
@@ -13477,8 +13223,6 @@ export class UpdateProposalCommand implements IUpdateProposalCommand {
 }
 
 export interface IUpdateProposalCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     proposalId?: string;
     coverLetter?: string | undefined;
     proposedRate?: number | undefined;
@@ -13525,8 +13269,6 @@ export interface IUpdateSkillDto {
 }
 
 export class UpdateSkillsCommand implements IUpdateSkillsCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     skills?: UpdateSkillDto[] | undefined;
 
     constructor(data?: IUpdateSkillsCommand) {
@@ -13540,8 +13282,6 @@ export class UpdateSkillsCommand implements IUpdateSkillsCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             if (Array.isArray(_data["skills"])) {
                 this.skills = [] as any;
                 for (let item of _data["skills"])
@@ -13559,8 +13299,6 @@ export class UpdateSkillsCommand implements IUpdateSkillsCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         if (Array.isArray(this.skills)) {
             data["skills"] = [];
             for (let item of this.skills)
@@ -13571,14 +13309,10 @@ export class UpdateSkillsCommand implements IUpdateSkillsCommand {
 }
 
 export interface IUpdateSkillsCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     skills?: UpdateSkillDto[] | undefined;
 }
 
 export class UpdateTaskCommand implements IUpdateTaskCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     taskId?: string;
     title?: string | undefined;
     description?: string | undefined;
@@ -13595,8 +13329,6 @@ export class UpdateTaskCommand implements IUpdateTaskCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.taskId = _data["taskId"];
             this.title = _data["title"];
             this.description = _data["description"];
@@ -13613,8 +13345,6 @@ export class UpdateTaskCommand implements IUpdateTaskCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["taskId"] = this.taskId;
         data["title"] = this.title;
         data["description"] = this.description;
@@ -13624,8 +13354,6 @@ export class UpdateTaskCommand implements IUpdateTaskCommand {
 }
 
 export interface IUpdateTaskCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     taskId?: string;
     title?: string | undefined;
     description?: string | undefined;
@@ -13633,8 +13361,6 @@ export interface IUpdateTaskCommand {
 }
 
 export class UpdateTaxSettingsCommand implements IUpdateTaxSettingsCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     userId!: string;
     countryIso!: string;
     localIdNumber!: string;
@@ -13657,8 +13383,6 @@ export class UpdateTaxSettingsCommand implements IUpdateTaxSettingsCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.userId = _data["userId"];
             this.countryIso = _data["countryIso"];
             this.localIdNumber = _data["localIdNumber"];
@@ -13681,8 +13405,6 @@ export class UpdateTaxSettingsCommand implements IUpdateTaxSettingsCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["userId"] = this.userId;
         data["countryIso"] = this.countryIso;
         data["localIdNumber"] = this.localIdNumber;
@@ -13698,8 +13420,6 @@ export class UpdateTaxSettingsCommand implements IUpdateTaxSettingsCommand {
 }
 
 export interface IUpdateTaxSettingsCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     userId: string;
     countryIso: string;
     localIdNumber: string;
@@ -13713,8 +13433,6 @@ export interface IUpdateTaxSettingsCommand {
 }
 
 export class UpdateUserCommand implements IUpdateUserCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     userId!: string;
     email?: string | undefined;
     role?: UpdateUserCommandRole | undefined;
@@ -13737,8 +13455,6 @@ export class UpdateUserCommand implements IUpdateUserCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.userId = _data["userId"];
             this.email = _data["email"];
             this.role = _data["role"];
@@ -13761,8 +13477,6 @@ export class UpdateUserCommand implements IUpdateUserCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["userId"] = this.userId;
         data["email"] = this.email;
         data["role"] = this.role;
@@ -13778,8 +13492,6 @@ export class UpdateUserCommand implements IUpdateUserCommand {
 }
 
 export interface IUpdateUserCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     userId: string;
     email?: string | undefined;
     role?: UpdateUserCommandRole | undefined;
@@ -13793,11 +13505,6 @@ export interface IUpdateUserCommand {
 }
 
 export class UserEntity implements IUserEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     name!: string;
     surname!: string;
     fullname!: string;
@@ -13813,6 +13520,11 @@ export class UserEntity implements IUserEntity {
     location?: UserEntityLocation | undefined;
     readonly isExternalUser!: boolean;
     taxInfo?: TaxInformation;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: IUserEntity) {
         if (data) {
@@ -13825,11 +13537,6 @@ export class UserEntity implements IUserEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             this.name = _data["name"];
             this.surname = _data["surname"];
             this.fullname = _data["fullname"];
@@ -13845,6 +13552,11 @@ export class UserEntity implements IUserEntity {
             this.location = _data["location"];
             (<any>this).isExternalUser = _data["isExternalUser"];
             this.taxInfo = _data["taxInfo"] ? TaxInformation.fromJS(_data["taxInfo"]) : <any>undefined;
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -13857,11 +13569,6 @@ export class UserEntity implements IUserEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["name"] = this.name;
         data["surname"] = this.surname;
         data["fullname"] = this.fullname;
@@ -13877,16 +13584,16 @@ export class UserEntity implements IUserEntity {
         data["location"] = this.location;
         data["isExternalUser"] = this.isExternalUser;
         data["taxInfo"] = this.taxInfo ? this.taxInfo.toJSON() : <any>undefined;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IUserEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     name: string;
     surname: string;
     fullname: string;
@@ -13902,14 +13609,14 @@ export interface IUserEntity {
     location?: UserEntityLocation | undefined;
     isExternalUser: boolean;
     taxInfo?: TaxInformation;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class WalletEntity implements IWalletEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     readonly userId!: string;
     user!: UserEntity;
     readonly currency!: WalletEntityCurrency;
@@ -13918,6 +13625,12 @@ export class WalletEntity implements IWalletEntity {
     pendingIncome!: Money;
     readonly blocked!: boolean;
     readonly blockReason?: WalletEntityBlockReason;
+    rowVersion?: string | undefined;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: IWalletEntity) {
         if (data) {
@@ -13936,11 +13649,6 @@ export class WalletEntity implements IWalletEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             (<any>this).userId = _data["userId"];
             this.user = _data["user"] ? UserEntity.fromJS(_data["user"]) : new UserEntity();
             (<any>this).currency = _data["currency"];
@@ -13949,6 +13657,12 @@ export class WalletEntity implements IWalletEntity {
             this.pendingIncome = _data["pendingIncome"] ? Money.fromJS(_data["pendingIncome"]) : new Money();
             (<any>this).blocked = _data["blocked"];
             (<any>this).blockReason = _data["blockReason"];
+            this.rowVersion = _data["rowVersion"];
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -13961,11 +13675,6 @@ export class WalletEntity implements IWalletEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         data["userId"] = this.userId;
         data["user"] = this.user ? this.user.toJSON() : <any>undefined;
         data["currency"] = this.currency;
@@ -13974,16 +13683,17 @@ export class WalletEntity implements IWalletEntity {
         data["pendingIncome"] = this.pendingIncome ? this.pendingIncome.toJSON() : <any>undefined;
         data["blocked"] = this.blocked;
         data["blockReason"] = this.blockReason;
+        data["rowVersion"] = this.rowVersion;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IWalletEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     userId: string;
     user: UserEntity;
     currency: WalletEntityCurrency;
@@ -13992,6 +13702,12 @@ export interface IWalletEntity {
     pendingIncome: Money;
     blocked: boolean;
     blockReason?: WalletEntityBlockReason;
+    rowVersion?: string | undefined;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class WarnUserScheme implements IWarnUserScheme {
@@ -14031,8 +13747,6 @@ export interface IWarnUserScheme {
 }
 
 export class WithdrawProposalCommand implements IWithdrawProposalCommand {
-    readonly commandId?: string | undefined;
-    readonly timestamp?: Date;
     proposalId?: string;
 
     constructor(data?: IWithdrawProposalCommand) {
@@ -14046,8 +13760,6 @@ export class WithdrawProposalCommand implements IWithdrawProposalCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).commandId = _data["commandId"];
-            (<any>this).timestamp = _data["timestamp"] ? new Date(_data["timestamp"].toString()) : <any>undefined;
             this.proposalId = _data["proposalId"];
         }
     }
@@ -14061,25 +13773,16 @@ export class WithdrawProposalCommand implements IWithdrawProposalCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["commandId"] = this.commandId;
-        data["timestamp"] = this.timestamp ? this.timestamp.toISOString() : <any>undefined;
         data["proposalId"] = this.proposalId;
         return data;
     }
 }
 
 export interface IWithdrawProposalCommand {
-    commandId?: string | undefined;
-    timestamp?: Date;
     proposalId?: string;
 }
 
 export class WorkSessionEntity implements IWorkSessionEntity {
-    id!: string;
-    createdById?: string | undefined;
-    createdAt!: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     files?: FileEntity[] | undefined;
     contractId?: string;
     contract?: ContractEntity;
@@ -14094,6 +13797,11 @@ export class WorkSessionEntity implements IWorkSessionEntity {
     rejectedAt?: Date | undefined;
     status?: WorkSessionEntityStatus;
     readonly autoApproved?: boolean;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
 
     constructor(data?: IWorkSessionEntity) {
         if (data) {
@@ -14106,11 +13814,6 @@ export class WorkSessionEntity implements IWorkSessionEntity {
 
     init(_data?: any) {
         if (_data) {
-            this.id = _data["id"];
-            this.createdById = _data["createdById"];
-            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
-            this.lastModifiedById = _data["lastModifiedById"];
-            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
             if (Array.isArray(_data["files"])) {
                 this.files = [] as any;
                 for (let item of _data["files"])
@@ -14129,6 +13832,11 @@ export class WorkSessionEntity implements IWorkSessionEntity {
             this.rejectedAt = _data["rejectedAt"] ? new Date(_data["rejectedAt"].toString()) : <any>undefined;
             this.status = _data["status"];
             (<any>this).autoApproved = _data["autoApproved"];
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
         }
     }
 
@@ -14141,11 +13849,6 @@ export class WorkSessionEntity implements IWorkSessionEntity {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["createdById"] = this.createdById;
-        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
-        data["lastModifiedById"] = this.lastModifiedById;
-        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
         if (Array.isArray(this.files)) {
             data["files"] = [];
             for (let item of this.files)
@@ -14164,16 +13867,16 @@ export class WorkSessionEntity implements IWorkSessionEntity {
         data["rejectedAt"] = this.rejectedAt ? this.rejectedAt.toISOString() : <any>undefined;
         data["status"] = this.status;
         data["autoApproved"] = this.autoApproved;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
         return data;
     }
 }
 
 export interface IWorkSessionEntity {
-    id: string;
-    createdById?: string | undefined;
-    createdAt: Date;
-    lastModifiedById?: string | undefined;
-    lastModifiedAt?: Date | undefined;
     files?: FileEntity[] | undefined;
     contractId?: string;
     contract?: ContractEntity;
@@ -14188,6 +13891,11 @@ export interface IWorkSessionEntity {
     rejectedAt?: Date | undefined;
     status?: WorkSessionEntityStatus;
     autoApproved?: boolean;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export enum BalanceOperationCommandBalanceOperationType {
@@ -14212,67 +13920,67 @@ export enum ChatEntityType {
 }
 
 export enum CommandResultStatus {
-    _100 = 100,
-    _101 = 101,
-    _102 = 102,
-    _103 = 103,
-    _200 = 200,
-    _201 = 201,
-    _202 = 202,
-    _203 = 203,
-    _204 = 204,
-    _205 = 205,
-    _206 = 206,
-    _207 = 207,
-    _208 = 208,
-    _226 = 226,
-    _300 = 300,
-    _301 = 301,
-    _302 = 302,
-    _303 = 303,
-    _304 = 304,
-    _305 = 305,
-    _306 = 306,
-    _307 = 307,
-    _308 = 308,
-    _400 = 400,
-    _401 = 401,
-    _402 = 402,
-    _403 = 403,
-    _404 = 404,
-    _405 = 405,
-    _406 = 406,
-    _407 = 407,
-    _408 = 408,
-    _409 = 409,
-    _410 = 410,
-    _411 = 411,
-    _412 = 412,
-    _413 = 413,
-    _414 = 414,
-    _415 = 415,
-    _416 = 416,
-    _417 = 417,
-    _421 = 421,
-    _422 = 422,
-    _423 = 423,
-    _424 = 424,
-    _426 = 426,
-    _428 = 428,
-    _429 = 429,
-    _431 = 431,
-    _451 = 451,
-    _500 = 500,
-    _501 = 501,
-    _502 = 502,
-    _503 = 503,
-    _504 = 504,
-    _505 = 505,
-    _506 = 506,
-    _507 = 507,
-    _508 = 508,
-    _510 = 510,
-    _511 = 511,
+    Continue = "Continue",
+    SwitchingProtocols = "SwitchingProtocols",
+    Processing = "Processing",
+    EarlyHints = "EarlyHints",
+    OK = "OK",
+    Created = "Created",
+    Accepted = "Accepted",
+    NonAuthoritativeInformation = "NonAuthoritativeInformation",
+    NoContent = "NoContent",
+    ResetContent = "ResetContent",
+    PartialContent = "PartialContent",
+    MultiStatus = "MultiStatus",
+    AlreadyReported = "AlreadyReported",
+    IMUsed = "IMUsed",
+    MultipleChoices = "MultipleChoices",
+    MovedPermanently = "MovedPermanently",
+    Found = "Found",
+    SeeOther = "SeeOther",
+    NotModified = "NotModified",
+    UseProxy = "UseProxy",
+    Unused = "Unused",
+    RedirectKeepVerb = "RedirectKeepVerb",
+    PermanentRedirect = "PermanentRedirect",
+    BadRequest = "BadRequest",
+    Unauthorized = "Unauthorized",
+    PaymentRequired = "PaymentRequired",
+    Forbidden = "Forbidden",
+    NotFound = "NotFound",
+    MethodNotAllowed = "MethodNotAllowed",
+    NotAcceptable = "NotAcceptable",
+    ProxyAuthenticationRequired = "ProxyAuthenticationRequired",
+    RequestTimeout = "RequestTimeout",
+    Conflict = "Conflict",
+    Gone = "Gone",
+    LengthRequired = "LengthRequired",
+    PreconditionFailed = "PreconditionFailed",
+    RequestEntityTooLarge = "RequestEntityTooLarge",
+    RequestUriTooLong = "RequestUriTooLong",
+    UnsupportedMediaType = "UnsupportedMediaType",
+    RequestedRangeNotSatisfiable = "RequestedRangeNotSatisfiable",
+    ExpectationFailed = "ExpectationFailed",
+    MisdirectedRequest = "MisdirectedRequest",
+    UnprocessableEntity = "UnprocessableEntity",
+    Locked = "Locked",
+    FailedDependency = "FailedDependency",
+    UpgradeRequired = "UpgradeRequired",
+    PreconditionRequired = "PreconditionRequired",
+    TooManyRequests = "TooManyRequests",
+    RequestHeaderFieldsTooLarge = "RequestHeaderFieldsTooLarge",
+    UnavailableForLegalReasons = "UnavailableForLegalReasons",
+    InternalServerError = "InternalServerError",
+    NotImplemented = "NotImplemented",
+    BadGateway = "BadGateway",
+    ServiceUnavailable = "ServiceUnavailable",
+    GatewayTimeout = "GatewayTimeout",
+    HttpVersionNotSupported = "HttpVersionNotSupported",
+    VariantAlsoNegotiates = "VariantAlsoNegotiates",
+    InsufficientStorage = "InsufficientStorage",
+    LoopDetected = "LoopDetected",
+    NotExtended = "NotExtended",
+    NetworkAuthenticationRequired = "NetworkAuthenticationRequired",
 }
 
 export enum ContestEntityStatus {
@@ -14400,6 +14108,7 @@ export enum Statuses {
     Accepted = "Accepted",
     InContract = "InContract",
     Draft = "Draft",
+    SentToModeration = "SentToModeration",
     Completed = "Completed",
     WaitingFreelancerApproval = "WaitingFreelancerApproval",
 }
@@ -14455,6 +14164,7 @@ export enum JobDetailsStatus {
     Accepted = "Accepted",
     InContract = "InContract",
     Draft = "Draft",
+    SentToModeration = "SentToModeration",
     Completed = "Completed",
     WaitingFreelancerApproval = "WaitingFreelancerApproval",
 }
@@ -14472,6 +14182,7 @@ export enum JobEntityStatus {
     Accepted = "Accepted",
     InContract = "InContract",
     Draft = "Draft",
+    SentToModeration = "SentToModeration",
     Completed = "Completed",
     WaitingFreelancerApproval = "WaitingFreelancerApproval",
 }
@@ -14505,6 +14216,12 @@ export enum ProposalEntityStatus {
     Hidden = "Hidden",
 }
 
+export enum ReactToSentJobCommandReaction {
+    Resubmit = "Resubmit",
+    Approve = "Approve",
+    Delete = "Delete",
+}
+
 export enum RegisterUserSchemaCountry {
     Kazakhstan = "Kazakhstan",
     Russia = "Russia",
@@ -14520,9 +14237,9 @@ export enum RegisterUserSchemaType {
 }
 
 export enum ResolveDisputeCommandStrategy {
-    _0 = 0,
-    _1 = 1,
-    _2 = 2,
+    RefundClient = "RefundClient",
+    PayFreelancer = "PayFreelancer",
+    SplitPayment = "SplitPayment",
 }
 
 export enum StartPaymentFlowCommandFlow {
