@@ -39562,6 +39562,52 @@
       "UnresolvedReference": false,
       "Reference": null
     },
+    "/api/sse": {
+      "Summary": null,
+      "Description": null,
+      "Operations": {
+        "Get": {
+          "Tags": [
+            {
+              "Name": "Sse",
+              "Description": null,
+              "ExternalDocs": null,
+              "Extensions": {},
+              "UnresolvedReference": false,
+              "Reference": null
+            }
+          ],
+          "Summary": null,
+          "Description": null,
+          "ExternalDocs": null,
+          "OperationId": null,
+          "Parameters": [],
+          "RequestBody": null,
+          "Responses": {
+            "200": {
+              "Description": "OK",
+              "Headers": {},
+              "Content": {},
+              "Links": {},
+              "Extensions": {},
+              "UnresolvedReference": false,
+              "Reference": null
+            }
+          },
+          "Callbacks": {},
+          "Deprecated": false,
+          "Security": [],
+          "Servers": [],
+          "Extensions": {},
+          "Annotations": null
+        }
+      },
+      "Servers": [],
+      "Parameters": [],
+      "Extensions": {},
+      "UnresolvedReference": false,
+      "Reference": null
+    },
     "/api/stuff/user/{userId}/block": {
       "Summary": null,
       "Description": null,
@@ -51773,6 +51819,52 @@
                   "Extensions": {}
                 }
               },
+              "Links": {},
+              "Extensions": {},
+              "UnresolvedReference": false,
+              "Reference": null
+            }
+          },
+          "Callbacks": {},
+          "Deprecated": false,
+          "Security": [],
+          "Servers": [],
+          "Extensions": {},
+          "Annotations": null
+        }
+      },
+      "Servers": [],
+      "Parameters": [],
+      "Extensions": {},
+      "UnresolvedReference": false,
+      "Reference": null
+    },
+    "/api/ws": {
+      "Summary": null,
+      "Description": null,
+      "Operations": {
+        "Get": {
+          "Tags": [
+            {
+              "Name": "WebSocket",
+              "Description": null,
+              "ExternalDocs": null,
+              "Extensions": {},
+              "UnresolvedReference": false,
+              "Reference": null
+            }
+          ],
+          "Summary": null,
+          "Description": null,
+          "ExternalDocs": null,
+          "OperationId": null,
+          "Parameters": [],
+          "RequestBody": null,
+          "Responses": {
+            "200": {
+              "Description": "OK",
+              "Headers": {},
+              "Content": {},
               "Links": {},
               "Extensions": {},
               "UnresolvedReference": false,
@@ -81958,6 +82050,48 @@
             "UnresolvedReference": false,
             "Reference": null,
             "Annotations": null
+          },
+          "rememberMe": {
+            "Title": null,
+            "Type": "boolean",
+            "Format": null,
+            "Description": null,
+            "Maximum": null,
+            "ExclusiveMaximum": null,
+            "Minimum": null,
+            "ExclusiveMinimum": null,
+            "MaxLength": null,
+            "MinLength": null,
+            "Pattern": null,
+            "MultipleOf": null,
+            "Default": null,
+            "ReadOnly": false,
+            "WriteOnly": false,
+            "AllOf": [],
+            "OneOf": [],
+            "AnyOf": [],
+            "Not": null,
+            "Required": [],
+            "Items": null,
+            "MaxItems": null,
+            "MinItems": null,
+            "UniqueItems": null,
+            "Properties": {},
+            "MaxProperties": null,
+            "MinProperties": null,
+            "AdditionalPropertiesAllowed": true,
+            "AdditionalProperties": null,
+            "Discriminator": null,
+            "Example": null,
+            "Enum": [],
+            "Nullable": false,
+            "ExternalDocs": null,
+            "Deprecated": false,
+            "Xml": null,
+            "Extensions": {},
+            "UnresolvedReference": false,
+            "Reference": null,
+            "Annotations": null
           }
         },
         "MaxProperties": null,
@@ -96159,6 +96293,6 @@
   ],
   "ExternalDocs": null,
   "Extensions": {},
-  "HashCode": "1317F7306BAB9219A959F5BDCDAF066C3A4250A39CAD44828F0300C84DFEABABE321C69EB1596322DE3ACF1BE61569BBD3CFBCED78A86DC471CD489FCBF40511",
+  "HashCode": "16F539D62414DDF6F88A203AAF0CD1CDACE463EB628C4AF18FE97743361137FFC4A82ED62537580133B7738B0E45DD3895A5AA1054BF2B06146246D87C775855",
   "Annotations": null
 }
