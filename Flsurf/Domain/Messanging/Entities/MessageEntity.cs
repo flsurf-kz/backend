@@ -18,11 +18,24 @@ namespace Flsurf.Domain.Messanging.Entities
         public ChatEntity Chat { get; set; } = null!;
         public DateTime SentDate { get; set; }
         public bool IsPinned { get; set; } = false; 
+        public Guid? ReplyedToMessageId { get; set; } 
         public ICollection<FileEntity> Files { get; set; } = []; 
 
         public static MessageEntity Create(string text, UserEntity sender, ICollection<FileEntity> files)
         {
             var message = new MessageEntity { Text = text, SenderId = sender.Id, Sender = sender, Files = files };
+            message.AddDomainEvent(new MessageCreated(message));
+            return message;
+        }
+
+        public static MessageEntity Reply(string text, UserEntity sender, Guid replyedToMsgId, ICollection<FileEntity> files)
+        {
+            var message = new MessageEntity { 
+                Text = text,
+                SenderId = sender.Id,
+                Sender = sender,
+                Files = files, 
+                ReplyedToMessageId = replyedToMsgId };
             message.AddDomainEvent(new MessageCreated(message));
             return message;
         }

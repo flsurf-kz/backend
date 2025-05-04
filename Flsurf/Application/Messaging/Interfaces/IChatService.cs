@@ -5,7 +5,9 @@ namespace Flsurf.Application.Messaging.Interfaces
 {
     public interface IChatService
     {
-        GetChatsList GetChats();
+        GetChatsList GetChatsList();
+        GetChat GetChat();
+        GetUnreadCounter GetUnreadCounter(); 
         CreateChat Create();
         CloseChat Close();
         BookmarkChat Bookmark();

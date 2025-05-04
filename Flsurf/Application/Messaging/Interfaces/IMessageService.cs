@@ -8,6 +8,7 @@ namespace Flsurf.Application.Messaging.Interfaces
         GetMessagesList GetMessages();
         DeleteMessage Delete();
         UpdateMessage Update();
+        GetMessagesThread GetThread(); 
         PinMessage Pin(); 
     }
 }

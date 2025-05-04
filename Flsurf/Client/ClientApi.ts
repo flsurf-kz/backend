@@ -75,6 +75,69 @@ export interface IClient {
     /**
      * @return Success
      */
+    getChats(): Promise<ChatEntity[]>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createChat(body?: CreateChatDto | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    closeChat(body?: CloseChatDto | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    bookmarkChat(body?: BookmarkChatDto | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updateChat(body?: UpdateChatDto | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    markAsRead(body?: MarkAsReadDto | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    inviteMember(body?: InviteMemberDto | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    kickMember(body?: KickMemberDto | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getChat(chatId: string, body?: string | undefined): Promise<ChatEntity>;
+
+    /**
+     * @return Success
+     */
+    getChatUnreadCounter(chatId: string): Promise<number>;
+
+    /**
+     * @return Success
+     */
+    getUnreadCounter(): Promise<number>;
+
+    /**
+     * @return Success
+     */
     getClientOrderInfo(userId: string): Promise<ClientJobInfo>;
 
     /**
@@ -379,6 +442,42 @@ export interface IClient {
      * @return Success
      */
     getBookmarksList(): Promise<JobEntity[]>;
+
+    /**
+     * @param starts (optional) 
+     * @param ends (optional) 
+     * @return Success
+     */
+    getMessages(chatId: string, starts?: number | undefined, ends?: number | undefined): Promise<MessageEntity[]>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    sendMessage(body?: SendMessageDto | undefined): Promise<MessageEntity>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updateMessage(body?: UpdateMessageDto | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    deleteMessage(body?: DeleteMessageDto | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    pinMessage(body?: PinMessageDto | undefined): Promise<boolean>;
+
+    /**
+     * @return Success
+     */
+    getThreadMessages(messageId: string): Promise<MessageThreadDto[]>;
 
     /**
      * @param start (optional) 
@@ -1110,6 +1209,468 @@ export class Client implements IClient {
             });
         }
         return Promise.resolve<CategoryEntity[]>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getChats(): Promise<ChatEntity[]> {
+        let url_ = this.baseUrl + "/api/chat/list";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetChats(_response);
+        });
+    }
+
+    protected processGetChats(response: Response): Promise<ChatEntity[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ChatEntity.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ChatEntity[]>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createChat(body?: CreateChatDto | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/chat/create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateChat(_response);
+        });
+    }
+
+    protected processCreateChat(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    closeChat(body?: CloseChatDto | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/chat/close";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCloseChat(_response);
+        });
+    }
+
+    protected processCloseChat(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    bookmarkChat(body?: BookmarkChatDto | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/chat/bookmark";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processBookmarkChat(_response);
+        });
+    }
+
+    protected processBookmarkChat(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updateChat(body?: UpdateChatDto | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/chat/update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateChat(_response);
+        });
+    }
+
+    protected processUpdateChat(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    markAsRead(body?: MarkAsReadDto | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/chat/mark-as-read";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processMarkAsRead(_response);
+        });
+    }
+
+    protected processMarkAsRead(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    inviteMember(body?: InviteMemberDto | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/chat/invite";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processInviteMember(_response);
+        });
+    }
+
+    protected processInviteMember(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    kickMember(body?: KickMemberDto | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/chat/kick";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processKickMember(_response);
+        });
+    }
+
+    protected processKickMember(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getChat(chatId: string, body?: string | undefined): Promise<ChatEntity> {
+        let url_ = this.baseUrl + "/api/chat/{chatId}";
+        if (chatId === undefined || chatId === null)
+            throw new Error("The parameter 'chatId' must be defined.");
+        url_ = url_.replace("{chatId}", encodeURIComponent("" + chatId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetChat(_response);
+        });
+    }
+
+    protected processGetChat(response: Response): Promise<ChatEntity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ChatEntity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ChatEntity>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getChatUnreadCounter(chatId: string): Promise<number> {
+        let url_ = this.baseUrl + "/api/chat/{chatId}/unread";
+        if (chatId === undefined || chatId === null)
+            throw new Error("The parameter 'chatId' must be defined.");
+        url_ = url_.replace("{chatId}", encodeURIComponent("" + chatId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetChatUnreadCounter(_response);
+        });
+    }
+
+    protected processGetChatUnreadCounter(response: Response): Promise<number> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getUnreadCounter(): Promise<number> {
+        let url_ = this.baseUrl + "/api/chat/unread";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetUnreadCounter(_response);
+        });
+    }
+
+    protected processGetUnreadCounter(response: Response): Promise<number> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(null as any);
     }
 
     /**
@@ -3339,6 +3900,280 @@ export class Client implements IClient {
             });
         }
         return Promise.resolve<JobEntity[]>(null as any);
+    }
+
+    /**
+     * @param starts (optional) 
+     * @param ends (optional) 
+     * @return Success
+     */
+    getMessages(chatId: string, starts?: number | undefined, ends?: number | undefined): Promise<MessageEntity[]> {
+        let url_ = this.baseUrl + "/api/message/list?";
+        if (chatId === undefined || chatId === null)
+            throw new Error("The parameter 'chatId' must be defined and cannot be null.");
+        else
+            url_ += "ChatId=" + encodeURIComponent("" + chatId) + "&";
+        if (starts === null)
+            throw new Error("The parameter 'starts' cannot be null.");
+        else if (starts !== undefined)
+            url_ += "Starts=" + encodeURIComponent("" + starts) + "&";
+        if (ends === null)
+            throw new Error("The parameter 'ends' cannot be null.");
+        else if (ends !== undefined)
+            url_ += "Ends=" + encodeURIComponent("" + ends) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetMessages(_response);
+        });
+    }
+
+    protected processGetMessages(response: Response): Promise<MessageEntity[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(MessageEntity.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<MessageEntity[]>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    sendMessage(body?: SendMessageDto | undefined): Promise<MessageEntity> {
+        let url_ = this.baseUrl + "/api/message/send";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processSendMessage(_response);
+        });
+    }
+
+    protected processSendMessage(response: Response): Promise<MessageEntity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = MessageEntity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<MessageEntity>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    updateMessage(body?: UpdateMessageDto | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/message/update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateMessage(_response);
+        });
+    }
+
+    protected processUpdateMessage(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    deleteMessage(body?: DeleteMessageDto | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/message/delete";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteMessage(_response);
+        });
+    }
+
+    protected processDeleteMessage(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    pinMessage(body?: PinMessageDto | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/api/message/pin";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processPinMessage(_response);
+        });
+    }
+
+    protected processPinMessage(response: Response): Promise<boolean> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<boolean>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getThreadMessages(messageId: string): Promise<MessageThreadDto[]> {
+        let url_ = this.baseUrl + "/api/message/{messageId}/thread";
+        if (messageId === undefined || messageId === null)
+            throw new Error("The parameter 'messageId' must be defined.");
+        url_ = url_.replace("{messageId}", encodeURIComponent("" + messageId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetThreadMessages(_response);
+        });
+    }
+
+    protected processGetThreadMessages(response: Response): Promise<MessageThreadDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(MessageThreadDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<MessageThreadDto[]>(null as any);
     }
 
     /**
@@ -5832,6 +6667,42 @@ export interface IBlockWalletCommand {
     reason: BlockWalletCommandReason;
 }
 
+export class BookmarkChatDto implements IBookmarkChatDto {
+    chatId?: string;
+
+    constructor(data?: IBookmarkChatDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.chatId = _data["chatId"];
+        }
+    }
+
+    static fromJS(data: any): BookmarkChatDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new BookmarkChatDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["chatId"] = this.chatId;
+        return data;
+    }
+}
+
+export interface IBookmarkChatDto {
+    chatId?: string;
+}
+
 export class BookmarkJobCommand implements IBookmarkJobCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
@@ -5984,6 +6855,110 @@ export class CategoryModel implements ICategoryModel {
 }
 
 export interface ICategoryModel {
+}
+
+export class ChatEntity implements IChatEntity {
+    id!: string;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    readonly ownerId?: string;
+    owner?: UserEntity;
+    participants?: UserEntity[] | undefined;
+    name?: string | undefined;
+    type?: ChatEntityType;
+    isArchived?: boolean;
+    isTextingAllowed?: boolean;
+    finishedAt?: Date | undefined;
+    contracts?: ContractEntity[] | undefined;
+
+    constructor(data?: IChatEntity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            (<any>this).ownerId = _data["ownerId"];
+            this.owner = _data["owner"] ? UserEntity.fromJS(_data["owner"]) : <any>undefined;
+            if (Array.isArray(_data["participants"])) {
+                this.participants = [] as any;
+                for (let item of _data["participants"])
+                    this.participants!.push(UserEntity.fromJS(item));
+            }
+            this.name = _data["name"];
+            this.type = _data["type"];
+            this.isArchived = _data["isArchived"];
+            this.isTextingAllowed = _data["isTextingAllowed"];
+            this.finishedAt = _data["finishedAt"] ? new Date(_data["finishedAt"].toString()) : <any>undefined;
+            if (Array.isArray(_data["contracts"])) {
+                this.contracts = [] as any;
+                for (let item of _data["contracts"])
+                    this.contracts!.push(ContractEntity.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ChatEntity {
+        data = typeof data === 'object' ? data : {};
+        let result = new ChatEntity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["ownerId"] = this.ownerId;
+        data["owner"] = this.owner ? this.owner.toJSON() : <any>undefined;
+        if (Array.isArray(this.participants)) {
+            data["participants"] = [];
+            for (let item of this.participants)
+                data["participants"].push(item.toJSON());
+        }
+        data["name"] = this.name;
+        data["type"] = this.type;
+        data["isArchived"] = this.isArchived;
+        data["isTextingAllowed"] = this.isTextingAllowed;
+        data["finishedAt"] = this.finishedAt ? this.finishedAt.toISOString() : <any>undefined;
+        if (Array.isArray(this.contracts)) {
+            data["contracts"] = [];
+            for (let item of this.contracts)
+                data["contracts"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IChatEntity {
+    id: string;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    ownerId?: string;
+    owner?: UserEntity;
+    participants?: UserEntity[] | undefined;
+    name?: string | undefined;
+    type?: ChatEntityType;
+    isArchived?: boolean;
+    isTextingAllowed?: boolean;
+    finishedAt?: Date | undefined;
+    contracts?: ContractEntity[] | undefined;
 }
 
 export class ClientAcceptFinishContractCommand implements IClientAcceptFinishContractCommand {
@@ -6212,6 +7187,42 @@ export interface IClientRejectContractCompletionCommand {
     timestamp?: Date;
     contractId?: string;
     reason?: string | undefined;
+}
+
+export class CloseChatDto implements ICloseChatDto {
+    chatId?: string;
+
+    constructor(data?: ICloseChatDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.chatId = _data["chatId"];
+        }
+    }
+
+    static fromJS(data: any): CloseChatDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CloseChatDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["chatId"] = this.chatId;
+        return data;
+    }
+}
+
+export interface ICloseChatDto {
+    chatId?: string;
 }
 
 export class CommandResult implements ICommandResult {
@@ -6632,6 +7643,62 @@ export interface ICreateCategoryCommand {
     slug?: string | undefined;
     tags?: string | undefined;
     parentCategoryId?: string | undefined;
+}
+
+export class CreateChatDto implements ICreateChatDto {
+    name!: string;
+    description?: string | undefined;
+    userIds?: string[] | undefined;
+    type?: CreateChatDtoType;
+
+    constructor(data?: ICreateChatDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.description = _data["description"];
+            if (Array.isArray(_data["userIds"])) {
+                this.userIds = [] as any;
+                for (let item of _data["userIds"])
+                    this.userIds!.push(item);
+            }
+            this.type = _data["type"];
+        }
+    }
+
+    static fromJS(data: any): CreateChatDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateChatDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["description"] = this.description;
+        if (Array.isArray(this.userIds)) {
+            data["userIds"] = [];
+            for (let item of this.userIds)
+                data["userIds"].push(item);
+        }
+        data["type"] = this.type;
+        return data;
+    }
+}
+
+export interface ICreateChatDto {
+    name: string;
+    description?: string | undefined;
+    userIds?: string[] | undefined;
+    type?: CreateChatDtoType;
 }
 
 export class CreateClientProfileCommand implements ICreateClientProfileCommand {
@@ -7511,6 +8578,42 @@ export interface IDeleteJobCommand {
     commandId?: string | undefined;
     timestamp?: Date;
     jobId?: string;
+}
+
+export class DeleteMessageDto implements IDeleteMessageDto {
+    messgeId?: string;
+
+    constructor(data?: IDeleteMessageDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.messgeId = _data["messgeId"];
+        }
+    }
+
+    static fromJS(data: any): DeleteMessageDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DeleteMessageDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["messgeId"] = this.messgeId;
+        return data;
+    }
+}
+
+export interface IDeleteMessageDto {
+    messgeId?: string;
 }
 
 export class DeletePortfolioProjectCommand implements IDeletePortfolioProjectCommand {
@@ -8997,6 +10100,46 @@ export interface IInitiateDisputeCommand {
     reason?: string | undefined;
 }
 
+export class InviteMemberDto implements IInviteMemberDto {
+    chatId?: string;
+    userId?: string;
+
+    constructor(data?: IInviteMemberDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.chatId = _data["chatId"];
+            this.userId = _data["userId"];
+        }
+    }
+
+    static fromJS(data: any): InviteMemberDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new InviteMemberDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["chatId"] = this.chatId;
+        data["userId"] = this.userId;
+        return data;
+    }
+}
+
+export interface IInviteMemberDto {
+    chatId?: string;
+    userId?: string;
+}
+
 export class JobDetails implements IJobDetails {
     jobId?: string;
     title?: string | undefined;
@@ -9362,6 +10505,46 @@ export interface IJobReviewEntity {
     reviewDate: Date;
 }
 
+export class KickMemberDto implements IKickMemberDto {
+    chatId?: string;
+    userId?: string;
+
+    constructor(data?: IKickMemberDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.chatId = _data["chatId"];
+            this.userId = _data["userId"];
+        }
+    }
+
+    static fromJS(data: any): KickMemberDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new KickMemberDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["chatId"] = this.chatId;
+        data["userId"] = this.userId;
+        return data;
+    }
+}
+
+export interface IKickMemberDto {
+    chatId?: string;
+    userId?: string;
+}
+
 export class LoginUserSchema implements ILoginUserSchema {
     email!: string;
     password!: string;
@@ -9404,6 +10587,182 @@ export interface ILoginUserSchema {
     email: string;
     password: string;
     rememberMe?: boolean;
+}
+
+export class MarkAsReadDto implements IMarkAsReadDto {
+    chatId?: string;
+
+    constructor(data?: IMarkAsReadDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.chatId = _data["chatId"];
+        }
+    }
+
+    static fromJS(data: any): MarkAsReadDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new MarkAsReadDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["chatId"] = this.chatId;
+        return data;
+    }
+}
+
+export interface IMarkAsReadDto {
+    chatId?: string;
+}
+
+export class MessageEntity implements IMessageEntity {
+    id!: string;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    senderId?: string;
+    sender?: UserEntity;
+    text?: string | undefined;
+    isDeleted?: boolean;
+    chatId?: string;
+    chat?: ChatEntity;
+    sentDate?: Date;
+    isPinned?: boolean;
+    replyedToMessageId?: string | undefined;
+    files?: FileEntity[] | undefined;
+
+    constructor(data?: IMessageEntity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.senderId = _data["senderId"];
+            this.sender = _data["sender"] ? UserEntity.fromJS(_data["sender"]) : <any>undefined;
+            this.text = _data["text"];
+            this.isDeleted = _data["isDeleted"];
+            this.chatId = _data["chatId"];
+            this.chat = _data["chat"] ? ChatEntity.fromJS(_data["chat"]) : <any>undefined;
+            this.sentDate = _data["sentDate"] ? new Date(_data["sentDate"].toString()) : <any>undefined;
+            this.isPinned = _data["isPinned"];
+            this.replyedToMessageId = _data["replyedToMessageId"];
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files!.push(FileEntity.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): MessageEntity {
+        data = typeof data === 'object' ? data : {};
+        let result = new MessageEntity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["senderId"] = this.senderId;
+        data["sender"] = this.sender ? this.sender.toJSON() : <any>undefined;
+        data["text"] = this.text;
+        data["isDeleted"] = this.isDeleted;
+        data["chatId"] = this.chatId;
+        data["chat"] = this.chat ? this.chat.toJSON() : <any>undefined;
+        data["sentDate"] = this.sentDate ? this.sentDate.toISOString() : <any>undefined;
+        data["isPinned"] = this.isPinned;
+        data["replyedToMessageId"] = this.replyedToMessageId;
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IMessageEntity {
+    id: string;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    senderId?: string;
+    sender?: UserEntity;
+    text?: string | undefined;
+    isDeleted?: boolean;
+    chatId?: string;
+    chat?: ChatEntity;
+    sentDate?: Date;
+    isPinned?: boolean;
+    replyedToMessageId?: string | undefined;
+    files?: FileEntity[] | undefined;
+}
+
+export class MessageThreadDto implements IMessageThreadDto {
+    messageId?: string;
+    replyToId?: string;
+
+    constructor(data?: IMessageThreadDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.messageId = _data["messageId"];
+            this.replyToId = _data["replyToId"];
+        }
+    }
+
+    static fromJS(data: any): MessageThreadDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new MessageThreadDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["messageId"] = this.messageId;
+        data["replyToId"] = this.replyToId;
+        return data;
+    }
+}
+
+export interface IMessageThreadDto {
+    messageId?: string;
+    replyToId?: string;
 }
 
 export class Money implements IMoney {
@@ -9648,6 +11007,42 @@ export interface IPaymentSystemEntity {
     lastModifiedAt?: Date | undefined;
     name: string;
     isActive?: boolean;
+}
+
+export class PinMessageDto implements IPinMessageDto {
+    messageId?: string;
+
+    constructor(data?: IPinMessageDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.messageId = _data["messageId"];
+        }
+    }
+
+    static fromJS(data: any): PinMessageDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new PinMessageDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["messageId"] = this.messageId;
+        return data;
+    }
+}
+
+export interface IPinMessageDto {
+    messageId?: string;
 }
 
 export class PortfolioProjectEntity implements IPortfolioProjectEntity {
@@ -10308,6 +11703,62 @@ export interface ISelectContestWinnerCommand {
     timestamp?: Date;
     contestId: string;
     entryId: string;
+}
+
+export class SendMessageDto implements ISendMessageDto {
+    chatId!: string;
+    text?: string | undefined;
+    files?: CreateFileDto[] | undefined;
+    replyToMsg?: string | undefined;
+
+    constructor(data?: ISendMessageDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.chatId = _data["chatId"];
+            this.text = _data["text"];
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files!.push(CreateFileDto.fromJS(item));
+            }
+            this.replyToMsg = _data["replyToMsg"];
+        }
+    }
+
+    static fromJS(data: any): SendMessageDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SendMessageDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["chatId"] = this.chatId;
+        data["text"] = this.text;
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
+        }
+        data["replyToMsg"] = this.replyToMsg;
+        return data;
+    }
+}
+
+export interface ISendMessageDto {
+    chatId: string;
+    text?: string | undefined;
+    files?: CreateFileDto[] | undefined;
+    replyToMsg?: string | undefined;
 }
 
 export class SendResetCodeCommand implements ISendResetCodeCommand {
@@ -11445,6 +12896,54 @@ export interface IUpdateCategoryCommand {
     name?: string | undefined;
 }
 
+export class UpdateChatDto implements IUpdateChatDto {
+    chatId!: string;
+    name?: string | undefined;
+    isTextingAllowed?: boolean | undefined;
+    isArchived?: boolean | undefined;
+
+    constructor(data?: IUpdateChatDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.chatId = _data["chatId"];
+            this.name = _data["name"];
+            this.isTextingAllowed = _data["isTextingAllowed"];
+            this.isArchived = _data["isArchived"];
+        }
+    }
+
+    static fromJS(data: any): UpdateChatDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateChatDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["chatId"] = this.chatId;
+        data["name"] = this.name;
+        data["isTextingAllowed"] = this.isTextingAllowed;
+        data["isArchived"] = this.isArchived;
+        return data;
+    }
+}
+
+export interface IUpdateChatDto {
+    chatId: string;
+    name?: string | undefined;
+    isTextingAllowed?: boolean | undefined;
+    isArchived?: boolean | undefined;
+}
+
 export class UpdateClientProfileCommand implements IUpdateClientProfileCommand {
     readonly commandId?: string | undefined;
     readonly timestamp?: Date;
@@ -11794,6 +13293,58 @@ export interface IUpdateJobCommand {
     hourlyRate?: number | undefined;
     expirationDate?: Date | undefined;
     duration?: number | undefined;
+    files?: CreateFileDto[] | undefined;
+}
+
+export class UpdateMessageDto implements IUpdateMessageDto {
+    messageId?: string;
+    text?: string | undefined;
+    files?: CreateFileDto[] | undefined;
+
+    constructor(data?: IUpdateMessageDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.messageId = _data["messageId"];
+            this.text = _data["text"];
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files!.push(CreateFileDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): UpdateMessageDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateMessageDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["messageId"] = this.messageId;
+        data["text"] = this.text;
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IUpdateMessageDto {
+    messageId?: string;
+    text?: string | undefined;
     files?: CreateFileDto[] | undefined;
 }
 
@@ -12654,6 +14205,12 @@ export enum BlockWalletCommandReason {
     UserRequest = "UserRequest",
 }
 
+export enum ChatEntityType {
+    Group = "Group",
+    Direct = "Direct",
+    Support = "Support",
+}
+
 export enum CommandResultStatus {
     _100 = 100,
     _101 = 101,
@@ -12749,6 +14306,12 @@ export enum ContractEntityPaymentSchedule {
     Weekly = "Weekly",
     Monthly = "Monthly",
     OnCompletion = "OnCompletion",
+}
+
+export enum CreateChatDtoType {
+    Group = "Group",
+    Direct = "Direct",
+    Support = "Support",
 }
 
 export enum CreateClientProfileCommandEmployerType {

@@ -36,5 +36,10 @@ namespace Flsurf.Application.Messaging.Services
         {
             return _serviceProvider.GetRequiredService<PinMessage>();
         }
+
+        public GetMessagesThread GetThread()
+        {
+            return _serviceProvider.GetRequiredService<GetMessagesThread>();
+        }
     }
 }

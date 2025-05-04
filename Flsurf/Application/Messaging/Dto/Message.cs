@@ -3,28 +3,29 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Flsurf.Application.Messaging.Dto
 {
-    public record UpdateMessageDto {
-        public Guid MessageId;
-        public string? Text;
-        public ICollection<CreateFileDto>? Files; 
+    public class UpdateMessageDto {
+        public Guid MessageId { get; set; }
+        public string? Text { get; set; }
+        public ICollection<CreateFileDto>? Files { get; set; }
     }
-    public record SendMessageDto {
+    public class SendMessageDto {
         [Required]
-        public Guid ChatId;
-        public string? Text;
-        public ICollection<CreateFileDto>? Files;
+        public Guid ChatId { get; set; }
+        public string? Text { get; set; }
+        public ICollection<CreateFileDto>? Files { get; set; }
+        public Guid? replyToMsg { get; set; }
     }
     public class PinMessageDto
     {
         public Guid MessageId { get; set; }
     }
 
-    public record UnpinMessageDto { }
-    public record GetMessagesListDto {
+    public class UnpinMessageDto { }
+    public class GetMessagesListDto {
         [Required]
-        public Guid ChatId;
-        public int starts = 0;
+        public Guid ChatId { get; set; }
+        public int Starts { get; set; } = 0;  
         // override 
-        public int ends = 20;
+        public int Ends { get; set; } = 20;
     }
 }

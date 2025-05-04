@@ -12,9 +12,19 @@ namespace Flsurf.Application.Messaging.Services
             _serviceProvider = serviceProvider;
         }
 
-        public GetChatsList GetChats()
+        public GetChatsList GetChatsList()
         {
             return _serviceProvider.GetRequiredService<GetChatsList>();
+        }
+
+        public GetChat GetChat()
+        {
+            return _serviceProvider.GetRequiredService<GetChat>();
+        }
+
+        public GetUnreadCounter GetUnreadCounter()
+        {
+            return _serviceProvider.GetRequiredService<GetUnreadCounter>();
         }
 
         public CreateChat Create()

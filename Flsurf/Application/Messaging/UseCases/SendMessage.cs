@@ -42,8 +42,18 @@ namespace Flsurf.Application.Messaging.UseCases
             {
                 files = await _uploadFiles.Execute(dto.Files);
             }
-            var message = MessageEntity.Create(dto.Text, currentUser, files);
 
+            var message = MessageEntity.Create(dto.Text, currentUser, files);
+            if (dto.replyToMsg != null)
+            {
+                var msg = await _dbContext.Messages.FirstOrDefaultAsync(x => x.Id == dto.replyToMsg);
+
+                // default use case implyes that replyed message could be deleted when sending replyed. 
+                if (msg != null)
+                {
+                    message.ReplyedToMessageId = msg.Id; 
+                }
+            }
             _dbContext.Messages.Add(message);
             await _dbContext.SaveChangesAsync(); 
 

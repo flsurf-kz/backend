@@ -31,7 +31,7 @@ namespace Flsurf.Application.Messaging.UseCases
                 .Where(x => x.IsDeleted == false)
                 .IncludeStandard()
                 .OrderByDescending(x => x.CreatedAt)
-                .Paginate(dto.starts, dto.ends)
+                .Paginate(dto.Starts, dto.Ends)
                 .ToListAsync();
 
             return messages;
