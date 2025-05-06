@@ -565,6 +565,11 @@ export interface IClient {
     /**
      * @return OK
      */
+    sse(): Promise<void>;
+
+    /**
+     * @return OK
+     */
     blockUser(userId: string): Promise<boolean>;
 
     /**
@@ -727,6 +732,11 @@ export interface IClient {
      * @return OK
      */
     addPaymentMethod(body?: AddPaymentMethodCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @return OK
+     */
+    ws(): Promise<void>;
 
     /**
      * @param body (optional) 
@@ -4808,6 +4818,39 @@ export class Client implements IClient {
     /**
      * @return OK
      */
+    sse(): Promise<void> {
+        let url_ = this.baseUrl + "/api/sse";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processSse(_response);
+        });
+    }
+
+    protected processSse(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
     blockUser(userId: string): Promise<boolean> {
         let url_ = this.baseUrl + "/api/stuff/user/{userId}/block";
         if (userId === undefined || userId === null)
@@ -6057,6 +6100,39 @@ export class Client implements IClient {
     }
 
     /**
+     * @return OK
+     */
+    ws(): Promise<void> {
+        let url_ = this.baseUrl + "/api/ws";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processWs(_response);
+        });
+    }
+
+    protected processWs(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    /**
      * @param body (optional) 
      * @return OK
      */
@@ -6900,6 +6976,8 @@ export class ChatEntity implements IChatEntity {
     finishedAt?: Date | undefined;
     contracts?: ContractEntity[] | undefined;
     readRecords?: MessageReadEntity[] | undefined;
+    messages?: MessageEntity[] | undefined;
+    lastMessage?: MessageEntity;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
@@ -6939,6 +7017,12 @@ export class ChatEntity implements IChatEntity {
                 for (let item of _data["readRecords"])
                     this.readRecords!.push(MessageReadEntity.fromJS(item));
             }
+            if (Array.isArray(_data["messages"])) {
+                this.messages = [] as any;
+                for (let item of _data["messages"])
+                    this.messages!.push(MessageEntity.fromJS(item));
+            }
+            this.lastMessage = _data["lastMessage"] ? MessageEntity.fromJS(_data["lastMessage"]) : <any>undefined;
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
@@ -6978,6 +7062,12 @@ export class ChatEntity implements IChatEntity {
             for (let item of this.readRecords)
                 data["readRecords"].push(item.toJSON());
         }
+        if (Array.isArray(this.messages)) {
+            data["messages"] = [];
+            for (let item of this.messages)
+                data["messages"].push(item.toJSON());
+        }
+        data["lastMessage"] = this.lastMessage ? this.lastMessage.toJSON() : <any>undefined;
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["lastModifiedById"] = this.lastModifiedById;
@@ -6998,6 +7088,8 @@ export interface IChatEntity {
     finishedAt?: Date | undefined;
     contracts?: ContractEntity[] | undefined;
     readRecords?: MessageReadEntity[] | undefined;
+    messages?: MessageEntity[] | undefined;
+    lastMessage?: MessageEntity;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;
@@ -11333,6 +11425,7 @@ export class RegisterUserSchema implements IRegisterUserSchema {
     email!: string;
     country!: RegisterUserSchemaCountry;
     type!: RegisterUserSchemaType;
+    rememberMe?: boolean;
 
     constructor(data?: IRegisterUserSchema) {
         if (data) {
@@ -11352,6 +11445,7 @@ export class RegisterUserSchema implements IRegisterUserSchema {
             this.email = _data["email"];
             this.country = _data["country"];
             this.type = _data["type"];
+            this.rememberMe = _data["rememberMe"];
         }
     }
 
@@ -11371,6 +11465,7 @@ export class RegisterUserSchema implements IRegisterUserSchema {
         data["email"] = this.email;
         data["country"] = this.country;
         data["type"] = this.type;
+        data["rememberMe"] = this.rememberMe;
         return data;
     }
 }
@@ -11383,6 +11478,7 @@ export interface IRegisterUserSchema {
     email: string;
     country: RegisterUserSchemaCountry;
     type: RegisterUserSchemaType;
+    rememberMe?: boolean;
 }
 
 export class ResetPasswordCommand implements IResetPasswordCommand {
