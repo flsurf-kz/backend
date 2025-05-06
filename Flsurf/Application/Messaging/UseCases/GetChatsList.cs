@@ -46,6 +46,9 @@ namespace Flsurf.Application.Messaging.UseCases
 
             var chats = await _context.Chats
                 .IncludeStandard()
+                .Include(c => c.Messages              // filtered include
+                    .OrderByDescending(m => m.CreatedAt)
+                    .Take(1))
                 .Where(x => chatIds.Contains(x.Id))
                 .ToListAsync(); 
 

@@ -3,6 +3,7 @@ using Flsurf.Domain.Messanging.Enums;
 using Flsurf.Domain.Messanging.Events;
 using Flsurf.Domain.Messanging.Exceptions;
 using Flsurf.Domain.User.Entities;
+using MailKit;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -23,6 +24,15 @@ namespace Flsurf.Domain.Messanging.Entities
         public ICollection<ContractEntity> Contracts { get; set; } = [];
         [JsonIgnore]
         public ICollection<MessageReadEntity> ReadRecords { get; set; } = [];
+
+        // DONT LOAD ALL OF THEM, LAST MESSAGE REQUIRED IT 
+        [JsonIgnore]
+        public ICollection<MessageEntity> Messages { get; set; } = [];
+
+        [NotMapped]
+        public MessageEntity? LastMessage => Messages
+            .OrderByDescending(m => m.CreatedAt) 
+            .FirstOrDefault();
 
         public static ChatEntity Create(string name, UserEntity owner, List<UserEntity> participants, bool isTextingAllowed, ChatTypes type)
         {
