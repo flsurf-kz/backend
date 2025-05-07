@@ -69879,6 +69879,11 @@
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
+                "Value": "Tenge"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
                 "Value": "Euro"
               }
             ],
@@ -73618,6 +73623,11 @@
                 "PrimitiveType": 4,
                 "AnyType": 0,
                 "Value": "Dollar"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
+                "Value": "Tenge"
               },
               {
                 "PrimitiveType": 4,
@@ -78077,6 +78087,11 @@
                 "PrimitiveType": 4,
                 "AnyType": 0,
                 "Value": "Dollar"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
+                "Value": "Tenge"
               },
               {
                 "PrimitiveType": 4,
@@ -94745,6 +94760,11 @@
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
+                "Value": "Tenge"
+              },
+              {
+                "PrimitiveType": 4,
+                "AnyType": 0,
                 "Value": "Euro"
               }
             ],
@@ -96438,6 +96458,6 @@
   ],
   "ExternalDocs": null,
   "Extensions": {},
-  "HashCode": "61955AACF6B67FC2ECA5122A59891ABB6D3A1F1FE198AC0F1E81647E2D57E0E499EB6AEA6BCAD1550C195B2A17AA6E31BC80CB14E8CEDC5AF62862CC43706AE8",
+  "HashCode": "AD1DB872A06047583608C007FFEDFBC0FBBBB365F587F955EF6C7D42AE851D970A646E3B7C17D24AC4EAAF3E729743EC974B3BB0E03B71555FB0D36A17F84657",
   "Annotations": null
 }
