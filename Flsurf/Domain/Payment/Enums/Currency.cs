@@ -10,6 +10,8 @@ namespace Flsurf.Domain.Payment.Enums
         RussianRuble,
         [Display(Name = "USD")]
         Dollar,
+        [Display(Name = "KZT")]
+        Tenge,
         [Display(Name = "EUR")]
         Euro
     }

@@ -3,6 +3,7 @@ using System;
 using Flsurf.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Flsurf.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250508071839_MessageReplies")]
+    partial class MessageReplies
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2345,7 +2348,7 @@ namespace Flsurf.Migrations
             modelBuilder.Entity("Flsurf.Domain.Messanging.Entities.MessageEntity", b =>
                 {
                     b.HasOne("Flsurf.Domain.Messanging.Entities.ChatEntity", "Chat")
-                        .WithMany("Messages")
+                        .WithMany()
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2872,8 +2875,6 @@ namespace Flsurf.Migrations
             modelBuilder.Entity("Flsurf.Domain.Messanging.Entities.ChatEntity", b =>
                 {
                     b.Navigation("Contracts");
-
-                    b.Navigation("Messages");
 
                     b.Navigation("Participants");
 

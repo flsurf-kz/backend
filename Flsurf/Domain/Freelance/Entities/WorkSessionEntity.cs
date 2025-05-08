@@ -77,6 +77,22 @@ namespace Flsurf.Domain.Freelance.Entities
             return Contract.CostPerHour * WorkedHours();
         }
 
+        public IEnumerable<DateOnly> GetWorkDates()
+        {
+            if (EndDate is null)
+                yield break;
+
+            // нормализуем к полуночи UTC
+            var current = StartDate.Date;
+            var last = EndDate.Value.Date;
+
+            while (current <= last)
+            {
+                yield return DateOnly.FromDateTime(current);
+                current = current.AddDays(1);
+            }
+        }
+
         public void StartSession()
         {
             if (IsActive) return;

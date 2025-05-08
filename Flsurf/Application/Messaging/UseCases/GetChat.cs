@@ -12,6 +12,9 @@ namespace Flsurf.Application.Messaging.UseCases
         {
             var chat = await dbContext.Chats
                 .IncludeStandard()
+                .Include(c => c.Messages              // filtered include
+                    .OrderByDescending(m => m.CreatedAt)
+                    .Take(1))
                 .FirstOrDefaultAsync(x => x.Id == chatId);
             return chat; 
         } 
