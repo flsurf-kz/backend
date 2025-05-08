@@ -46,7 +46,8 @@ namespace Flsurf.Application.Messaging.UseCases
 
             var chats = await _context.Chats
                 .IncludeStandard()
-                .Where(x => chatIds.Contains(x.Id))
+                //.Where(x => chatIds.Contains(x.Id))
+                .Where(x => x.Participants.Select(x => x.Id).Contains(user.Id) || x.OwnerId == user.Id)
                 .ToListAsync(); 
 
             return chats;

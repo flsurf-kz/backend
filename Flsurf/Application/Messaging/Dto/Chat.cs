@@ -4,21 +4,22 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Flsurf.Application.Messaging.Dto
 {
-    public record BookmarkChatDto
+    public class BookmarkChatDto
     {
-        public Guid ChatId;
+        public Guid ChatId { get; set; }
     }
 
-    public record CreateChatDto {
-        public string Name = null!; 
-        public string Description = null!;
-        public List<Guid> UserIds = [];
-        public ChatTypes type; 
+    public class CreateChatDto {
+        [Required]
+        public string Name { get; set; } = null!; 
+        public string Description { get; set; } = null!;
+        public List<Guid> UserIds { get; set; } = [];
+        public ChatTypes type { get; set; }
     }
 
-    public record CloseChatDto
+    public class CloseChatDto
     {
-        public Guid ChatId; 
+        public Guid ChatId { get; set; }
     }
 
     public class GetChatsListDto : InputPagination
@@ -36,23 +37,25 @@ namespace Flsurf.Application.Messaging.Dto
     }
 
 
-    public record GetUserChats { }
+    public class GetUserChats { }
 
-    public record MarkAsReadDto { }
-
-    public record KickMemberDto {
-        public Guid ChatId;
-        public Guid UserId;
+    public class MarkAsReadDto { 
+        public Guid ChatId { get; set; }
     }
 
-    public record InviteMemberDto {
-        public Guid ChatId;
-        public Guid UserId; 
+    public class KickMemberDto {
+        public Guid ChatId { get; set; }
+        public Guid UserId { get; set; }
     }
 
-    public record GetUserChatsDto { }
+    public class InviteMemberDto {
+        public Guid ChatId { get; set; }
+        public Guid UserId { get; set; }
+    }
 
-    public record DeleteMessageDto { 
+    public class GetUserChatsDto { }
+
+    public class DeleteMessageDto { 
         public Guid MessgeId { get; set; }
     }
 }

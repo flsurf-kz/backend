@@ -2,9 +2,9 @@
 
 namespace Flsurf.Domain.Messanging.Events
 {
-    public class ChatBookmarked(UserToChatEntity userToChat) : BaseEvent
+    public class ChatBookmarked(Guid userId, Guid chatId) : BaseEvent
     {
-        public Guid UserId { get; } = userToChat.UserId;
-        public Guid ChatId { get; } = userToChat.ChatId; 
+        public Guid UserId { get; } = userId;
+        public Guid ChatId { get; } = chatId; 
     }
 }

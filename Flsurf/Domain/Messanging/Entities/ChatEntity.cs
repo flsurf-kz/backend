@@ -37,7 +37,7 @@ namespace Flsurf.Domain.Messanging.Entities
                 Type = type, 
             };
 
-            chat.AddDomainEvent(new ChatCreated(chat)); 
+            chat.AddDomainEvent(new ChatCreated(chat.Id)); 
 
             return chat; 
         }
@@ -58,7 +58,7 @@ namespace Flsurf.Domain.Messanging.Entities
             if (isArchived.HasValue && isArchived.Value)
                 Archive(); // Используем существующий метод Archive()
 
-            AddDomainEvent(new ChatUpdated(this));
+            AddDomainEvent(new ChatUpdated(this.Id));
         }
 
 
@@ -73,7 +73,7 @@ namespace Flsurf.Domain.Messanging.Entities
 
             invitation.React(ChatInvitationStatus.Accepted);
 
-            AddDomainEvent(new ChatAddedParticipant(this)); 
+            AddDomainEvent(new ChatAddedParticipant(this.Id)); 
         }
 
         public void KickMember(UserEntity user, UserEntity kickedBy)
@@ -86,7 +86,7 @@ namespace Flsurf.Domain.Messanging.Entities
 
             Participants.Remove(user);
 
-            AddDomainEvent(new ChatRemovedParticipant(this, user, kickedBy));
+            AddDomainEvent(new ChatRemovedParticipant(this.Id, user.Id, kickedBy.Id));
         }
 
 
@@ -95,7 +95,7 @@ namespace Flsurf.Domain.Messanging.Entities
             if (IsArchived)
                 return;
             IsArchived = true;
-            AddDomainEvent(new ChatArchived(this)); 
+            AddDomainEvent(new ChatArchived(this.Id)); 
         }
     }
 }

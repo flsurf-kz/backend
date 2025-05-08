@@ -24,7 +24,7 @@ namespace Flsurf.Application.Messaging.UseCases
             await _permService.EnforceCheckPermission(
                 ZedMessangerUser.WithId(currentUser.Id).CanSendMessage(ZedChat.WithId(dto.ChatId))); 
 
-            if (string.IsNullOrEmpty(dto.Text) || dto.Files != null)
+            if (string.IsNullOrEmpty(dto.Text) || dto.Files == null)
             {
                 throw new DomainException("Неправильный формат"); 
             }
@@ -42,8 +42,18 @@ namespace Flsurf.Application.Messaging.UseCases
             {
                 files = await _uploadFiles.Execute(dto.Files);
             }
-            var message = MessageEntity.Create(dto.Text, currentUser, files);
 
+            var message = MessageEntity.Create(dto.Text, currentUser, files, chat.Id);
+            if (dto.replyToMsg != null)
+            {
+                var msg = await _dbContext.Messages.FirstOrDefaultAsync(x => x.Id == dto.replyToMsg);
+
+                // default use case implyes that replyed message could be deleted when sending replyed. 
+                if (msg != null)
+                {
+                    message.ReplyedToMessageId = msg.Id; 
+                }
+            }
             _dbContext.Messages.Add(message);
             await _dbContext.SaveChangesAsync(); 
 

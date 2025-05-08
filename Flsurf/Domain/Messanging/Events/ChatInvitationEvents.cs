@@ -2,13 +2,13 @@
 
 namespace Flsurf.Domain.Messanging.Events
 {
-    public class ChatInvitationUsed(ChatInvitationEntity invitation) : BaseEvent
+    public class ChatInvitationUsed(Guid invitationId) : BaseEvent
     {
-        public Guid InvitationId { get; } = invitation.Id;
+        public Guid InvitationId { get; } = invitationId;
     }
 
-    public class ChatInvitationCreated(ChatInvitationEntity invitation) : BaseEvent
+    public class ChatInvitationCreated(Guid invitationId) : BaseEvent
     {
-        public Guid InvitationId { get; } = invitation.Id;
+        public Guid InvitationId { get; } = invitationId;
     }
 }

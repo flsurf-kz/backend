@@ -45,5 +45,6 @@ namespace Flsurf.Presentation.Web.Schemas
         public Countries Country { get; set; }
         [Required]
         public UserTypes Type { get; set; }
+        public bool RememberMe { get; set; } = false;
     }
 }

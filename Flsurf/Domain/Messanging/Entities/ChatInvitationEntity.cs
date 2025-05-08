@@ -36,7 +36,7 @@ namespace Flsurf.Domain.Messanging.Entities
                 Status = ChatInvitationStatus.Waiting
             };
 
-            invitation.AddDomainEvent(new ChatInvitationCreated(invitation));
+            invitation.AddDomainEvent(new ChatInvitationCreated(invitation.Id));
 
             return invitation;
         }
@@ -48,7 +48,7 @@ namespace Flsurf.Domain.Messanging.Entities
 
             Status = status;
 
-            AddDomainEvent(new ChatInvitationUsed(this));
+            AddDomainEvent(new ChatInvitationUsed(this.Id));
         }
     }
 }

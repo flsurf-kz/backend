@@ -1,32 +1,29 @@
-﻿using Flsurf.Domain.Messanging.Entities;
-using Flsurf.Domain.User.Entities;
-
-namespace Flsurf.Domain.Messanging.Events
+﻿namespace Flsurf.Domain.Messanging.Events
 {
-    public class ChatCreated(ChatEntity chat) : BaseEvent
+    public class ChatCreated(Guid chatId) : BaseEvent
     {
-        public Guid ChatId { get; } = chat.Id;
+        public Guid ChatId { get; } = chatId;
     }
 
-    public class ChatArchived(ChatEntity chat) : BaseEvent
+    public class ChatArchived(Guid chatId) : BaseEvent
     {
-        public Guid ChatId { get; } = chat.Id;
+        public Guid ChatId { get; } = chatId;
     }
 
-    public class ChatAddedParticipant(ChatEntity chat) : BaseEvent
+    public class ChatAddedParticipant(Guid chatId) : BaseEvent
     {
-        public Guid ChatId { get; } = chat.Id;
+        public Guid ChatId { get; } = chatId;
     }
 
-    public class ChatRemovedParticipant(ChatEntity chat, UserEntity user, UserEntity kickedBy) : BaseEvent
+    public class ChatRemovedParticipant(Guid chatId, Guid userId, Guid kickedById) : BaseEvent
     {
-        public Guid ChatId { get; } = chat.Id;
-        public Guid UserId { get; } = user.Id;
-        public Guid KickedById { get; } = kickedBy.Id;
+        public Guid ChatId { get; } = chatId;
+        public Guid UserId { get; } = userId;
+        public Guid KickedById { get; } = kickedById;
     }
 
-    public class ChatUpdated(ChatEntity chat) : BaseEvent
+    public class ChatUpdated(Guid chatId) : BaseEvent
     {
-        public Guid ChatId { get; } = chat.Id;
+        public Guid ChatId { get; } = chatId;
     }
 }

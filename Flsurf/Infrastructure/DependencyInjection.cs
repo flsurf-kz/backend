@@ -55,7 +55,7 @@ namespace Flsurf.Infrastructure
 
             services.AddDbContext<EventStoreContext>((sp, options) =>
             {
-                options.EnableDetailedErrors(true);
+                options.EnableSensitiveDataLogging(false); 
                 options.UseNpgsql(
                     connectionString,
                     o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)

@@ -2,18 +2,18 @@
 
 namespace Flsurf.Domain.Messanging.Events
 {
-    public class MessageCreated(MessageEntity message) : BaseEvent
+    public class MessageCreated(Guid messageId) : BaseEvent
     {
-        public Guid MessageId { get; } = message.Id;
+        public Guid MessageId { get; } = messageId;
     }
 
-    public class MessagePinned(MessageEntity message) : BaseEvent
+    public class MessagePinned(Guid messageId) : BaseEvent
     {
-        public Guid MessageId { get; } = message.Id;
+        public Guid MessageId { get; } = messageId;
     }
 
-    public class MessageUnpinned(MessageEntity message) : BaseEvent
+    public class MessageUnpinned(Guid messageId) : BaseEvent
     {
-        public Guid MessageId { get; } = message.Id;
+        public Guid MessageId { get; } = messageId;
     }
 }

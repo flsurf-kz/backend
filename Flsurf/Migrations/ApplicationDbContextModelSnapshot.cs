@@ -1160,6 +1160,9 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("ReplyedToMessageId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("SenderId")
                         .HasColumnType("uuid");
 

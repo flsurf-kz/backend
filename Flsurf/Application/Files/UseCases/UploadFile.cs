@@ -16,20 +16,23 @@ namespace Flsurf.Application.Files.UseCases
         private readonly IApplicationDbContext _context;
         private readonly IFileStorageAdapter _fileStorage;
         private readonly HttpClient _httpClient;
+        private readonly ILogger<UploadFile> _logger; 
 
-        public UploadFile(IApplicationDbContext dbContext, IFileStorageAdapter fileStorage, IHttpClientFactory httpClient)
+        public UploadFile(IApplicationDbContext dbContext, IFileStorageAdapter fileStorage, IHttpClientFactory httpClient, ILogger<UploadFile> logger)
         {
             _context = dbContext;
             _fileStorage = fileStorage;
             _httpClient = httpClient.CreateClient();
+            _logger = logger;
         }
 
         public async Task<FileEntity> Execute(CreateFileDto dto)
         {
             if (dto.FileId != null)
             {
+
+                _logger.LogInformation("HERE I CUMM, {}", dto.ToString());
                 var image = await _context.Files
-                    .AsNoTracking()
                     .FirstOrDefaultAsync(x => x.Id == dto.FileId);
                 Guard.Against.Null(image, message: $"Image does not exists with id: {dto.FileId}");
 

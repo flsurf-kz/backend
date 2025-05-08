@@ -155,6 +155,7 @@ namespace Flsurf.Presentation.Web
             services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
             services.AddRouting();
             services.AddHttpContextAccessor();
+            services.AddSingleton<IRealtimeHub, InMemoryRealtimeHub>();
             services.AddScoped<IUser, CurrentUser>();
 
             services.AddHostedService<SwaggerFileUpdater>();
