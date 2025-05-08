@@ -15,6 +15,7 @@ namespace Flsurf.Domain.Messanging.Entities
         public bool IsDeleted { get; set; } = false; 
         [ForeignKey("Chat")]
         public Guid ChatId { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
         public ChatEntity Chat { get; set; } = null!;
         public DateTime SentDate { get; set; }
         public bool IsPinned { get; set; } = false; 

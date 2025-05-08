@@ -89,7 +89,9 @@ namespace Flsurf.Infrastructure
             {
                 Guard.Against.Null(filesDirectory, message: "No files directory");
 
-                services.AddScoped<IFileStorageAdapter, LocalFileStorageAdapter>(x => new LocalFileStorageAdapter(filesDirectory));
+                services.AddScoped<IFileStorageAdapter, LocalFileStorageAdapter>(x => new LocalFileStorageAdapter(
+                    filesDirectory, 
+                    x.GetRequiredService<ILogger<LocalFileStorageAdapter>>()));
             }
             else if (type == StorageTypes.Minio)
             {

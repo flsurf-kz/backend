@@ -8,17 +8,21 @@ namespace Flsurf.Infrastructure.Adapters.FileStorage
         private static readonly Regex _fileNameRegex =
             new(@"^[\w\-. ]+$", RegexOptions.Compiled);          // допустимые символы
         private static readonly HashSet<string> _allowedExt =
-            new(StringComparer.OrdinalIgnoreCase) { ".jpg", ".png", ".pdf" /* … */ };
+            new(StringComparer.OrdinalIgnoreCase) { ".jpg", ".png", ".pdf", ".svg" /* … */ };
+        private ILogger _logger; 
 
-        public LocalFileStorageAdapter(string baseDirectory)
+        public LocalFileStorageAdapter(string baseDirectory, ILogger<IFileStorageAdapter> logger)
         {
+            _logger = logger;
             _baseDirectory = Path.GetFullPath(baseDirectory);
             Directory.CreateDirectory(_baseDirectory);          // гарантируем существование
         }
 
         public async Task UploadFileAsync(string relativePath, Stream fileStream)
         {
-            var fullPath = GetSafePath(relativePath);
+            _logger.LogInformation("Creating a file with a relative path: {}", relativePath);
+
+            var fullPath = GetSafePath(relativePath); 
 
             var directory = Path.GetDirectoryName(fullPath)!;
             Directory.CreateDirectory(directory);
@@ -31,6 +35,8 @@ namespace Flsurf.Infrastructure.Adapters.FileStorage
 
         public async Task<Stream> DownloadFileAsync(string relativePath)
         {
+
+            _logger.LogInformation("Downloading a file with a relative path: {}", relativePath);
             var fullPath = GetSafePath(relativePath);
 
             if (!File.Exists(fullPath))
@@ -42,6 +48,9 @@ namespace Flsurf.Infrastructure.Adapters.FileStorage
 
         public Task DeleteFileAsync(string relativePath)
         {
+
+            _logger.LogInformation("Deleting a file with a relative path: {}", relativePath);
+
             var fullPath = GetSafePath(relativePath);
             File.Delete(fullPath);
             return Task.CompletedTask;
@@ -64,12 +73,12 @@ namespace Flsurf.Infrastructure.Adapters.FileStorage
             // 1) базовая валидация имени
             var fileName = Path.GetFileName(relativePath);
             if (!_fileNameRegex.IsMatch(fileName))
-                throw new ArgumentException("Invalid characters in file name.");
+                throw new ArgumentException($"Invalid characters in file name. name: {fileName}") ;
 
             // 2) whitelist расширений
             var ext = Path.GetExtension(fileName);
             if (!_allowedExt.Contains(ext))
-                throw new ArgumentException("File type not allowed.");
+                throw new ArgumentException($"File type not allowed. ext: {ext}");
 
             // 3) нормализуем и проверяем, что путь остаётся внутри baseDir
             var fullPath = Path.GetFullPath(Path.Combine(_baseDirectory, relativePath));

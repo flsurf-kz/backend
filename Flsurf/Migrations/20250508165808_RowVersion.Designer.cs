@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Flsurf.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250421135406_UpdateTaxInfo")]
-    partial class UpdateTaxInfo
+    [Migration("20250508165808_RowVersion")]
+    partial class RowVersion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -548,6 +548,39 @@ namespace Flsurf.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("FreelancerProfiles");
+                });
+
+            modelBuilder.Entity("Flsurf.Domain.Freelance.Entities.FreelancerProfileViewEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .IsRequired()
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("FreelancerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("ViewedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FreelancerProfileViews");
                 });
 
             modelBuilder.Entity("Flsurf.Domain.Freelance.Entities.FreelancerTeamEntity", b =>
@@ -1130,6 +1163,9 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("ReplyedToMessageId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("SenderId")
                         .HasColumnType("uuid");
 
@@ -1434,6 +1470,11 @@ namespace Flsurf.Migrations
 
                     b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bytea");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -2306,7 +2347,7 @@ namespace Flsurf.Migrations
             modelBuilder.Entity("Flsurf.Domain.Messanging.Entities.MessageEntity", b =>
                 {
                     b.HasOne("Flsurf.Domain.Messanging.Entities.ChatEntity", "Chat")
-                        .WithMany()
+                        .WithMany("Messages")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2833,6 +2874,8 @@ namespace Flsurf.Migrations
             modelBuilder.Entity("Flsurf.Domain.Messanging.Entities.ChatEntity", b =>
                 {
                     b.Navigation("Contracts");
+
+                    b.Navigation("Messages");
 
                     b.Navigation("Participants");
 

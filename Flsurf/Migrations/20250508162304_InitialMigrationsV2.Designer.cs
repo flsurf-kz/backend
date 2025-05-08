@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Flsurf.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250506174950_MessagesLastMessage")]
-    partial class MessagesLastMessage
+    [Migration("20250508162304_InitialMigrationsV2")]
+    partial class InitialMigrationsV2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

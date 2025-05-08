@@ -130,7 +130,8 @@ namespace Flsurf.Infrastructure.Data
                     provider.Logo = await _fileService.UploadFile().Execute(
                         new Application.Files.Dto.CreateFileDto()
                         {
-                            DownloadUrl = providerImages[provider.Name]
+                            DownloadUrl = providerImages[provider.Name], 
+                            Name = providerImages[provider.Name], 
                         });
                 }
 

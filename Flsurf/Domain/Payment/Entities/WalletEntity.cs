@@ -43,7 +43,7 @@ namespace Flsurf.Domain.Payment.Entities
         public ICollection<TransactionEntity> Transactions { get; private set; } = new List<TransactionEntity>();
 
         [Timestamp]
-        public byte[] RowVersion { get; set; }
+        public byte[]? RowVersion { get; set; }
 
 
         public static WalletEntity Create(UserEntity user)
@@ -59,7 +59,7 @@ namespace Flsurf.Domain.Payment.Entities
                 Frozen = new Money(0, CurrencyEnum.RussianRuble),
                 AvailableBalance = new Money(1000, CurrencyEnum.RussianRuble),
                 PendingIncome = new Money(0, CurrencyEnum.RussianRuble),
-                Blocked = false
+                Blocked = false, 
             };
 
             wallet.AddDomainEvent(new WalletCreated(wallet));

@@ -51,6 +51,7 @@ namespace Flsurf.Application.Messaging.Dto
     public class InviteMemberDto {
         public Guid ChatId { get; set; }
         public Guid UserId { get; set; }
+        public bool Owner { get; set; }
     }
 
     public class GetUserChatsDto { }

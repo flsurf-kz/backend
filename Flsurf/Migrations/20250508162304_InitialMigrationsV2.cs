@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Flsurf.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigrationV1 : Migration
+    public partial class InitialMigrationsV2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,7 @@ namespace Flsurf.Migrations
                     Slug = table.Column<string>(type: "text", nullable: false),
                     ParentCategoryId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -44,7 +44,7 @@ namespace Flsurf.Migrations
                     Link = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -54,13 +54,31 @@ namespace Flsurf.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FreelancerProfileViews",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FreelancerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ClientId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ViewedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FreelancerProfileViews", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Groups",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -90,7 +108,7 @@ namespace Flsurf.Migrations
                     JobId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -111,7 +129,7 @@ namespace Flsurf.Migrations
                     IsTextingAllowed = table.Column<bool>(type: "boolean", nullable: false),
                     FinishedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -137,7 +155,7 @@ namespace Flsurf.Migrations
                     LastActiveAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Suspended = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -157,7 +175,7 @@ namespace Flsurf.Migrations
                     Reaction = table.Column<string>(type: "text", nullable: false),
                     Hidden = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -183,7 +201,7 @@ namespace Flsurf.Migrations
                     IsResultPublic = table.Column<bool>(type: "boolean", nullable: false),
                     IsEntriesPublic = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -217,7 +235,7 @@ namespace Flsurf.Migrations
                     ClientProfileEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     FreelancerTeamEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -249,7 +267,7 @@ namespace Flsurf.Migrations
                     CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CompletionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -277,7 +295,7 @@ namespace Flsurf.Migrations
                     MessengerChatId = table.Column<Guid>(type: "uuid", nullable: true),
                     ModeratorComment = table.Column<string>(type: "text", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -359,9 +377,10 @@ namespace Flsurf.Migrations
                     ToUserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false),
                     Data = table.Column<string>(type: "jsonb", nullable: true),
+                    Hidden = table.Column<bool>(type: "boolean", nullable: false),
                     IconId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -384,7 +403,7 @@ namespace Flsurf.Migrations
                     FeePercent = table.Column<decimal>(type: "numeric", nullable: false),
                     LogoId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -408,7 +427,7 @@ namespace Flsurf.Migrations
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     TransactionProviderEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -435,7 +454,7 @@ namespace Flsurf.Migrations
                     Rating = table.Column<float>(type: "real", nullable: false),
                     IsHidden = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -453,7 +472,7 @@ namespace Flsurf.Migrations
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -473,7 +492,7 @@ namespace Flsurf.Migrations
                     AvatarId = table.Column<Guid>(type: "uuid", nullable: false),
                     OwnerId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -506,11 +525,20 @@ namespace Flsurf.Migrations
                     Blocked = table.Column<bool>(type: "boolean", nullable: false),
                     Location = table.Column<string>(type: "text", nullable: true),
                     IsExternalUser = table.Column<bool>(type: "boolean", nullable: false),
+                    TaxInfo_CountryIso = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: true),
+                    TaxInfo_LocalIdNumber = table.Column<string>(type: "character varying(12)", maxLength: 12, nullable: true),
+                    TaxInfo_LegalStatus = table.Column<int>(type: "integer", nullable: true),
+                    TaxInfo_TaxRegime = table.Column<int>(type: "integer", nullable: true),
+                    TaxInfo_VatRegistered = table.Column<bool>(type: "boolean", nullable: true),
+                    TaxInfo_VatNumber = table.Column<string>(type: "text", nullable: true),
+                    TaxInfo_BankDetails_Bic = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    TaxInfo_BankDetails_AccountNumber = table.Column<string>(type: "character varying(34)", maxLength: 34, nullable: true),
+                    TaxInfo_BankDetails_BankName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     ChatEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     FreelancerTeamEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     GroupEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -550,7 +578,7 @@ namespace Flsurf.Migrations
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -586,8 +614,8 @@ namespace Flsurf.Migrations
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Payout_Amount = table.Column<decimal>(type: "numeric", nullable: true),
-                    Payout_Currency = table.Column<int>(type: "integer", nullable: true),
+                    Payout_Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    Payout_Currency = table.Column<int>(type: "integer", nullable: false),
                     ExpirationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Duration = table.Column<int>(type: "integer", nullable: true),
                     Status = table.Column<string>(type: "text", nullable: false),
@@ -599,7 +627,7 @@ namespace Flsurf.Migrations
                     IsHidden = table.Column<bool>(type: "boolean", nullable: false),
                     ClientProfileEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -640,7 +668,7 @@ namespace Flsurf.Migrations
                     ReadAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ChatEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -671,8 +699,9 @@ namespace Flsurf.Migrations
                     ChatId = table.Column<Guid>(type: "uuid", nullable: false),
                     SentDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IsPinned = table.Column<bool>(type: "boolean", nullable: false),
+                    ReplyedToMessageId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -694,6 +723,42 @@ namespace Flsurf.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PaymentMethods",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProviderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Token = table.Column<string>(type: "text", nullable: false),
+                    Last4 = table.Column<string>(type: "text", nullable: false),
+                    Brand = table.Column<string>(type: "text", nullable: false),
+                    ExpMonth = table.Column<int>(type: "integer", nullable: false),
+                    ExpYear = table.Column<int>(type: "integer", nullable: false),
+                    IsDefault = table.Column<bool>(type: "boolean", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PaymentMethods", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PaymentMethods_TransactionProviders_ProviderId",
+                        column: x => x.ProviderId,
+                        principalTable: "TransactionProviders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PaymentMethods_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PortfolioProjects",
                 columns: table => new
                 {
@@ -705,7 +770,7 @@ namespace Flsurf.Migrations
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     FreelancerProfileEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -737,7 +802,7 @@ namespace Flsurf.Migrations
                     AssignedUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     ClosedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -793,7 +858,7 @@ namespace Flsurf.Migrations
                     ExpiresIn = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UserEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -822,8 +887,9 @@ namespace Flsurf.Migrations
                     PendingIncome_Currency = table.Column<int>(type: "integer", nullable: false),
                     Blocked = table.Column<bool>(type: "boolean", nullable: false),
                     BlockReason = table.Column<string>(type: "text", nullable: false),
+                    RowVersion = table.Column<byte[]>(type: "bytea", rowVersion: true, nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -855,7 +921,7 @@ namespace Flsurf.Migrations
                     RejectedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Status = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -887,7 +953,7 @@ namespace Flsurf.Migrations
                     CoverLetter = table.Column<string>(type: "text", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -921,7 +987,7 @@ namespace Flsurf.Migrations
                     ReviewDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     FreelancerProfileEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -962,7 +1028,7 @@ namespace Flsurf.Migrations
                     FreelancerProfileEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     PortfolioProjectEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -992,7 +1058,7 @@ namespace Flsurf.Migrations
                     TicketId = table.Column<Guid>(type: "uuid", nullable: false),
                     TicketEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -1031,6 +1097,7 @@ namespace Flsurf.Migrations
                     Props_PaymentUrl = table.Column<string>(type: "text", nullable: true),
                     Props_SuccessUrl = table.Column<string>(type: "text", nullable: true),
                     Props_PaymentGateway = table.Column<string>(type: "text", nullable: true),
+                    Props_ProviderPaymentId = table.Column<string>(type: "text", nullable: true),
                     Props_FeeContext_IsContractCancellation = table.Column<bool>(type: "boolean", nullable: true),
                     Props_FeeContext_IsAdminOverride = table.Column<bool>(type: "boolean", nullable: true),
                     FrozenUntil = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -1039,7 +1106,7 @@ namespace Flsurf.Migrations
                     ProviderId = table.Column<Guid>(type: "uuid", nullable: true),
                     WalletEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
                     LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -1301,6 +1368,16 @@ namespace Flsurf.Migrations
                 name: "IX_Notifications_IconId",
                 table: "Notifications",
                 column: "IconId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PaymentMethods_ProviderId",
+                table: "PaymentMethods",
+                column: "ProviderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PaymentMethods_UserId",
+                table: "PaymentMethods",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PaymentSystems_TransactionProviderEntityId",
@@ -1707,6 +1784,9 @@ namespace Flsurf.Migrations
                 name: "DisputeStatuses");
 
             migrationBuilder.DropTable(
+                name: "FreelancerProfileViews");
+
+            migrationBuilder.DropTable(
                 name: "FreelancerTeamInvitations");
 
             migrationBuilder.DropTable(
@@ -1720,6 +1800,9 @@ namespace Flsurf.Migrations
 
             migrationBuilder.DropTable(
                 name: "Notifications");
+
+            migrationBuilder.DropTable(
+                name: "PaymentMethods");
 
             migrationBuilder.DropTable(
                 name: "PaymentSystems");
