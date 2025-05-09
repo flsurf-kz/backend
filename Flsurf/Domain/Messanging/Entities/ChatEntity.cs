@@ -27,7 +27,7 @@ namespace Flsurf.Domain.Messanging.Entities
 
         // DONT LOAD ALL OF THEM, LAST MESSAGE REQUIRED IT 
         [JsonIgnore]
-        public ICollection<MessageEntity> Messages { get; set; } = [];
+        public List<MessageEntity> Messages { get; set; } = [];
 
         [NotMapped]
         public MessageEntity? LastMessage => Messages

@@ -50,6 +50,7 @@ namespace Flsurf.Application.Messaging.UseCases
                     .OrderByDescending(m => m.CreatedAt)
                     .Take(1))
                 .Where(x => x.Participants.Select(x => x.Id).Contains(user.Id) || x.OwnerId == user.Id)
+                .OrderBy(x => x.Messages[0].CreatedAt)
                 .ToListAsync(); 
 
             return chats;
