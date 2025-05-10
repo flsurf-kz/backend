@@ -6511,9 +6511,9 @@ export interface IAcceptDisputeCommand {
 }
 
 export class ActivitySummaryDto implements IActivitySummaryDto {
-    activityId?: string;
-    description?: string | undefined;
-    count?: number;
+    activityId!: string;
+    description!: string;
+    count!: number;
 
     constructor(data?: IActivitySummaryDto) {
         if (data) {
@@ -6549,9 +6549,9 @@ export class ActivitySummaryDto implements IActivitySummaryDto {
 }
 
 export interface IActivitySummaryDto {
-    activityId?: string;
-    description?: string | undefined;
-    count?: number;
+    activityId: string;
+    description: string;
+    count: number;
 }
 
 export class AddPaymentMethodCommand implements IAddPaymentMethodCommand {
@@ -7780,9 +7780,9 @@ export interface IContractEntity {
 }
 
 export class ContractSummaryDto implements IContractSummaryDto {
-    contractId?: string;
-    contractLabel?: string | undefined;
-    amount?: number;
+    contractId!: string;
+    contractLabel!: string;
+    amount!: number;
 
     constructor(data?: IContractSummaryDto) {
         if (data) {
@@ -7818,9 +7818,9 @@ export class ContractSummaryDto implements IContractSummaryDto {
 }
 
 export interface IContractSummaryDto {
-    contractId?: string;
-    contractLabel?: string | undefined;
-    amount?: number;
+    contractId: string;
+    contractLabel: string;
+    amount: number;
 }
 
 export class CreateCategoryCommand implements ICreateCategoryCommand {
@@ -8563,8 +8563,8 @@ export interface ICreateTicketDto {
 }
 
 export class DailyPointDto implements IDailyPointDto {
-    date?: Date;
-    amount?: number;
+    date!: Date;
+    amount!: number;
 
     constructor(data?: IDailyPointDto) {
         if (data) {
@@ -8598,8 +8598,8 @@ export class DailyPointDto implements IDailyPointDto {
 }
 
 export interface IDailyPointDto {
-    date?: Date;
-    amount?: number;
+    date: Date;
+    amount: number;
 }
 
 export class DeleteContestCommand implements IDeleteContestCommand {
@@ -8911,8 +8911,8 @@ export interface IDeleteTaskCommand {
 }
 
 export class EarningsSectionDto implements IEarningsSectionDto {
-    fixed?: FixedEarnDto[] | undefined;
-    hourly?: WorkSessionSummaryDto[] | undefined;
+    fixed!: FixedEarnDto[];
+    hourly!: WorkSessionSummaryDto[];
 
     constructor(data?: IEarningsSectionDto) {
         if (data) {
@@ -8920,6 +8920,10 @@ export class EarningsSectionDto implements IEarningsSectionDto {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
+        }
+        if (!data) {
+            this.fixed = [];
+            this.hourly = [];
         }
     }
 
@@ -8962,8 +8966,8 @@ export class EarningsSectionDto implements IEarningsSectionDto {
 }
 
 export interface IEarningsSectionDto {
-    fixed?: FixedEarnDto[] | undefined;
-    hourly?: WorkSessionSummaryDto[] | undefined;
+    fixed: FixedEarnDto[];
+    hourly: WorkSessionSummaryDto[];
 }
 
 export class EndContestCommand implements IEndContestCommand {
@@ -9143,19 +9147,19 @@ export interface IFileEntity {
 }
 
 export class FinanceSummaryDto implements IFinanceSummaryDto {
-    month?: number;
-    year?: number;
-    currency?: string | undefined;
-    generatedAt?: Date;
-    totalEarn?: TotalsDto;
-    topContracts?: ContractSummaryDto[] | undefined;
-    topActivities?: ActivitySummaryDto[] | undefined;
-    earnings?: EarningsSectionDto;
-    dailyBreakdown?: DailyPointDto[] | undefined;
-    avgHourlyRate?: number;
-    daysWorked?: number;
+    month!: number;
+    year!: number;
+    currency!: string;
+    generatedAt!: Date;
+    totalEarn!: TotalsDto;
+    topContracts!: ContractSummaryDto[];
+    topActivities!: ActivitySummaryDto[];
+    earnings!: EarningsSectionDto;
+    dailyBreakdown!: DailyPointDto[];
+    avgHourlyRate!: number;
+    daysWorked!: number;
     bestDay?: Date | undefined;
-    bestDayAmount?: number;
+    bestDayAmount!: number;
 
     constructor(data?: IFinanceSummaryDto) {
         if (data) {
@@ -9163,6 +9167,13 @@ export class FinanceSummaryDto implements IFinanceSummaryDto {
                 if (data.hasOwnProperty(property))
                     (<any>this)[property] = (<any>data)[property];
             }
+        }
+        if (!data) {
+            this.totalEarn = new TotalsDto();
+            this.topContracts = [];
+            this.topActivities = [];
+            this.earnings = new EarningsSectionDto();
+            this.dailyBreakdown = [];
         }
     }
 
@@ -9172,7 +9183,7 @@ export class FinanceSummaryDto implements IFinanceSummaryDto {
             this.year = _data["year"];
             this.currency = _data["currency"];
             this.generatedAt = _data["generatedAt"] ? new Date(_data["generatedAt"].toString()) : <any>undefined;
-            this.totalEarn = _data["totalEarn"] ? TotalsDto.fromJS(_data["totalEarn"]) : <any>undefined;
+            this.totalEarn = _data["totalEarn"] ? TotalsDto.fromJS(_data["totalEarn"]) : new TotalsDto();
             if (Array.isArray(_data["topContracts"])) {
                 this.topContracts = [] as any;
                 for (let item of _data["topContracts"])
@@ -9183,7 +9194,7 @@ export class FinanceSummaryDto implements IFinanceSummaryDto {
                 for (let item of _data["topActivities"])
                     this.topActivities!.push(ActivitySummaryDto.fromJS(item));
             }
-            this.earnings = _data["earnings"] ? EarningsSectionDto.fromJS(_data["earnings"]) : <any>undefined;
+            this.earnings = _data["earnings"] ? EarningsSectionDto.fromJS(_data["earnings"]) : new EarningsSectionDto();
             if (Array.isArray(_data["dailyBreakdown"])) {
                 this.dailyBreakdown = [] as any;
                 for (let item of _data["dailyBreakdown"])
@@ -9235,25 +9246,25 @@ export class FinanceSummaryDto implements IFinanceSummaryDto {
 }
 
 export interface IFinanceSummaryDto {
-    month?: number;
-    year?: number;
-    currency?: string | undefined;
-    generatedAt?: Date;
-    totalEarn?: TotalsDto;
-    topContracts?: ContractSummaryDto[] | undefined;
-    topActivities?: ActivitySummaryDto[] | undefined;
-    earnings?: EarningsSectionDto;
-    dailyBreakdown?: DailyPointDto[] | undefined;
-    avgHourlyRate?: number;
-    daysWorked?: number;
+    month: number;
+    year: number;
+    currency: string;
+    generatedAt: Date;
+    totalEarn: TotalsDto;
+    topContracts: ContractSummaryDto[];
+    topActivities: ActivitySummaryDto[];
+    earnings: EarningsSectionDto;
+    dailyBreakdown: DailyPointDto[];
+    avgHourlyRate: number;
+    daysWorked: number;
     bestDay?: Date | undefined;
-    bestDayAmount?: number;
+    bestDayAmount: number;
 }
 
 export class FixedEarnDto implements IFixedEarnDto {
-    contractId?: string;
-    contractLabel?: string | undefined;
-    amount?: number;
+    contractId!: string;
+    contractLabel!: string;
+    amount!: number;
 
     constructor(data?: IFixedEarnDto) {
         if (data) {
@@ -9289,9 +9300,9 @@ export class FixedEarnDto implements IFixedEarnDto {
 }
 
 export interface IFixedEarnDto {
-    contractId?: string;
-    contractLabel?: string | undefined;
-    amount?: number;
+    contractId: string;
+    contractLabel: string;
+    amount: number;
 }
 
 export class ForceContractCancelCommand implements IForceContractCancelCommand {
@@ -12939,12 +12950,12 @@ export interface ITicketEntity {
 }
 
 export class TotalsDto implements ITotalsDto {
-    hourlyAmount?: number;
-    manualAmount?: number;
-    fixedAmount?: number;
-    platformFee?: number;
-    taxWithheld?: number;
-    netAmount?: number;
+    hourlyAmount!: number;
+    manualAmount!: number;
+    fixedAmount!: number;
+    platformFee!: number;
+    taxWithheld!: number;
+    netAmount!: number;
 
     constructor(data?: ITotalsDto) {
         if (data) {
@@ -12986,12 +12997,12 @@ export class TotalsDto implements ITotalsDto {
 }
 
 export interface ITotalsDto {
-    hourlyAmount?: number;
-    manualAmount?: number;
-    fixedAmount?: number;
-    platformFee?: number;
-    taxWithheld?: number;
-    netAmount?: number;
+    hourlyAmount: number;
+    manualAmount: number;
+    fixedAmount: number;
+    platformFee: number;
+    taxWithheld: number;
+    netAmount: number;
 }
 
 export class TransactionEntity implements ITransactionEntity {
@@ -14473,14 +14484,14 @@ export interface IWorkSessionEntity {
 }
 
 export class WorkSessionSummaryDto implements IWorkSessionSummaryDto {
-    sessionId?: string;
-    contractId?: string;
-    contractLabel?: string | undefined;
-    comment?: string | undefined;
-    hours?: number;
-    amount?: number;
-    isManual?: boolean;
-    startUtc?: Date;
+    sessionId!: string;
+    contractId!: string;
+    contractLabel!: string;
+    comment!: string;
+    hours!: number;
+    amount!: number;
+    isManual!: boolean;
+    startUtc!: Date;
     endUtc?: Date | undefined;
 
     constructor(data?: IWorkSessionSummaryDto) {
@@ -14529,14 +14540,14 @@ export class WorkSessionSummaryDto implements IWorkSessionSummaryDto {
 }
 
 export interface IWorkSessionSummaryDto {
-    sessionId?: string;
-    contractId?: string;
-    contractLabel?: string | undefined;
-    comment?: string | undefined;
-    hours?: number;
-    amount?: number;
-    isManual?: boolean;
-    startUtc?: Date;
+    sessionId: string;
+    contractId: string;
+    contractLabel: string;
+    comment: string;
+    hours: number;
+    amount: number;
+    isManual: boolean;
+    startUtc: Date;
     endUtc?: Date | undefined;
 }
 
