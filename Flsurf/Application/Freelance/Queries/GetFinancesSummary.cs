@@ -1,6 +1,5 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
-using Flsurf.Application.Payment.Queries.Models;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.Payment.Entities;
@@ -9,7 +8,7 @@ using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
-namespace Flsurf.Application.Payment.Queries
+namespace Flsurf.Application.Freelance.Queries
 {
     public class GetFinanceSummaryQuery : BaseQuery
     {
@@ -56,9 +55,9 @@ namespace Flsurf.Application.Payment.Queries
                 Comment = ws.Comment ?? string.Empty,
                 Hours = (decimal)(ws.EndDate!.Value - ws.StartDate).TotalHours,
                 Amount = ws.TotalEarned().Amount,
-                IsManual = ws.Status == WorkSessionStatus.Pending, 
-                StartUtc = ws.StartDate, 
-                EndUtc = ws.EndDate, 
+                IsManual = ws.Status == WorkSessionStatus.Pending,
+                StartUtc = ws.StartDate,
+                EndUtc = ws.EndDate,
             }).ToList();
 
             /* ── 2. ТРАНЗАКЦИИ (через Wallet) ─────── */
@@ -157,7 +156,7 @@ namespace Flsurf.Application.Payment.Queries
 
             foreach (var h in sessions)
                 foreach (var d in h.GetWorkDates())
-                    dict[d] = dict.GetValueOrDefault(d) + (h.Amount / h.Hours);
+                    dict[d] = dict.GetValueOrDefault(d) + h.Amount / h.Hours;
 
             foreach (var t in txs)
             {

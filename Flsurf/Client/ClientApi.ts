@@ -120,10 +120,9 @@ export interface IClient {
     kickMember(body?: KickMemberDto | undefined): Promise<CommandResult>;
 
     /**
-     * @param body (optional) 
      * @return OK
      */
-    getChat(chatId: string, body?: string | undefined): Promise<ChatEntity>;
+    getChat(chatId: string): Promise<ChatEntity>;
 
     /**
      * @return OK
@@ -537,6 +536,12 @@ export interface IClient {
      * @return OK
      */
     getMyPortfolioProjects(): Promise<PortfolioProjectEntity[]>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    getUserFinancesSummary(body?: GetFinanceSummaryQuery | undefined): Promise<FinanceSummaryDto>;
 
     /**
      * @param body (optional) 
@@ -1572,23 +1577,18 @@ export class Client implements IClient {
     }
 
     /**
-     * @param body (optional) 
      * @return OK
      */
-    getChat(chatId: string, body?: string | undefined): Promise<ChatEntity> {
+    getChat(chatId: string): Promise<ChatEntity> {
         let url_ = this.baseUrl + "/api/chat/{chatId}";
         if (chatId === undefined || chatId === null)
             throw new Error("The parameter 'chatId' must be defined.");
         url_ = url_.replace("{chatId}", encodeURIComponent("" + chatId));
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(body);
-
         let options_: RequestInit = {
-            body: content_,
             method: "GET",
             headers: {
-                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -4644,6 +4644,48 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return OK
      */
+    getUserFinancesSummary(body?: GetFinanceSummaryQuery | undefined): Promise<FinanceSummaryDto> {
+        let url_ = this.baseUrl + "/finances-summary";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetUserFinancesSummary(_response);
+        });
+    }
+
+    protected processGetUserFinancesSummary(response: Response): Promise<FinanceSummaryDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = FinanceSummaryDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<FinanceSummaryDto>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
     createSkills(body?: CreateSkillsCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/skill/create";
         url_ = url_.replace(/[?&]$/, "");
@@ -6468,6 +6510,50 @@ export interface IAcceptDisputeCommand {
     disputeId?: string;
 }
 
+export class ActivitySummaryDto implements IActivitySummaryDto {
+    activityId?: string;
+    description?: string | undefined;
+    count?: number;
+
+    constructor(data?: IActivitySummaryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.activityId = _data["activityId"];
+            this.description = _data["description"];
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): ActivitySummaryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ActivitySummaryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["activityId"] = this.activityId;
+        data["description"] = this.description;
+        data["count"] = this.count;
+        return data;
+    }
+}
+
+export interface IActivitySummaryDto {
+    activityId?: string;
+    description?: string | undefined;
+    count?: number;
+}
+
 export class AddPaymentMethodCommand implements IAddPaymentMethodCommand {
     providerId?: string;
     paymentMethodToken?: string | undefined;
@@ -7693,6 +7779,50 @@ export interface IContractEntity {
     id: string;
 }
 
+export class ContractSummaryDto implements IContractSummaryDto {
+    contractId?: string;
+    contractLabel?: string | undefined;
+    amount?: number;
+
+    constructor(data?: IContractSummaryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.contractId = _data["contractId"];
+            this.contractLabel = _data["contractLabel"];
+            this.amount = _data["amount"];
+        }
+    }
+
+    static fromJS(data: any): ContractSummaryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ContractSummaryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["contractId"] = this.contractId;
+        data["contractLabel"] = this.contractLabel;
+        data["amount"] = this.amount;
+        return data;
+    }
+}
+
+export interface IContractSummaryDto {
+    contractId?: string;
+    contractLabel?: string | undefined;
+    amount?: number;
+}
+
 export class CreateCategoryCommand implements ICreateCategoryCommand {
     name!: string | undefined;
     slug?: string | undefined;
@@ -8432,6 +8562,46 @@ export interface ICreateTicketDto {
     title?: string | undefined;
 }
 
+export class DailyPointDto implements IDailyPointDto {
+    date?: Date;
+    amount?: number;
+
+    constructor(data?: IDailyPointDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.date = _data["date"] ? new Date(_data["date"].toString()) : <any>undefined;
+            this.amount = _data["amount"];
+        }
+    }
+
+    static fromJS(data: any): DailyPointDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new DailyPointDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["date"] = this.date ? this.date.toISOString() : <any>undefined;
+        data["amount"] = this.amount;
+        return data;
+    }
+}
+
+export interface IDailyPointDto {
+    date?: Date;
+    amount?: number;
+}
+
 export class DeleteContestCommand implements IDeleteContestCommand {
     contestId?: string;
 
@@ -8740,6 +8910,62 @@ export interface IDeleteTaskCommand {
     taskId?: string;
 }
 
+export class EarningsSectionDto implements IEarningsSectionDto {
+    fixed?: FixedEarnDto[] | undefined;
+    hourly?: WorkSessionSummaryDto[] | undefined;
+
+    constructor(data?: IEarningsSectionDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["fixed"])) {
+                this.fixed = [] as any;
+                for (let item of _data["fixed"])
+                    this.fixed!.push(FixedEarnDto.fromJS(item));
+            }
+            if (Array.isArray(_data["hourly"])) {
+                this.hourly = [] as any;
+                for (let item of _data["hourly"])
+                    this.hourly!.push(WorkSessionSummaryDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): EarningsSectionDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new EarningsSectionDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.fixed)) {
+            data["fixed"] = [];
+            for (let item of this.fixed)
+                data["fixed"].push(item.toJSON());
+        }
+        if (Array.isArray(this.hourly)) {
+            data["hourly"] = [];
+            for (let item of this.hourly)
+                data["hourly"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IEarningsSectionDto {
+    fixed?: FixedEarnDto[] | undefined;
+    hourly?: WorkSessionSummaryDto[] | undefined;
+}
+
 export class EndContestCommand implements IEndContestCommand {
     contestId?: string;
 
@@ -8914,6 +9140,158 @@ export interface IFileEntity {
     filePath: string;
     mimeType: string;
     size?: number;
+}
+
+export class FinanceSummaryDto implements IFinanceSummaryDto {
+    month?: number;
+    year?: number;
+    currency?: string | undefined;
+    generatedAt?: Date;
+    totalEarn?: TotalsDto;
+    topContracts?: ContractSummaryDto[] | undefined;
+    topActivities?: ActivitySummaryDto[] | undefined;
+    earnings?: EarningsSectionDto;
+    dailyBreakdown?: DailyPointDto[] | undefined;
+    avgHourlyRate?: number;
+    daysWorked?: number;
+    bestDay?: Date | undefined;
+    bestDayAmount?: number;
+
+    constructor(data?: IFinanceSummaryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.month = _data["month"];
+            this.year = _data["year"];
+            this.currency = _data["currency"];
+            this.generatedAt = _data["generatedAt"] ? new Date(_data["generatedAt"].toString()) : <any>undefined;
+            this.totalEarn = _data["totalEarn"] ? TotalsDto.fromJS(_data["totalEarn"]) : <any>undefined;
+            if (Array.isArray(_data["topContracts"])) {
+                this.topContracts = [] as any;
+                for (let item of _data["topContracts"])
+                    this.topContracts!.push(ContractSummaryDto.fromJS(item));
+            }
+            if (Array.isArray(_data["topActivities"])) {
+                this.topActivities = [] as any;
+                for (let item of _data["topActivities"])
+                    this.topActivities!.push(ActivitySummaryDto.fromJS(item));
+            }
+            this.earnings = _data["earnings"] ? EarningsSectionDto.fromJS(_data["earnings"]) : <any>undefined;
+            if (Array.isArray(_data["dailyBreakdown"])) {
+                this.dailyBreakdown = [] as any;
+                for (let item of _data["dailyBreakdown"])
+                    this.dailyBreakdown!.push(DailyPointDto.fromJS(item));
+            }
+            this.avgHourlyRate = _data["avgHourlyRate"];
+            this.daysWorked = _data["daysWorked"];
+            this.bestDay = _data["bestDay"] ? new Date(_data["bestDay"].toString()) : <any>undefined;
+            this.bestDayAmount = _data["bestDayAmount"];
+        }
+    }
+
+    static fromJS(data: any): FinanceSummaryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new FinanceSummaryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["month"] = this.month;
+        data["year"] = this.year;
+        data["currency"] = this.currency;
+        data["generatedAt"] = this.generatedAt ? this.generatedAt.toISOString() : <any>undefined;
+        data["totalEarn"] = this.totalEarn ? this.totalEarn.toJSON() : <any>undefined;
+        if (Array.isArray(this.topContracts)) {
+            data["topContracts"] = [];
+            for (let item of this.topContracts)
+                data["topContracts"].push(item.toJSON());
+        }
+        if (Array.isArray(this.topActivities)) {
+            data["topActivities"] = [];
+            for (let item of this.topActivities)
+                data["topActivities"].push(item.toJSON());
+        }
+        data["earnings"] = this.earnings ? this.earnings.toJSON() : <any>undefined;
+        if (Array.isArray(this.dailyBreakdown)) {
+            data["dailyBreakdown"] = [];
+            for (let item of this.dailyBreakdown)
+                data["dailyBreakdown"].push(item.toJSON());
+        }
+        data["avgHourlyRate"] = this.avgHourlyRate;
+        data["daysWorked"] = this.daysWorked;
+        data["bestDay"] = this.bestDay ? this.bestDay.toISOString() : <any>undefined;
+        data["bestDayAmount"] = this.bestDayAmount;
+        return data;
+    }
+}
+
+export interface IFinanceSummaryDto {
+    month?: number;
+    year?: number;
+    currency?: string | undefined;
+    generatedAt?: Date;
+    totalEarn?: TotalsDto;
+    topContracts?: ContractSummaryDto[] | undefined;
+    topActivities?: ActivitySummaryDto[] | undefined;
+    earnings?: EarningsSectionDto;
+    dailyBreakdown?: DailyPointDto[] | undefined;
+    avgHourlyRate?: number;
+    daysWorked?: number;
+    bestDay?: Date | undefined;
+    bestDayAmount?: number;
+}
+
+export class FixedEarnDto implements IFixedEarnDto {
+    contractId?: string;
+    contractLabel?: string | undefined;
+    amount?: number;
+
+    constructor(data?: IFixedEarnDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.contractId = _data["contractId"];
+            this.contractLabel = _data["contractLabel"];
+            this.amount = _data["amount"];
+        }
+    }
+
+    static fromJS(data: any): FixedEarnDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new FixedEarnDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["contractId"] = this.contractId;
+        data["contractLabel"] = this.contractLabel;
+        data["amount"] = this.amount;
+        return data;
+    }
+}
+
+export interface IFixedEarnDto {
+    contractId?: string;
+    contractLabel?: string | undefined;
+    amount?: number;
 }
 
 export class ForceContractCancelCommand implements IForceContractCancelCommand {
@@ -9440,6 +9818,50 @@ export interface IGetContractsListQuery {
     ends?: number;
 }
 
+export class GetFinanceSummaryQuery implements IGetFinanceSummaryQuery {
+    readonly month?: number;
+    readonly year?: number;
+    readonly userId?: string | undefined;
+
+    constructor(data?: IGetFinanceSummaryQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).month = _data["month"];
+            (<any>this).year = _data["year"];
+            (<any>this).userId = _data["userId"];
+        }
+    }
+
+    static fromJS(data: any): GetFinanceSummaryQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetFinanceSummaryQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["month"] = this.month;
+        data["year"] = this.year;
+        data["userId"] = this.userId;
+        return data;
+    }
+}
+
+export interface IGetFinanceSummaryQuery {
+    month?: number;
+    year?: number;
+    userId?: string | undefined;
+}
+
 export class GetJobsListQuery implements IGetJobsListQuery {
     start?: number;
     ends?: number;
@@ -9955,6 +10377,7 @@ export interface IInitiateDisputeCommand {
 export class InviteMemberDto implements IInviteMemberDto {
     chatId?: string;
     userId?: string;
+    owner?: boolean;
 
     constructor(data?: IInviteMemberDto) {
         if (data) {
@@ -9969,6 +10392,7 @@ export class InviteMemberDto implements IInviteMemberDto {
         if (_data) {
             this.chatId = _data["chatId"];
             this.userId = _data["userId"];
+            this.owner = _data["owner"];
         }
     }
 
@@ -9983,6 +10407,7 @@ export class InviteMemberDto implements IInviteMemberDto {
         data = typeof data === 'object' ? data : {};
         data["chatId"] = this.chatId;
         data["userId"] = this.userId;
+        data["owner"] = this.owner;
         return data;
     }
 }
@@ -9990,6 +10415,7 @@ export class InviteMemberDto implements IInviteMemberDto {
 export interface IInviteMemberDto {
     chatId?: string;
     userId?: string;
+    owner?: boolean;
 }
 
 export class JobDetails implements IJobDetails {
@@ -10487,7 +10913,6 @@ export class MessageEntity implements IMessageEntity {
     text?: string | undefined;
     isDeleted?: boolean;
     chatId?: string;
-    chat?: ChatEntity;
     sentDate?: Date;
     isPinned?: boolean;
     replyedToMessageId?: string | undefined;
@@ -10514,7 +10939,6 @@ export class MessageEntity implements IMessageEntity {
             this.text = _data["text"];
             this.isDeleted = _data["isDeleted"];
             this.chatId = _data["chatId"];
-            this.chat = _data["chat"] ? ChatEntity.fromJS(_data["chat"]) : <any>undefined;
             this.sentDate = _data["sentDate"] ? new Date(_data["sentDate"].toString()) : <any>undefined;
             this.isPinned = _data["isPinned"];
             this.replyedToMessageId = _data["replyedToMessageId"];
@@ -10545,7 +10969,6 @@ export class MessageEntity implements IMessageEntity {
         data["text"] = this.text;
         data["isDeleted"] = this.isDeleted;
         data["chatId"] = this.chatId;
-        data["chat"] = this.chat ? this.chat.toJSON() : <any>undefined;
         data["sentDate"] = this.sentDate ? this.sentDate.toISOString() : <any>undefined;
         data["isPinned"] = this.isPinned;
         data["replyedToMessageId"] = this.replyedToMessageId;
@@ -10569,7 +10992,6 @@ export interface IMessageEntity {
     text?: string | undefined;
     isDeleted?: boolean;
     chatId?: string;
-    chat?: ChatEntity;
     sentDate?: Date;
     isPinned?: boolean;
     replyedToMessageId?: string | undefined;
@@ -12516,6 +12938,62 @@ export interface ITicketEntity {
     id: string;
 }
 
+export class TotalsDto implements ITotalsDto {
+    hourlyAmount?: number;
+    manualAmount?: number;
+    fixedAmount?: number;
+    platformFee?: number;
+    taxWithheld?: number;
+    netAmount?: number;
+
+    constructor(data?: ITotalsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.hourlyAmount = _data["hourlyAmount"];
+            this.manualAmount = _data["manualAmount"];
+            this.fixedAmount = _data["fixedAmount"];
+            this.platformFee = _data["platformFee"];
+            this.taxWithheld = _data["taxWithheld"];
+            this.netAmount = _data["netAmount"];
+        }
+    }
+
+    static fromJS(data: any): TotalsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TotalsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["hourlyAmount"] = this.hourlyAmount;
+        data["manualAmount"] = this.manualAmount;
+        data["fixedAmount"] = this.fixedAmount;
+        data["platformFee"] = this.platformFee;
+        data["taxWithheld"] = this.taxWithheld;
+        data["netAmount"] = this.netAmount;
+        return data;
+    }
+}
+
+export interface ITotalsDto {
+    hourlyAmount?: number;
+    manualAmount?: number;
+    fixedAmount?: number;
+    platformFee?: number;
+    taxWithheld?: number;
+    netAmount?: number;
+}
+
 export class TransactionEntity implements ITransactionEntity {
     readonly walletId?: string;
     antoganistTransactionId?: string | undefined;
@@ -13994,6 +14472,74 @@ export interface IWorkSessionEntity {
     id: string;
 }
 
+export class WorkSessionSummaryDto implements IWorkSessionSummaryDto {
+    sessionId?: string;
+    contractId?: string;
+    contractLabel?: string | undefined;
+    comment?: string | undefined;
+    hours?: number;
+    amount?: number;
+    isManual?: boolean;
+    startUtc?: Date;
+    endUtc?: Date | undefined;
+
+    constructor(data?: IWorkSessionSummaryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.sessionId = _data["sessionId"];
+            this.contractId = _data["contractId"];
+            this.contractLabel = _data["contractLabel"];
+            this.comment = _data["comment"];
+            this.hours = _data["hours"];
+            this.amount = _data["amount"];
+            this.isManual = _data["isManual"];
+            this.startUtc = _data["startUtc"] ? new Date(_data["startUtc"].toString()) : <any>undefined;
+            this.endUtc = _data["endUtc"] ? new Date(_data["endUtc"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): WorkSessionSummaryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new WorkSessionSummaryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["sessionId"] = this.sessionId;
+        data["contractId"] = this.contractId;
+        data["contractLabel"] = this.contractLabel;
+        data["comment"] = this.comment;
+        data["hours"] = this.hours;
+        data["amount"] = this.amount;
+        data["isManual"] = this.isManual;
+        data["startUtc"] = this.startUtc ? this.startUtc.toISOString() : <any>undefined;
+        data["endUtc"] = this.endUtc ? this.endUtc.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IWorkSessionSummaryDto {
+    sessionId?: string;
+    contractId?: string;
+    contractLabel?: string | undefined;
+    comment?: string | undefined;
+    hours?: number;
+    amount?: number;
+    isManual?: boolean;
+    startUtc?: Date;
+    endUtc?: Date | undefined;
+}
+
 export enum BalanceOperationCommandBalanceOperationType {
     Freeze = "Freeze",
     Unfreeze = "Unfreeze",
@@ -14170,6 +14716,7 @@ export enum FreelancerProfileEntityAvailability {
 export enum GatewayResultCommandCurrency {
     RussianRuble = "RussianRuble",
     Dollar = "Dollar",
+    Tenge = "Tenge",
     Euro = "Euro",
 }
 
@@ -14268,6 +14815,7 @@ export enum JobDetailsStatus {
 export enum JobDetailsCurrency {
     RussianRuble = "RussianRuble",
     Dollar = "Dollar",
+    Tenge = "Tenge",
     Euro = "Euro",
 }
 
@@ -14297,6 +14845,7 @@ export enum JobEntityBudgetType {
 export enum MoneyCurrency {
     RussianRuble = "RussianRuble",
     Dollar = "Dollar",
+    Tenge = "Tenge",
     Euro = "Euro",
 }
 
@@ -14458,6 +15007,7 @@ export enum UserEntityLocation {
 export enum WalletEntityCurrency {
     RussianRuble = "RussianRuble",
     Dollar = "Dollar",
+    Tenge = "Tenge",
     Euro = "Euro",
 }
 

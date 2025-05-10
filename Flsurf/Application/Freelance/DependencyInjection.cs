@@ -18,7 +18,7 @@ namespace Flsurf.Application.Freelance
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IClientProfileService, ClientProfileService>(); 
             services.AddScoped<IWorkSessionService, WorkSessionService>();
-
+            services.AddScoped<IReportsService, ReportsService>(); 
 
             return services;
         }

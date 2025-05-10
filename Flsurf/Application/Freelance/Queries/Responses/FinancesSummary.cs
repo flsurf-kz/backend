@@ -1,6 +1,6 @@
 ﻿using Flsurf.Domain.Payment.Enums;
 
-namespace Flsurf.Application.Payment.Queries.Models
+namespace Flsurf.Application.Freelance.Queries
 {
     public class FinanceSummaryDto
     {
@@ -69,7 +69,7 @@ namespace Flsurf.Application.Payment.Queries.Models
         {
             if (EndUtc is null)
             {
-                yield break; 
+                yield break;
             }
 
             var current = StartUtc.Date;
