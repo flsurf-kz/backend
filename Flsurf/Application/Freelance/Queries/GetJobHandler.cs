@@ -15,6 +15,8 @@ namespace Flsurf.Application.Freelance.Queries
         {
             var job = await _dbContext.Jobs
                 .Include(j => j.Employer) // Загружаем клиента
+                .Include(x => x.Category)
+                .Include(x => x.RequiredSkills)
                 .Where(j => j.Id == query.JobId)
                 .AsNoTracking()
                 .Select(j => new JobDetails
@@ -25,8 +27,9 @@ namespace Flsurf.Application.Freelance.Queries
                     Status = j.Status,
                     Budget = j.Payout,
                     // TODO 
-                    //Category = j.Category,
-                    //Skills = j.Skills.Split(','),
+                    Category = j.Category.Name,
+                    CategorySlug = j.Category.Slug, 
+                    Skills = j.RequiredSkills.Select(x => x.Name).ToArray(),
                     //Languages = j.Languages.Split(','),
 
                     CreatedAt = j.CreatedAt ?? DateTime.UtcNow,
@@ -36,7 +39,8 @@ namespace Flsurf.Application.Freelance.Queries
                     ResponsesRangeMax = 30,
                     DailyResponsesMin = 5,
                     DailyResponsesMax = 10,
-                    ConfirmedResponses = 5
+                    ConfirmedResponses = 5, 
+                    Views = 10, 
                 })
                 .FirstOrDefaultAsync();
 

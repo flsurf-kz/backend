@@ -57491,48 +57491,6 @@
         "Reference": null,
         "Annotations": null
       },
-      "CategoryModel": {
-        "Title": null,
-        "Type": "object",
-        "Format": null,
-        "Description": null,
-        "Maximum": null,
-        "ExclusiveMaximum": null,
-        "Minimum": null,
-        "ExclusiveMinimum": null,
-        "MaxLength": null,
-        "MinLength": null,
-        "Pattern": null,
-        "MultipleOf": null,
-        "Default": null,
-        "ReadOnly": false,
-        "WriteOnly": false,
-        "AllOf": [],
-        "OneOf": [],
-        "AnyOf": [],
-        "Not": null,
-        "Required": [],
-        "Items": null,
-        "MaxItems": null,
-        "MinItems": null,
-        "UniqueItems": null,
-        "Properties": {},
-        "MaxProperties": null,
-        "MinProperties": null,
-        "AdditionalPropertiesAllowed": false,
-        "AdditionalProperties": null,
-        "Discriminator": null,
-        "Example": null,
-        "Enum": [],
-        "Nullable": false,
-        "ExternalDocs": null,
-        "Deprecated": false,
-        "Xml": null,
-        "Extensions": {},
-        "UnresolvedReference": false,
-        "Reference": null,
-        "Annotations": null
-      },
       "ChatEntity": {
         "Title": null,
         "Type": "object",
@@ -71786,22 +71744,22 @@
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "RussianRuble"
+                "Value": "RUB"
               },
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "Dollar"
+                "Value": "USD"
               },
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "Tenge"
+                "Value": "KZT"
               },
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "Euro"
+                "Value": "EUR"
               }
             ],
             "Nullable": false,
@@ -75745,22 +75703,22 @@
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "RussianRuble"
+                "Value": "RUB"
               },
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "Dollar"
+                "Value": "USD"
               },
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "Tenge"
+                "Value": "KZT"
               },
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "Euro"
+                "Value": "EUR"
               }
             ],
             "Nullable": false,
@@ -75774,7 +75732,7 @@
           },
           "category": {
             "Title": null,
-            "Type": null,
+            "Type": "string",
             "Format": null,
             "Description": null,
             "Maximum": null,
@@ -75805,23 +75763,55 @@
             "Discriminator": null,
             "Example": null,
             "Enum": [],
-            "Nullable": false,
+            "Nullable": true,
             "ExternalDocs": null,
             "Deprecated": false,
             "Xml": null,
             "Extensions": {},
             "UnresolvedReference": false,
-            "Reference": {
-              "IsFragrament": false,
-              "ExternalResource": null,
-              "Type": 0,
-              "Id": "CategoryModel",
-              "IsExternal": false,
-              "IsLocal": true,
-              "HostDocument": null,
-              "ReferenceV3": "#/components/schemas/CategoryModel",
-              "ReferenceV2": "#/definitions/CategoryModel"
-            },
+            "Reference": null,
+            "Annotations": null
+          },
+          "categorySlug": {
+            "Title": null,
+            "Type": "string",
+            "Format": null,
+            "Description": null,
+            "Maximum": null,
+            "ExclusiveMaximum": null,
+            "Minimum": null,
+            "ExclusiveMinimum": null,
+            "MaxLength": null,
+            "MinLength": null,
+            "Pattern": null,
+            "MultipleOf": null,
+            "Default": null,
+            "ReadOnly": false,
+            "WriteOnly": false,
+            "AllOf": [],
+            "OneOf": [],
+            "AnyOf": [],
+            "Not": null,
+            "Required": [],
+            "Items": null,
+            "MaxItems": null,
+            "MinItems": null,
+            "UniqueItems": null,
+            "Properties": {},
+            "MaxProperties": null,
+            "MinProperties": null,
+            "AdditionalPropertiesAllowed": true,
+            "AdditionalProperties": null,
+            "Discriminator": null,
+            "Example": null,
+            "Enum": [],
+            "Nullable": true,
+            "ExternalDocs": null,
+            "Deprecated": false,
+            "Xml": null,
+            "Extensions": {},
+            "UnresolvedReference": false,
+            "Reference": null,
             "Annotations": null
           },
           "skills": {
@@ -76369,6 +76359,48 @@
             "Annotations": null
           },
           "confirmedResponses": {
+            "Title": null,
+            "Type": "integer",
+            "Format": "int32",
+            "Description": null,
+            "Maximum": null,
+            "ExclusiveMaximum": null,
+            "Minimum": null,
+            "ExclusiveMinimum": null,
+            "MaxLength": null,
+            "MinLength": null,
+            "Pattern": null,
+            "MultipleOf": null,
+            "Default": null,
+            "ReadOnly": false,
+            "WriteOnly": false,
+            "AllOf": [],
+            "OneOf": [],
+            "AnyOf": [],
+            "Not": null,
+            "Required": [],
+            "Items": null,
+            "MaxItems": null,
+            "MinItems": null,
+            "UniqueItems": null,
+            "Properties": {},
+            "MaxProperties": null,
+            "MinProperties": null,
+            "AdditionalPropertiesAllowed": true,
+            "AdditionalProperties": null,
+            "Discriminator": null,
+            "Example": null,
+            "Enum": [],
+            "Nullable": false,
+            "ExternalDocs": null,
+            "Deprecated": false,
+            "Xml": null,
+            "Extensions": {},
+            "UnresolvedReference": false,
+            "Reference": null,
+            "Annotations": null
+          },
+          "views": {
             "Title": null,
             "Type": "integer",
             "Format": "int32",
@@ -80157,22 +80189,22 @@
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "RussianRuble"
+                "Value": "RUB"
               },
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "Dollar"
+                "Value": "USD"
               },
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "Tenge"
+                "Value": "KZT"
               },
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "Euro"
+                "Value": "EUR"
               }
             ],
             "Nullable": false,
@@ -97128,22 +97160,22 @@
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "RussianRuble"
+                "Value": "RUB"
               },
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "Dollar"
+                "Value": "USD"
               },
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "Tenge"
+                "Value": "KZT"
               },
               {
                 "PrimitiveType": 4,
                 "AnyType": 0,
-                "Value": "Euro"
+                "Value": "EUR"
               }
             ],
             "Nullable": false,
@@ -99266,6 +99298,6 @@
   ],
   "ExternalDocs": null,
   "Extensions": {},
-  "HashCode": "A14E5DD9039928B47024DE2CBA0D5279877D2C2F6E4D93D269BF0D041B92924D2F3785A060DFA33AEBC10FB8950A32223B73A32D78342EB070C95062354DBF97",
+  "HashCode": "9224EBF431B097068171664B1956096B4BE54CA662B7AD70166E41A484AB1BB1064290A215D778C7FD8EA3E72360A78ECB9DA87DCE320EA7334E47A6D90AF4D0",
   "Annotations": null
 }

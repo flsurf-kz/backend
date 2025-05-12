@@ -15,31 +15,31 @@ public class MoneyTests
     [SetUp]
     public void Setup()
     {
-        rub100 = new Money(100, CurrencyEnum.RussianRuble);
-        rub50 = new Money(50, CurrencyEnum.RussianRuble);
-        usd100 = new Money(100, CurrencyEnum.Dollar);
+        rub100 = new Money(100, CurrencyEnum.RUB);
+        rub50 = new Money(50, CurrencyEnum.RUB);
+        usd100 = new Money(100, CurrencyEnum.USD);
     }
 
     [Test]
     public void Constructor_ShouldSetProperties()
     {
-        var money = new Money(123.456m, CurrencyEnum.RussianRuble);
+        var money = new Money(123.456m, CurrencyEnum.RUB);
 
         Assert.That(money.Amount, Is.EqualTo(123.46m));
-        Assert.That(money.Currency, Is.EqualTo(CurrencyEnum.RussianRuble));
+        Assert.That(money.Currency, Is.EqualTo(CurrencyEnum.RUB));
     }
 
     [Test]
     public void Constructor_NegativeAmount_ShouldThrow()
     {
-        Assert.Throws<ArgumentException>(() => new Money(-1, CurrencyEnum.Dollar));
+        Assert.Throws<ArgumentException>(() => new Money(-1, CurrencyEnum.USD));
     }
 
     [Test]
     public void Equality_ShouldCompareByValue()
     {
-        var a = new Money(100, CurrencyEnum.RussianRuble);
-        var b = new Money(100, CurrencyEnum.RussianRuble);
+        var a = new Money(100, CurrencyEnum.RUB);
+        var b = new Money(100, CurrencyEnum.RUB);
 
         Assert.That(a == b, Is.True);
         Assert.That(a.Equals(b), Is.True);
@@ -137,7 +137,7 @@ public class MoneyTests
     [Test]
     public void IsZero_ShouldReturnTrue_WhenZero()
     {
-        var zero = new Money(0, CurrencyEnum.Dollar);
+        var zero = new Money(0, CurrencyEnum.USD);
 
         Assert.That(zero.IsZero(), Is.True);
     }
@@ -160,8 +160,8 @@ public class MoneyTests
     [Test]
     public void Equals_And_HashCode_ShouldMatch()
     {
-        var a = new Money(123, CurrencyEnum.RussianRuble);
-        var b = new Money(123, CurrencyEnum.RussianRuble);
+        var a = new Money(123, CurrencyEnum.RUB);
+        var b = new Money(123, CurrencyEnum.RUB);
 
         Assert.That(a.Equals(b), Is.True);
         Assert.That(a.GetHashCode(), Is.EqualTo(b.GetHashCode()));

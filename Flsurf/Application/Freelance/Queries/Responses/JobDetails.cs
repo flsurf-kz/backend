@@ -13,7 +13,8 @@ namespace Flsurf.Application.Freelance.Queries.Responses
         public Money? Budget { get; set; } = null!; 
         public CurrencyEnum Currency { get; set; }
 
-        public CategoryModel Category { get; set; } = null!; 
+        public string Category { get; set; } = null!;
+        public string CategorySlug { get; set; } = string.Empty;    
         public string[] Skills { get; set; } = Array.Empty<string>();
         public string[] Languages { get; set; } = Array.Empty<string>();
 
@@ -30,6 +31,8 @@ namespace Flsurf.Application.Freelance.Queries.Responses
         public int DailyResponsesMin { get; set; }
         public int DailyResponsesMax { get; set; }
         public int ConfirmedResponses { get; set; }
+
+        public int Views { get; set; }
     }
 
 }

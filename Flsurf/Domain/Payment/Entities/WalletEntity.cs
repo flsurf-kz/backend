@@ -22,16 +22,16 @@ namespace Flsurf.Domain.Payment.Entities
         public virtual UserEntity User { get; private set; } = null!;
 
         [Required]
-        public CurrencyEnum Currency { get; private set; } = CurrencyEnum.RussianRuble;
+        public CurrencyEnum Currency { get; private set; } = CurrencyEnum.RUB;
 
         [Required]
-        public Money Frozen { get; private set; } = new(0, CurrencyEnum.RussianRuble);
+        public Money Frozen { get; private set; } = new(0, CurrencyEnum.RUB);
 
         [Required]
-        public Money AvailableBalance { get; private set; } = new(1000, CurrencyEnum.RussianRuble);
+        public Money AvailableBalance { get; private set; } = new(1000, CurrencyEnum.RUB);
 
         [Required]
-        public Money PendingIncome { get; private set; } = new(0, CurrencyEnum.RussianRuble);
+        public Money PendingIncome { get; private set; } = new(0, CurrencyEnum.RUB);
 
         [Required]
         public bool Blocked { get; private set; } = false;
@@ -55,10 +55,10 @@ namespace Flsurf.Domain.Payment.Entities
             {
                 User = user,
                 UserId = user.Id,
-                Currency = CurrencyEnum.RussianRuble,
-                Frozen = new Money(0, CurrencyEnum.RussianRuble),
-                AvailableBalance = new Money(1000, CurrencyEnum.RussianRuble),
-                PendingIncome = new Money(0, CurrencyEnum.RussianRuble),
+                Currency = CurrencyEnum.RUB,
+                Frozen = new Money(0, CurrencyEnum.RUB),
+                AvailableBalance = new Money(1000, CurrencyEnum.RUB),
+                PendingIncome = new Money(0, CurrencyEnum.RUB),
                 Blocked = false, 
             };
 

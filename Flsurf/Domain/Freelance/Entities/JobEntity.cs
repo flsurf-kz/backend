@@ -35,7 +35,7 @@ namespace Flsurf.Domain.Freelance.Entities
         [ForeignKey("Contract")]
         public Guid? ContractId { get; private set; }
         public ICollection<FileEntity> Files { get; private set; } = [];
-        public bool IsHidden { get; set; } = false; 
+        public bool IsHidden { get; set; } = false;
 
         public static JobEntity CreateFixed(
             UserEntity employer,

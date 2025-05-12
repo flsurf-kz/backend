@@ -18,7 +18,7 @@ namespace Tests.Domain.UnitTests.Entities
         public void SetUp()
         {
             _walletId = Guid.NewGuid();
-            _amount = new Money(100, CurrencyEnum.RussianRuble);
+            _amount = new Money(100, CurrencyEnum.RUB);
             _feePolicy = new NoFeePolicy(); // Для простоты
         }
 

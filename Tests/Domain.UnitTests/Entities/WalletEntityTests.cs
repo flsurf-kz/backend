@@ -26,7 +26,7 @@ public class WalletEntityTests
     [Test]
     public void Create_ShouldInitializeWalletCorrectly()
     {
-        Assert.That(_wallet.Currency, Is.EqualTo(CurrencyEnum.RussianRuble));
+        Assert.That(_wallet.Currency, Is.EqualTo(CurrencyEnum.RUB));
         Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(1000));
         Assert.That(_wallet.Frozen.Amount, Is.EqualTo(0));
         Assert.That(_wallet.Blocked, Is.False);
@@ -36,7 +36,7 @@ public class WalletEntityTests
     [Test]
     public void Deposit_ShouldIncreaseBalance()
     {
-        _wallet.BalanceOperation(new Money(300, CurrencyEnum.RussianRuble), BalanceOperationType.Deposit);
+        _wallet.BalanceOperation(new Money(300, CurrencyEnum.RUB), BalanceOperationType.Deposit);
 
         Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(1300));
     }
@@ -44,7 +44,7 @@ public class WalletEntityTests
     [Test]
     public void Withdraw_ShouldDecreaseBalance()
     {
-        _wallet.BalanceOperation(new Money(400, CurrencyEnum.RussianRuble), BalanceOperationType.Withdrawl);
+        _wallet.BalanceOperation(new Money(400, CurrencyEnum.RUB), BalanceOperationType.Withdrawl);
 
         Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(600));
     }
@@ -53,13 +53,13 @@ public class WalletEntityTests
     public void Withdraw_InsufficientFunds_ShouldThrow()
     {
         Assert.Throws<NotEnoughMoneyException>(() =>
-            _wallet.BalanceOperation(new Money(2000, CurrencyEnum.RussianRuble), BalanceOperationType.Withdrawl));
+            _wallet.BalanceOperation(new Money(2000, CurrencyEnum.RUB), BalanceOperationType.Withdrawl));
     }
 
     [Test]
     public void Freeze_ShouldMoveFundsToFrozen()
     {
-        _wallet.BalanceOperation(new Money(300, CurrencyEnum.RussianRuble), BalanceOperationType.Freeze);
+        _wallet.BalanceOperation(new Money(300, CurrencyEnum.RUB), BalanceOperationType.Freeze);
 
         Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(700));
         Assert.That(_wallet.Frozen.Amount, Is.EqualTo(300));
@@ -68,8 +68,8 @@ public class WalletEntityTests
     [Test]
     public void Unfreeze_ShouldMoveFundsToAvailable()
     {
-        _wallet.BalanceOperation(new Money(200, CurrencyEnum.RussianRuble), BalanceOperationType.Freeze);
-        _wallet.BalanceOperation(new Money(200, CurrencyEnum.RussianRuble), BalanceOperationType.Unfreeze);
+        _wallet.BalanceOperation(new Money(200, CurrencyEnum.RUB), BalanceOperationType.Freeze);
+        _wallet.BalanceOperation(new Money(200, CurrencyEnum.RUB), BalanceOperationType.Unfreeze);
 
         Assert.That(_wallet.Frozen.Amount, Is.EqualTo(0));
         Assert.That(_wallet.AvailableBalance.Amount, Is.EqualTo(1000));
@@ -79,7 +79,7 @@ public class WalletEntityTests
     public void Transfer_ShouldMoveFundsToAnotherWalletWithFreeze()
     {
         _wallet.Transfer(
-            new Money(300, CurrencyEnum.RussianRuble),
+            new Money(300, CurrencyEnum.RUB),
             _receiverWallet,
             new NoFeePolicy(),
             2
@@ -94,7 +94,7 @@ public class WalletEntityTests
     {
         var tx = TransactionEntity.Create(
             walletId: _wallet.Id,
-            amount: new Money(150, CurrencyEnum.RussianRuble),
+            amount: new Money(150, CurrencyEnum.RUB),
             feePolicy: new NoFeePolicy(),
             type: TransactionType.Transfer,
             flow: TransactionFlow.Outgoing,
@@ -112,7 +112,7 @@ public class WalletEntityTests
         _wallet.Block(WalletBlockReason.LegalIssue);
 
         Assert.Throws<WalletIsBlocked>(() =>
-            _wallet.BalanceOperation(new Money(100, CurrencyEnum.RussianRuble), BalanceOperationType.Deposit));
+            _wallet.BalanceOperation(new Money(100, CurrencyEnum.RUB), BalanceOperationType.Deposit));
 
         Assert.That(_wallet.Blocked, Is.True);
         Assert.That(_wallet.BlockReason, Is.EqualTo(WalletBlockReason.LegalIssue));
@@ -123,7 +123,7 @@ public class WalletEntityTests
     {
         var tx = TransactionEntity.Create(
             walletId: _wallet.Id,
-            amount: new Money(200, CurrencyEnum.RussianRuble),
+            amount: new Money(200, CurrencyEnum.RUB),
             feePolicy: new NoFeePolicy(),
             type: TransactionType.Deposit,
             flow: TransactionFlow.Incoming,
@@ -140,7 +140,7 @@ public class WalletEntityTests
     {
         var tx = TransactionEntity.Create(
             walletId: _wallet.Id,
-            amount: new Money(100, CurrencyEnum.RussianRuble),
+            amount: new Money(100, CurrencyEnum.RUB),
             feePolicy: new NoFeePolicy(),
             type: TransactionType.Deposit,
             flow: TransactionFlow.Incoming,

@@ -7021,36 +7021,6 @@ export interface ICategoryEntity {
     id: string;
 }
 
-export class CategoryModel implements ICategoryModel {
-
-    constructor(data?: ICategoryModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): CategoryModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new CategoryModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface ICategoryModel {
-}
-
 export class ChatEntity implements IChatEntity {
     readonly ownerId?: string;
     owner?: UserEntity;
@@ -10436,7 +10406,8 @@ export class JobDetails implements IJobDetails {
     status?: JobDetailsStatus;
     budget?: Money;
     currency?: JobDetailsCurrency;
-    category?: CategoryModel;
+    category?: string | undefined;
+    categorySlug?: string | undefined;
     skills?: string[] | undefined;
     languages?: string[] | undefined;
     clientName?: string | undefined;
@@ -10449,6 +10420,7 @@ export class JobDetails implements IJobDetails {
     dailyResponsesMin?: number;
     dailyResponsesMax?: number;
     confirmedResponses?: number;
+    views?: number;
 
     constructor(data?: IJobDetails) {
         if (data) {
@@ -10467,7 +10439,8 @@ export class JobDetails implements IJobDetails {
             this.status = _data["status"];
             this.budget = _data["budget"] ? Money.fromJS(_data["budget"]) : <any>undefined;
             this.currency = _data["currency"];
-            this.category = _data["category"] ? CategoryModel.fromJS(_data["category"]) : <any>undefined;
+            this.category = _data["category"];
+            this.categorySlug = _data["categorySlug"];
             if (Array.isArray(_data["skills"])) {
                 this.skills = [] as any;
                 for (let item of _data["skills"])
@@ -10488,6 +10461,7 @@ export class JobDetails implements IJobDetails {
             this.dailyResponsesMin = _data["dailyResponsesMin"];
             this.dailyResponsesMax = _data["dailyResponsesMax"];
             this.confirmedResponses = _data["confirmedResponses"];
+            this.views = _data["views"];
         }
     }
 
@@ -10506,7 +10480,8 @@ export class JobDetails implements IJobDetails {
         data["status"] = this.status;
         data["budget"] = this.budget ? this.budget.toJSON() : <any>undefined;
         data["currency"] = this.currency;
-        data["category"] = this.category ? this.category.toJSON() : <any>undefined;
+        data["category"] = this.category;
+        data["categorySlug"] = this.categorySlug;
         if (Array.isArray(this.skills)) {
             data["skills"] = [];
             for (let item of this.skills)
@@ -10527,6 +10502,7 @@ export class JobDetails implements IJobDetails {
         data["dailyResponsesMin"] = this.dailyResponsesMin;
         data["dailyResponsesMax"] = this.dailyResponsesMax;
         data["confirmedResponses"] = this.confirmedResponses;
+        data["views"] = this.views;
         return data;
     }
 }
@@ -10538,7 +10514,8 @@ export interface IJobDetails {
     status?: JobDetailsStatus;
     budget?: Money;
     currency?: JobDetailsCurrency;
-    category?: CategoryModel;
+    category?: string | undefined;
+    categorySlug?: string | undefined;
     skills?: string[] | undefined;
     languages?: string[] | undefined;
     clientName?: string | undefined;
@@ -10551,6 +10528,7 @@ export interface IJobDetails {
     dailyResponsesMin?: number;
     dailyResponsesMax?: number;
     confirmedResponses?: number;
+    views?: number;
 }
 
 export class JobEntity implements IJobEntity {
@@ -14725,10 +14703,10 @@ export enum FreelancerProfileEntityAvailability {
 }
 
 export enum GatewayResultCommandCurrency {
-    RussianRuble = "RussianRuble",
-    Dollar = "Dollar",
-    Tenge = "Tenge",
-    Euro = "Euro",
+    RUB = "RUB",
+    USD = "USD",
+    KZT = "KZT",
+    EUR = "EUR",
 }
 
 export enum GetContractsListQueryStatus {
@@ -14824,10 +14802,10 @@ export enum JobDetailsStatus {
 }
 
 export enum JobDetailsCurrency {
-    RussianRuble = "RussianRuble",
-    Dollar = "Dollar",
-    Tenge = "Tenge",
-    Euro = "Euro",
+    RUB = "RUB",
+    USD = "USD",
+    KZT = "KZT",
+    EUR = "EUR",
 }
 
 export enum JobEntityStatus {
@@ -14854,10 +14832,10 @@ export enum JobEntityBudgetType {
 }
 
 export enum MoneyCurrency {
-    RussianRuble = "RussianRuble",
-    Dollar = "Dollar",
-    Tenge = "Tenge",
-    Euro = "Euro",
+    RUB = "RUB",
+    USD = "USD",
+    KZT = "KZT",
+    EUR = "EUR",
 }
 
 export enum NotificationEntityType {
@@ -15016,10 +14994,10 @@ export enum UserEntityLocation {
 }
 
 export enum WalletEntityCurrency {
-    RussianRuble = "RussianRuble",
-    Dollar = "Dollar",
-    Tenge = "Tenge",
-    Euro = "Euro",
+    RUB = "RUB",
+    USD = "USD",
+    KZT = "KZT",
+    EUR = "EUR",
 }
 
 export enum WalletEntityBlockReason {

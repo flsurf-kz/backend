@@ -7,12 +7,12 @@ namespace Flsurf.Domain.Payment.Enums
     public enum CurrencyEnum
     {
         [Display(Name = "RUB")]
-        RussianRuble,
+        RUB,
         [Display(Name = "USD")]
-        Dollar,
+        USD,
         [Display(Name = "KZT")]
-        Tenge,
+        KZT,
         [Display(Name = "EUR")]
-        Euro
+        EUR
     }
 }
