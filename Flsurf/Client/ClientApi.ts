@@ -454,7 +454,7 @@ export interface IClient {
      * @param ends (optional) 
      * @return OK
      */
-    getBookmarksList(start?: number | undefined, ends?: number | undefined): Promise<JobEntity[]>;
+    getBookmarksList(start?: number | undefined, ends?: number | undefined): Promise<BookmarkedJobEntity[]>;
 
     /**
      * @param body (optional) 
@@ -3984,7 +3984,7 @@ export class Client implements IClient {
      * @param ends (optional) 
      * @return OK
      */
-    getBookmarksList(start?: number | undefined, ends?: number | undefined): Promise<JobEntity[]> {
+    getBookmarksList(start?: number | undefined, ends?: number | undefined): Promise<BookmarkedJobEntity[]> {
         let url_ = this.baseUrl + "/api/job/bookmarks?";
         if (start === null)
             throw new Error("The parameter 'start' cannot be null.");
@@ -4008,7 +4008,7 @@ export class Client implements IClient {
         });
     }
 
-    protected processGetBookmarksList(response: Response): Promise<JobEntity[]> {
+    protected processGetBookmarksList(response: Response): Promise<BookmarkedJobEntity[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -4018,7 +4018,7 @@ export class Client implements IClient {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(JobEntity.fromJS(item));
+                    result200!.push(BookmarkedJobEntity.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -4030,7 +4030,7 @@ export class Client implements IClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<JobEntity[]>(null as any);
+        return Promise.resolve<BookmarkedJobEntity[]>(null as any);
     }
 
     /**
@@ -7060,6 +7060,74 @@ export class BookmarkJobCommand implements IBookmarkJobCommand {
 
 export interface IBookmarkJobCommand {
     jobId?: string;
+}
+
+export class BookmarkedJobEntity implements IBookmarkedJobEntity {
+    jobId?: string;
+    job?: JobEntity;
+    userId?: string;
+    user?: UserEntity;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
+
+    constructor(data?: IBookmarkedJobEntity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.jobId = _data["jobId"];
+            this.job = _data["job"] ? JobEntity.fromJS(_data["job"]) : <any>undefined;
+            this.userId = _data["userId"];
+            this.user = _data["user"] ? UserEntity.fromJS(_data["user"]) : <any>undefined;
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): BookmarkedJobEntity {
+        data = typeof data === 'object' ? data : {};
+        let result = new BookmarkedJobEntity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["jobId"] = this.jobId;
+        data["job"] = this.job ? this.job.toJSON() : <any>undefined;
+        data["userId"] = this.userId;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
+        return data;
+    }
+}
+
+export interface IBookmarkedJobEntity {
+    jobId?: string;
+    job?: JobEntity;
+    userId?: string;
+    user?: UserEntity;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class CategoryEntity implements ICategoryEntity {
