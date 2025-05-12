@@ -463,11 +463,9 @@ export interface IClient {
     /**
      * @param jobId (optional) 
      * @param status (optional) 
-     * @param queryId (optional) 
-     * @param timestamp (optional) 
      * @return OK
      */
-    getProposalsList(jobId?: string | undefined, status?: Status | undefined, queryId?: string | undefined, timestamp?: Date | undefined): Promise<ProposalEntity[]>;
+    getProposalsList(jobId?: string | undefined, status?: Status | undefined): Promise<ProposalEntity[]>;
 
     /**
      * @param starts (optional) 
@@ -4068,11 +4066,9 @@ export class Client implements IClient {
     /**
      * @param jobId (optional) 
      * @param status (optional) 
-     * @param queryId (optional) 
-     * @param timestamp (optional) 
      * @return OK
      */
-    getProposalsList(jobId?: string | undefined, status?: Status | undefined, queryId?: string | undefined, timestamp?: Date | undefined): Promise<ProposalEntity[]> {
+    getProposalsList(jobId?: string | undefined, status?: Status | undefined): Promise<ProposalEntity[]> {
         let url_ = this.baseUrl + "/api/job/proposals?";
         if (jobId === null)
             throw new Error("The parameter 'jobId' cannot be null.");
@@ -4082,14 +4078,6 @@ export class Client implements IClient {
             throw new Error("The parameter 'status' cannot be null.");
         else if (status !== undefined)
             url_ += "Status=" + encodeURIComponent("" + status) + "&";
-        if (queryId === null)
-            throw new Error("The parameter 'queryId' cannot be null.");
-        else if (queryId !== undefined)
-            url_ += "QueryId=" + encodeURIComponent("" + queryId) + "&";
-        if (timestamp === null)
-            throw new Error("The parameter 'timestamp' cannot be null.");
-        else if (timestamp !== undefined)
-            url_ += "Timestamp=" + encodeURIComponent(timestamp ? "" + timestamp.toISOString() : "") + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {

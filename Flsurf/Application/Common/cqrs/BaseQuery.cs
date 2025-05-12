@@ -1,14 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.OpenApi.Validations.Rules;
+using Newtonsoft.Json;
 
 namespace Flsurf.Application.Common.cqrs
 {
     public abstract class BaseQuery
     {
         // Все эти поля нужны для составления очереди и разделение Запросов 
-        [JsonIgnore]
+        [JsonIgnore, BindNever]
         public string QueryId { get; private set; } // Уникальный идентификатор запроса
 
-        [JsonIgnore]
+        [JsonIgnore, BindNever]
         public DateTime Timestamp { get; private set; } // Временная метка создания запроса
 
         protected BaseQuery()
