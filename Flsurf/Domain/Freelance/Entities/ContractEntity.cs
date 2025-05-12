@@ -7,6 +7,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Diagnostics.Contracts;
 using Flsurf.Application.Common.Exceptions;
 using Flsurf.Domain.Payment.ValueObjects;
+using MimeKit.Cryptography;
 
 namespace Flsurf.Domain.Freelance.Entities
 {
@@ -51,6 +52,8 @@ namespace Flsurf.Domain.Freelance.Entities
         public decimal? Bonus { get; set; }
         [ForeignKey(nameof(DisputeEntity))]
         public Guid? DisputeId { get; set; }
+        [ForeignKey(nameof(JobEntity))]
+        public Guid JobId { get; set; }
 
         public static ContractEntity CreateFixed(
             Guid employerId,
@@ -58,6 +61,7 @@ namespace Flsurf.Domain.Freelance.Entities
             decimal? budget,
             PaymentScheduleType paymentSchedule,
             string contractTerms,
+            Guid jobId, 
             DateTime? endDate)
         {
             if (budget == null)
@@ -74,7 +78,8 @@ namespace Flsurf.Domain.Freelance.Entities
                 ContractTerms = contractTerms,
                 StartDate = DateTime.UtcNow,
                 EndDate = endDate,
-                Status = ContractStatus.PendingApproval
+                Status = ContractStatus.PendingApproval, 
+                JobId = jobId, 
             };
         }
 
@@ -84,6 +89,7 @@ namespace Flsurf.Domain.Freelance.Entities
             decimal costPerHour,
             PaymentScheduleType paymentSchedule,
             string contractTerms,
+            Guid jobId, 
             DateTime? endDate)
         {
             return new ContractEntity
@@ -97,7 +103,8 @@ namespace Flsurf.Domain.Freelance.Entities
                 ContractTerms = contractTerms,
                 StartDate = DateTime.UtcNow,
                 EndDate = endDate,
-                Status = ContractStatus.PendingApproval
+                Status = ContractStatus.PendingApproval, 
+                JobId = jobId, 
             };
         }
 

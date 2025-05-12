@@ -72,7 +72,8 @@ namespace Flsurf.Application.Freelance.Commands.Contract
                     budget: command.Budget,
                     paymentSchedule: command.PaymentSchedule,
                     contractTerms: command.ContractTerms,
-                    endDate: command.EndDate
+                    endDate: command.EndDate, 
+                    jobId: job.Id
                 );
             }
             else if (command.BudgetType == BudgetType.Hourly)
@@ -86,7 +87,8 @@ namespace Flsurf.Application.Freelance.Commands.Contract
                     costPerHour: (decimal)command.CostPerHour,
                     paymentSchedule: command.PaymentSchedule,
                     contractTerms: command.ContractTerms,
-                    endDate: command.EndDate
+                    endDate: command.EndDate, 
+                    jobId: job.Id 
                 );
             }
             else
