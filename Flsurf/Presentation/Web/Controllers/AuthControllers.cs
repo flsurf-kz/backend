@@ -44,13 +44,18 @@ namespace Flsurf.Presentation.Web.Controllers
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
+            var rememberFor = 60; 
+            if (model.RememberMe)
+            {
+                rememberFor = 60 * 24 * 7; 
+            }
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 principal,
                 new AuthenticationProperties
                 {
                     IsPersistent = model.RememberMe,
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(rememberFor)
                 });
 
             return CommandResult.Success("Authenticated", user.Id).MapResult(this); 
@@ -104,14 +109,19 @@ namespace Flsurf.Presentation.Web.Controllers
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
-
+            
+            var rememberFor = 60;
+            if (model.RememberMe)
+            {
+                rememberFor = 60 * 24 * 7;
+            }
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 principal,
                 new AuthenticationProperties
                 {
                     IsPersistent = true,
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(rememberFor)
                 });
 
             return CommandResult.Success(user.Id).MapResult(this);

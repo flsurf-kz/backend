@@ -148,5 +148,23 @@ namespace Flsurf.Presentation.Web.Controllers
             var bookmarks = await handler.Handle(new GetBookmarksListQuery());
             return Ok(bookmarks);
         }
+
+        [HttpPost("react-to-proposal", Name = "ReactToProposal")]
+        [Authorize]
+        public async Task<ActionResult<CommandResult>> ReactToProposal([FromBody] ReactToProposalCommand command)
+        {
+            var result = await _jobService.ReactToProposal().Handle(command);
+
+            return result.MapResult(this); 
+        }
+
+        [HttpGet("proposals", Name = "GetProposalsList")]
+        [Authorize]
+        public async Task<ActionResult<ICollection<ProposalEntity>>> GetProposals([FromQuery] GetProposalsListQuery query)
+        {
+            var result = await _jobService.GetProposalsList().Handle(query);
+
+            return Ok(result);
+        }
     }
 }

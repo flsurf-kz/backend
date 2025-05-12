@@ -57,5 +57,11 @@ namespace Flsurf.Application.Freelance.Services
 
         public SendDraftJobToModerationHandler SendDraftJobToModeration() => 
             _serviceProvider.GetRequiredService<SendDraftJobToModerationHandler>();
+
+        public ReactToProposalHandler ReactToProposal() =>
+            _serviceProvider.GetRequiredService<ReactToProposalHandler>(); 
+
+        public GetProposalsListHandler GetProposalsList() => 
+            _serviceProvider.GetRequiredService<GetProposalsListHandler>();
     }
 }
