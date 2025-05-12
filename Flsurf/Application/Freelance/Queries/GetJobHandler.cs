@@ -15,6 +15,7 @@ namespace Flsurf.Application.Freelance.Queries
         {
             var job = await _dbContext.Jobs
                 .Include(j => j.Employer) // Загружаем клиента
+                    .ThenInclude(x => x.Avatar)
                 .Include(x => x.Category)
                 .Include(x => x.RequiredSkills)
                 .Where(j => j.Id == query.JobId)
@@ -36,6 +37,8 @@ namespace Flsurf.Application.Freelance.Queries
 
                     // 🔥 **Активность на заказе**
                     ResponsesRangeMin = 20, // Можно вынести в конфиг
+                    ClientName = j.Employer.Fullname, 
+                    ClientAvatarUrl = j.Employer.Avatar != null ? j.Employer.Avatar.FilePath : "", 
                     ResponsesRangeMax = 30,
                     DailyResponsesMin = 5,
                     DailyResponsesMax = 10,

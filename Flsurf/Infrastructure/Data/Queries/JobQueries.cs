@@ -11,7 +11,8 @@ namespace Flsurf.Infrastructure.Data.Queries
                 .Include(x => x.Proposals)
                 .Include(x => x.RequiredSkills)
                 .Include(x => x.Category)
-                .Include(x => x.Employer);
+                .Include(x => x.Employer)
+                    .ThenInclude(x => x.Avatar);
         }
     }
 }
