@@ -142,10 +142,10 @@ namespace Flsurf.Presentation.Web.Controllers
 
         [HttpGet("bookmarks", Name = "GetBookmarksList")]
         [Authorize]
-        public async Task<ActionResult<ICollection<JobEntity>>> GetBookmarksList()
+        public async Task<ActionResult<ICollection<JobEntity>>> GetBookmarksList([FromQuery] GetBookmarksListQuery query)
         {
             var handler = _jobService.GetBookmarksList();
-            var bookmarks = await handler.Handle(new GetBookmarksListQuery());
+            var bookmarks = await handler.Handle(query);
             return Ok(bookmarks);
         }
 

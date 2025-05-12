@@ -450,9 +450,11 @@ export interface IClient {
     withdrawProposal(body?: WithdrawProposalCommand | undefined): Promise<CommandResult>;
 
     /**
+     * @param start (optional) 
+     * @param ends (optional) 
      * @return OK
      */
-    getBookmarksList(): Promise<JobEntity[]>;
+    getBookmarksList(start?: number | undefined, ends?: number | undefined): Promise<JobEntity[]>;
 
     /**
      * @param body (optional) 
@@ -3978,10 +3980,20 @@ export class Client implements IClient {
     }
 
     /**
+     * @param start (optional) 
+     * @param ends (optional) 
      * @return OK
      */
-    getBookmarksList(): Promise<JobEntity[]> {
-        let url_ = this.baseUrl + "/api/job/bookmarks";
+    getBookmarksList(start?: number | undefined, ends?: number | undefined): Promise<JobEntity[]> {
+        let url_ = this.baseUrl + "/api/job/bookmarks?";
+        if (start === null)
+            throw new Error("The parameter 'start' cannot be null.");
+        else if (start !== undefined)
+            url_ += "Start=" + encodeURIComponent("" + start) + "&";
+        if (ends === null)
+            throw new Error("The parameter 'ends' cannot be null.");
+        else if (ends !== undefined)
+            url_ += "Ends=" + encodeURIComponent("" + ends) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
