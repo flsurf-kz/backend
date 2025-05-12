@@ -9973,6 +9973,7 @@ export class GetJobsListQuery implements IGetJobsListQuery {
     sortOption?: GetJobsListQuerySortOption | undefined;
     clientId?: string | undefined;
     freelancerId?: string | undefined;
+    recommended?: boolean | undefined;
 
     constructor(data?: IGetJobsListQuery) {
         if (data) {
@@ -10013,6 +10014,7 @@ export class GetJobsListQuery implements IGetJobsListQuery {
             this.sortOption = _data["sortOption"];
             this.clientId = _data["clientId"];
             this.freelancerId = _data["freelancerId"];
+            this.recommended = _data["recommended"];
         }
     }
 
@@ -10053,6 +10055,7 @@ export class GetJobsListQuery implements IGetJobsListQuery {
         data["sortOption"] = this.sortOption;
         data["clientId"] = this.clientId;
         data["freelancerId"] = this.freelancerId;
+        data["recommended"] = this.recommended;
         return data;
     }
 }
@@ -10078,6 +10081,7 @@ export interface IGetJobsListQuery {
     sortOption?: GetJobsListQuerySortOption | undefined;
     clientId?: string | undefined;
     freelancerId?: string | undefined;
+    recommended?: boolean | undefined;
 }
 
 export class GetTicketsDto implements IGetTicketsDto {

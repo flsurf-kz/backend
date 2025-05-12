@@ -32,6 +32,8 @@ namespace Flsurf.Application.Freelance.Queries
 
         public Guid? ClientId { get; set; }
         public Guid? FreelancerId { get; set; }
+
+        public bool? Recommended { get; set; }
     }
 
 }
