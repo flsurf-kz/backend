@@ -46,7 +46,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this);
         }
 
-        [HttpGet("list/{userid}", Name = "GetPortfolioProjects")]
+        [HttpGet("list/{userId}", Name = "GetPortfolioProjects")]
         [Authorize]
         public async Task<ActionResult<ICollection<PortfolioProjectEntity>>> GetPortfolioProjects(Guid userId)
         {

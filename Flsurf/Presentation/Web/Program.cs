@@ -15,8 +15,6 @@ builder.Services.AddDomainServices();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddWebServices(builder.Configuration, builder.Environment, builder.Logging);
 
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

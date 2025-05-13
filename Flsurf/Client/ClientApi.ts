@@ -4674,7 +4674,7 @@ export class Client implements IClient {
      * @return OK
      */
     getPortfolioProjects(userId: string): Promise<PortfolioProjectEntity[]> {
-        let url_ = this.baseUrl + "/api/portfolio-project/list/{userid}";
+        let url_ = this.baseUrl + "/api/portfolio-project/list/{userId}";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
         url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
@@ -7063,10 +7063,10 @@ export interface IBookmarkJobCommand {
 }
 
 export class BookmarkedJobEntity implements IBookmarkedJobEntity {
-    jobId?: string;
-    job?: JobEntity;
-    userId?: string;
-    user?: UserEntity;
+    jobId!: string;
+    job!: JobEntity;
+    userId!: string;
+    user!: UserEntity;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
@@ -7080,14 +7080,18 @@ export class BookmarkedJobEntity implements IBookmarkedJobEntity {
                     (<any>this)[property] = (<any>data)[property];
             }
         }
+        if (!data) {
+            this.job = new JobEntity();
+            this.user = new UserEntity();
+        }
     }
 
     init(_data?: any) {
         if (_data) {
             this.jobId = _data["jobId"];
-            this.job = _data["job"] ? JobEntity.fromJS(_data["job"]) : <any>undefined;
+            this.job = _data["job"] ? JobEntity.fromJS(_data["job"]) : new JobEntity();
             this.userId = _data["userId"];
-            this.user = _data["user"] ? UserEntity.fromJS(_data["user"]) : <any>undefined;
+            this.user = _data["user"] ? UserEntity.fromJS(_data["user"]) : new UserEntity();
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
@@ -7119,10 +7123,10 @@ export class BookmarkedJobEntity implements IBookmarkedJobEntity {
 }
 
 export interface IBookmarkedJobEntity {
-    jobId?: string;
-    job?: JobEntity;
-    userId?: string;
-    user?: UserEntity;
+    jobId: string;
+    job: JobEntity;
+    userId: string;
+    user: UserEntity;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;

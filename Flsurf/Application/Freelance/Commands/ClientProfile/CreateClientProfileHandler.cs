@@ -41,9 +41,9 @@ namespace Flsurf.Application.Freelance.Commands.ClientProfile
             if (user == null)
                 return CommandResult.NotFound("Пользватель не найден", command.UserId); 
 
-            if (user.Type != Domain.User.Enums.UserTypes.NonUser)
+            if (user.Type != Domain.User.Enums.UserTypes.Client)
             {
-                return CommandResult.Conflict("You are already registered as a client.");
+                return CommandResult.Conflict("You are not client.");
             }
 
             // Проверяем, что профиль еще не создан

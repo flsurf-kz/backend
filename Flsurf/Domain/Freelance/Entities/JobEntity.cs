@@ -21,8 +21,8 @@ namespace Flsurf.Domain.Freelance.Entities
         public ICollection<SkillEntity> RequiredSkills { get; set; } = [];  // many to many? 
         public CategoryEntity Category { get; set; } = null!;
         public Guid CategoryId { get; set; }
-        public Money Payout { get; set; } = Money.Null();  
-        public DateTime? ExpirationDate { get; set; } 
+        public Money Payout { get; set; } = Money.Null();
+        public DateTime? ExpirationDate { get; set; }
         public int? Duration { get; set; }
         public JobStatus Status { get; set; } = JobStatus.Draft;
         public ICollection<ProposalEntity> Proposals { get; set; } = []; 

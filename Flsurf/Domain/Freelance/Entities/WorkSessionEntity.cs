@@ -44,7 +44,7 @@ namespace Flsurf.Domain.Freelance.Entities
             var session = new WorkSessionEntity
             {
                 ClientComment = string.Empty,
-                StartDate = DateTime.Now,
+                StartDate = DateTime.UtcNow,
                 Freelancer = freelancer,
                 Contract = contract,
                 ContractId = contract.Id,
@@ -114,7 +114,7 @@ namespace Flsurf.Domain.Freelance.Entities
             Status = WorkSessionStatus.Pending;
             SubmittedAt = DateTime.UtcNow;
 
-            AddDomainEvent(new WorkSessionSubmitted(this, DateTime.Now));
+            AddDomainEvent(new WorkSessionSubmitted(this, DateTime.UtcNow));
         }
 
         public void ApproveSession()
@@ -124,7 +124,7 @@ namespace Flsurf.Domain.Freelance.Entities
 
             Status = WorkSessionStatus.Approved;
             ApprovedAt = DateTime.UtcNow;
-            AddDomainEvent(new WorkSessionApproved(this, DateTime.Now));
+            AddDomainEvent(new WorkSessionApproved(this, DateTime.UtcNow));
         }
 
         public void RejectSession(string clientComment)
@@ -136,7 +136,7 @@ namespace Flsurf.Domain.Freelance.Entities
             RejectedAt = DateTime.UtcNow;
             ClientComment = clientComment;
 
-            AddDomainEvent(new WorkSessionRejected(this, DateTime.Now, clientComment));
+            AddDomainEvent(new WorkSessionRejected(this, DateTime.UtcNow, clientComment));
         }
     }
 }

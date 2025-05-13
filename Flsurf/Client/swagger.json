@@ -37888,7 +37888,7 @@
       "UnresolvedReference": false,
       "Reference": null
     },
-    "/api/portfolio-project/list/{userid}": {
+    "/api/portfolio-project/list/{userId}": {
       "Summary": null,
       "Description": null,
       "Operations": {
@@ -58049,7 +58049,11 @@
         "Not": null,
         "Required": [
           "createdAt",
-          "id"
+          "id",
+          "job",
+          "jobId",
+          "user",
+          "userId"
         ],
         "Items": null,
         "MaxItems": null,
@@ -101032,6 +101036,6 @@
   ],
   "ExternalDocs": null,
   "Extensions": {},
-  "HashCode": "2275C1B9316564BCE0BDA9B95940E414960071660D04148D77E5EE4759D8AC21F9B0FC00E39B990B536D17419027B87B7827492353CD788380FD53FC62D5A5DE",
+  "HashCode": "388F95A9518DF2BEB607380A00B4980ABA5B69241AFBE6073F33025998FA3CA71AF16CE0C7C9444D0BB5D93C816F1A0C90CC4EC893C4A4D6B9D03775EF776325",
   "Annotations": null
 }

@@ -78,7 +78,7 @@ namespace Flsurf.Application.Freelance.Commands.Job
             if (env.IsDevelopment())
             {
                 job.Status = JobStatus.Open; 
-                job.PublicationDate = DateTime.Now;
+                job.PublicationDate = DateTime.UtcNow;
             }
 
             _dbContext.Jobs.Add(job);

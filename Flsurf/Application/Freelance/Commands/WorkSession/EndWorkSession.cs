@@ -31,7 +31,7 @@ namespace Flsurf.Application.Freelance.Commands.WorkSession
 
             var uploadedFiles = await _uploadFiles.Execute(command.SelectedFiles);
             session.EndSession(uploadedFiles.ToList());
-            session.AddDomainEvent(new WorkSessionEnded(session, DateTime.Now));
+            session.AddDomainEvent(new WorkSessionEnded(session, DateTime.UtcNow));
 
             await _context.SaveChangesAsync();
             return CommandResult.Success(session.Id);

@@ -28,7 +28,7 @@ namespace Flsurf.Application.Freelance.Commands.WorkSession
             if (session.Contract.EmployerId != user.Id)
                 return CommandResult.Forbidden("");
 
-            session.AddDomainEvent(new WorkSessionApproved(session, DateTime.Now));
+            session.AddDomainEvent(new WorkSessionApproved(session, DateTime.UtcNow));
 
             await _context.SaveChangesAsync();
             return CommandResult.Success(session.Id);

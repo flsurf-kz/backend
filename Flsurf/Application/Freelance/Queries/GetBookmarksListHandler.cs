@@ -20,6 +20,11 @@ namespace Flsurf.Application.Freelance.Queries
 
             var bookmarkedJobs = await _dbContext.BookmarkedJobs.Where(x => x.UserId == userId)
                 .Paginate(query.Start, query.Ends)
+                .Include(x => x.Job)
+                    .ThenInclude(x => x.Category)
+                .Include(x => x.Job)
+                    .ThenInclude(x => x.Employer)
+                .Include(x => x.User)
                 .ToListAsync();
 
             return bookmarkedJobs; 

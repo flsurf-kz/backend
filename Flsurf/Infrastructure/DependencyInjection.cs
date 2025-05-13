@@ -15,6 +15,7 @@ using Flsurf.Infrastructure.Adapters.Payment;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Flsurf.Infrastructure.EventDispatcher;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Flsurf.Infrastructure
 {
@@ -55,7 +56,12 @@ namespace Flsurf.Infrastructure
 
             services.AddDbContext<EventStoreContext>((sp, options) =>
             {
-                options.EnableSensitiveDataLogging(false); 
+                options.UseLoggerFactory(NullLoggerFactory.Instance);
+
+                // при желании:
+                options.EnableSensitiveDataLogging(false);
+                options.EnableDetailedErrors(false);
+
                 options.UseNpgsql(
                     connectionString,
                     o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)

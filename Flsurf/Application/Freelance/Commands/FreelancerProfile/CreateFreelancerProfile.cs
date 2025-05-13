@@ -42,9 +42,9 @@ namespace Flsurf.Application.Freelance.Commands.FreelancerProfile
             if (user == null)
                 return CommandResult.NotFound("ПОшел нахуй отсюда", command.UserId ?? Guid.Empty);
 
-            if (user.Type != Domain.User.Enums.UserTypes.NonUser)
+            if (user.Type != Domain.User.Enums.UserTypes.Freelancer)
             {
-                return CommandResult.Conflict("You are already registered freelancer"); 
+                return CommandResult.Conflict("You are not freelancer"); 
             }
 
             // Проверяем, что профиль еще не создан

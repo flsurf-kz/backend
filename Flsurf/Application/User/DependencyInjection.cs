@@ -1,5 +1,8 @@
-﻿using Flsurf.Application.User.EventHandlers;
+﻿using Flsurf.Application.Common.Events;
+using Flsurf.Application.User.DomainHandlers;
+using Flsurf.Application.User.EventHandlers;
 using Flsurf.Application.User.Interfaces;
+using Flsurf.Domain.User.Events;
 
 namespace Flsurf.Application.User
 {
@@ -9,7 +12,8 @@ namespace Flsurf.Application.User
         {
             services.AddScoped<IUserService, UserService>();
 
-            services.AddScoped<UserCreatedHandler>();
+            services.AddScoped<UserCreatedDomainHandler>();
+            services.AddScoped<UserCreatedIntegrationHandler>();
 
             return services;
         }
