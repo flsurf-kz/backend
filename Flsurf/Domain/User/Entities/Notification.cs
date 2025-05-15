@@ -1,6 +1,7 @@
 ﻿using Flsurf.Domain.Common;
 using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.User.Enums;
+using Flsurf.Domain.User.Events;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
@@ -37,6 +38,8 @@ namespace Flsurf.Domain.User.Entities
             notification.FromUserId = toUserId;
             notification.Data = JsonSerializer.Serialize(data);
 
+            notification.AddDomainEvent(new NotificationCreated(notification.Id));
+
             return notification;
         }
 
@@ -50,6 +53,8 @@ namespace Flsurf.Domain.User.Entities
             notification.FromUserId = fromUserId;
             notification.ToUserId = toUserId;
             notification.Data = JsonSerializer.Serialize(data);
+
+            notification.AddDomainEvent(new NotificationCreated(notification.Id));
 
             return notification;
 

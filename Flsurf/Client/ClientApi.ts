@@ -585,11 +585,6 @@ export interface IClient {
     /**
      * @return OK
      */
-    sse(): Promise<void>;
-
-    /**
-     * @return OK
-     */
     blockUser(userId: string): Promise<boolean>;
 
     /**
@@ -614,6 +609,38 @@ export interface IClient {
      * @return OK
      */
     getTicket(ticketId: string): Promise<TicketEntity>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    createNews(body?: CreateNewsDto | undefined): Promise<NewsEntity>;
+
+    /**
+     * @param start (optional) 
+     * @param ends (optional) 
+     * @param includeHidden (optional) 
+     * @param startDate (optional) 
+     * @param endDate (optional) 
+     * @return OK
+     */
+    getNewsList(start?: number | undefined, ends?: number | undefined, includeHidden?: boolean | undefined, startDate?: Date | undefined, endDate?: Date | undefined): Promise<NewsEntity[]>;
+
+    /**
+     * @return OK
+     */
+    getNewsById(newsId: string): Promise<NewsEntity>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    updateNews(newsId: string, body?: UpdateNewsDto | undefined): Promise<NewsEntity>;
+
+    /**
+     * @return No Content
+     */
+    deleteNews(newsId: string): Promise<void>;
 
     /**
      * @param body (optional) 
@@ -752,11 +779,6 @@ export interface IClient {
      * @return OK
      */
     addPaymentMethod(body?: AddPaymentMethodCommand | undefined): Promise<CommandResult>;
-
-    /**
-     * @return OK
-     */
-    ws(): Promise<void>;
 
     /**
      * @param body (optional) 
@@ -4981,39 +5003,6 @@ export class Client implements IClient {
     /**
      * @return OK
      */
-    sse(): Promise<void> {
-        let url_ = this.baseUrl + "/api/sse";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processSse(_response);
-        });
-    }
-
-    protected processSse(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @return OK
-     */
     blockUser(userId: string): Promise<boolean> {
         let url_ = this.baseUrl + "/api/stuff/user/{userId}/block";
         if (userId === undefined || userId === null)
@@ -5227,6 +5216,245 @@ export class Client implements IClient {
             });
         }
         return Promise.resolve<TicketEntity>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    createNews(body?: CreateNewsDto | undefined): Promise<NewsEntity> {
+        let url_ = this.baseUrl + "/api/stuff";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateNews(_response);
+        });
+    }
+
+    protected processCreateNews(response: Response): Promise<NewsEntity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = NewsEntity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<NewsEntity>(null as any);
+    }
+
+    /**
+     * @param start (optional) 
+     * @param ends (optional) 
+     * @param includeHidden (optional) 
+     * @param startDate (optional) 
+     * @param endDate (optional) 
+     * @return OK
+     */
+    getNewsList(start?: number | undefined, ends?: number | undefined, includeHidden?: boolean | undefined, startDate?: Date | undefined, endDate?: Date | undefined): Promise<NewsEntity[]> {
+        let url_ = this.baseUrl + "/api/stuff?";
+        if (start === null)
+            throw new Error("The parameter 'start' cannot be null.");
+        else if (start !== undefined)
+            url_ += "Start=" + encodeURIComponent("" + start) + "&";
+        if (ends === null)
+            throw new Error("The parameter 'ends' cannot be null.");
+        else if (ends !== undefined)
+            url_ += "Ends=" + encodeURIComponent("" + ends) + "&";
+        if (includeHidden === null)
+            throw new Error("The parameter 'includeHidden' cannot be null.");
+        else if (includeHidden !== undefined)
+            url_ += "IncludeHidden=" + encodeURIComponent("" + includeHidden) + "&";
+        if (startDate === null)
+            throw new Error("The parameter 'startDate' cannot be null.");
+        else if (startDate !== undefined)
+            url_ += "StartDate=" + encodeURIComponent(startDate ? "" + startDate.toISOString() : "") + "&";
+        if (endDate === null)
+            throw new Error("The parameter 'endDate' cannot be null.");
+        else if (endDate !== undefined)
+            url_ += "EndDate=" + encodeURIComponent(endDate ? "" + endDate.toISOString() : "") + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetNewsList(_response);
+        });
+    }
+
+    protected processGetNewsList(response: Response): Promise<NewsEntity[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(NewsEntity.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<NewsEntity[]>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    getNewsById(newsId: string): Promise<NewsEntity> {
+        let url_ = this.baseUrl + "/api/stuff/{newsId}";
+        if (newsId === undefined || newsId === null)
+            throw new Error("The parameter 'newsId' must be defined.");
+        url_ = url_.replace("{newsId}", encodeURIComponent("" + newsId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetNewsById(_response);
+        });
+    }
+
+    protected processGetNewsById(response: Response): Promise<NewsEntity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = NewsEntity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status === 404) {
+            return response.text().then((_responseText) => {
+            let result404: any = null;
+            let resultData404 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result404 = ProblemDetails.fromJS(resultData404);
+            return throwException("Not Found", status, _responseText, _headers, result404);
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<NewsEntity>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    updateNews(newsId: string, body?: UpdateNewsDto | undefined): Promise<NewsEntity> {
+        let url_ = this.baseUrl + "/api/stuff/{newsId}";
+        if (newsId === undefined || newsId === null)
+            throw new Error("The parameter 'newsId' must be defined.");
+        url_ = url_.replace("{newsId}", encodeURIComponent("" + newsId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateNews(_response);
+        });
+    }
+
+    protected processUpdateNews(response: Response): Promise<NewsEntity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = NewsEntity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<NewsEntity>(null as any);
+    }
+
+    /**
+     * @return No Content
+     */
+    deleteNews(newsId: string): Promise<void> {
+        let url_ = this.baseUrl + "/api/stuff/{newsId}";
+        if (newsId === undefined || newsId === null)
+            throw new Error("The parameter 'newsId' must be defined.");
+        url_ = url_.replace("{newsId}", encodeURIComponent("" + newsId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteNews(_response);
+        });
+    }
+
+    protected processDeleteNews(response: Response): Promise<void> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 204) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
     }
 
     /**
@@ -6260,39 +6488,6 @@ export class Client implements IClient {
             });
         }
         return Promise.resolve<CommandResult>(null as any);
-    }
-
-    /**
-     * @return OK
-     */
-    ws(): Promise<void> {
-        let url_ = this.baseUrl + "/api/ws";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: RequestInit = {
-            method: "GET",
-            headers: {
-            }
-        };
-
-        return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processWs(_response);
-        });
-    }
-
-    protected processWs(response: Response): Promise<void> {
-        const status = response.status;
-        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
-        if (status === 200) {
-            return response.text().then((_responseText) => {
-            return;
-            });
-        } else if (status !== 200 && status !== 204) {
-            return response.text().then((_responseText) => {
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            });
-        }
-        return Promise.resolve<void>(null as any);
     }
 
     /**
@@ -8499,6 +8694,62 @@ export interface ICreateJobCommand {
     budgetType?: CreateJobCommandBudgetType;
     level?: CreateJobCommandLevel;
     expirationDate?: Date | undefined;
+    files?: CreateFileDto[] | undefined;
+}
+
+export class CreateNewsDto implements ICreateNewsDto {
+    title?: string | undefined;
+    text?: string | undefined;
+    publishTime?: Date;
+    files?: CreateFileDto[] | undefined;
+
+    constructor(data?: ICreateNewsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.text = _data["text"];
+            this.publishTime = _data["publishTime"] ? new Date(_data["publishTime"].toString()) : <any>undefined;
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files!.push(CreateFileDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): CreateNewsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateNewsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["text"] = this.text;
+        data["publishTime"] = this.publishTime ? this.publishTime.toISOString() : <any>undefined;
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface ICreateNewsDto {
+    title?: string | undefined;
+    text?: string | undefined;
+    publishTime?: Date;
     files?: CreateFileDto[] | undefined;
 }
 
@@ -11341,6 +11592,86 @@ export interface IMoney {
     currency: MoneyCurrency;
 }
 
+export class NewsEntity implements INewsEntity {
+    text!: string;
+    attachments?: FileEntity[] | undefined;
+    title!: string;
+    isHidden?: boolean;
+    publishTime?: Date;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
+
+    constructor(data?: INewsEntity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.text = _data["text"];
+            if (Array.isArray(_data["attachments"])) {
+                this.attachments = [] as any;
+                for (let item of _data["attachments"])
+                    this.attachments!.push(FileEntity.fromJS(item));
+            }
+            this.title = _data["title"];
+            this.isHidden = _data["isHidden"];
+            this.publishTime = _data["publishTime"] ? new Date(_data["publishTime"].toString()) : <any>undefined;
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): NewsEntity {
+        data = typeof data === 'object' ? data : {};
+        let result = new NewsEntity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["text"] = this.text;
+        if (Array.isArray(this.attachments)) {
+            data["attachments"] = [];
+            for (let item of this.attachments)
+                data["attachments"].push(item.toJSON());
+        }
+        data["title"] = this.title;
+        data["isHidden"] = this.isHidden;
+        data["publishTime"] = this.publishTime ? this.publishTime.toISOString() : <any>undefined;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
+        return data;
+    }
+}
+
+export interface INewsEntity {
+    text: string;
+    attachments?: FileEntity[] | undefined;
+    title: string;
+    isHidden?: boolean;
+    publishTime?: Date;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
+}
+
 export class NotificationEntity implements INotificationEntity {
     title!: string;
     text!: string;
@@ -11423,6 +11754,86 @@ export interface INotificationEntity {
     lastModifiedById?: string | undefined;
     lastModifiedAt?: Date | undefined;
     id: string;
+}
+
+export class NotificationSettings implements INotificationSettings {
+    readonly desktopNotificationsEnabled?: boolean;
+    readonly desktopBadgeCountEnabled?: boolean;
+    readonly webNotificationsEnabled?: boolean;
+    readonly webBadgeCountEnabled?: boolean;
+    readonly emailNotificationsEnabled?: boolean;
+    readonly emailWhenOfflineEnabled?: boolean;
+    readonly pushNotificationsEnabled?: boolean;
+    readonly pushWhenOfflineEnabled?: boolean;
+    readonly dailySummaryEmailEnabled?: boolean;
+    readonly doNotDisturbStart?: string | undefined;
+    readonly doNotDisturbEnd?: string | undefined;
+    readonly preferredLanguage?: string | undefined;
+
+    constructor(data?: INotificationSettings) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).desktopNotificationsEnabled = _data["desktopNotificationsEnabled"];
+            (<any>this).desktopBadgeCountEnabled = _data["desktopBadgeCountEnabled"];
+            (<any>this).webNotificationsEnabled = _data["webNotificationsEnabled"];
+            (<any>this).webBadgeCountEnabled = _data["webBadgeCountEnabled"];
+            (<any>this).emailNotificationsEnabled = _data["emailNotificationsEnabled"];
+            (<any>this).emailWhenOfflineEnabled = _data["emailWhenOfflineEnabled"];
+            (<any>this).pushNotificationsEnabled = _data["pushNotificationsEnabled"];
+            (<any>this).pushWhenOfflineEnabled = _data["pushWhenOfflineEnabled"];
+            (<any>this).dailySummaryEmailEnabled = _data["dailySummaryEmailEnabled"];
+            (<any>this).doNotDisturbStart = _data["doNotDisturbStart"];
+            (<any>this).doNotDisturbEnd = _data["doNotDisturbEnd"];
+            (<any>this).preferredLanguage = _data["preferredLanguage"];
+        }
+    }
+
+    static fromJS(data: any): NotificationSettings {
+        data = typeof data === 'object' ? data : {};
+        let result = new NotificationSettings();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["desktopNotificationsEnabled"] = this.desktopNotificationsEnabled;
+        data["desktopBadgeCountEnabled"] = this.desktopBadgeCountEnabled;
+        data["webNotificationsEnabled"] = this.webNotificationsEnabled;
+        data["webBadgeCountEnabled"] = this.webBadgeCountEnabled;
+        data["emailNotificationsEnabled"] = this.emailNotificationsEnabled;
+        data["emailWhenOfflineEnabled"] = this.emailWhenOfflineEnabled;
+        data["pushNotificationsEnabled"] = this.pushNotificationsEnabled;
+        data["pushWhenOfflineEnabled"] = this.pushWhenOfflineEnabled;
+        data["dailySummaryEmailEnabled"] = this.dailySummaryEmailEnabled;
+        data["doNotDisturbStart"] = this.doNotDisturbStart;
+        data["doNotDisturbEnd"] = this.doNotDisturbEnd;
+        data["preferredLanguage"] = this.preferredLanguage;
+        return data;
+    }
+}
+
+export interface INotificationSettings {
+    desktopNotificationsEnabled?: boolean;
+    desktopBadgeCountEnabled?: boolean;
+    webNotificationsEnabled?: boolean;
+    webBadgeCountEnabled?: boolean;
+    emailNotificationsEnabled?: boolean;
+    emailWhenOfflineEnabled?: boolean;
+    pushNotificationsEnabled?: boolean;
+    pushWhenOfflineEnabled?: boolean;
+    dailySummaryEmailEnabled?: boolean;
+    doNotDisturbStart?: string | undefined;
+    doNotDisturbEnd?: string | undefined;
+    preferredLanguage?: string | undefined;
 }
 
 export class PaymentMethodDto implements IPaymentMethodDto {
@@ -11679,6 +12090,70 @@ export interface IPortfolioProjectEntity {
     lastModifiedById?: string | undefined;
     lastModifiedAt?: Date | undefined;
     id: string;
+}
+
+export class ProblemDetails implements IProblemDetails {
+    type?: string | undefined;
+    title?: string | undefined;
+    status?: number | undefined;
+    detail?: string | undefined;
+    instance?: string | undefined;
+
+    [key: string]: any;
+
+    constructor(data?: IProblemDetails) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            for (var property in _data) {
+                if (_data.hasOwnProperty(property))
+                    this[property] = _data[property];
+            }
+            this.type = _data["type"];
+            this.title = _data["title"];
+            this.status = _data["status"];
+            this.detail = _data["detail"];
+            this.instance = _data["instance"];
+        }
+    }
+
+    static fromJS(data: any): ProblemDetails {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProblemDetails();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        for (var property in this) {
+            if (this.hasOwnProperty(property))
+                data[property] = this[property];
+        }
+        data["type"] = this.type;
+        data["title"] = this.title;
+        data["status"] = this.status;
+        data["detail"] = this.detail;
+        data["instance"] = this.instance;
+        return data;
+    }
+}
+
+export interface IProblemDetails {
+    type?: string | undefined;
+    title?: string | undefined;
+    status?: number | undefined;
+    detail?: string | undefined;
+    instance?: string | undefined;
+
+    [key: string]: any;
 }
 
 export class ProfileViewDto implements IProfileViewDto {
@@ -13912,6 +14387,70 @@ export interface IUpdateMessageDto {
     files?: CreateFileDto[] | undefined;
 }
 
+export class UpdateNewsDto implements IUpdateNewsDto {
+    newsId?: string;
+    title?: string | undefined;
+    text?: string | undefined;
+    publishTime?: Date | undefined;
+    isHidden?: boolean | undefined;
+    newFiles?: CreateFileDto[] | undefined;
+
+    constructor(data?: IUpdateNewsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.newsId = _data["newsId"];
+            this.title = _data["title"];
+            this.text = _data["text"];
+            this.publishTime = _data["publishTime"] ? new Date(_data["publishTime"].toString()) : <any>undefined;
+            this.isHidden = _data["isHidden"];
+            if (Array.isArray(_data["newFiles"])) {
+                this.newFiles = [] as any;
+                for (let item of _data["newFiles"])
+                    this.newFiles!.push(CreateFileDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): UpdateNewsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateNewsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["newsId"] = this.newsId;
+        data["title"] = this.title;
+        data["text"] = this.text;
+        data["publishTime"] = this.publishTime ? this.publishTime.toISOString() : <any>undefined;
+        data["isHidden"] = this.isHidden;
+        if (Array.isArray(this.newFiles)) {
+            data["newFiles"] = [];
+            for (let item of this.newFiles)
+                data["newFiles"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IUpdateNewsDto {
+    newsId?: string;
+    title?: string | undefined;
+    text?: string | undefined;
+    publishTime?: Date | undefined;
+    isHidden?: boolean | undefined;
+    newFiles?: CreateFileDto[] | undefined;
+}
+
 export class UpdatePortfolioProjectCommand implements IUpdatePortfolioProjectCommand {
     projectId?: string;
     name?: string | undefined;
@@ -14324,6 +14863,7 @@ export class UserEntity implements IUserEntity {
     location?: UserEntityLocation | undefined;
     readonly isExternalUser!: boolean;
     taxInfo?: TaxInformation;
+    notificationSettings?: NotificationSettings;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
@@ -14356,6 +14896,7 @@ export class UserEntity implements IUserEntity {
             this.location = _data["location"];
             (<any>this).isExternalUser = _data["isExternalUser"];
             this.taxInfo = _data["taxInfo"] ? TaxInformation.fromJS(_data["taxInfo"]) : <any>undefined;
+            this.notificationSettings = _data["notificationSettings"] ? NotificationSettings.fromJS(_data["notificationSettings"]) : <any>undefined;
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
@@ -14388,6 +14929,7 @@ export class UserEntity implements IUserEntity {
         data["location"] = this.location;
         data["isExternalUser"] = this.isExternalUser;
         data["taxInfo"] = this.taxInfo ? this.taxInfo.toJSON() : <any>undefined;
+        data["notificationSettings"] = this.notificationSettings ? this.notificationSettings.toJSON() : <any>undefined;
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["lastModifiedById"] = this.lastModifiedById;
@@ -14413,6 +14955,7 @@ export interface IUserEntity {
     location?: UserEntityLocation | undefined;
     isExternalUser: boolean;
     taxInfo?: TaxInformation;
+    notificationSettings?: NotificationSettings;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;

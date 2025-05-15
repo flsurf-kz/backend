@@ -54,6 +54,9 @@ namespace Flsurf.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("character varying(128)");
 
+                    b.Property<Guid?>("NewsEntityId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("OriginalDownloadUrl")
                         .HasColumnType("text");
 
@@ -85,6 +88,8 @@ namespace Flsurf.Migrations
 
                     b.HasIndex("MessageEntityId");
 
+                    b.HasIndex("NewsEntityId");
+
                     b.HasIndex("PortfolioProjectEntityId");
 
                     b.HasIndex("ProposalEntityId");
@@ -104,8 +109,7 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -138,8 +142,7 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -193,8 +196,7 @@ namespace Flsurf.Migrations
                     b.Property<string>("CompanyWebsite")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -239,8 +241,7 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -298,8 +299,7 @@ namespace Flsurf.Migrations
                     b.Property<Guid>("ContestId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -357,8 +357,7 @@ namespace Flsurf.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -429,8 +428,7 @@ namespace Flsurf.Migrations
                     b.Property<Guid>("ContractId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -514,8 +512,7 @@ namespace Flsurf.Migrations
                     b.Property<decimal>("CostPerHour")
                         .HasColumnType("numeric");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -559,8 +556,7 @@ namespace Flsurf.Migrations
                     b.Property<Guid>("ClientId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -598,8 +594,7 @@ namespace Flsurf.Migrations
                     b.Property<string>("ClosedReason")
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -633,8 +628,7 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -684,8 +678,7 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("ContractId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -754,8 +747,7 @@ namespace Flsurf.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -804,8 +796,7 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -857,8 +848,7 @@ namespace Flsurf.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -898,8 +888,7 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -942,8 +931,7 @@ namespace Flsurf.Migrations
                     b.Property<Guid>("ContractId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -998,8 +986,7 @@ namespace Flsurf.Migrations
                     b.Property<Guid>("ContractId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1048,8 +1035,7 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1097,8 +1083,7 @@ namespace Flsurf.Migrations
                     b.Property<Guid>("ChatId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1144,8 +1129,7 @@ namespace Flsurf.Migrations
                     b.Property<Guid>("ChatId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1197,8 +1181,7 @@ namespace Flsurf.Migrations
                     b.Property<Guid>("ChatId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1260,8 +1243,7 @@ namespace Flsurf.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1314,8 +1296,7 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1359,8 +1340,7 @@ namespace Flsurf.Migrations
                     b.Property<DateTime?>("CompletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1411,8 +1391,7 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1454,8 +1433,7 @@ namespace Flsurf.Migrations
                     b.Property<bool>("Blocked")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1486,14 +1464,55 @@ namespace Flsurf.Migrations
                     b.ToTable("Wallets");
                 });
 
+            modelBuilder.Entity("Flsurf.Domain.Staff.Entities.NewsEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsHidden")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("PublishTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("News");
+                });
+
             modelBuilder.Entity("Flsurf.Domain.Staff.Entities.TicketCommentEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1546,8 +1565,7 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("ClosedById")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1589,8 +1607,7 @@ namespace Flsurf.Migrations
                     b.Property<Guid>("Avatar")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1625,8 +1642,7 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1653,8 +1669,7 @@ namespace Flsurf.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1733,8 +1748,7 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("ChatEntityId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1815,8 +1829,7 @@ namespace Flsurf.Migrations
                     b.Property<Guid>("ByUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("CreatedAt")
-                        .IsRequired()
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedById")
@@ -1880,6 +1893,10 @@ namespace Flsurf.Migrations
                     b.HasOne("Flsurf.Domain.Messanging.Entities.MessageEntity", null)
                         .WithMany("Files")
                         .HasForeignKey("MessageEntityId");
+
+                    b.HasOne("Flsurf.Domain.Staff.Entities.NewsEntity", null)
+                        .WithMany("Attachments")
+                        .HasForeignKey("NewsEntityId");
 
                     b.HasOne("Flsurf.Domain.Freelance.Entities.PortfolioProjectEntity", null)
                         .WithMany("Images")
@@ -2643,6 +2660,17 @@ namespace Flsurf.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Flsurf.Domain.Staff.Entities.NewsEntity", b =>
+                {
+                    b.HasOne("Flsurf.Domain.User.Entities.UserEntity", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+                });
+
             modelBuilder.Entity("Flsurf.Domain.Staff.Entities.TicketCommentEntity", b =>
                 {
                     b.HasOne("Flsurf.Domain.User.Entities.UserEntity", "CreatedBy")
@@ -2699,6 +2727,55 @@ namespace Flsurf.Migrations
                     b.HasOne("Flsurf.Domain.User.Entities.GroupEntity", null)
                         .WithMany("Users")
                         .HasForeignKey("GroupEntityId");
+
+                    b.OwnsOne("Flsurf.Domain.User.ValueObjects.NotificationSettings", "NotificationSettings", b1 =>
+                        {
+                            b1.Property<Guid>("UserEntityId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<bool>("DailySummaryEmailEnabled")
+                                .HasColumnType("boolean");
+
+                            b1.Property<bool>("DesktopBadgeCountEnabled")
+                                .HasColumnType("boolean");
+
+                            b1.Property<bool>("DesktopNotificationsEnabled")
+                                .HasColumnType("boolean");
+
+                            b1.Property<TimeSpan?>("DoNotDisturbEnd")
+                                .HasColumnType("interval");
+
+                            b1.Property<TimeSpan?>("DoNotDisturbStart")
+                                .HasColumnType("interval");
+
+                            b1.Property<bool>("EmailNotificationsEnabled")
+                                .HasColumnType("boolean");
+
+                            b1.Property<bool>("EmailWhenOfflineEnabled")
+                                .HasColumnType("boolean");
+
+                            b1.Property<string>("PreferredLanguage")
+                                .HasColumnType("text");
+
+                            b1.Property<bool>("PushNotificationsEnabled")
+                                .HasColumnType("boolean");
+
+                            b1.Property<bool>("PushWhenOfflineEnabled")
+                                .HasColumnType("boolean");
+
+                            b1.Property<bool>("WebBadgeCountEnabled")
+                                .HasColumnType("boolean");
+
+                            b1.Property<bool>("WebNotificationsEnabled")
+                                .HasColumnType("boolean");
+
+                            b1.HasKey("UserEntityId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserEntityId");
+                        });
 
                     b.OwnsOne("Flsurf.Domain.User.ValueObjects.TaxInformation", "TaxInfo", b1 =>
                         {
@@ -2767,6 +2844,9 @@ namespace Flsurf.Migrations
                         });
 
                     b.Navigation("Avatar");
+
+                    b.Navigation("NotificationSettings")
+                        .IsRequired();
 
                     b.Navigation("TaxInfo");
                 });
@@ -2895,6 +2975,11 @@ namespace Flsurf.Migrations
             modelBuilder.Entity("Flsurf.Domain.Payment.Entities.WalletEntity", b =>
                 {
                     b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("Flsurf.Domain.Staff.Entities.NewsEntity", b =>
+                {
+                    b.Navigation("Attachments");
                 });
 
             modelBuilder.Entity("Flsurf.Domain.Staff.Entities.TicketCommentEntity", b =>

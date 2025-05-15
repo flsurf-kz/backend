@@ -86,6 +86,7 @@ namespace Flsurf.Domain.User.Entities
         [Required]
         public bool IsExternalUser { get; private set; } = false; 
         public TaxInformation? TaxInfo { get; set; }
+        public NotificationSettings NotificationSettings { get; set; } = null!; 
 
         public static UserEntity Create(
             string fullname,
@@ -99,6 +100,7 @@ namespace Flsurf.Domain.User.Entities
                 Email = email,
                 Type = userType, 
                 Fullname = fullname,
+                NotificationSettings = NotificationSettings.CreateDefault(), 
             };
             var hashedPassword = passwordService.HashPassword(user, password);
 

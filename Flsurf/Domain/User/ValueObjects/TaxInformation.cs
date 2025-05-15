@@ -22,13 +22,13 @@ namespace Flsurf.Domain.User.ValueObjects
         }
 
         [Required, MaxLength(20)]
-        public string Bic { get; init; }
+        public string Bic { get; init; } = "";
 
         [Required, MaxLength(34)]
-        public string AccountNumber { get; init; }
+        public string AccountNumber { get; init; } = "";
 
         [Required, MaxLength(200)]
-        public string BankName { get; init; }
+        public string BankName { get; init; } = ""; 
     }
 
     [Owned]
@@ -57,10 +57,10 @@ namespace Flsurf.Domain.User.ValueObjects
         }
 
         [Required, StringLength(2, MinimumLength = 2)]
-        public string CountryIso { get; init; }
+        public string CountryIso { get; init; } = null!; 
 
         [Required, StringLength(12, MinimumLength = 9)]
-        public string LocalIdNumber { get; init; }
+        public string LocalIdNumber { get; init; } = null!;
 
         [Required]
         public LegalStatus LegalStatus { get; init; }
@@ -73,6 +73,6 @@ namespace Flsurf.Domain.User.ValueObjects
         public string? VatNumber { get; init; }
 
         [Required]
-        public BankDetails BankDetails { get; init; }
+        public BankDetails? BankDetails { get; init; }
     }
 }

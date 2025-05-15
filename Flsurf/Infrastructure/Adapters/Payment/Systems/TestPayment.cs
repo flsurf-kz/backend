@@ -30,7 +30,7 @@
 
         public Task<CardMeta?> FetchCardMetaAsync(string paymentMethodToken)
         {
-            return Task.FromResult(new CardMeta("kaspi", "4444", 10, 26)); 
+            return Task.FromResult(new CardMeta("kaspi", "4444", 10, 26) ?? null); 
         }
     }
 }

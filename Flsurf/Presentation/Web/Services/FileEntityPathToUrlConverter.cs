@@ -24,7 +24,7 @@
 
         public override void WriteJson(
             JsonWriter writer,
-            Flsurf.Domain.Files.Entities.FileEntity value,
+            Flsurf.Domain.Files.Entities.FileEntity? value,
             JsonSerializer serializer)
         {
             if (value == null)
@@ -77,7 +77,7 @@
         public override Flsurf.Domain.Files.Entities.FileEntity ReadJson(
             JsonReader reader,
             Type objectType,
-            Flsurf.Domain.Files.Entities.FileEntity existingValue,
+            Flsurf.Domain.Files.Entities.FileEntity? existingValue,
             bool hasExistingValue,
             JsonSerializer serializer)
             => throw new NotSupportedException();

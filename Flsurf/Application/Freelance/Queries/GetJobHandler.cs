@@ -33,7 +33,7 @@ namespace Flsurf.Application.Freelance.Queries
                     Skills = j.RequiredSkills.Select(x => x.Name).ToArray(),
                     //Languages = j.Languages.Split(','),
 
-                    CreatedAt = j.CreatedAt ?? DateTime.UtcNow,
+                    CreatedAt = j.CreatedAt,
 
                     // 🔥 **Активность на заказе**
                     ResponsesRangeMin = 20, // Можно вынести в конфиг

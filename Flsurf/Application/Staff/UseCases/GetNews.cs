@@ -1,8 +1,10 @@
 ﻿using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Staff.Perms;
 using Flsurf.Domain.Staff.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
+using MimeDetective.Storage;
 
 namespace Flsurf.Application.Staff.UseCases
 {
@@ -26,8 +28,10 @@ namespace Flsurf.Application.Staff.UseCases
             if (news == null) return null;
 
             if (news.IsHidden || news.PublishTime > DateTime.UtcNow)
-                await _perm.EnforceCheckPermission(ZedAdmin.WithCurrent());
-
+            {
+                var author = await _perm.GetCurrentUser();
+                await _perm.EnforceCheckPermission(ZedStaffUser.WithId(author.Id).CanCreateNews());
+            }
             return news;
         }
     }

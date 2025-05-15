@@ -6,7 +6,7 @@ namespace Flsurf.Domain.Common
     {
         public Guid? CreatedById { get; set; }
         [Required]
-        public DateTime? CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
         public Guid? LastModifiedById { get; set; }
         public DateTime? LastModifiedAt { get; set; }
     }

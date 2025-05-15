@@ -1,5 +1,7 @@
 ﻿using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Freelance.Permissions;
+using Flsurf.Application.Staff.Perms;
 using Flsurf.Infrastructure.Adapters.Permissions;
 
 namespace Flsurf.Application.Staff.UseCases
@@ -17,7 +19,8 @@ namespace Flsurf.Application.Staff.UseCases
 
         public async Task<bool> Execute(Guid id)
         {
-            await _perm.EnforceCheckPermission(ZedAdmin.WithCurrent());
+            var author = await _perm.GetCurrentUser();
+            await _perm.EnforceCheckPermission(ZedStaffUser.WithId(author.Id).CanDeleteNews());
 
             var news = await _ctx.News.FindAsync(id);
             if (news is null) return false;

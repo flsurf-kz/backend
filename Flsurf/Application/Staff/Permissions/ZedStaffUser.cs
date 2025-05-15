@@ -1,4 +1,5 @@
-﻿using SpiceDb.Models;
+﻿using Flsurf.Application.Staff.Permissions;
+using SpiceDb.Models;
 
 namespace Flsurf.Application.Staff.Perms
 {
@@ -18,6 +19,10 @@ namespace Flsurf.Application.Staff.Perms
 
         public Permission CanUpdateTicket(ZedTicket ticket) => new(this, "update", ticket);
 
-        public Permission CanAddComment(ZedTicket ticket) => new(this, "add_comment", ticket);  
+        public Permission CanAddComment(ZedTicket ticket) => new(this, "add_comment", ticket);
+        public Permission CanCreateNews() => new(this, "create", ZedNews.WithWildcard());
+        public Permission CanUpdateNews() => new(this, "update", ZedNews.WithWildcard());
+        public Permission CanDeleteNews() => new(this, "delete", ZedNews.WithWildcard());
+
     }
 }

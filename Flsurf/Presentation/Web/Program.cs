@@ -65,6 +65,8 @@ app.UseWebSockets(new WebSocketOptions() {
     KeepAliveInterval = TimeSpan.FromMinutes(2), 
 });
 
+app.MapHub<GeneralHub>("/ws/general");
+
 app.MapHealthChecks("/api/health");
 app.MapControllers();
 

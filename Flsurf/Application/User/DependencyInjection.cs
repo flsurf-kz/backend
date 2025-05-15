@@ -14,6 +14,7 @@ namespace Flsurf.Application.User
 
             services.AddScoped<UserCreatedDomainHandler>();
             services.AddScoped<UserCreatedIntegrationHandler>();
+            services.AddScoped<NotificationCreatedIntegrationHandler>(); 
 
             return services;
         }

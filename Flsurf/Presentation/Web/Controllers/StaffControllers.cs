@@ -59,5 +59,50 @@ namespace Flsurf.Presentation.Web.Controllers
         {
             return Ok(await _staffService.GetTicket().Execute(new GetTicketDto() { TicketId = ticketId }));
         }
+
+        // ------------- CREATE ------------------------------------------------
+        [HttpPost(Name = "CreateNews")]
+        public async Task<ActionResult<NewsEntity>> CreateNews([FromBody] CreateNewsDto dto)
+        {
+            var news = await _staffService.CreateNews().Execute(dto);
+            return CreatedAtRoute("GetNewsById", new { newsId = news.Id }, news);
+        }
+
+        // ------------- READ – список ----------------------------------------
+        [HttpGet(Name = "GetNewsList")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<ICollection<NewsEntity>>> GetNewsList([FromQuery] GetNewsListDto dto)
+        {
+            var list = await _staffService.GetNewsList().Execute(dto);
+            return Ok(list);
+        }
+
+        // ------------- READ – по Id -----------------------------------------
+        [HttpGet("{newsId:guid}", Name = "GetNewsById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<NewsEntity>> GetNewsById(Guid newsId)
+        {
+            var news = await _staffService.GetNews().Execute(newsId);
+            return news is null ? NotFound() : Ok(news);
+        }
+
+        // ------------- UPDATE ------------------------------------------------
+        [HttpPut("{newsId:guid}", Name = "UpdateNews")]
+        public async Task<ActionResult<NewsEntity>> UpdateNews(Guid newsId, [FromBody] UpdateNewsDto dto)
+        {
+            dto.NewsId = newsId;
+            var updated = await _staffService.UpdateNews().Execute(dto);
+            return Ok(updated);
+        }
+
+        // ------------- DELETE ------------------------------------------------
+        [HttpDelete("{newsId:guid}", Name = "DeleteNews")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> DeleteNews(Guid newsId)
+        {
+            var removed = await _staffService.DeleteNews().Execute(newsId);
+            return removed ? NoContent() : NotFound();
+        }
     }
 }

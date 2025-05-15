@@ -9,5 +9,12 @@ namespace Flsurf.Application.Staff.Interfaces
         UpdateTicket UpdateTicket();
         GetTicket GetTicket();
         GetTicketsList GetTicketsList();
+
+        // news 
+        CreateNews CreateNews(); 
+        UpdateNews UpdateNews();
+        GetNewsById GetNews();
+        GetNewsList GetNewsList();
+        DeleteNews DeleteNews(); 
     }
 }

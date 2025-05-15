@@ -34,5 +34,27 @@ namespace Flsurf.Application.Staff
         {
             return _serviceProvider.GetRequiredService<GetTicketsList>();
         }
+
+        // news 
+        public CreateNews CreateNews()
+        {
+            return _serviceProvider.GetRequiredService<CreateNews>();
+        }
+        public UpdateNews UpdateNews()
+        {
+            return _serviceProvider.GetRequiredService<UpdateNews>();
+        }
+        public GetNewsById GetNews()
+        {
+            return _serviceProvider.GetRequiredService<GetNewsById>();
+        }
+        public GetNewsList GetNewsList()
+        {
+            return _serviceProvider.GetRequiredService<GetNewsList>();
+        }
+        public DeleteNews DeleteNews()
+        {
+            return _serviceProvider.GetRequiredService<DeleteNews>();
+        }
     }
 }

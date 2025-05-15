@@ -1,7 +1,12 @@
-﻿using Flsurf.Application.Staff.Dto;
+﻿using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Common.UseCases;
+using Flsurf.Application.Staff.Dto;
+using Flsurf.Application.Staff.Perms;
 using Flsurf.Domain.Staff.Entities;
+using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace Flsurf.Application.Staff.UseCases
 {
@@ -32,8 +37,10 @@ namespace Flsurf.Application.Staff.UseCases
             if (!dto.IncludeHidden)
                 q = q.Where(n => !n.IsHidden && n.PublishTime <= DateTime.UtcNow);
             else
-                await _perm.EnforceCheckPermission(ZedAdmin.WithCurrent());
-
+            {
+                var user = await _perm.GetCurrentUser(); 
+                await _perm.EnforceCheckPermission(ZedStaffUser.WithId(user.Id).CanCreateNews());
+            }
             q = q.Paginate(dto.Start, dto.Ends);
 
             return await q.AsNoTracking().ToListAsync();

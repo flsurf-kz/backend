@@ -2,6 +2,7 @@
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Files.Interfaces;
 using Flsurf.Application.Staff.Dto;
+using Flsurf.Application.Staff.Perms;
 using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.Staff.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
@@ -25,16 +26,19 @@ namespace Flsurf.Application.Staff.UseCases
 
         public async Task<NewsEntity> Execute(CreateNewsDto dto)
         {
-            await _perm.EnforceCheckPermission(ZedAdmin.WithCurrent());
-
             var author = await _perm.GetCurrentUser();
-            var atts = await _files.UploadFiles().Execute(dto.Files);
+            await _perm.EnforceCheckPermission(ZedStaffUser.WithId(author.Id).CanCreateNews());
+
 
             var news = NewsEntity.Create(dto.Title,
-                                         dto.Text,
-                                         (List<FileEntity>)atts,
+                                         dto.Text, 
+                                         [], 
                                          dto.PublishTime,
                                          author);
+
+
+            if (dto.Files != null)
+                news.Attachments = await _files.UploadFiles().Execute(dto.Files);
 
             await _ctx.News.AddAsync(news);
             await _ctx.SaveChangesAsync();

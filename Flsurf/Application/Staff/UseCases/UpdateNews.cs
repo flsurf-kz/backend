@@ -2,6 +2,7 @@
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Files.Interfaces;
 using Flsurf.Application.Staff.Dto;
+using Flsurf.Application.Staff.Perms;
 using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.Staff.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
@@ -26,7 +27,9 @@ namespace Flsurf.Application.Staff.UseCases
 
         public async Task<NewsEntity> Execute(UpdateNewsDto dto)
         {
-            await _perm.EnforceCheckPermission(ZedAdmin.WithCurrent());
+            var user = await _perm.GetCurrentUser(); 
+
+            await _perm.EnforceCheckPermission(ZedStaffUser.WithId(user.Id).CanUpdateNews());
 
             var news = await _ctx.News
                                  .Include(n => n.Attachments)

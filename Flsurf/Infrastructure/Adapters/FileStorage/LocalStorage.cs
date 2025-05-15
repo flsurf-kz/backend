@@ -33,7 +33,7 @@ namespace Flsurf.Infrastructure.Adapters.FileStorage
             await fileStream.CopyToAsync(file, 64 * 1024);
         }
 
-        public async Task<Stream> DownloadFileAsync(string relativePath)
+        public Task<Stream> DownloadFileAsync(string relativePath)
         {
 
             _logger.LogInformation("Downloading a file with a relative path: {}", relativePath);
@@ -42,8 +42,8 @@ namespace Flsurf.Infrastructure.Adapters.FileStorage
             if (!File.Exists(fullPath))
                 throw new FileNotFoundException("File not found.");
 
-            return new FileStream(fullPath, FileMode.Open, FileAccess.Read,
-                                  FileShare.Read, 64 * 1024, useAsync: true);
+            return Task.FromResult((Stream)new FileStream(fullPath, FileMode.Open, FileAccess.Read,
+                                   FileShare.Read, 64 * 1024, useAsync: true));
         }
 
         public Task DeleteFileAsync(string relativePath)

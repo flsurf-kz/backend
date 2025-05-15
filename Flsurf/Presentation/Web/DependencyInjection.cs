@@ -155,7 +155,6 @@ namespace Flsurf.Presentation.Web
             services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
             services.AddRouting();
             services.AddHttpContextAccessor();
-            services.AddSingleton<IRealtimeHub, InMemoryRealtimeHub>();
             services.AddScoped<IUser, CurrentUser>();
 
             services.AddHostedService<SwaggerFileUpdater>();
@@ -199,6 +198,9 @@ namespace Flsurf.Presentation.Web
                 });
                 options.RejectionStatusCode = 429;
             });
+
+            services.AddSignalR();                // <-- SignalR
+            services.AddScoped<GeneralHub>();     // DI для HubContext
 
             return services;
         }
