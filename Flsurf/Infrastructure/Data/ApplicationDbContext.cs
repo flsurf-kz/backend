@@ -35,6 +35,8 @@ namespace Flsurf.Infrastructure.Data
         // Staff 
         public DbSet<TicketEntity> Tickets { get; set; }
         public DbSet<TicketCommentEntity> TicketComments { get; set; }
+        public DbSet<NewsEntity> News { get; set; }
+
 
         // Files 
         public DbSet<FileEntity> Files { get; set; }

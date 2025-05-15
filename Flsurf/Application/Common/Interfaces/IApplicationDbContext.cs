@@ -27,6 +27,8 @@ namespace Flsurf.Application.Common.Interfaces
 
         // Staff 
         DbSet<TicketEntity> Tickets { get; set; }
+        DbSet<TicketCommentEntity> TicketComments { get; set; }
+        DbSet<NewsEntity> News { get; set; }
 
         // Files 
         DbSet<FileEntity> Files { get; set; }
