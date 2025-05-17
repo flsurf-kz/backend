@@ -34,6 +34,16 @@ namespace Flsurf.Domain.Messanging.Entities
             .OrderByDescending(m => m.CreatedAt) 
             .FirstOrDefault();
 
+        // New [NotMapped] properties for user-specific data
+        [NotMapped]
+        public bool CurrentUserBookmarked { get; set; }
+
+        [NotMapped]
+        public bool CurrentUserNotificationsDisabled { get; set; }
+
+        [NotMapped]
+        public int CurrentUserUnreadMessagesCount { get; set; }
+
         public static ChatEntity Create(string name, UserEntity owner, List<UserEntity> participants, bool isTextingAllowed, ChatTypes type)
         {
             if (isTextingAllowed && type != ChatTypes.Group)

@@ -295,6 +295,17 @@ export interface IClient {
     getContractsList(body?: GetContractsListQuery | undefined): Promise<ContractEntity[]>;
 
     /**
+     * @param body (optional) 
+     * @return OK
+     */
+    addBonusToContract(body?: AddBonusToContractCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @return OK
+     */
+    getBonuses(contractId: string): Promise<BonusEntity[]>;
+
+    /**
      * @param file (optional) 
      * @return OK
      */
@@ -2877,6 +2888,95 @@ export class Client implements IClient {
             });
         }
         return Promise.resolve<ContractEntity[]>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    addBonusToContract(body?: AddBonusToContractCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/contract/bonus/add";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddBonusToContract(_response);
+        });
+    }
+
+    protected processAddBonusToContract(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    getBonuses(contractId: string): Promise<BonusEntity[]> {
+        let url_ = this.baseUrl + "/api/contract/{contractId}/bonuses";
+        if (contractId === undefined || contractId === null)
+            throw new Error("The parameter 'contractId' must be defined.");
+        url_ = url_.replace("{contractId}", encodeURIComponent("" + contractId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetBonuses(_response);
+        });
+    }
+
+    protected processGetBonuses(response: Response): Promise<BonusEntity[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(BonusEntity.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<BonusEntity[]>(null as any);
     }
 
     /**
@@ -6870,6 +6970,58 @@ export interface IActivitySummaryDto {
     count: number;
 }
 
+export class AddBonusToContractCommand implements IAddBonusToContractCommand {
+    contractId?: string;
+    amountValue?: number;
+    currency?: AddBonusToContractCommandCurrency;
+    description?: string | undefined;
+    type?: AddBonusToContractCommandType;
+
+    constructor(data?: IAddBonusToContractCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.contractId = _data["contractId"];
+            this.amountValue = _data["amountValue"];
+            this.currency = _data["currency"];
+            this.description = _data["description"];
+            this.type = _data["type"];
+        }
+    }
+
+    static fromJS(data: any): AddBonusToContractCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddBonusToContractCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["contractId"] = this.contractId;
+        data["amountValue"] = this.amountValue;
+        data["currency"] = this.currency;
+        data["description"] = this.description;
+        data["type"] = this.type;
+        return data;
+    }
+}
+
+export interface IAddBonusToContractCommand {
+    contractId?: string;
+    amountValue?: number;
+    currency?: AddBonusToContractCommandCurrency;
+    description?: string | undefined;
+    type?: AddBonusToContractCommandType;
+}
+
 export class AddPaymentMethodCommand implements IAddPaymentMethodCommand {
     providerId?: string;
     paymentMethodToken?: string | undefined;
@@ -7185,6 +7337,78 @@ export interface IBlockWalletCommand {
     reason: BlockWalletCommandReason;
 }
 
+export class BonusEntity implements IBonusEntity {
+    contract?: ContractEntity;
+    contractId?: string;
+    amount?: Money;
+    description?: string | undefined;
+    type?: BonusEntityType;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
+
+    constructor(data?: IBonusEntity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.contract = _data["contract"] ? ContractEntity.fromJS(_data["contract"]) : <any>undefined;
+            this.contractId = _data["contractId"];
+            this.amount = _data["amount"] ? Money.fromJS(_data["amount"]) : <any>undefined;
+            this.description = _data["description"];
+            this.type = _data["type"];
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): BonusEntity {
+        data = typeof data === 'object' ? data : {};
+        let result = new BonusEntity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["contract"] = this.contract ? this.contract.toJSON() : <any>undefined;
+        data["contractId"] = this.contractId;
+        data["amount"] = this.amount ? this.amount.toJSON() : <any>undefined;
+        data["description"] = this.description;
+        data["type"] = this.type;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
+        return data;
+    }
+}
+
+export interface IBonusEntity {
+    contract?: ContractEntity;
+    contractId?: string;
+    amount?: Money;
+    description?: string | undefined;
+    type?: BonusEntityType;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
+}
+
 export class BookmarkChatDto implements IBookmarkChatDto {
     chatId?: string;
 
@@ -7422,6 +7646,9 @@ export class ChatEntity implements IChatEntity {
     readRecords?: MessageReadEntity[] | undefined;
     messages?: MessageEntity[] | undefined;
     lastMessage?: MessageEntity;
+    currentUserBookmarked?: boolean;
+    currentUserNotificationsDisabled?: boolean;
+    currentUserUnreadMessagesCount?: number;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
@@ -7467,6 +7694,9 @@ export class ChatEntity implements IChatEntity {
                     this.messages!.push(MessageEntity.fromJS(item));
             }
             this.lastMessage = _data["lastMessage"] ? MessageEntity.fromJS(_data["lastMessage"]) : <any>undefined;
+            this.currentUserBookmarked = _data["currentUserBookmarked"];
+            this.currentUserNotificationsDisabled = _data["currentUserNotificationsDisabled"];
+            this.currentUserUnreadMessagesCount = _data["currentUserUnreadMessagesCount"];
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
@@ -7512,6 +7742,9 @@ export class ChatEntity implements IChatEntity {
                 data["messages"].push(item.toJSON());
         }
         data["lastMessage"] = this.lastMessage ? this.lastMessage.toJSON() : <any>undefined;
+        data["currentUserBookmarked"] = this.currentUserBookmarked;
+        data["currentUserNotificationsDisabled"] = this.currentUserNotificationsDisabled;
+        data["currentUserUnreadMessagesCount"] = this.currentUserUnreadMessagesCount;
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["lastModifiedById"] = this.lastModifiedById;
@@ -7534,6 +7767,9 @@ export interface IChatEntity {
     readRecords?: MessageReadEntity[] | undefined;
     messages?: MessageEntity[] | undefined;
     lastMessage?: MessageEntity;
+    currentUserBookmarked?: boolean;
+    currentUserNotificationsDisabled?: boolean;
+    currentUserUnreadMessagesCount?: number;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;
@@ -7999,6 +8235,7 @@ export class ContractEntity implements IContractEntity {
     tasks?: TaskEntity[] | undefined;
     workSessions?: WorkSessionEntity[] | undefined;
     readonly totalWorkSessions?: number;
+    bonuses?: BonusEntity[] | undefined;
     readonly totalHoursWorked?: number;
     remainingBudget?: Money;
     paymentSchedule?: ContractEntityPaymentSchedule;
@@ -8046,6 +8283,11 @@ export class ContractEntity implements IContractEntity {
                     this.workSessions!.push(WorkSessionEntity.fromJS(item));
             }
             (<any>this).totalWorkSessions = _data["totalWorkSessions"];
+            if (Array.isArray(_data["bonuses"])) {
+                this.bonuses = [] as any;
+                for (let item of _data["bonuses"])
+                    this.bonuses!.push(BonusEntity.fromJS(item));
+            }
             (<any>this).totalHoursWorked = _data["totalHoursWorked"];
             this.remainingBudget = _data["remainingBudget"] ? Money.fromJS(_data["remainingBudget"]) : <any>undefined;
             this.paymentSchedule = _data["paymentSchedule"];
@@ -8093,6 +8335,11 @@ export class ContractEntity implements IContractEntity {
                 data["workSessions"].push(item.toJSON());
         }
         data["totalWorkSessions"] = this.totalWorkSessions;
+        if (Array.isArray(this.bonuses)) {
+            data["bonuses"] = [];
+            for (let item of this.bonuses)
+                data["bonuses"].push(item.toJSON());
+        }
         data["totalHoursWorked"] = this.totalHoursWorked;
         data["remainingBudget"] = this.remainingBudget ? this.remainingBudget.toJSON() : <any>undefined;
         data["paymentSchedule"] = this.paymentSchedule;
@@ -8125,6 +8372,7 @@ export interface IContractEntity {
     tasks?: TaskEntity[] | undefined;
     workSessions?: WorkSessionEntity[] | undefined;
     totalWorkSessions?: number;
+    bonuses?: BonusEntity[] | undefined;
     totalHoursWorked?: number;
     remainingBudget?: Money;
     paymentSchedule?: ContractEntityPaymentSchedule;
@@ -15319,6 +15567,19 @@ export enum Status {
     Hidden = "Hidden",
 }
 
+export enum AddBonusToContractCommandCurrency {
+    RUB = "RUB",
+    USD = "USD",
+    KZT = "KZT",
+    EUR = "EUR",
+}
+
+export enum AddBonusToContractCommandType {
+    Performance = "Performance",
+    Discretionary = "Discretionary",
+    Tip = "Tip",
+}
+
 export enum BalanceOperationCommandBalanceOperationType {
     Freeze = "Freeze",
     Unfreeze = "Unfreeze",
@@ -15332,6 +15593,12 @@ export enum BlockWalletCommandReason {
     FraudSuspicion = "FraudSuspicion",
     LegalIssue = "LegalIssue",
     UserRequest = "UserRequest",
+}
+
+export enum BonusEntityType {
+    Performance = "Performance",
+    Discretionary = "Discretionary",
+    Tip = "Tip",
 }
 
 export enum ChatEntityType {

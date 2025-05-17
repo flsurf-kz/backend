@@ -1,4 +1,5 @@
-﻿using Flsurf.Application.Freelance.Commands.Contract;
+﻿// --- Flsurf.Application.Freelance.Services.ContractService.cs ---
+using Flsurf.Application.Freelance.Commands.Contract;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 
@@ -46,10 +47,18 @@ namespace Flsurf.Application.Freelance.Services
         //public UpdateContractHandler UpdateContract() =>
         //    _serviceProvider.GetRequiredService<UpdateContractHandler>();
 
+        // New Bonus Command Handler
+        public AddBonusToContractHandler AddBonusToContract() =>             // << NEW
+            _serviceProvider.GetRequiredService<AddBonusToContractHandler>(); // << NEW
+
         public GetContractHandler GetContract() =>
             _serviceProvider.GetRequiredService<GetContractHandler>();
 
         public GetContractsListHandler GetContractsList() =>
             _serviceProvider.GetRequiredService<GetContractsListHandler>();
+
+        // New Bonus Query Handler
+        public GetBonusesForContractHandler GetBonusesForContract() =>       // << NEW
+            _serviceProvider.GetRequiredService<GetBonusesForContractHandler>(); // << NEW
     }
 }

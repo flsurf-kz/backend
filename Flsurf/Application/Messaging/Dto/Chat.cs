@@ -25,6 +25,8 @@ namespace Flsurf.Application.Messaging.Dto
     public class GetChatsListDto : InputPagination
     {
         public Guid? UserId { get; set; }
+        public ChatTypes? type { get; set; }
+        public bool? Bookmarked { get; set; }
     }
 
     public class UpdateChatDto

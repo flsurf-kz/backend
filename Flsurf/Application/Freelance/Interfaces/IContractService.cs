@@ -1,5 +1,6 @@
-﻿using Flsurf.Application.Freelance.Commands.Contract;
-using Flsurf.Application.Freelance.Queries;
+﻿// --- Flsurf.Application.Freelance.Interfaces.IContractService.cs ---
+using Flsurf.Application.Freelance.Commands.Contract;
+using Flsurf.Application.Freelance.Queries; // For GetBonusesForContractHandler
 
 namespace Flsurf.Application.Freelance.Interfaces
 {
@@ -18,8 +19,14 @@ namespace Flsurf.Application.Freelance.Interfaces
         ResolveDisputeHandler ResolveDispute();
         //UpdateContractHandler UpdateContract();
 
+        // New Bonus Command Handler
+        AddBonusToContractHandler AddBonusToContract(); // << NEW
+
         // Запросы
         GetContractHandler GetContract();
         GetContractsListHandler GetContractsList();
+
+        // New Bonus Query Handler
+        GetBonusesForContractHandler GetBonusesForContract(); // << NEW
     }
 }

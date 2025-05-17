@@ -2,6 +2,7 @@
 using Flsurf.Application.Common.Extensions;
 using Flsurf.Application.Messaging.Dto;
 using Flsurf.Application.Messaging.Interfaces;
+using Flsurf.Application.Messaging.UseCases;
 using Flsurf.Domain.Messanging.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -94,7 +95,7 @@ namespace Flsurf.Presentation.Web.Controllers
         public async Task<ActionResult<int>> GetChatUnreadCounter(Guid chatId)
         {
             var handler = _chat.GetUnreadCounter();
-            var result = await handler.Execute(chatId);
+            var result = await handler.Execute(new GetUnreadCounterDto() { ChatId = chatId });
             return Ok(result); 
         }
 

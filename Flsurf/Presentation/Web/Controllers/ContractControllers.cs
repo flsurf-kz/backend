@@ -128,5 +128,21 @@ namespace Flsurf.Presentation.Web.Controllers
             var contracts = await handler.Handle(query);
             return Ok(contracts);
         }
+
+        [HttpPost("bonus/add", Name = "AddBonusToContract")]
+        public async Task<ActionResult<CommandResult>> AddBonus([FromBody] AddBonusToContractCommand cmd)
+        {
+            var result = await _contractService.AddBonusToContract().Handle(cmd);
+            return result.MapResult(this); 
+        }
+
+        [HttpGet("{contractId}/bonuses", Name = "GetBonuses")]
+        public async Task<ActionResult<ICollection<BonusEntity>>> GetBonuses(Guid contractId)
+        {
+            var result = await _contractService
+                .GetBonusesForContract()
+                .Handle(new GetBonusesForContractQuery() { ContractId = contractId });
+            return Ok(result); 
+        }
     }
 }

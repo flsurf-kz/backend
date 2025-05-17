@@ -1,13 +1,10 @@
 ﻿using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.Freelance.Events;
-using Flsurf.Domain.Payment.Enums;
 using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using System.Diagnostics.Contracts;
 using Flsurf.Application.Common.Exceptions;
 using Flsurf.Domain.Payment.ValueObjects;
-using MimeKit.Cryptography;
+using System.Text.Json.Serialization;
 
 namespace Flsurf.Domain.Freelance.Entities
 {
@@ -35,6 +32,9 @@ namespace Flsurf.Domain.Freelance.Entities
 
         // Динамически вычисляемые свойства
         public int TotalWorkSessions => WorkSessions?.Count ?? 0;
+        [JsonIgnore]
+        public ICollection<BonusEntity> Bonuses { get; set; } = []; 
+
 
         // NEED FIX this edgecase of nullable!! 
         public decimal TotalHoursWorked => WorkSessions?
