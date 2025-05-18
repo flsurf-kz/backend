@@ -43,26 +43,24 @@ namespace Flsurf.Application.Payment.InnerServices
             return CommandResult.Success(); 
         }
 
-        public Task<CommandResult> Transfer(
+        public async Task<CommandResult> Transfer(
              Money transferAmount,
              WalletEntity recieverWallet,
              WalletEntity senderWallet,
              IFeePolicy? feePolicy,
              int? freezeForDays)
         {
-            _dbContext.Entry(recieverWallet).Collection(x => x.Transactions);
-            _dbContext.Entry(senderWallet).Collection(x => x.Transactions);
+            await _dbContext.Entry(recieverWallet).Collection(x => x.Transactions).LoadAsync();
+            await _dbContext.Entry(senderWallet).Collection(x => x.Transactions).LoadAsync();
 
             if (recieverWallet == null || senderWallet == null)
             {
-                return Task.FromResult(
-                    CommandResult.NotFound("Не найден кошелек получателя или начальный кошелёк",
-                    Guid.Empty));
+                return CommandResult.NotFound("Не найден кошелек получателя или начальный кошелёк", Guid.Empty);
             }
 
             senderWallet.Transfer(transferAmount, recieverWallet, feePolicy, freezeForDays);
 
-            return Task.FromResult(CommandResult.Success());
+            return CommandResult.Success();
         }
 
         public async Task<CommandResult> Refund(Guid transactionId)

@@ -16,9 +16,9 @@ namespace Flsurf.Application.Freelance.Commands.Contract
     }
 
     public class ClientCloseContractHandler(
-    IApplicationDbContext dbContext,
-    IPermissionService permService,
-    TransactionInnerService transactionService)
+        IApplicationDbContext dbContext,
+        IPermissionService permService,
+        TransactionInnerService transactionService)
     : ICommandHandler<ClientCloseContractCommand>
     {
         private readonly IApplicationDbContext _dbContext = dbContext;

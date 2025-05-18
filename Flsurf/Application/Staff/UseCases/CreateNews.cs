@@ -34,7 +34,8 @@ namespace Flsurf.Application.Staff.UseCases
                                          dto.Text, 
                                          [], 
                                          dto.PublishTime,
-                                         author);
+                                         author, 
+                                         dto.ChangeNotes);
 
 
             if (dto.Files != null)

@@ -8,6 +8,7 @@ namespace Flsurf.Application.Staff.Dto
         public string Text { get; set; } = null!;
         public DateTime PublishTime { get; set; }
         public ICollection<CreateFileDto>? Files { get; set; }
+        public bool ChangeNotes { get; set; }
     }
 
     public class UpdateNewsDto
@@ -18,6 +19,7 @@ namespace Flsurf.Application.Staff.Dto
         public DateTime? PublishTime { get; set; }
         public bool? IsHidden { get; set; }
         public ICollection<CreateFileDto>? NewFiles { get; set; }
+        public bool? ChangeNotes { get; set; }
     }
 
     public class GetNewsListDto
@@ -27,6 +29,7 @@ namespace Flsurf.Application.Staff.Dto
         public bool IncludeHidden { get; set; } = false;
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public bool? ChangeNotes { get; set; }
     }
 
 }

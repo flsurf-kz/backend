@@ -17,10 +17,14 @@ namespace Flsurf.Domain.Staff.Entities
         public ICollection<FileEntity>? Attachments { get; set; } = [];
         [Required]
         public string Title { get; set; } = null!;
-        public bool IsHidden { get; set; } = false; 
+        [Required]
+        public bool IsHidden { get; set; } = false;
+        [Required]
         public DateTime PublishTime { get; set; }
+        [Required]
+        public bool ChangeNotes { get; set; } = false; 
 
-        public static NewsEntity Create(string title, string text, ICollection<FileEntity> attachments, DateTime publishTime, UserEntity author)
+        public static NewsEntity Create(string title, string text, ICollection<FileEntity> attachments, DateTime publishTime, UserEntity author, bool changeNotes)
         {
             return new NewsEntity()
             {
@@ -31,6 +35,7 @@ namespace Flsurf.Domain.Staff.Entities
                 IsHidden = publishTime > DateTime.Now,
                 Author = author,
                 AuthorId = author.Id,
+                ChangeNotes = changeNotes, 
             }; 
         }
     }

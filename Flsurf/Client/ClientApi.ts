@@ -633,9 +633,10 @@ export interface IClient {
      * @param includeHidden (optional) 
      * @param startDate (optional) 
      * @param endDate (optional) 
+     * @param changeNotes (optional) 
      * @return OK
      */
-    getNewsList(start?: number | undefined, ends?: number | undefined, includeHidden?: boolean | undefined, startDate?: Date | undefined, endDate?: Date | undefined): Promise<NewsEntity[]>;
+    getNewsList(start?: number | undefined, ends?: number | undefined, includeHidden?: boolean | undefined, startDate?: Date | undefined, endDate?: Date | undefined, changeNotes?: boolean | undefined): Promise<NewsEntity[]>;
 
     /**
      * @return OK
@@ -5366,9 +5367,10 @@ export class Client implements IClient {
      * @param includeHidden (optional) 
      * @param startDate (optional) 
      * @param endDate (optional) 
+     * @param changeNotes (optional) 
      * @return OK
      */
-    getNewsList(start?: number | undefined, ends?: number | undefined, includeHidden?: boolean | undefined, startDate?: Date | undefined, endDate?: Date | undefined): Promise<NewsEntity[]> {
+    getNewsList(start?: number | undefined, ends?: number | undefined, includeHidden?: boolean | undefined, startDate?: Date | undefined, endDate?: Date | undefined, changeNotes?: boolean | undefined): Promise<NewsEntity[]> {
         let url_ = this.baseUrl + "/api/stuff?";
         if (start === null)
             throw new Error("The parameter 'start' cannot be null.");
@@ -5390,6 +5392,10 @@ export class Client implements IClient {
             throw new Error("The parameter 'endDate' cannot be null.");
         else if (endDate !== undefined)
             url_ += "EndDate=" + encodeURIComponent(endDate ? "" + endDate.toISOString() : "") + "&";
+        if (changeNotes === null)
+            throw new Error("The parameter 'changeNotes' cannot be null.");
+        else if (changeNotes !== undefined)
+            url_ += "ChangeNotes=" + encodeURIComponent("" + changeNotes) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -8950,6 +8956,7 @@ export class CreateNewsDto implements ICreateNewsDto {
     text?: string | undefined;
     publishTime?: Date;
     files?: CreateFileDto[] | undefined;
+    changeNotes?: boolean;
 
     constructor(data?: ICreateNewsDto) {
         if (data) {
@@ -8970,6 +8977,7 @@ export class CreateNewsDto implements ICreateNewsDto {
                 for (let item of _data["files"])
                     this.files!.push(CreateFileDto.fromJS(item));
             }
+            this.changeNotes = _data["changeNotes"];
         }
     }
 
@@ -8990,6 +8998,7 @@ export class CreateNewsDto implements ICreateNewsDto {
             for (let item of this.files)
                 data["files"].push(item.toJSON());
         }
+        data["changeNotes"] = this.changeNotes;
         return data;
     }
 }
@@ -8999,6 +9008,7 @@ export interface ICreateNewsDto {
     text?: string | undefined;
     publishTime?: Date;
     files?: CreateFileDto[] | undefined;
+    changeNotes?: boolean;
 }
 
 export class CreateNotificationCommand implements ICreateNotificationCommand {
@@ -11844,8 +11854,9 @@ export class NewsEntity implements INewsEntity {
     text!: string;
     attachments?: FileEntity[] | undefined;
     title!: string;
-    isHidden?: boolean;
-    publishTime?: Date;
+    isHidden!: boolean;
+    publishTime!: Date;
+    changeNotes!: boolean;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
@@ -11872,6 +11883,7 @@ export class NewsEntity implements INewsEntity {
             this.title = _data["title"];
             this.isHidden = _data["isHidden"];
             this.publishTime = _data["publishTime"] ? new Date(_data["publishTime"].toString()) : <any>undefined;
+            this.changeNotes = _data["changeNotes"];
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
@@ -11898,6 +11910,7 @@ export class NewsEntity implements INewsEntity {
         data["title"] = this.title;
         data["isHidden"] = this.isHidden;
         data["publishTime"] = this.publishTime ? this.publishTime.toISOString() : <any>undefined;
+        data["changeNotes"] = this.changeNotes;
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["lastModifiedById"] = this.lastModifiedById;
@@ -11911,8 +11924,9 @@ export interface INewsEntity {
     text: string;
     attachments?: FileEntity[] | undefined;
     title: string;
-    isHidden?: boolean;
-    publishTime?: Date;
+    isHidden: boolean;
+    publishTime: Date;
+    changeNotes: boolean;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;
@@ -14642,6 +14656,7 @@ export class UpdateNewsDto implements IUpdateNewsDto {
     publishTime?: Date | undefined;
     isHidden?: boolean | undefined;
     newFiles?: CreateFileDto[] | undefined;
+    changeNotes?: boolean | undefined;
 
     constructor(data?: IUpdateNewsDto) {
         if (data) {
@@ -14664,6 +14679,7 @@ export class UpdateNewsDto implements IUpdateNewsDto {
                 for (let item of _data["newFiles"])
                     this.newFiles!.push(CreateFileDto.fromJS(item));
             }
+            this.changeNotes = _data["changeNotes"];
         }
     }
 
@@ -14686,6 +14702,7 @@ export class UpdateNewsDto implements IUpdateNewsDto {
             for (let item of this.newFiles)
                 data["newFiles"].push(item.toJSON());
         }
+        data["changeNotes"] = this.changeNotes;
         return data;
     }
 }
@@ -14697,6 +14714,7 @@ export interface IUpdateNewsDto {
     publishTime?: Date | undefined;
     isHidden?: boolean | undefined;
     newFiles?: CreateFileDto[] | undefined;
+    changeNotes?: boolean | undefined;
 }
 
 export class UpdatePortfolioProjectCommand implements IUpdatePortfolioProjectCommand {

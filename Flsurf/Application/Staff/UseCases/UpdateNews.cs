@@ -39,6 +39,7 @@ namespace Flsurf.Application.Staff.UseCases
             if (dto.Text != null) news.Text = dto.Text;
             if (dto.PublishTime != null) news.PublishTime = dto.PublishTime.Value;
             if (dto.IsHidden != null) news.IsHidden = dto.IsHidden.Value;
+            if (dto.ChangeNotes != null) news.ChangeNotes = dto.ChangeNotes.Value; 
 
             if (dto.NewFiles?.Any() == true)
             {

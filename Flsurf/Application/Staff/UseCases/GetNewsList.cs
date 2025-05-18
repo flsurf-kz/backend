@@ -32,6 +32,8 @@ namespace Flsurf.Application.Staff.UseCases
                 q = q.Where(n => n.PublishTime >= dto.StartDate);
             if (dto.EndDate is not null)
                 q = q.Where(n => n.PublishTime <= dto.EndDate);
+            if (dto.ChangeNotes is not null) 
+                q = q.Where(x => x.ChangeNotes == dto.ChangeNotes);
 
             // скрытые новости — только админ
             if (!dto.IncludeHidden)
