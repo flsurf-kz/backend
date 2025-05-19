@@ -166,5 +166,14 @@ namespace Flsurf.Presentation.Web.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("start-chat", Name = "StartChatWithFreelancer")]
+        [Authorize]
+        public async Task<ActionResult<CommandResult>> StartChat([FromBody] StartChatWithFreelancerCommand cmd)
+        {
+            var result = await _jobService.StartChatWithFreelancer().Handle(cmd);
+
+            return result.MapResult(this); 
+        }
     }
 }

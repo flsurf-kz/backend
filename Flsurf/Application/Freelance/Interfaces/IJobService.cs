@@ -23,5 +23,6 @@ namespace Flsurf.Application.Freelance.Interfaces
         SendDraftJobToModerationHandler SendDraftJobToModeration();
         ReactToProposalHandler ReactToProposal();
         GetProposalsListHandler GetProposalsList(); 
+        StartChatWithFreelancerHandler StartChatWithFreelancer();
     }
 }

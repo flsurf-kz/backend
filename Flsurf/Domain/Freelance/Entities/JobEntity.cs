@@ -2,6 +2,7 @@
 using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.Freelance.Events;
+using Flsurf.Domain.Messanging.Entities;
 using Flsurf.Domain.Payment.ValueObjects;
 using Flsurf.Domain.User.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -36,6 +37,9 @@ namespace Flsurf.Domain.Freelance.Entities
         public Guid? ContractId { get; private set; }
         public ICollection<FileEntity> Files { get; private set; } = [];
         public bool IsHidden { get; set; } = false;
+
+        [JsonIgnore]
+        public ICollection<ChatEntity> Chats { get; set; } = []; 
 
         public static JobEntity CreateFixed(
             UserEntity employer,

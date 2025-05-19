@@ -3,6 +3,7 @@ using System;
 using Flsurf.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Flsurf.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250518083112_SmallUpdate")]
+    partial class SmallUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace Flsurf.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("ChatEntityJobEntity", b =>
-                {
-                    b.Property<Guid>("ChatsId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("JobsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("ChatsId", "JobsId");
-
-                    b.HasIndex("JobsId");
-
-                    b.ToTable("ChatEntityJobEntity");
-                });
 
             modelBuilder.Entity("Flsurf.Domain.Files.Entities.FileEntity", b =>
                 {
@@ -1928,21 +1916,6 @@ namespace Flsurf.Migrations
                     b.HasIndex("RequiredSkillsId");
 
                     b.ToTable("JobEntitySkillEntity");
-                });
-
-            modelBuilder.Entity("ChatEntityJobEntity", b =>
-                {
-                    b.HasOne("Flsurf.Domain.Messanging.Entities.ChatEntity", null)
-                        .WithMany()
-                        .HasForeignKey("ChatsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Flsurf.Domain.Freelance.Entities.JobEntity", null)
-                        .WithMany()
-                        .HasForeignKey("JobsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Flsurf.Domain.Files.Entities.FileEntity", b =>

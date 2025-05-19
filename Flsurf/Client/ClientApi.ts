@@ -481,6 +481,12 @@ export interface IClient {
     getProposalsList(jobId?: string | undefined, status?: Status | undefined): Promise<ProposalEntity[]>;
 
     /**
+     * @param body (optional) 
+     * @return OK
+     */
+    startChatWithFreelancer(body?: StartChatWithFreelancerCommand | undefined): Promise<CommandResult>;
+
+    /**
      * @param starts (optional) 
      * @param ends (optional) 
      * @return OK
@@ -4253,6 +4259,48 @@ export class Client implements IClient {
     }
 
     /**
+     * @param body (optional) 
+     * @return OK
+     */
+    startChatWithFreelancer(body?: StartChatWithFreelancerCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/job/start-chat";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processStartChatWithFreelancer(_response);
+        });
+    }
+
+    protected processStartChatWithFreelancer(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
      * @param starts (optional) 
      * @param ends (optional) 
      * @return OK
@@ -7655,6 +7703,7 @@ export class ChatEntity implements IChatEntity {
     currentUserBookmarked?: boolean;
     currentUserNotificationsDisabled?: boolean;
     currentUserUnreadMessagesCount?: number;
+    jobs?: JobEntity[] | undefined;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
@@ -7703,6 +7752,11 @@ export class ChatEntity implements IChatEntity {
             this.currentUserBookmarked = _data["currentUserBookmarked"];
             this.currentUserNotificationsDisabled = _data["currentUserNotificationsDisabled"];
             this.currentUserUnreadMessagesCount = _data["currentUserUnreadMessagesCount"];
+            if (Array.isArray(_data["jobs"])) {
+                this.jobs = [] as any;
+                for (let item of _data["jobs"])
+                    this.jobs!.push(JobEntity.fromJS(item));
+            }
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
@@ -7751,6 +7805,11 @@ export class ChatEntity implements IChatEntity {
         data["currentUserBookmarked"] = this.currentUserBookmarked;
         data["currentUserNotificationsDisabled"] = this.currentUserNotificationsDisabled;
         data["currentUserUnreadMessagesCount"] = this.currentUserUnreadMessagesCount;
+        if (Array.isArray(this.jobs)) {
+            data["jobs"] = [];
+            for (let item of this.jobs)
+                data["jobs"].push(item.toJSON());
+        }
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["lastModifiedById"] = this.lastModifiedById;
@@ -7776,6 +7835,7 @@ export interface IChatEntity {
     currentUserBookmarked?: boolean;
     currentUserNotificationsDisabled?: boolean;
     currentUserUnreadMessagesCount?: number;
+    jobs?: JobEntity[] | undefined;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;
@@ -11261,6 +11321,7 @@ export class JobEntity implements IJobEntity {
     readonly contractId?: string | undefined;
     readonly files?: FileEntity[] | undefined;
     isHidden?: boolean;
+    chats?: ChatEntity[] | undefined;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
@@ -11309,6 +11370,11 @@ export class JobEntity implements IJobEntity {
                     (<any>this).files!.push(FileEntity.fromJS(item));
             }
             this.isHidden = _data["isHidden"];
+            if (Array.isArray(_data["chats"])) {
+                this.chats = [] as any;
+                for (let item of _data["chats"])
+                    this.chats!.push(ChatEntity.fromJS(item));
+            }
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
@@ -11357,6 +11423,11 @@ export class JobEntity implements IJobEntity {
                 data["files"].push(item.toJSON());
         }
         data["isHidden"] = this.isHidden;
+        if (Array.isArray(this.chats)) {
+            data["chats"] = [];
+            for (let item of this.chats)
+                data["chats"].push(item.toJSON());
+        }
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["lastModifiedById"] = this.lastModifiedById;
@@ -11386,6 +11457,7 @@ export interface IJobEntity {
     contractId?: string | undefined;
     files?: FileEntity[] | undefined;
     isHidden?: boolean;
+    chats?: ChatEntity[] | undefined;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;
@@ -13248,6 +13320,46 @@ export class SkillModel implements ISkillModel {
 export interface ISkillModel {
     id?: string;
     name?: string | undefined;
+}
+
+export class StartChatWithFreelancerCommand implements IStartChatWithFreelancerCommand {
+    proposalId?: string;
+    jobId?: string;
+
+    constructor(data?: IStartChatWithFreelancerCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.proposalId = _data["proposalId"];
+            this.jobId = _data["jobId"];
+        }
+    }
+
+    static fromJS(data: any): StartChatWithFreelancerCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new StartChatWithFreelancerCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["proposalId"] = this.proposalId;
+        data["jobId"] = this.jobId;
+        return data;
+    }
+}
+
+export interface IStartChatWithFreelancerCommand {
+    proposalId?: string;
+    jobId?: string;
 }
 
 export class StartContestCommand implements IStartContestCommand {

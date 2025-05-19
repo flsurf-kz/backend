@@ -63,5 +63,8 @@ namespace Flsurf.Application.Freelance.Services
 
         public GetProposalsListHandler GetProposalsList() => 
             _serviceProvider.GetRequiredService<GetProposalsListHandler>();
+
+        public StartChatWithFreelancerHandler StartChatWithFreelancer() => 
+            _serviceProvider.GetRequiredService<StartChatWithFreelancerHandler>();
     }
 }
