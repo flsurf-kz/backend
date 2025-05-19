@@ -52,7 +52,9 @@ namespace Flsurf.Domain.Freelance.Entities
         public decimal? Bonus { get; set; }
         [ForeignKey(nameof(DisputeEntity))]
         public Guid? DisputeId { get; set; }
-        [ForeignKey(nameof(JobEntity))]
+
+        public JobEntity Job { get; set; } = null!; 
+        [ForeignKey("Job")]
         public Guid JobId { get; set; }
 
         public static ContractEntity CreateFixed(

@@ -8310,6 +8310,7 @@ export class ContractEntity implements IContractEntity {
     contractTerms?: string | undefined;
     bonus?: number | undefined;
     disputeId?: string | undefined;
+    job?: JobEntity;
     jobId?: string;
     createdById?: string | undefined;
     createdAt!: Date;
@@ -8362,6 +8363,7 @@ export class ContractEntity implements IContractEntity {
             this.contractTerms = _data["contractTerms"];
             this.bonus = _data["bonus"];
             this.disputeId = _data["disputeId"];
+            this.job = _data["job"] ? JobEntity.fromJS(_data["job"]) : <any>undefined;
             this.jobId = _data["jobId"];
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
@@ -8414,6 +8416,7 @@ export class ContractEntity implements IContractEntity {
         data["contractTerms"] = this.contractTerms;
         data["bonus"] = this.bonus;
         data["disputeId"] = this.disputeId;
+        data["job"] = this.job ? this.job.toJSON() : <any>undefined;
         data["jobId"] = this.jobId;
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
@@ -8447,6 +8450,7 @@ export interface IContractEntity {
     contractTerms?: string | undefined;
     bonus?: number | undefined;
     disputeId?: string | undefined;
+    job?: JobEntity;
     jobId?: string;
     createdById?: string | undefined;
     createdAt: Date;

@@ -8,8 +8,14 @@ namespace Flsurf.Infrastructure.Data.Queries
         public static IQueryable<ContractEntity> IncludeStandard(this IQueryable<ContractEntity> query)
         {
             return query
-                .Include(c => c.Employer)    // Включаем клиента
-                .Include(c => c.Freelancer);
+                .Include(x => x.Bonuses)
+                .Include(x => x.Tasks)
+                .Include(x => x.WorkSessions)
+                .Include(x => x.Job)
+                .Include(c => c.Employer)
+                    .ThenInclude(x => x.Avatar)
+                .Include(c => c.Freelancer)
+                    .ThenInclude(x => x.Avatar);
         }
     }
 

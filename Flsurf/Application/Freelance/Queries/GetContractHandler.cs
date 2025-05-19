@@ -3,6 +3,7 @@ using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Freelance.Permissions;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Freelance.Queries
@@ -20,6 +21,7 @@ namespace Flsurf.Application.Freelance.Queries
             await permissionService.EnforceCheckPermission(rel);
 
             var contract = await _dbContext.Contracts
+                .IncludeStandard()
                 .FirstOrDefaultAsync(x => x.Id == query.ContractId);
 
             return contract;
