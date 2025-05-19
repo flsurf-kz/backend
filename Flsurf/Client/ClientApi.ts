@@ -764,6 +764,12 @@ export interface IClient {
      * @param body (optional) 
      * @return OK
      */
+    searchUsers(body?: GetUsersListQuery | undefined): Promise<UserEntity[]>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
     balanceOperation(body?: BalanceOperationCommand | undefined): Promise<CommandResult>;
 
     /**
@@ -6354,6 +6360,55 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return OK
      */
+    searchUsers(body?: GetUsersListQuery | undefined): Promise<UserEntity[]> {
+        let url_ = this.baseUrl + "/api/user/search";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processSearchUsers(_response);
+        });
+    }
+
+    protected processSearchUsers(response: Response): Promise<UserEntity[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(UserEntity.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<UserEntity[]>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
     balanceOperation(body?: BalanceOperationCommand | undefined): Promise<CommandResult> {
         let url_ = this.baseUrl + "/api/wallet/balance-operation";
         url_ = url_.replace(/[?&]$/, "");
@@ -10879,6 +10934,58 @@ export interface IGetTransactionsListQuery {
     walletId?: string | undefined;
     priceRange?: number[] | undefined;
     status?: GetTransactionsListQueryStatus | undefined;
+}
+
+export class GetUsersListQuery implements IGetUsersListQuery {
+    searchTerm?: string | undefined;
+    role?: GetUsersListQueryRole | undefined;
+    advancedFilters?: string | undefined;
+    start?: number;
+    ends?: number;
+
+    constructor(data?: IGetUsersListQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.searchTerm = _data["searchTerm"];
+            this.role = _data["role"];
+            this.advancedFilters = _data["advancedFilters"];
+            this.start = _data["start"];
+            this.ends = _data["ends"];
+        }
+    }
+
+    static fromJS(data: any): GetUsersListQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetUsersListQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["searchTerm"] = this.searchTerm;
+        data["role"] = this.role;
+        data["advancedFilters"] = this.advancedFilters;
+        data["start"] = this.start;
+        data["ends"] = this.ends;
+        return data;
+    }
+}
+
+export interface IGetUsersListQuery {
+    searchTerm?: string | undefined;
+    role?: GetUsersListQueryRole | undefined;
+    advancedFilters?: string | undefined;
+    start?: number;
+    ends?: number;
 }
 
 export class GetWorkSessionListQuery implements IGetWorkSessionListQuery {
@@ -15977,6 +16084,13 @@ export enum GetTransactionsListQueryStatus {
     Cancelled = "Cancelled",
     Expired = "Expired",
     Reversed = "Reversed",
+}
+
+export enum GetUsersListQueryRole {
+    User = "User",
+    Moderator = "Moderator",
+    Admin = "Admin",
+    Superadmin = "Superadmin",
 }
 
 export enum GetWorkSessionListQueryStatus {
