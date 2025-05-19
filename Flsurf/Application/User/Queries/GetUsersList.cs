@@ -67,7 +67,7 @@ namespace Flsurf.Application.User.Queries
             {
                 string searchTermLower = query.SearchTerm.ToLower().Trim();
                 usersQuery = usersQuery.Where(u =>
-                    (u.Fullname != null && u.Fullname.ToLower().Contains(searchTermLower)) ||
+                    ((u.Name + u.Surname).ToLower().Contains(searchTermLower)) ||
                     (u.Email != null && u.Email.ToLower().Contains(searchTermLower))
                 );
                 // Для более высокой производительности на больших объемах данных и сложных текстовых запросах
@@ -113,7 +113,7 @@ namespace Flsurf.Application.User.Queries
 
             // 5. Сортировка (опционально, можно добавить параметры в DTO)
             // Например, по умолчанию сортировать по Fullname
-            usersQuery = usersQuery.OrderBy(u => u.Fullname);
+            usersQuery = usersQuery.OrderBy(u => u.Name);
 
             return await usersQuery.ToListAsync();
         }
