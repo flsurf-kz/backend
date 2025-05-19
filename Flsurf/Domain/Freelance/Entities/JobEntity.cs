@@ -39,7 +39,7 @@ namespace Flsurf.Domain.Freelance.Entities
         public bool IsHidden { get; set; } = false;
 
         [JsonIgnore]
-        public ICollection<ChatEntity> Chats { get; set; } = []; 
+        public ICollection<ChatEntity> Chats { get; set; } = new List<ChatEntity>(); // Инициализация важна
 
         public static JobEntity CreateFixed(
             UserEntity employer,

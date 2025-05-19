@@ -9836,6 +9836,7 @@ export interface IFeeContext {
 
 export class FileEntity implements IFileEntity {
     id!: string;
+    createdAt!: Date;
     fileName!: string;
     filePath!: string;
     mimeType!: string;
@@ -9853,6 +9854,7 @@ export class FileEntity implements IFileEntity {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.fileName = _data["fileName"];
             this.filePath = _data["filePath"];
             this.mimeType = _data["mimeType"];
@@ -9870,6 +9872,7 @@ export class FileEntity implements IFileEntity {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["fileName"] = this.fileName;
         data["filePath"] = this.filePath;
         data["mimeType"] = this.mimeType;
@@ -9880,6 +9883,7 @@ export class FileEntity implements IFileEntity {
 
 export interface IFileEntity {
     id: string;
+    createdAt: Date;
     fileName: string;
     filePath: string;
     mimeType: string;

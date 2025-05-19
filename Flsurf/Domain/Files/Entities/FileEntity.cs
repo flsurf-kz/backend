@@ -8,6 +8,8 @@ namespace Flsurf.Domain.Files.Entities
     {
         [Key, Required]
         public Guid Id { get; set; }
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow; 
 
         [Required, MaxLength(256)]
         public string FileName { get; set; }

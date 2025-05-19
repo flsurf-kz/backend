@@ -44,7 +44,7 @@ namespace Flsurf.Domain.Messanging.Entities
         [NotMapped]
         public int CurrentUserUnreadMessagesCount { get; set; }
 
-        public ICollection<JobEntity> Jobs { get; set; } = []; 
+        public ICollection<JobEntity> Jobs { get; set; } = new List<JobEntity>(); // Инициализация важна
 
         public static ChatEntity Create(string name, UserEntity owner, List<UserEntity> participants, bool isTextingAllowed, ChatTypes type)
         {
