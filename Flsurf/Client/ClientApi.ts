@@ -6368,7 +6368,7 @@ export class Client implements IClient {
 
         let options_: RequestInit = {
             body: content_,
-            method: "GET",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"

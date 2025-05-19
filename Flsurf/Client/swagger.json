@@ -54046,7 +54046,7 @@
       "Summary": null,
       "Description": null,
       "Operations": {
-        "Get": {
+        "Post": {
           "Tags": [
             {
               "Name": "UserControllers",
@@ -108940,6 +108940,6 @@
   ],
   "ExternalDocs": null,
   "Extensions": {},
-  "HashCode": "A942D60AAD426B50D062808887B2D144BF82F8104CEBDC54D80C6D85C80BA81190F1C1B29197519BB79710A089944AFE4DE9075E1938E85D7B6EEE35EC51FA6B",
+  "HashCode": "4C48551939AF695B6C66EEDFCCC10C28A8395E00412E34CE3DF51A3CB14BFE856A29354A6622436796B49A36949385728F5C386544C29DBAC8BE0466D3C33E89",
   "Annotations": null
 }

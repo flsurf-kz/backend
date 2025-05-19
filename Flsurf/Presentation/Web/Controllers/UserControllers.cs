@@ -73,7 +73,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return result.MapResult(this); 
         }
 
-        [HttpGet("search", Name = "SearchUsers")]
+        [HttpPost("search", Name = "SearchUsers")]
         public async Task<ActionResult<ICollection<UserEntity>>> SearchUsers([FromBody] GetUsersListQuery query)
         {
             var result = await UserService.GetUsersList().Handle(query);
