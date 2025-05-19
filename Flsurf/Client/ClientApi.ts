@@ -15698,6 +15698,7 @@ export interface IWorkSessionSummaryDto {
 export enum Status {
     Pending = "Pending",
     Accepted = "Accepted",
+    Rejected = "Rejected",
     Hidden = "Hidden",
 }
 
@@ -16038,12 +16039,14 @@ export enum NotificationEntityType {
 export enum ProposalEntityStatus {
     Pending = "Pending",
     Accepted = "Accepted",
+    Rejected = "Rejected",
     Hidden = "Hidden",
 }
 
 export enum ReactToProposalCommandReaction {
     Pending = "Pending",
     Accepted = "Accepted",
+    Rejected = "Rejected",
     Hidden = "Hidden",
 }
 

@@ -7,6 +7,7 @@ namespace Flsurf.Domain.Freelance.Enums
     {
         Pending,
         Accepted, 
+        Rejected, 
         Hidden, 
     }
 }
