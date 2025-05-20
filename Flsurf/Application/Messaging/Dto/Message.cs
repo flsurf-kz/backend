@@ -28,4 +28,24 @@ namespace Flsurf.Application.Messaging.Dto
         // override 
         public int Ends { get; set; } = 20;
     }
+
+    // websocket messages 
+    public sealed class FileAttachmentDto         // лёгкая «визитка» файла
+    {
+        public Guid Id { get; init; }
+        public string FileName { get; init; } = default!;
+        public string? MimeType { get; init; } = default!;
+        public long Size { get; init; }
+        public string FilePath { get; set; } = null!; 
+    }
+
+    public sealed class MessageContract           // заменяем record → class
+    {
+        public Guid Id { get; init; }
+        public Guid SenderId { get; init; }
+        public string Text { get; init; } = default!;
+        public DateTime CreatedAt { get; init; }
+
+        public IReadOnlyList<FileAttachmentDto> Files { get; init; } = Array.Empty<FileAttachmentDto>();
+    }
 }
