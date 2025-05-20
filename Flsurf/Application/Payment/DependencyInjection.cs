@@ -14,7 +14,9 @@ namespace Flsurf.Application.Payment
             services.AddSingleton<FeePolicyService>();
             services.AddScoped<IWalletService, WalletService>();
             services.AddScoped<TransactionInnerService>();
-            services.AddScoped<IUrlBuilder, UrlBuilder>(); 
+            services.AddScoped<IUrlBuilder, UrlBuilder>();
+
+            services.AddHttpClient("StripeClient");
 
             return services;
         }

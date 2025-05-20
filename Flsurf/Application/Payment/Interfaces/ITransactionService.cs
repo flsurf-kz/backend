@@ -12,5 +12,6 @@ namespace Flsurf.Application.Payment.Interfaces
         HandleGatewayResultHandler HandleGatewayResult();
         RefundTransaction RefundTransaction(); 
         StartPaymentFlowHandler StartPaymentFlow();
+        CreateSetupIntentHandler CreateSetupIntent(); 
     }
 }

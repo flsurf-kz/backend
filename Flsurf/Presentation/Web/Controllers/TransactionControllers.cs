@@ -5,6 +5,7 @@ using Flsurf.Application.Payment.Interfaces;
 using Flsurf.Application.Payment.Queries;
 using Flsurf.Application.Payment.UseCases;
 using Flsurf.Domain.Payment.Entities;
+using Flsurf.Infrastructure.Adapters.Payment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -81,5 +82,14 @@ namespace Flsurf.Presentation.Web.Controllers
             var result = await handler.Handle(command);
             return result.MapResult(this);
         }
+
+        [HttpPost("setup-intent", Name = "CreateSetupIntent")]
+        [Authorize]
+        public async Task<ActionResult<CardSetupDetails>> CreateSetupIntent([FromBody] CreateSetupIntentCommand cmd)
+        {
+            var result = await _transactionService.CreateSetupIntent().Execute(cmd);
+
+            return result; 
+        } 
     }
 }

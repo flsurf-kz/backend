@@ -736,6 +736,12 @@ export interface IClient {
      * @param body (optional) 
      * @return OK
      */
+    createSetupIntent(body?: CreateSetupIntentCommand | undefined): Promise<CardSetupDetails>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
     updateUser(userId: string, body?: UpdateUserCommand | undefined): Promise<boolean>;
 
     /**
@@ -6149,6 +6155,48 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return OK
      */
+    createSetupIntent(body?: CreateSetupIntentCommand | undefined): Promise<CardSetupDetails> {
+        let url_ = this.baseUrl + "/api/transaction/setup-intent";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateSetupIntent(_response);
+        });
+    }
+
+    protected processCreateSetupIntent(response: Response): Promise<CardSetupDetails> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CardSetupDetails.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CardSetupDetails>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
     updateUser(userId: string, body?: UpdateUserCommand | undefined): Promise<boolean> {
         let url_ = this.baseUrl + "/api/user/{userId}";
         if (userId === undefined || userId === null)
@@ -7660,6 +7708,58 @@ export interface IBookmarkedJobEntity {
     lastModifiedById?: string | undefined;
     lastModifiedAt?: Date | undefined;
     id: string;
+}
+
+export class CardSetupDetails implements ICardSetupDetails {
+    success?: boolean;
+    providerSetupId?: string | undefined;
+    clientSecretForWidget?: string | undefined;
+    redirectUrlForProviderPage?: string | undefined;
+    errorMessage?: string | undefined;
+
+    constructor(data?: ICardSetupDetails) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.success = _data["success"];
+            this.providerSetupId = _data["providerSetupId"];
+            this.clientSecretForWidget = _data["clientSecretForWidget"];
+            this.redirectUrlForProviderPage = _data["redirectUrlForProviderPage"];
+            this.errorMessage = _data["errorMessage"];
+        }
+    }
+
+    static fromJS(data: any): CardSetupDetails {
+        data = typeof data === 'object' ? data : {};
+        let result = new CardSetupDetails();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["success"] = this.success;
+        data["providerSetupId"] = this.providerSetupId;
+        data["clientSecretForWidget"] = this.clientSecretForWidget;
+        data["redirectUrlForProviderPage"] = this.redirectUrlForProviderPage;
+        data["errorMessage"] = this.errorMessage;
+        return data;
+    }
+}
+
+export interface ICardSetupDetails {
+    success?: boolean;
+    providerSetupId?: string | undefined;
+    clientSecretForWidget?: string | undefined;
+    redirectUrlForProviderPage?: string | undefined;
+    errorMessage?: string | undefined;
 }
 
 export class CategoryEntity implements ICategoryEntity {
@@ -9199,6 +9299,66 @@ export interface ICreateNotificationCommand {
     userId?: string | undefined;
     role?: CreateNotificationCommandRole | undefined;
     type?: CreateNotificationCommandType | undefined;
+}
+
+export class CreateSetupIntentCommand implements ICreateSetupIntentCommand {
+    providerId!: string;
+    systemId?: string | undefined;
+    returnUrl!: string;
+    metadata?: { [key: string]: string; } | undefined;
+
+    constructor(data?: ICreateSetupIntentCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.providerId = _data["providerId"];
+            this.systemId = _data["systemId"];
+            this.returnUrl = _data["returnUrl"];
+            if (_data["metadata"]) {
+                this.metadata = {} as any;
+                for (let key in _data["metadata"]) {
+                    if (_data["metadata"].hasOwnProperty(key))
+                        (<any>this.metadata)![key] = _data["metadata"][key];
+                }
+            }
+        }
+    }
+
+    static fromJS(data: any): CreateSetupIntentCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateSetupIntentCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["providerId"] = this.providerId;
+        data["systemId"] = this.systemId;
+        data["returnUrl"] = this.returnUrl;
+        if (this.metadata) {
+            data["metadata"] = {};
+            for (let key in this.metadata) {
+                if (this.metadata.hasOwnProperty(key))
+                    (<any>data["metadata"])[key] = (<any>this.metadata)[key];
+            }
+        }
+        return data;
+    }
+}
+
+export interface ICreateSetupIntentCommand {
+    providerId: string;
+    systemId?: string | undefined;
+    returnUrl: string;
+    metadata?: { [key: string]: string; } | undefined;
 }
 
 export class CreateSkillsCommand implements ICreateSkillsCommand {

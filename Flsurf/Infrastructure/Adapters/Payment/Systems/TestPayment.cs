@@ -32,5 +32,15 @@
         {
             return Task.FromResult(new CardMeta("kaspi", "4444", 10, 26) ?? null); 
         }
+
+
+        public Task<CardSetupDetails> PrepareCardSetupAsync(PrepareCardSetupRequest request)
+        {
+            return Task.FromResult(
+                new CardSetupDetails() { 
+                    ClientSecretForWidget = "", 
+                    ProviderSetupId = "", 
+                    Success = true });
+        }
     }
 }

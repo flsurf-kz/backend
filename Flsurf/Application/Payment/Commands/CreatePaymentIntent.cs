@@ -1,7 +1,14 @@
-﻿using Flsurf.Application.Common.Interfaces;
+﻿using Flsurf.Application.Common.Exceptions;
+using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Common.UseCases;
+using Flsurf.Domain.Payment.Entities;
 using Flsurf.Infrastructure.Adapters.Payment;
+using Flsurf.Infrastructure.Adapters.Payment.Systems;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 namespace Flsurf.Application.Payment.Commands
 {
@@ -9,6 +16,7 @@ namespace Flsurf.Application.Payment.Commands
     public class CreateSetupIntentCommand // Возвращает CardSetupDetails
     {
         // ID провайдера (например, Stripe) из вашей базы данных TransactionProviderEntity.Id
+        [Required]
         public Guid ProviderId { get; set; }
 
         // ID конкретной платежной системы этого провайдера (например, "Cards" для Stripe)
@@ -20,6 +28,7 @@ namespace Flsurf.Application.Payment.Commands
         // URL, на который Stripe может вернуть пользователя (например, после 3D Secure)
         // Это должно быть передано с фронтенда, так как URL может быть динамическим
         // или содержать параметры сессии.
+        [Required]
         public string ReturnUrl { get; set; } = string.Empty;
 
         // Дополнительные метаданные, если Stripe их поддерживает для SetupIntents
@@ -29,67 +38,105 @@ namespace Flsurf.Application.Payment.Commands
     public class CreateSetupIntentHandler : BaseUseCase<CreateSetupIntentCommand, CardSetupDetails>
     {
         private readonly IApplicationDbContext _dbContext;
-        private readonly IPermissionService _permissionService;
+        private readonly IPermissionService _permissionService; // ЗАМЕНА: ICurrentUserIdentifier на IPermissionService
         private readonly IPaymentAdapterFactory _paymentAdapterFactory;
+        private readonly HttpClient _httpClientForStripe;
+        private readonly StripeConfig _stripeConfig;
 
         public CreateSetupIntentHandler(
             IApplicationDbContext dbContext,
-            IPermissionService permissionService,
-            IPaymentAdapterFactory paymentAdapterFactory)
+            IPermissionService permissionService, // ЗАМЕНА
+            IPaymentAdapterFactory paymentAdapterFactory,
+            IHttpClientFactory httpClientFactory,
+            IOptions<StripeConfig> stripeConfigOptions)
         {
             _dbContext = dbContext;
-            _permissionService = permissionService;
+            _permissionService = permissionService; // ЗАМЕНА
             _paymentAdapterFactory = paymentAdapterFactory;
+
+            _httpClientForStripe = httpClientFactory.CreateClient("StripeClient"); // Имя должно совпадать с регистрацией в DI
+            _stripeConfig = stripeConfigOptions.Value;
+            // Установка заголовка авторизации для HttpClient один раз в конструкторе
+            if (!string.IsNullOrEmpty(_stripeConfig.SecretKey))
+            {
+                _httpClientForStripe.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _stripeConfig.SecretKey);
+            }
+            else
+            {
+                // Логирование или выброс исключения, если SecretKey не задан
+                throw new InvalidOperationException("Stripe SecretKey не сконфигурирован.");
+            }
         }
 
-        public async Task<CardSetupDetails> Handle(CreateSetupIntentCommand request, CancellationToken cancellationToken)
+        public async Task<CardSetupDetails> Execute(CreateSetupIntentCommand request)
         {
-            var currentUser = await _permissionService.GetCurrentUser(cancellationToken)
-                ?? throw new UnauthorizedAccessException("Пользователь не авторизован.");
+            var user = await _permissionService.GetCurrentUser(); 
 
             var provider = await _dbContext.TransactionProviders
-                .FirstOrDefaultAsync(p => p.Id == request.ProviderId, cancellationToken)
-                ?? throw new NotFoundException($"Платежный провайдер с ID {request.ProviderId} не найден.");
+                .FirstOrDefaultAsync(p => p.Id == request.ProviderId)
+                ?? throw new DomainException($"Платежный провайдер с ID {request.ProviderId} не найден.");
 
-            // Здесь логика выбора конкретной "системы" (PaymentSystemEntity) для провайдера, если это необходимо.
-            // Если systemId не используется или Stripe адаптер сам знает, какую систему использовать (например, "card"),
-            // то этот шаг может быть проще.
-            // Для Stripe, обычно название адаптера/провайдера уже определяет, что это Stripe.
-            var paymentAdapter = _paymentAdapterFactory.GetPaymentAdapter(provider.Name); // provider.Name должен быть "Stripe" или аналогично
-
-            // Получаем Stripe Customer ID для текущего пользователя, если он уже существует.
-            // Это важно для Stripe, чтобы привязывать способы оплаты к одному клиенту.
-            // Вам нужно будет хранить Stripe Customer ID в вашей UserEntity или связанной сущности.
-            // Предположим, что UserEntity имеет поле StripeCustomerId.
-            string? stripeCustomerId = currentUser.StripeCustomerId; // ЗАМЕНИТЕ НА РЕАЛЬНОЕ ПОЛЕ
-
-            var cardSetupRequest = new PrepareCardSetupRequest
+            if (!provider.Name.Equals("Stripe", StringComparison.OrdinalIgnoreCase))
             {
-                UserId = currentUser.Id,
-                CustomerIdInProvider = stripeCustomerId, // Передаем Stripe Customer ID, если есть
+                throw new ApplicationException($"Провайдер {provider.Name} не является Stripe. Эта команда предназначена для Stripe.");
+            }
+
+            var stripeMapping = await _dbContext.UserGatewayCustomerMappings
+                .FirstOrDefaultAsync(m => m.UserId == user.Id && m.PaymentProviderId == provider.Id);
+
+            string? stripeCustomerId = stripeMapping?.CustomerIdInProvider;
+
+            if (string.IsNullOrEmpty(stripeCustomerId))
+            {
+                var customerData = new Dictionary<string, string>
+                {
+                    ["email"] = user.Email, // UserEntity должен иметь Email
+                    ["name"] = user.Fullname, // UserEntity должен иметь Fullname
+                    [$"metadata[flsurf_user_id]"] = user.Id.ToString()
+                };
+
+                var customerResp = await _httpClientForStripe.PostAsync(
+                    "https://api.stripe.com/v1/customers",
+                    new FormUrlEncodedContent(customerData));
+
+                var customerRespContent = await customerResp.Content.ReadAsStringAsync();
+                var customerRoot = JsonDocument.Parse(customerRespContent).RootElement;
+
+                if (!customerResp.IsSuccessStatusCode)
+                {
+                    string stripeErrorMsg = "Не удалось создать клиента в Stripe.";
+                    if (customerRoot.TryGetProperty("error", out var errorElem) && errorElem.TryGetProperty("message", out var msgElem))
+                    {
+                        stripeErrorMsg = msgElem.GetString() ?? stripeErrorMsg;
+                    }
+                    Console.WriteLine($"Stripe API Error Creating Customer: {customerRespContent}");
+                    return new CardSetupDetails { Success = false, ErrorMessage = stripeErrorMsg };
+                }
+
+                stripeCustomerId = customerRoot.GetProperty("id").GetString();
+                if (string.IsNullOrEmpty(stripeCustomerId))
+                {
+                    return new CardSetupDetails { Success = false, ErrorMessage = "Stripe вернул пустого Customer ID." };
+                }
+
+                var newMapping = UserPaymentGatewayCustomer.Create(user.Id, provider.Id, stripeCustomerId);
+                _dbContext.UserGatewayCustomerMappings.Add(newMapping);
+                await _dbContext.SaveChangesAsync();
+                Console.WriteLine($"Создан новый Stripe Customer: {stripeCustomerId} для пользователя {user.Id} и сохранен маппинг.");
+            }
+
+            var paymentAdapter = _paymentAdapterFactory.GetPaymentAdapter(provider.Name);
+            var cardSetupRequestDto = new PrepareCardSetupRequest // Используем ваш DTO из Adapters.Payment
+            {
+                UserId = user.Id, // Это поле есть в PrepareCardSetupRequest вашего интерфейса IPaymentAdapter
+                CustomerIdInProvider = stripeCustomerId,
                 ReturnUrl = request.ReturnUrl,
                 Metadata = request.Metadata
             };
 
-            var cardSetupDetails = await paymentAdapter.PrepareCardSetupAsync(cardSetupRequest);
-
-            if (!cardSetupDetails.Success)
-            {
-                // Можно логировать ошибку или выбросить более специфическое исключение
-                throw new ApplicationException(cardSetupDetails.ErrorMessage ?? "Не удалось подготовить настройку карты на стороне платежного провайдера.");
-            }
-
-            // Если Stripe Customer ID не было и адаптер его создал (некоторые адаптеры могут это делать),
-            // его нужно сохранить для пользователя. Stripe адаптер должен был бы вернуть новый Customer ID
-            // в CardSetupDetails или через другой механизм, чтобы вы могли его сохранить.
-            // Например, если CardSetupDetails содержит newCustomerIdInProvider:
-            // if (string.IsNullOrEmpty(stripeCustomerId) && !string.IsNullOrEmpty(cardSetupDetails.NewCustomerIdInProvider))
-            // {
-            //     currentUser.StripeCustomerId = cardSetupDetails.NewCustomerIdInProvider;
-            //     _dbContext.Users.Update(currentUser); // Или ваш способ обновления пользователя
-            //     await _dbContext.SaveChangesAsync(cancellationToken);
-            // }
-
+            // Вызываем метод адаптера, который теперь ожидает CustomerIdInProvider
+            var cardSetupDetails = await paymentAdapter.PrepareCardSetupAsync(cardSetupRequestDto);
 
             return cardSetupDetails;
         }

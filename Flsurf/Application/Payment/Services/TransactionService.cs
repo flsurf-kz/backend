@@ -41,5 +41,10 @@ namespace Flsurf.Application.Payment.Services
         {
             return _serviceProvider.GetRequiredService<StartPaymentFlowHandler>();
         }
+
+        public CreateSetupIntentHandler CreateSetupIntent()
+        {
+            return _serviceProvider.GetRequiredService<CreateSetupIntentHandler>();
+        }
     }
 }
