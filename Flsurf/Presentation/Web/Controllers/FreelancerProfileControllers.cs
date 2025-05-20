@@ -5,6 +5,7 @@ using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 using Flsurf.Application.Freelance.Queries.Responses;
 using Flsurf.Domain.Freelance.Entities;
+using Flsurf.Domain.Freelance.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -79,25 +80,9 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
 
-        [HttpGet("list", Name = "GetFreelancerProfileList")]
-        public async Task<ActionResult<ICollection<FreelancerProfileEntity>>> GetFreelancerProfileList(
-            [FromQuery] int start = 0,
-            [FromQuery] int end = 10,
-            [FromQuery] string[]? skills = null,
-            [FromQuery] int? minCost = null,
-            [FromQuery] int? maxCost = null,
-            [FromQuery] int? minReviews = null,
-            [FromQuery] int? maxReviews = null)
+        [HttpPost("list", Name = "GetFreelancerProfileList")]
+        public async Task<ActionResult<ICollection<FreelancerProfileEntity>>> GetFreelancerProfileList([FromBody] GetFreelancerProfileListQuery query)
         {
-            var query = new GetFreelancerProfileListQuery
-            {
-                Start = start,
-                Ends = end,
-                Skills = skills,
-                CostPerHour = (minCost.HasValue && maxCost.HasValue) ? new int[] { minCost.Value, maxCost.Value } : null,
-                ReviewsCount = (minReviews.HasValue && maxReviews.HasValue) ? new int[] { minReviews.Value, maxReviews.Value } : null
-            };
-
             var handler = _freelancerProfileService.GetFreelancerProfileList();
             var profiles = await handler.Handle(query);
             return Ok(profiles);

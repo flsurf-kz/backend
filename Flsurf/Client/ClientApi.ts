@@ -350,16 +350,10 @@ export interface IClient {
     getFreelancerStats(userId: string): Promise<FreelancerStatsDto>;
 
     /**
-     * @param start (optional) 
-     * @param end (optional) 
-     * @param skills (optional) 
-     * @param minCost (optional) 
-     * @param maxCost (optional) 
-     * @param minReviews (optional) 
-     * @param maxReviews (optional) 
+     * @param body (optional) 
      * @return OK
      */
-    getFreelancerProfileList(start?: number | undefined, end?: number | undefined, skills?: string[] | undefined, minCost?: number | undefined, maxCost?: number | undefined, minReviews?: number | undefined, maxReviews?: number | undefined): Promise<FreelancerProfileEntity[]>;
+    getFreelancerProfileList(body?: GetFreelancerProfileListQuery | undefined): Promise<FreelancerProfileEntity[]>;
 
     /**
      * @param body (optional) 
@@ -3341,50 +3335,20 @@ export class Client implements IClient {
     }
 
     /**
-     * @param start (optional) 
-     * @param end (optional) 
-     * @param skills (optional) 
-     * @param minCost (optional) 
-     * @param maxCost (optional) 
-     * @param minReviews (optional) 
-     * @param maxReviews (optional) 
+     * @param body (optional) 
      * @return OK
      */
-    getFreelancerProfileList(start?: number | undefined, end?: number | undefined, skills?: string[] | undefined, minCost?: number | undefined, maxCost?: number | undefined, minReviews?: number | undefined, maxReviews?: number | undefined): Promise<FreelancerProfileEntity[]> {
-        let url_ = this.baseUrl + "/api/freelancer-profile/list?";
-        if (start === null)
-            throw new Error("The parameter 'start' cannot be null.");
-        else if (start !== undefined)
-            url_ += "start=" + encodeURIComponent("" + start) + "&";
-        if (end === null)
-            throw new Error("The parameter 'end' cannot be null.");
-        else if (end !== undefined)
-            url_ += "end=" + encodeURIComponent("" + end) + "&";
-        if (skills === null)
-            throw new Error("The parameter 'skills' cannot be null.");
-        else if (skills !== undefined)
-            skills && skills.forEach(item => { url_ += "skills=" + encodeURIComponent("" + item) + "&"; });
-        if (minCost === null)
-            throw new Error("The parameter 'minCost' cannot be null.");
-        else if (minCost !== undefined)
-            url_ += "minCost=" + encodeURIComponent("" + minCost) + "&";
-        if (maxCost === null)
-            throw new Error("The parameter 'maxCost' cannot be null.");
-        else if (maxCost !== undefined)
-            url_ += "maxCost=" + encodeURIComponent("" + maxCost) + "&";
-        if (minReviews === null)
-            throw new Error("The parameter 'minReviews' cannot be null.");
-        else if (minReviews !== undefined)
-            url_ += "minReviews=" + encodeURIComponent("" + minReviews) + "&";
-        if (maxReviews === null)
-            throw new Error("The parameter 'maxReviews' cannot be null.");
-        else if (maxReviews !== undefined)
-            url_ += "maxReviews=" + encodeURIComponent("" + maxReviews) + "&";
+    getFreelancerProfileList(body?: GetFreelancerProfileListQuery | undefined): Promise<FreelancerProfileEntity[]> {
+        let url_ = this.baseUrl + "/api/freelancer-profile/list";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_: RequestInit = {
-            method: "GET",
+            body: content_,
+            method: "POST",
             headers: {
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -10976,6 +10940,90 @@ export interface IGetFinanceSummaryQuery {
     userId?: string | undefined;
 }
 
+export class GetFreelancerProfileListQuery implements IGetFreelancerProfileListQuery {
+    start?: number;
+    ends?: number;
+    yourHires?: boolean;
+    location?: GetFreelancerProfileListQueryLocation | undefined;
+    skills?: string[] | undefined;
+    costPerHour?: number[] | undefined;
+    reviewsCount?: number[] | undefined;
+
+    constructor(data?: IGetFreelancerProfileListQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.start = _data["start"];
+            this.ends = _data["ends"];
+            this.yourHires = _data["yourHires"];
+            this.location = _data["location"];
+            if (Array.isArray(_data["skills"])) {
+                this.skills = [] as any;
+                for (let item of _data["skills"])
+                    this.skills!.push(item);
+            }
+            if (Array.isArray(_data["costPerHour"])) {
+                this.costPerHour = [] as any;
+                for (let item of _data["costPerHour"])
+                    this.costPerHour!.push(item);
+            }
+            if (Array.isArray(_data["reviewsCount"])) {
+                this.reviewsCount = [] as any;
+                for (let item of _data["reviewsCount"])
+                    this.reviewsCount!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): GetFreelancerProfileListQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetFreelancerProfileListQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["start"] = this.start;
+        data["ends"] = this.ends;
+        data["yourHires"] = this.yourHires;
+        data["location"] = this.location;
+        if (Array.isArray(this.skills)) {
+            data["skills"] = [];
+            for (let item of this.skills)
+                data["skills"].push(item);
+        }
+        if (Array.isArray(this.costPerHour)) {
+            data["costPerHour"] = [];
+            for (let item of this.costPerHour)
+                data["costPerHour"].push(item);
+        }
+        if (Array.isArray(this.reviewsCount)) {
+            data["reviewsCount"] = [];
+            for (let item of this.reviewsCount)
+                data["reviewsCount"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IGetFreelancerProfileListQuery {
+    start?: number;
+    ends?: number;
+    yourHires?: boolean;
+    location?: GetFreelancerProfileListQueryLocation | undefined;
+    skills?: string[] | undefined;
+    costPerHour?: number[] | undefined;
+    reviewsCount?: number[] | undefined;
+}
+
 export class GetJobsListQuery implements IGetJobsListQuery {
     start?: number;
     ends?: number;
@@ -16446,6 +16494,12 @@ export enum GetContractsListQueryStatus {
     Expired = "Expired",
     Closed = "Closed",
     PendingFinishApproval = "PendingFinishApproval",
+}
+
+export enum GetFreelancerProfileListQueryLocation {
+    Kazakhstan = "Kazakhstan",
+    Russia = "Russia",
+    Belarus = "Belarus",
 }
 
 export enum Levels {
