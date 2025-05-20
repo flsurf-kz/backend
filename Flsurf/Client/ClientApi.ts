@@ -5295,14 +5295,14 @@ export class Client implements IClient {
      * @return OK
      */
     getTickets(body?: GetTicketsDto | undefined): Promise<TicketEntity[]> {
-        let url_ = this.baseUrl + "/api/stuff/ticket";
+        let url_ = this.baseUrl + "/api/stuff/ticket/search";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
 
         let options_: RequestInit = {
             body: content_,
-            method: "GET",
+            method: "POST",
             headers: {
                 "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"

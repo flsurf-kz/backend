@@ -48,7 +48,7 @@ namespace Flsurf.Presentation.Web.Controllers
             return Ok(await _staffService.CreateTicket().Execute(ticket));
         }
 
-        [HttpGet("ticket", Name = "GetTickets")]
+        [HttpPost("ticket/search", Name = "GetTickets")]
         public async Task<ActionResult<ICollection<TicketEntity>>> GetTickets([FromBody] GetTicketsDto model)
         {
             return Ok(await _staffService.GetTicketsList().Execute(model));

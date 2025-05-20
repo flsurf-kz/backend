@@ -43415,8 +43415,19 @@
           "Servers": [],
           "Extensions": {},
           "Annotations": null
-        },
-        "Get": {
+        }
+      },
+      "Servers": [],
+      "Parameters": [],
+      "Extensions": {},
+      "UnresolvedReference": false,
+      "Reference": null
+    },
+    "/api/stuff/ticket/search": {
+      "Summary": null,
+      "Description": null,
+      "Operations": {
+        "Post": {
           "Tags": [
             {
               "Name": "StaffControllers",
@@ -109909,6 +109920,6 @@
   ],
   "ExternalDocs": null,
   "Extensions": {},
-  "HashCode": "51A2ACA91F0BB177252F3C19C7F4CADB5ACCCA587F2F4BFD400B977E8D7DE05363B1DD00205DEDFD9C73C2C3B9496C4A60A91E2BD256076165C8D0935D5630B8",
+  "HashCode": "4F27BC3D57A82553E33E0FBA95BA4192F57ED7757130071A95879FC1F43E39492B3611B2BC00F4499701E24E51607230DF618ED88415045BFEC69CF9B2322CFC",
   "Annotations": null
 }
