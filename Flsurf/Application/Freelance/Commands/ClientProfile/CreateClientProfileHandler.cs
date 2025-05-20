@@ -73,7 +73,7 @@ namespace Flsurf.Application.Freelance.Commands.ClientProfile
                 PhoneNumber = command.PhoneNumber
             };
 
-            user.Type = Domain.User.Enums.UserTypes.Client;
+            user.ChangeUserType(Domain.User.Enums.UserTypes.Client);
 
             dbContext.ClientProfiles.Add(profile);
             await dbContext.SaveChangesAsync();

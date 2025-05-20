@@ -28,7 +28,6 @@ namespace Flsurf.Application.Payment.Commands
         // URL, на который Stripe может вернуть пользователя (например, после 3D Secure)
         // Это должно быть передано с фронтенда, так как URL может быть динамическим
         // или содержать параметры сессии.
-        [Required]
         public string ReturnUrl { get; set; } = string.Empty;
 
         // Дополнительные метаданные, если Stripe их поддерживает для SetupIntents
@@ -41,26 +40,26 @@ namespace Flsurf.Application.Payment.Commands
         private readonly IPermissionService _permissionService; // ЗАМЕНА: ICurrentUserIdentifier на IPermissionService
         private readonly IPaymentAdapterFactory _paymentAdapterFactory;
         private readonly HttpClient _httpClientForStripe;
-        private readonly StripeConfig _stripeConfig;
 
         public CreateSetupIntentHandler(
             IApplicationDbContext dbContext,
             IPermissionService permissionService, // ЗАМЕНА
             IPaymentAdapterFactory paymentAdapterFactory,
             IHttpClientFactory httpClientFactory,
-            IOptions<StripeConfig> stripeConfigOptions)
+            IConfiguration config)
         {
             _dbContext = dbContext;
             _permissionService = permissionService; // ЗАМЕНА
             _paymentAdapterFactory = paymentAdapterFactory;
 
             _httpClientForStripe = httpClientFactory.CreateClient("StripeClient"); // Имя должно совпадать с регистрацией в DI
-            _stripeConfig = stripeConfigOptions.Value;
+
+            var secretKey = config["Payments:Stripe:SecretKey"]; 
             // Установка заголовка авторизации для HttpClient один раз в конструкторе
-            if (!string.IsNullOrEmpty(_stripeConfig.SecretKey))
+            if (secretKey is not null)
             {
                 _httpClientForStripe.DefaultRequestHeaders.Authorization =
-                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _stripeConfig.SecretKey);
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", secretKey);
             }
             else
             {
@@ -77,12 +76,9 @@ namespace Flsurf.Application.Payment.Commands
                 .FirstOrDefaultAsync(p => p.Id == request.ProviderId)
                 ?? throw new DomainException($"Платежный провайдер с ID {request.ProviderId} не найден.");
 
-            if (!provider.Name.Equals("Stripe", StringComparison.OrdinalIgnoreCase))
-            {
-                throw new ApplicationException($"Провайдер {provider.Name} не является Stripe. Эта команда предназначена для Stripe.");
-            }
+            var paymentAdapter = _paymentAdapterFactory.GetPaymentAdapter(provider.Name);
 
-            var stripeMapping = await _dbContext.UserGatewayCustomerMappings
+            var stripeMapping = await _dbContext.UserPaymentGatewayCustomers
                 .FirstOrDefaultAsync(m => m.UserId == user.Id && m.PaymentProviderId == provider.Id);
 
             string? stripeCustomerId = stripeMapping?.CustomerIdInProvider;
@@ -121,12 +117,11 @@ namespace Flsurf.Application.Payment.Commands
                 }
 
                 var newMapping = UserPaymentGatewayCustomer.Create(user.Id, provider.Id, stripeCustomerId);
-                _dbContext.UserGatewayCustomerMappings.Add(newMapping);
+                _dbContext.UserPaymentGatewayCustomers.Add(newMapping);
                 await _dbContext.SaveChangesAsync();
                 Console.WriteLine($"Создан новый Stripe Customer: {stripeCustomerId} для пользователя {user.Id} и сохранен маппинг.");
             }
 
-            var paymentAdapter = _paymentAdapterFactory.GetPaymentAdapter(provider.Name);
             var cardSetupRequestDto = new PrepareCardSetupRequest // Используем ваш DTO из Adapters.Payment
             {
                 UserId = user.Id, // Это поле есть в PrepareCardSetupRequest вашего интерфейса IPaymentAdapter

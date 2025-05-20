@@ -1,4 +1,5 @@
-﻿using Flsurf.Domain.Files.Entities;
+﻿using Flsurf.Application.Common.Exceptions;
+using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Domain.User.Events;
@@ -44,7 +45,7 @@ namespace Flsurf.Domain.User.Entities
         [Required]
         public UserRoles Role { get; set; } = UserRoles.User;
         [Required]
-        public UserTypes Type { get; set; } = UserTypes.NonUser; 
+        public UserTypes Type { get; private set; } = UserTypes.NonUser; 
         [Required]
         [EmailAddress(ErrorMessage = "Email address is not correct")]
         public string Email { get; set; } = null!;
@@ -95,11 +96,15 @@ namespace Flsurf.Domain.User.Entities
             UserTypes userType, 
             PasswordService passwordService)
         {
+            // no verification of fullname for legacy reasons! 
+
             var user = new UserEntity()
             {
                 Email = email,
-                Type = userType, 
+                Type = userType,
                 Fullname = fullname,
+                Surname = fullname.Split(' ')[0],
+                Name = fullname.Split(' ')[1], 
                 NotificationSettings = NotificationSettings.CreateDefault(), 
             };
             var hashedPassword = passwordService.HashPassword(user, password);
@@ -134,6 +139,8 @@ namespace Flsurf.Domain.User.Entities
 
             AddDomainEvent(new UserBlocked(this.Id));
         }
+
+        public void ChangeUserType(UserTypes type) => Type = type; 
 
         public void UpdatePassword(string oldPassword, string newPassword, PasswordService passwordService)
         {

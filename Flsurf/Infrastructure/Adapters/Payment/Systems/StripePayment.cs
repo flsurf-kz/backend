@@ -39,17 +39,11 @@ namespace Flsurf.Infrastructure.Adapters.Payment.Systems
     {
         private readonly HttpClient _http;
         private readonly StripeConfig _cfg;
-        // Предположим, что у вас есть доступ к DbContext для работы с UserEntity.StripeCustomerId
-        // private readonly IApplicationDbContext _dbContext; // Раскомментируйте, если будете использовать
-        // private readonly ICurrentUserAccessor _currentUserAccessor; // Сервис для получения текущего пользователя
 
-        // Обновите конструктор, если добавляете зависимости
-        public StripePaymentAdapter(HttpClient http, StripeConfig cfg /*, IApplicationDbContext dbContext, ICurrentUserAccessor currentUserAccessor */)
+        public StripePaymentAdapter(HttpClient http, StripeConfig cfg)
         {
             _http = http;
             _cfg = cfg;
-            // _dbContext = dbContext;
-            // _currentUserAccessor = currentUserAccessor;
             _http.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", cfg.SecretKey);
         }

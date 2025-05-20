@@ -8,12 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Freelance.Commands.FreelancerTeam
 {
-    public class ReactToTeamInvitationComman : BaseCommand { 
+    public class ReactToTeamInvitationCommand : BaseCommand { 
         public Guid InvitationId { get; set; }
         public bool Accepted { get; set; }
     }
 
-    public class ReactToTeamInvitationHandler : ICommandHandler<ReactToTeamInvitationComman>
+    public class ReactToTeamInvitationHandler : ICommandHandler<ReactToTeamInvitationCommand>
     {
         private readonly IApplicationDbContext _context;
         private readonly IPermissionService _permService;
@@ -24,7 +24,7 @@ namespace Flsurf.Application.Freelance.Commands.FreelancerTeam
             _permService = permService;
         }
 
-        public async Task<CommandResult> Handle(ReactToTeamInvitationComman command)
+        public async Task<CommandResult> Handle(ReactToTeamInvitationCommand command)
         {
             var invitation = await _context.FreelancerTeamInvitations.FirstOrDefaultAsync(x => x.Id == command.InvitationId);
 

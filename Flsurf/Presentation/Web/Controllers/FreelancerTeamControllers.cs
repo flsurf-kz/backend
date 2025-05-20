@@ -51,5 +51,29 @@ namespace Flsurf.Presentation.Web.Controllers
             var teams = await handler.Handle(new GetFreelancerTeamsListQuery());
             return Ok(teams);
         }
+
+        [HttpPost("kick", Name = "KickFreelancerMember")]
+        public async Task<ActionResult<CommandResult>> KickFreelancerMember([FromBody] KickFreelancerFromGroupCommand cmd)
+        {
+            var result = await _freelancerTeamService.KickFreelancerFromGroup().Handle(cmd);
+
+            return result; 
+        }
+
+        [HttpPost("react-to-invitation", Name = "ReactToInvitation")]
+        public async Task<ActionResult<CommandResult>> ReactToInvitation([FromBody] ReactToTeamInvitationCommand cmd)
+        {
+            var result = await _freelancerTeamService.ReactToTeamInvitation().Handle(cmd);
+
+            return result; 
+        }
+
+        [HttpPost("invite", Name = "InviteFreelancerToTeam")]
+        public async Task<ActionResult<CommandResult>> InviteMemberToTeam([FromBody] InviteFreelancerToTeamCommand cmd)
+        {
+            var result = await _freelancerTeamService.InviteFreelancerToTeam().Handle(cmd);
+
+            return result; 
+        }
     }
 }

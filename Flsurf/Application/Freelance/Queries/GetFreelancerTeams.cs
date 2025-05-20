@@ -3,6 +3,7 @@ using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Freelance.Permissions;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Freelance.Queries
@@ -35,7 +36,9 @@ namespace Flsurf.Application.Freelance.Queries
                 ids.Add(Guid.Parse(subject.Subject.Id)); 
             }
 
-            var teams = await dbContext.FreelancerTeams.Where(x => ids.Contains(x.Id)).ToListAsync();
+            var teams = await dbContext.FreelancerTeams
+                .IncludeStandard()
+                .Where(x => ids.Contains(x.Id)).ToListAsync();
 
             return teams; 
         }

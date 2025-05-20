@@ -37,9 +37,18 @@ namespace Flsurf.Application.User.Commands
                 return CommandResult.Conflict($"Пользователь с email {command.Email} уже существует.");
             }
 
+            if (!IsValidEmail(command.Email))
+            {
+                return CommandResult.BadRequest("Неправильный эмейл"); 
+            }
+
+            var fullName = $"{command.Surname} {command.Name}";
+            if (fullName.Split(" ").Length != 2)
+                return CommandResult.Forbidden("Неправильное имя и фамилия должна быть без пробелов");
+
             // Создаем нового пользователя
             var newUser = UserEntity.Create(
-                fullname: $"{command.Surname} {command.Name}",
+                fullname: fullName,
                 email: command.Email,
                 password: command.Password,
                 userType: command.UserType,
@@ -50,6 +59,25 @@ namespace Flsurf.Application.User.Commands
             await _context.SaveChangesAsync();
 
             return CommandResult.Success(newUser.Id);
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            var trimmedEmail = email.Trim();
+
+            if (trimmedEmail.EndsWith("."))
+            {
+                return false; // suggested by @TK-421
+            }
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == trimmedEmail;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

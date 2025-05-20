@@ -58,7 +58,7 @@ namespace Flsurf.Application.Freelance.Commands.FreelancerProfile
 
             // Создаем новый профиль
             var profile = FreelancerProfileEntity.Create(user.Id, command.Experience, command.HourlyRate, command.Resume);
-            user.Type = Domain.User.Enums.UserTypes.Freelancer; 
+            user.ChangeUserType(Domain.User.Enums.UserTypes.Freelancer); 
 
             _dbContext.FreelancerProfiles.Add(profile);
             await _dbContext.SaveChangesAsync();

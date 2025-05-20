@@ -1510,7 +1510,7 @@ namespace Flsurf.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserGatewayCustomerMappings");
+                    b.ToTable("UserPaymentGatewayCustomers");
                 });
 
             modelBuilder.Entity("Flsurf.Domain.Payment.Entities.WalletEntity", b =>

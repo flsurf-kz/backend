@@ -30,7 +30,7 @@ namespace Flsurf.Infrastructure.Data
         public DbSet<TransactionEntity> Transactions { get; set; }
         public DbSet<WalletEntity> Wallets { get; set; }
         public DbSet<PaymentMethodEntity> PaymentMethods { get; set; }
-        public DbSet<UserPaymentGatewayCustomer> UserGatewayCustomerMappings { get; set; }
+        public DbSet<UserPaymentGatewayCustomer> UserPaymentGatewayCustomers { get; set; }
 
         // Staff 
         public DbSet<TicketEntity> Tickets { get; set; }

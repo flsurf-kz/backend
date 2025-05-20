@@ -388,6 +388,24 @@ export interface IClient {
      * @param body (optional) 
      * @return OK
      */
+    kickFreelancerMember(body?: KickFreelancerFromGroupCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    reactToInvitation(body?: ReactToTeamInvitationCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    inviteFreelancerToTeam(body?: InviteFreelancerToTeamCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
     createJob(body?: CreateJobCommand | undefined): Promise<CommandResult>;
 
     /**
@@ -3569,6 +3587,132 @@ export class Client implements IClient {
             });
         }
         return Promise.resolve<FreelancerTeamEntity[]>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    kickFreelancerMember(body?: KickFreelancerFromGroupCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/freelancer-team/kick";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processKickFreelancerMember(_response);
+        });
+    }
+
+    protected processKickFreelancerMember(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    reactToInvitation(body?: ReactToTeamInvitationCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/freelancer-team/react-to-invitation";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processReactToInvitation(_response);
+        });
+    }
+
+    protected processReactToInvitation(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    inviteFreelancerToTeam(body?: InviteFreelancerToTeamCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/freelancer-team/invite";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processInviteFreelancerToTeam(_response);
+        });
+    }
+
+    protected processInviteFreelancerToTeam(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
     }
 
     /**
@@ -9304,7 +9448,7 @@ export interface ICreateNotificationCommand {
 export class CreateSetupIntentCommand implements ICreateSetupIntentCommand {
     providerId!: string;
     systemId?: string | undefined;
-    returnUrl!: string;
+    returnUrl?: string | undefined;
     metadata?: { [key: string]: string; } | undefined;
 
     constructor(data?: ICreateSetupIntentCommand) {
@@ -9357,7 +9501,7 @@ export class CreateSetupIntentCommand implements ICreateSetupIntentCommand {
 export interface ICreateSetupIntentCommand {
     providerId: string;
     systemId?: string | undefined;
-    returnUrl: string;
+    returnUrl?: string | undefined;
     metadata?: { [key: string]: string; } | undefined;
 }
 
@@ -11400,6 +11544,46 @@ export interface IInitiateDisputeCommand {
     reason?: string | undefined;
 }
 
+export class InviteFreelancerToTeamCommand implements IInviteFreelancerToTeamCommand {
+    readonly freelanceGroupId?: string;
+    readonly userId?: string;
+
+    constructor(data?: IInviteFreelancerToTeamCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            (<any>this).freelanceGroupId = _data["freelanceGroupId"];
+            (<any>this).userId = _data["userId"];
+        }
+    }
+
+    static fromJS(data: any): InviteFreelancerToTeamCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new InviteFreelancerToTeamCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["freelanceGroupId"] = this.freelanceGroupId;
+        data["userId"] = this.userId;
+        return data;
+    }
+}
+
+export interface IInviteFreelancerToTeamCommand {
+    freelanceGroupId?: string;
+    userId?: string;
+}
+
 export class InviteMemberDto implements IInviteMemberDto {
     chatId?: string;
     userId?: string;
@@ -11831,6 +12015,46 @@ export interface IJobReviewEntity {
     lastModifiedById?: string | undefined;
     lastModifiedAt?: Date | undefined;
     id: string;
+}
+
+export class KickFreelancerFromGroupCommand implements IKickFreelancerFromGroupCommand {
+    userId?: string;
+    teamId?: string;
+
+    constructor(data?: IKickFreelancerFromGroupCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.teamId = _data["teamId"];
+        }
+    }
+
+    static fromJS(data: any): KickFreelancerFromGroupCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new KickFreelancerFromGroupCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["teamId"] = this.teamId;
+        return data;
+    }
+}
+
+export interface IKickFreelancerFromGroupCommand {
+    userId?: string;
+    teamId?: string;
 }
 
 export class KickMemberDto implements IKickMemberDto {
@@ -13067,6 +13291,46 @@ export interface IReactToTaskCommand {
     approve?: boolean;
     newTitle?: string | undefined;
     newDescription?: string | undefined;
+}
+
+export class ReactToTeamInvitationCommand implements IReactToTeamInvitationCommand {
+    invitationId?: string;
+    accepted?: boolean;
+
+    constructor(data?: IReactToTeamInvitationCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.invitationId = _data["invitationId"];
+            this.accepted = _data["accepted"];
+        }
+    }
+
+    static fromJS(data: any): ReactToTeamInvitationCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new ReactToTeamInvitationCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["invitationId"] = this.invitationId;
+        data["accepted"] = this.accepted;
+        return data;
+    }
+}
+
+export interface IReactToTeamInvitationCommand {
+    invitationId?: string;
+    accepted?: boolean;
 }
 
 export class ReactToWorkSessionCommand implements IReactToWorkSessionCommand {
@@ -15505,7 +15769,7 @@ export class UserEntity implements IUserEntity {
     surname!: string;
     fullname!: string;
     role!: UserEntityRole;
-    type!: UserEntityType;
+    readonly type!: UserEntityType;
     email!: string;
     avatar?: FileEntity;
     isOnline!: boolean;
@@ -15538,7 +15802,7 @@ export class UserEntity implements IUserEntity {
             this.surname = _data["surname"];
             this.fullname = _data["fullname"];
             this.role = _data["role"];
-            this.type = _data["type"];
+            (<any>this).type = _data["type"];
             this.email = _data["email"];
             this.avatar = _data["avatar"] ? FileEntity.fromJS(_data["avatar"]) : <any>undefined;
             this.isOnline = _data["isOnline"];

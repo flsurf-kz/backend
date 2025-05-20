@@ -69,6 +69,7 @@
 
   <ItemGroup>
     <Folder Include="Application\Freelance\EventHandlers\" />
+    <Folder Include="Migrations\EventStore\" />
   </ItemGroup>
 
   <ItemGroup>

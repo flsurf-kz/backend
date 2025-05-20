@@ -9,6 +9,9 @@ namespace Flsurf.Application.Freelance.Interfaces
         CreateFreelancerTeamHandler CreateFreelancerTeam();
         UpdateFreelancerTeamHandler UpdateFreelancerTeam();
         DeleteFreelancerTeamHandler DeleteFreelancerTeam();
+        KickFreelancerFromGroup KickFreelancerFromGroup();
+        ReactToTeamInvitationHandler ReactToTeamInvitation();
+        InviteFreelancerToTeamHandler InviteFreelancerToTeam(); 
 
         // Запрос
         GetFreelancerTeamsHandler GetFreelancerTeams(); // если он существует как Handler

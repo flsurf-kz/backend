@@ -32,5 +32,20 @@ namespace Flsurf.Application.Freelance.Services
         {
             return _provider.GetRequiredService<GetFreelancerTeamsHandler>();
         }
+
+        public KickFreelancerFromGroup KickFreelancerFromGroup()
+        {
+            return _provider.GetRequiredService<KickFreelancerFromGroup>();
+        }
+
+        public ReactToTeamInvitationHandler ReactToTeamInvitation()
+        {
+            return _provider.GetRequiredService<ReactToTeamInvitationHandler>();
+        }
+
+        public InviteFreelancerToTeamHandler InviteFreelancerToTeam()
+        {
+            return _provider.GetRequiredService<InviteFreelancerToTeamHandler>();
+        }
     }
 }
