@@ -10,6 +10,7 @@ namespace Flsurf.Domain.Freelance.Entities
     {
         [ForeignKey("Job")]
         public Guid JobId { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
         public JobEntity Job { get; set; } = null!;
         [ForeignKey("User")]
         public Guid FreelancerId { get; set; }

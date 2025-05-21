@@ -13079,7 +13079,6 @@ export interface IProfileViewDto {
 
 export class ProposalEntity implements IProposalEntity {
     jobId?: string;
-    job?: JobEntity;
     freelancerId?: string;
     freelancer?: UserEntity;
     proposedRate?: number;
@@ -13104,7 +13103,6 @@ export class ProposalEntity implements IProposalEntity {
     init(_data?: any) {
         if (_data) {
             this.jobId = _data["jobId"];
-            this.job = _data["job"] ? JobEntity.fromJS(_data["job"]) : <any>undefined;
             this.freelancerId = _data["freelancerId"];
             this.freelancer = _data["freelancer"] ? UserEntity.fromJS(_data["freelancer"]) : <any>undefined;
             this.proposedRate = _data["proposedRate"];
@@ -13133,7 +13131,6 @@ export class ProposalEntity implements IProposalEntity {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["jobId"] = this.jobId;
-        data["job"] = this.job ? this.job.toJSON() : <any>undefined;
         data["freelancerId"] = this.freelancerId;
         data["freelancer"] = this.freelancer ? this.freelancer.toJSON() : <any>undefined;
         data["proposedRate"] = this.proposedRate;
@@ -13155,7 +13152,6 @@ export class ProposalEntity implements IProposalEntity {
 
 export interface IProposalEntity {
     jobId?: string;
-    job?: JobEntity;
     freelancerId?: string;
     freelancer?: UserEntity;
     proposedRate?: number;
