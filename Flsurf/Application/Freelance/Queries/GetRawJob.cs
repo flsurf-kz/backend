@@ -14,7 +14,10 @@ namespace Flsurf.Application.Freelance.Queries
     {
         public async Task<JobEntity?> Handle(GetRawJobQuery query)
         {
-            var job = await dbContext.Jobs.IncludeStandard().FirstOrDefaultAsync(x => x.Id == query.JobId);
+            var job = await dbContext.Jobs
+                .IncludeStandard()
+                
+                .FirstOrDefaultAsync(x => x.Id == query.JobId);
             return job; 
         }
     }

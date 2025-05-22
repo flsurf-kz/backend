@@ -9,6 +9,8 @@ namespace Flsurf.Infrastructure.Data.Queries
         {
             return query
                 .Include(x => x.Proposals)
+                    .ThenInclude(x => x.Freelancer)
+                        .ThenInclude(x => x.Avatar)
                 .Include(x => x.RequiredSkills)
                 .Include(x => x.Category)
                 .Include(x => x.Employer)
