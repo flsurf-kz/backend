@@ -48,7 +48,7 @@ namespace Flsurf.Presentation.Web.Controllers
         }
 
         [HttpGet("list", Name = "GetSkills")]
-        public async Task<ActionResult<ICollection<SkillModel>>> GetSkills([FromQuery] string searchQuery)
+        public async Task<ActionResult<ICollection<SkillModel>>> GetSkills([FromQuery] string? searchQuery)
         {
             var handler = _skillService.GetSkills();
             var skills = await handler.Handle(new GetSkillsQuery() { SearchQuery = searchQuery});

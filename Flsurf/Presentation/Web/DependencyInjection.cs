@@ -22,6 +22,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using Microsoft.Extensions.Options;
 using Google.Protobuf.WellKnownTypes;
+using Newtonsoft.Json;
 
 namespace Flsurf.Presentation.Web
 {
@@ -176,6 +177,7 @@ namespace Flsurf.Presentation.Web
                     var httpAcc = sp.GetRequiredService<IHttpContextAccessor>();
 
                     // Регистрируем конвертер только для FileEntity
+                    opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore; 
                     opts.SerializerSettings.Converters.Add(
                         new FileEntityJsonConverter(httpAcc, environment)
                     );

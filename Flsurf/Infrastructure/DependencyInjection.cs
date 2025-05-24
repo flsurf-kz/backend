@@ -97,7 +97,8 @@ namespace Flsurf.Infrastructure
 
                 services.AddScoped<IFileStorageAdapter, LocalFileStorageAdapter>(x => new LocalFileStorageAdapter(
                     filesDirectory, 
-                    x.GetRequiredService<ILogger<LocalFileStorageAdapter>>()));
+                    x.GetRequiredService<ILogger<LocalFileStorageAdapter>>(), 
+                    environment));
             }
             else if (type == StorageTypes.Minio)
             {
