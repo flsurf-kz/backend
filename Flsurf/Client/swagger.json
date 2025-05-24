@@ -97504,7 +97504,8 @@
         "Not": null,
         "Required": [
           "createdAt",
-          "id"
+          "id",
+          "name"
         ],
         "Items": null,
         "MaxItems": null,
@@ -97521,7 +97522,7 @@
             "Minimum": null,
             "ExclusiveMinimum": null,
             "MaxLength": null,
-            "MinLength": null,
+            "MinLength": 1,
             "Pattern": null,
             "MultipleOf": null,
             "Default": null,
@@ -97544,7 +97545,7 @@
             "Discriminator": null,
             "Example": null,
             "Enum": [],
-            "Nullable": true,
+            "Nullable": false,
             "ExternalDocs": null,
             "Deprecated": false,
             "Xml": null,
@@ -111877,6 +111878,6 @@
   ],
   "ExternalDocs": null,
   "Extensions": {},
-  "HashCode": "9F74698F83E4393924DC0D37C7B16A21E1FBEBF30823FA46A2026D5E39050EBBE92A4D68193FC7EE700B49B99987665A9C47F114D9E2A9E2810B76276D668256",
+  "HashCode": "07382C44B12B73A653C5DE7835DBC8E8021F8B6956D2FC304F5325C2FA64D60883C3C8414097676BB8835605E17F6CAFFCB5064194A11CC175651E0E1409B33E",
   "Annotations": null
 }

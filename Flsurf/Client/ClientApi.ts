@@ -13798,7 +13798,7 @@ export interface ISendResetCodeCommand {
 }
 
 export class SkillEntity implements ISkillEntity {
-    name?: string | undefined;
+    name!: string;
     jobs?: JobEntity[] | undefined;
     createdById?: string | undefined;
     createdAt!: Date;
@@ -13856,7 +13856,7 @@ export class SkillEntity implements ISkillEntity {
 }
 
 export interface ISkillEntity {
-    name?: string | undefined;
+    name: string;
     jobs?: JobEntity[] | undefined;
     createdById?: string | undefined;
     createdAt: Date;
