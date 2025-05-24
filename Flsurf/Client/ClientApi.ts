@@ -16105,6 +16105,7 @@ export class WorkSessionEntity implements IWorkSessionEntity {
     rejectedAt?: Date | undefined;
     status?: WorkSessionEntityStatus;
     readonly autoApproved?: boolean;
+    readonly workedHours?: number;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
@@ -16140,6 +16141,7 @@ export class WorkSessionEntity implements IWorkSessionEntity {
             this.rejectedAt = _data["rejectedAt"] ? new Date(_data["rejectedAt"].toString()) : <any>undefined;
             this.status = _data["status"];
             (<any>this).autoApproved = _data["autoApproved"];
+            (<any>this).workedHours = _data["workedHours"];
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
@@ -16175,6 +16177,7 @@ export class WorkSessionEntity implements IWorkSessionEntity {
         data["rejectedAt"] = this.rejectedAt ? this.rejectedAt.toISOString() : <any>undefined;
         data["status"] = this.status;
         data["autoApproved"] = this.autoApproved;
+        data["workedHours"] = this.workedHours;
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["lastModifiedById"] = this.lastModifiedById;
@@ -16199,6 +16202,7 @@ export interface IWorkSessionEntity {
     rejectedAt?: Date | undefined;
     status?: WorkSessionEntityStatus;
     autoApproved?: boolean;
+    workedHours?: number;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;

@@ -39,6 +39,15 @@ namespace Flsurf.Domain.Freelance.Entities
         // ⏳ Если клиент не ответил за 2 дня, автопринятие
         public bool AutoApproved => SubmittedAt.HasValue && (DateTime.UtcNow - SubmittedAt.Value).TotalHours >= 48;
 
+        [NotMapped]
+        public int WorkedHours {
+            get {
+                if (!EndDate.HasValue)
+                    return 0;
+                return (StartDate - (EndDate ?? DateTime.UtcNow)).Hours; 
+            } 
+        }
+
         public static WorkSessionEntity Create(UserEntity freelancer, ContractEntity contract)
         {
             var session = new WorkSessionEntity
@@ -54,14 +63,6 @@ namespace Flsurf.Domain.Freelance.Entities
             return session; 
         }
 
-        public int WorkedHours()
-        {
-            if (EndDate == null)
-                return 0;
-
-            return (int)(EndDate.Value - StartDate).TotalHours; // Фикс
-        }
-
 
         public Money TotalEarned()
         {
@@ -74,7 +75,7 @@ namespace Flsurf.Domain.Freelance.Entities
             if (EndDate == null)
                 return new Money(0); // Фикс
 
-            return Contract.CostPerHour * WorkedHours();
+            return Contract.CostPerHour * WorkedHours;
         }
 
         public IEnumerable<DateOnly> GetWorkDates()
@@ -105,7 +106,7 @@ namespace Flsurf.Domain.Freelance.Entities
         {
             if (!IsActive) return;
 
-            if (files.Count < WorkedHours())
+            if (files.Count < WorkedHours)
                 throw new DomainException("Должно быть минимум 1 фото за час работы");
 
             IsActive = false;
