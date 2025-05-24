@@ -16,6 +16,9 @@ namespace Flsurf.Application.Freelance.Services
         public GetClientOrderInfoHandler GetClientOrderInfo() =>
             _serviceProvider.GetRequiredService<GetClientOrderInfoHandler>();
 
+        public GetClientProfileHandler GetClientProfile() =>
+            _serviceProvider.GetRequiredService<GetClientProfileHandler>(); 
+
         public CreateClientProfileHandler CreateClientProfile() =>
             _serviceProvider.GetRequiredService<CreateClientProfileHandler>();
 

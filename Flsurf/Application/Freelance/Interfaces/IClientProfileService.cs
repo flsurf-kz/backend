@@ -6,6 +6,7 @@ namespace Flsurf.Application.Freelance.Interfaces
     public interface IClientProfileService
     {
         GetClientOrderInfoHandler GetClientOrderInfo();
+        GetClientProfileHandler GetClientProfile();
         CreateClientProfileHandler CreateClientProfile();
         SuspendClientProfileHandler SuspendClientProfile();
         UpdateClientProfileHandler UpdateClientProfile();

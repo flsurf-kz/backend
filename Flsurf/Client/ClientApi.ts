@@ -140,6 +140,16 @@ export interface IClient {
     getClientOrderInfo(userId: string): Promise<ClientJobInfo>;
 
     /**
+     * @return OK
+     */
+    getMyProfileInfo(): Promise<ClientProfileEntity>;
+
+    /**
+     * @return OK
+     */
+    getClientProfileInfo(userId: string): Promise<ClientProfileEntity>;
+
+    /**
      * @param body (optional) 
      * @return OK
      */
@@ -1812,6 +1822,83 @@ export class Client implements IClient {
             });
         }
         return Promise.resolve<ClientJobInfo>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    getMyProfileInfo(): Promise<ClientProfileEntity> {
+        let url_ = this.baseUrl + "/api/client-profile/my";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetMyProfileInfo(_response);
+        });
+    }
+
+    protected processGetMyProfileInfo(response: Response): Promise<ClientProfileEntity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ClientProfileEntity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ClientProfileEntity>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    getClientProfileInfo(userId: string): Promise<ClientProfileEntity> {
+        let url_ = this.baseUrl + "/api/client-profile/{userId}";
+        if (userId === undefined || userId === null)
+            throw new Error("The parameter 'userId' must be defined.");
+        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "GET",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetClientProfileInfo(_response);
+        });
+    }
+
+    protected processGetClientProfileInfo(response: Response): Promise<ClientProfileEntity> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ClientProfileEntity.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ClientProfileEntity>(null as any);
     }
 
     /**
@@ -8268,6 +8355,130 @@ export interface IClientJobInfo {
     lastActiveAt?: string | undefined;
     isPhoneVerified?: boolean;
     hasPremium?: boolean;
+}
+
+export class ClientProfileEntity implements IClientProfileEntity {
+    userId?: string;
+    user?: UserEntity;
+    companyName!: string;
+    companyDescription?: string | undefined;
+    companyWebsite?: string | undefined;
+    location?: string | undefined;
+    companyLogo?: FileEntity;
+    clientType?: ClientProfileEntityClientType;
+    isPhoneVerified?: boolean;
+    phoneNumber?: string | undefined;
+    jobs?: JobEntity[] | undefined;
+    contracts?: ContractEntity[] | undefined;
+    lastActiveAt?: Date | undefined;
+    suspended?: boolean;
+    createdById?: string | undefined;
+    createdAt!: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id!: string;
+
+    constructor(data?: IClientProfileEntity) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.user = _data["user"] ? UserEntity.fromJS(_data["user"]) : <any>undefined;
+            this.companyName = _data["companyName"];
+            this.companyDescription = _data["companyDescription"];
+            this.companyWebsite = _data["companyWebsite"];
+            this.location = _data["location"];
+            this.companyLogo = _data["companyLogo"] ? FileEntity.fromJS(_data["companyLogo"]) : <any>undefined;
+            this.clientType = _data["clientType"];
+            this.isPhoneVerified = _data["isPhoneVerified"];
+            this.phoneNumber = _data["phoneNumber"];
+            if (Array.isArray(_data["jobs"])) {
+                this.jobs = [] as any;
+                for (let item of _data["jobs"])
+                    this.jobs!.push(JobEntity.fromJS(item));
+            }
+            if (Array.isArray(_data["contracts"])) {
+                this.contracts = [] as any;
+                for (let item of _data["contracts"])
+                    this.contracts!.push(ContractEntity.fromJS(item));
+            }
+            this.lastActiveAt = _data["lastActiveAt"] ? new Date(_data["lastActiveAt"].toString()) : <any>undefined;
+            this.suspended = _data["suspended"];
+            this.createdById = _data["createdById"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.lastModifiedById = _data["lastModifiedById"];
+            this.lastModifiedAt = _data["lastModifiedAt"] ? new Date(_data["lastModifiedAt"].toString()) : <any>undefined;
+            this.id = _data["id"];
+        }
+    }
+
+    static fromJS(data: any): ClientProfileEntity {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClientProfileEntity();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["user"] = this.user ? this.user.toJSON() : <any>undefined;
+        data["companyName"] = this.companyName;
+        data["companyDescription"] = this.companyDescription;
+        data["companyWebsite"] = this.companyWebsite;
+        data["location"] = this.location;
+        data["companyLogo"] = this.companyLogo ? this.companyLogo.toJSON() : <any>undefined;
+        data["clientType"] = this.clientType;
+        data["isPhoneVerified"] = this.isPhoneVerified;
+        data["phoneNumber"] = this.phoneNumber;
+        if (Array.isArray(this.jobs)) {
+            data["jobs"] = [];
+            for (let item of this.jobs)
+                data["jobs"].push(item.toJSON());
+        }
+        if (Array.isArray(this.contracts)) {
+            data["contracts"] = [];
+            for (let item of this.contracts)
+                data["contracts"].push(item.toJSON());
+        }
+        data["lastActiveAt"] = this.lastActiveAt ? this.lastActiveAt.toISOString() : <any>undefined;
+        data["suspended"] = this.suspended;
+        data["createdById"] = this.createdById;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["lastModifiedById"] = this.lastModifiedById;
+        data["lastModifiedAt"] = this.lastModifiedAt ? this.lastModifiedAt.toISOString() : <any>undefined;
+        data["id"] = this.id;
+        return data;
+    }
+}
+
+export interface IClientProfileEntity {
+    userId?: string;
+    user?: UserEntity;
+    companyName: string;
+    companyDescription?: string | undefined;
+    companyWebsite?: string | undefined;
+    location?: string | undefined;
+    companyLogo?: FileEntity;
+    clientType?: ClientProfileEntityClientType;
+    isPhoneVerified?: boolean;
+    phoneNumber?: string | undefined;
+    jobs?: JobEntity[] | undefined;
+    contracts?: ContractEntity[] | undefined;
+    lastActiveAt?: Date | undefined;
+    suspended?: boolean;
+    createdById?: string | undefined;
+    createdAt: Date;
+    lastModifiedById?: string | undefined;
+    lastModifiedAt?: Date | undefined;
+    id: string;
 }
 
 export class ClientRejectContractCompletionCommand implements IClientRejectContractCompletionCommand {
@@ -16323,6 +16534,11 @@ export enum ChatEntityType {
     Group = "Group",
     Direct = "Direct",
     Support = "Support",
+}
+
+export enum ClientProfileEntityClientType {
+    Company = "Company",
+    Indivdual = "Indivdual",
 }
 
 export enum CommandResultStatus {

@@ -4,8 +4,10 @@ using Flsurf.Application.Freelance.Commands.ClientProfile;
 using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Queries;
 using Flsurf.Application.Freelance.Queries.Responses;
+using Flsurf.Domain.Freelance.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Bcpg;
 
 namespace Flsurf.Presentation.Web.Controllers
 {
@@ -33,6 +35,28 @@ namespace Flsurf.Presentation.Web.Controllers
             var result = await handler.Handle(query);
             if (result == null)
                 return NotFound("Информация о заказах не найдена");
+            return Ok(result);
+        }
+
+        [HttpGet("my", Name = "GetMyProfileInfo")]
+        public async Task<ActionResult<ClientProfileEntity>> GetMyClientProfileInfo()
+        {
+            var query = new GetClientProfileQuery() { };
+
+            var result = await _clientProfileService.GetClientProfile().Handle(query);
+            if (result == null)
+                return NotFound("не найдено");
+            return result; 
+        }
+
+        [HttpGet("{userId}", Name = "GetClientProfileInfo")]
+        public async Task<ActionResult<ClientProfileEntity>> GetClientProfileInfo(Guid userId)
+        {
+            var query = new GetClientProfileQuery() { UserId = userId };
+
+            var result = await _clientProfileService.GetClientProfile().Handle(query);
+            if (result == null)
+                return NotFound("не найдено"); 
             return Ok(result);
         }
 
