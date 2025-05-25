@@ -9,5 +9,6 @@ namespace Flsurf.Application.Freelance.Interfaces
         UpdateCategoryHandler UpdateCategory();
         DeleteCategoryHandler DeleteCategory();
         GetCategoriesHandler GetCategories();
+        GetCategoryHandler GetCategory(); 
     }
 }

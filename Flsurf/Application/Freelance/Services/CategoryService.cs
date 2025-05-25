@@ -24,5 +24,8 @@ namespace Flsurf.Application.Freelance.Services
 
         public GetCategoriesHandler GetCategories() =>
             _serviceProvider.GetRequiredService<GetCategoriesHandler>();
+
+        public GetCategoryHandler GetCategory() =>
+            _serviceProvider.GetRequiredService<GetCategoryHandler>(); 
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "flsurf-client",
-  "version": "1.0.60",
+  "version": "1.0.61",
   "description": "TypeScript client generated for Flsurf API",
   "main": "ClientApi.ts",
   "scripts": {

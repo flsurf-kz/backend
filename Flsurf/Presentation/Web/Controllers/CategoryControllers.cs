@@ -53,5 +53,13 @@ namespace Flsurf.Presentation.Web.Controllers
             var categories = await handler.Handle(new GetCategoriesQuery() { SearchQuery = searchQuery });
             return Ok(categories);
         }
+
+        [HttpGet("{categoryId}", Name = "GetCategory")]
+        public async Task<ActionResult<CategoryEntity?>> GetCategory(Guid categoryId)
+        {
+            var result = await _categoryService.GetCategory().Handle(new GetCategoryQuery() { CategoryId = categoryId });
+
+            return result; 
+        }
     }
 }
