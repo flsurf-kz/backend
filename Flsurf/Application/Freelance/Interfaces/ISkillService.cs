@@ -12,5 +12,6 @@ namespace Flsurf.Application.Freelance.Interfaces
 
         // Запрос
         GetSkillsHandler GetSkills();
+        GetSkillHandler GetSkill(); 
     }
 }

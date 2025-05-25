@@ -24,5 +24,8 @@ namespace Flsurf.Application.Freelance.Services
 
         public GetSkillsHandler GetSkills() =>
             _serviceProvider.GetRequiredService<GetSkillsHandler>();
+
+        public GetSkillHandler GetSkill() =>
+            _serviceProvider.GetRequiredService<GetSkillHandler>(); 
     }
 }

@@ -54,5 +54,13 @@ namespace Flsurf.Presentation.Web.Controllers
             var skills = await handler.Handle(new GetSkillsQuery() { SearchQuery = searchQuery});
             return Ok(skills);
         }
+
+        [HttpGet("{skillId}", Name = "GetSkill")]
+        public async Task<ActionResult<SkillModel?>> GetSkill(Guid skillId)
+        {
+            var result = await _skillService.GetSkill().Handle(new GetSkillQuery() { SkillId = skillId });
+
+            return result; 
+        } 
     }
 }
