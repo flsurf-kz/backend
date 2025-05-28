@@ -40,6 +40,8 @@ namespace Flsurf.Domain.Freelance.Entities
 
         [JsonIgnore]
         public ICollection<ChatEntity> Chats { get; set; } = new List<ChatEntity>(); // Инициализация важна
+        /// <summary>Количество дизлайков (загружается / изменяется только из апп-слоя)</summary>
+        public int DislikesCount { get; private set; }
 
         public static JobEntity CreateFixed(
             UserEntity employer,
@@ -97,6 +99,9 @@ namespace Flsurf.Domain.Freelance.Entities
                 Category = category,
             };
         }
+
+        /* internal helper — инкапсулирует правку счётчика */
+        public void ApplyDislikes(int total) => DislikesCount = total;
 
         public void SetFiles(ICollection<FileEntity> files)
         {

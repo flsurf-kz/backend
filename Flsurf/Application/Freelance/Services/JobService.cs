@@ -35,7 +35,10 @@ namespace Flsurf.Application.Freelance.Services
             _serviceProvider.GetRequiredService<BookmarkJobHandler>();
 
         public GetClientOrderInfoHandler GetClientOrderInfo() =>
-            _serviceProvider.GetRequiredService<GetClientOrderInfoHandler>(); 
+            _serviceProvider.GetRequiredService<GetClientOrderInfoHandler>();
+
+        public DislikeJobHandler DislikeJob() =>
+            _serviceProvider.GetRequiredService<DislikeJobHandler>();
 
         public HideJobHandler HideJob() =>
             _serviceProvider.GetRequiredService<HideJobHandler>();

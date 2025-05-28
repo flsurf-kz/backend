@@ -514,6 +514,11 @@ export interface IClient {
     startChatWithFreelancer(body?: StartChatWithFreelancerCommand | undefined): Promise<CommandResult>;
 
     /**
+     * @return OK
+     */
+    dislikeJob(jobId: string): Promise<CommandResult>;
+
+    /**
      * @param starts (optional) 
      * @param ends (optional) 
      * @return OK
@@ -4540,6 +4545,46 @@ export class Client implements IClient {
     }
 
     protected processStartChatWithFreelancer(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    dislikeJob(jobId: string): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/job/{jobId}/dislike";
+        if (jobId === undefined || jobId === null)
+            throw new Error("The parameter 'jobId' must be defined.");
+        url_ = url_.replace("{jobId}", encodeURIComponent("" + jobId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "POST",
+            headers: {
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDislikeJob(_response);
+        });
+    }
+
+    protected processDislikeJob(response: Response): Promise<CommandResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -12118,6 +12163,7 @@ export class JobEntity implements IJobEntity {
     readonly files?: FileEntity[] | undefined;
     isHidden?: boolean;
     chats?: ChatEntity[] | undefined;
+    readonly dislikesCount?: number;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
@@ -12171,6 +12217,7 @@ export class JobEntity implements IJobEntity {
                 for (let item of _data["chats"])
                     this.chats!.push(ChatEntity.fromJS(item));
             }
+            (<any>this).dislikesCount = _data["dislikesCount"];
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
@@ -12224,6 +12271,7 @@ export class JobEntity implements IJobEntity {
             for (let item of this.chats)
                 data["chats"].push(item.toJSON());
         }
+        data["dislikesCount"] = this.dislikesCount;
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["lastModifiedById"] = this.lastModifiedById;
@@ -12254,6 +12302,7 @@ export interface IJobEntity {
     files?: FileEntity[] | undefined;
     isHidden?: boolean;
     chats?: ChatEntity[] | undefined;
+    dislikesCount?: number;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;

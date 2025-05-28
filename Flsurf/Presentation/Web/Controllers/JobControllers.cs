@@ -175,5 +175,14 @@ namespace Flsurf.Presentation.Web.Controllers
 
             return result.MapResult(this); 
         }
+
+        [HttpPost("{jobId}/dislike", Name = "DislikeJob")]
+        [Authorize]
+        public async Task<ActionResult<CommandResult>> DislikeJob(Guid jobId) 
+        {
+            var result = await _jobService.DislikeJob().Handle(new DislikeJobCommand() { JobId = jobId });
+
+            return result.MapResult(this); 
+        }
     }
 }
