@@ -4,7 +4,6 @@ using Flsurf.Application.Staff.Perms;
 using Flsurf.Domain.Staff.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
-using MimeDetective.Storage;
 
 namespace Flsurf.Application.Staff.UseCases
 {

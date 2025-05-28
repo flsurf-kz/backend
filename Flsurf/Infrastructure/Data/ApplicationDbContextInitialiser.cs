@@ -109,8 +109,8 @@ namespace Flsurf.Infrastructure.Data
             {
                 var providerImages = new Dictionary<string, string>();
 
-                providerImages[nameof(PaymentProviders.BankCardRu)] = "https://assets.playerok.com/web-app/images/Icons/card-ru.svg";
-                providerImages[nameof(PaymentProviders.Test)] = "https://assets.playerok.com/web-app/images/Icons/Wallet.png";
+                providerImages[nameof(PaymentProviders.BankCardRu)] = "https://card-banks.ru/wp-content/uploads/2016/12/creditcard-300x247.png";
+                providerImages[nameof(PaymentProviders.Test)] = "https://cdn-icons-png.flaticon.com/512/6020/6020687.png";
 
                 var providers = new List<TransactionProviderEntity>
                 {
@@ -132,6 +132,7 @@ namespace Flsurf.Infrastructure.Data
                         {
                             DownloadUrl = providerImages[provider.Name], 
                             Name = providerImages[provider.Name], 
+                            MimeType = "image/png"
                         });
                 }
 
