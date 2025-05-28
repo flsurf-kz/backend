@@ -8856,6 +8856,7 @@ export class ContractEntity implements IContractEntity {
     freelancer?: UserEntity;
     employerId?: string;
     employer?: UserEntity;
+    proposalId?: string;
     startDate?: Date;
     endDate?: Date | undefined;
     budget?: Money;
@@ -8897,6 +8898,7 @@ export class ContractEntity implements IContractEntity {
             this.freelancer = _data["freelancer"] ? UserEntity.fromJS(_data["freelancer"]) : <any>undefined;
             this.employerId = _data["employerId"];
             this.employer = _data["employer"] ? UserEntity.fromJS(_data["employer"]) : <any>undefined;
+            this.proposalId = _data["proposalId"];
             this.startDate = _data["startDate"] ? new Date(_data["startDate"].toString()) : <any>undefined;
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
             this.budget = _data["budget"] ? Money.fromJS(_data["budget"]) : <any>undefined;
@@ -8950,6 +8952,7 @@ export class ContractEntity implements IContractEntity {
         data["freelancer"] = this.freelancer ? this.freelancer.toJSON() : <any>undefined;
         data["employerId"] = this.employerId;
         data["employer"] = this.employer ? this.employer.toJSON() : <any>undefined;
+        data["proposalId"] = this.proposalId;
         data["startDate"] = this.startDate ? this.startDate.toISOString() : <any>undefined;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
         data["budget"] = this.budget ? this.budget.toJSON() : <any>undefined;
@@ -8996,6 +8999,7 @@ export interface IContractEntity {
     freelancer?: UserEntity;
     employerId?: string;
     employer?: UserEntity;
+    proposalId?: string;
     startDate?: Date;
     endDate?: Date | undefined;
     budget?: Money;
@@ -9284,13 +9288,9 @@ export interface ICreateContestCommand {
 }
 
 export class CreateContractCommand implements ICreateContractCommand {
-    freelancerId?: string;
-    jobId?: string;
-    budget?: number | undefined;
-    costPerHour?: number | undefined;
-    budgetType?: CreateContractCommandBudgetType;
-    paymentSchedule?: CreateContractCommandPaymentSchedule;
-    contractTerms?: string | undefined;
+    proposalId!: string;
+    paymentSchedule!: CreateContractCommandPaymentSchedule;
+    contractTerms!: string;
     endDate?: Date | undefined;
 
     constructor(data?: ICreateContractCommand) {
@@ -9304,11 +9304,7 @@ export class CreateContractCommand implements ICreateContractCommand {
 
     init(_data?: any) {
         if (_data) {
-            this.freelancerId = _data["freelancerId"];
-            this.jobId = _data["jobId"];
-            this.budget = _data["budget"];
-            this.costPerHour = _data["costPerHour"];
-            this.budgetType = _data["budgetType"];
+            this.proposalId = _data["proposalId"];
             this.paymentSchedule = _data["paymentSchedule"];
             this.contractTerms = _data["contractTerms"];
             this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
@@ -9324,11 +9320,7 @@ export class CreateContractCommand implements ICreateContractCommand {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["freelancerId"] = this.freelancerId;
-        data["jobId"] = this.jobId;
-        data["budget"] = this.budget;
-        data["costPerHour"] = this.costPerHour;
-        data["budgetType"] = this.budgetType;
+        data["proposalId"] = this.proposalId;
         data["paymentSchedule"] = this.paymentSchedule;
         data["contractTerms"] = this.contractTerms;
         data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
@@ -9337,13 +9329,9 @@ export class CreateContractCommand implements ICreateContractCommand {
 }
 
 export interface ICreateContractCommand {
-    freelancerId?: string;
-    jobId?: string;
-    budget?: number | undefined;
-    costPerHour?: number | undefined;
-    budgetType?: CreateContractCommandBudgetType;
-    paymentSchedule?: CreateContractCommandPaymentSchedule;
-    contractTerms?: string | undefined;
+    proposalId: string;
+    paymentSchedule: CreateContractCommandPaymentSchedule;
+    contractTerms: string;
     endDate?: Date | undefined;
 }
 
@@ -13382,10 +13370,14 @@ export class ProposalEntity implements IProposalEntity {
     jobId?: string;
     freelancerId?: string;
     freelancer?: UserEntity;
-    proposedRate?: number;
+    proposedRate?: Money;
+    budgetType?: ProposalEntityBudgetType;
     coverLetter?: string | undefined;
     status?: ProposalEntityStatus;
     files?: FileEntity[] | undefined;
+    esitimatedDurationDays?: number;
+    similarExpriences?: string | undefined;
+    portfolioProjects?: PortfolioProjectEntity[] | undefined;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
@@ -13406,13 +13398,21 @@ export class ProposalEntity implements IProposalEntity {
             this.jobId = _data["jobId"];
             this.freelancerId = _data["freelancerId"];
             this.freelancer = _data["freelancer"] ? UserEntity.fromJS(_data["freelancer"]) : <any>undefined;
-            this.proposedRate = _data["proposedRate"];
+            this.proposedRate = _data["proposedRate"] ? Money.fromJS(_data["proposedRate"]) : <any>undefined;
+            this.budgetType = _data["budgetType"];
             this.coverLetter = _data["coverLetter"];
             this.status = _data["status"];
             if (Array.isArray(_data["files"])) {
                 this.files = [] as any;
                 for (let item of _data["files"])
                     this.files!.push(FileEntity.fromJS(item));
+            }
+            this.esitimatedDurationDays = _data["esitimatedDurationDays"];
+            this.similarExpriences = _data["similarExpriences"];
+            if (Array.isArray(_data["portfolioProjects"])) {
+                this.portfolioProjects = [] as any;
+                for (let item of _data["portfolioProjects"])
+                    this.portfolioProjects!.push(PortfolioProjectEntity.fromJS(item));
             }
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
@@ -13434,13 +13434,21 @@ export class ProposalEntity implements IProposalEntity {
         data["jobId"] = this.jobId;
         data["freelancerId"] = this.freelancerId;
         data["freelancer"] = this.freelancer ? this.freelancer.toJSON() : <any>undefined;
-        data["proposedRate"] = this.proposedRate;
+        data["proposedRate"] = this.proposedRate ? this.proposedRate.toJSON() : <any>undefined;
+        data["budgetType"] = this.budgetType;
         data["coverLetter"] = this.coverLetter;
         data["status"] = this.status;
         if (Array.isArray(this.files)) {
             data["files"] = [];
             for (let item of this.files)
                 data["files"].push(item.toJSON());
+        }
+        data["esitimatedDurationDays"] = this.esitimatedDurationDays;
+        data["similarExpriences"] = this.similarExpriences;
+        if (Array.isArray(this.portfolioProjects)) {
+            data["portfolioProjects"] = [];
+            for (let item of this.portfolioProjects)
+                data["portfolioProjects"].push(item.toJSON());
         }
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
@@ -13455,10 +13463,14 @@ export interface IProposalEntity {
     jobId?: string;
     freelancerId?: string;
     freelancer?: UserEntity;
-    proposedRate?: number;
+    proposedRate?: Money;
+    budgetType?: ProposalEntityBudgetType;
     coverLetter?: string | undefined;
     status?: ProposalEntityStatus;
     files?: FileEntity[] | undefined;
+    esitimatedDurationDays?: number;
+    similarExpriences?: string | undefined;
+    portfolioProjects?: PortfolioProjectEntity[] | undefined;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;
@@ -14427,9 +14439,14 @@ export interface ISubmitContestEntryCommand {
 }
 
 export class SubmitProposalCommand implements ISubmitProposalCommand {
-    jobId?: string;
-    coverLetter?: string | undefined;
+    jobId!: string;
+    coverLetter!: string;
+    budgetType!: SubmitProposalCommandBudgetType;
     proposedRate?: number | undefined;
+    files?: CreateFileDto[] | undefined;
+    estimatedDurationDays?: number;
+    similarExpirence?: string | undefined;
+    portfolioProjectsIds?: string[] | undefined;
 
     constructor(data?: ISubmitProposalCommand) {
         if (data) {
@@ -14444,7 +14461,20 @@ export class SubmitProposalCommand implements ISubmitProposalCommand {
         if (_data) {
             this.jobId = _data["jobId"];
             this.coverLetter = _data["coverLetter"];
+            this.budgetType = _data["budgetType"];
             this.proposedRate = _data["proposedRate"];
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files!.push(CreateFileDto.fromJS(item));
+            }
+            this.estimatedDurationDays = _data["estimatedDurationDays"];
+            this.similarExpirence = _data["similarExpirence"];
+            if (Array.isArray(_data["portfolioProjectsIds"])) {
+                this.portfolioProjectsIds = [] as any;
+                for (let item of _data["portfolioProjectsIds"])
+                    this.portfolioProjectsIds!.push(item);
+            }
         }
     }
 
@@ -14459,15 +14489,33 @@ export class SubmitProposalCommand implements ISubmitProposalCommand {
         data = typeof data === 'object' ? data : {};
         data["jobId"] = this.jobId;
         data["coverLetter"] = this.coverLetter;
+        data["budgetType"] = this.budgetType;
         data["proposedRate"] = this.proposedRate;
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
+        }
+        data["estimatedDurationDays"] = this.estimatedDurationDays;
+        data["similarExpirence"] = this.similarExpirence;
+        if (Array.isArray(this.portfolioProjectsIds)) {
+            data["portfolioProjectsIds"] = [];
+            for (let item of this.portfolioProjectsIds)
+                data["portfolioProjectsIds"].push(item);
+        }
         return data;
     }
 }
 
 export interface ISubmitProposalCommand {
-    jobId?: string;
-    coverLetter?: string | undefined;
+    jobId: string;
+    coverLetter: string;
+    budgetType: SubmitProposalCommandBudgetType;
     proposedRate?: number | undefined;
+    files?: CreateFileDto[] | undefined;
+    estimatedDurationDays?: number;
+    similarExpirence?: string | undefined;
+    portfolioProjectsIds?: string[] | undefined;
 }
 
 export class SubmitWorkSessionCommand implements ISubmitWorkSessionCommand {
@@ -16739,11 +16787,6 @@ export enum CreateClientProfileCommandEmployerType {
     Indivdual = "Indivdual",
 }
 
-export enum CreateContractCommandBudgetType {
-    Hourly = "Hourly",
-    Fixed = "Fixed",
-}
-
 export enum CreateContractCommandPaymentSchedule {
     Milestone = "Milestone",
     Weekly = "Weekly",
@@ -16938,6 +16981,11 @@ export enum NotificationEntityType {
     Other = "Other",
 }
 
+export enum ProposalEntityBudgetType {
+    Hourly = "Hourly",
+    Fixed = "Fixed",
+}
+
 export enum ProposalEntityStatus {
     Pending = "Pending",
     Accepted = "Accepted",
@@ -16992,6 +17040,11 @@ export enum StartPaymentFlowCommandType {
     SystemAdjustment = "SystemAdjustment",
     Bonus = "Bonus",
     Penalty = "Penalty",
+}
+
+export enum SubmitProposalCommandBudgetType {
+    Hourly = "Hourly",
+    Fixed = "Fixed",
 }
 
 export enum TaxInformationLegalStatus {

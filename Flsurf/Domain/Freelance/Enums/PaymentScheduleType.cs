@@ -10,5 +10,4 @@ namespace Flsurf.Domain.Freelance.Enums
         Monthly,       // Ежемесячно
         OnCompletion   // По завершению
     }
-
 }

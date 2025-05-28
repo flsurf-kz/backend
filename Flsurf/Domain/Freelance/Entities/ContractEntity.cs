@@ -17,6 +17,8 @@ namespace Flsurf.Domain.Freelance.Entities
         [ForeignKey("Employer")]
         public Guid EmployerId { get; set; }
         public UserEntity Employer { get; set; } = null!;
+        [ForeignKey(nameof(ProposalEntity))]
+        public Guid ProposalId { get; set; }
 
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -60,10 +62,11 @@ namespace Flsurf.Domain.Freelance.Entities
         public static ContractEntity CreateFixed(
             Guid employerId,
             Guid freelancerId,
-            decimal? budget,
+            Money? budget,
             PaymentScheduleType paymentSchedule,
             string contractTerms,
-            Guid jobId, 
+            Guid jobId,
+            Guid proposalId,
             DateTime? endDate)
         {
             if (budget == null)
@@ -73,12 +76,13 @@ namespace Flsurf.Domain.Freelance.Entities
             {
                 EmployerId = employerId,
                 FreelancerId = freelancerId,
-                Budget = new Money(budget ?? 0),
+                Budget = budget,
                 CostPerHour = Money.Null(),
                 BudgetType = BudgetType.Fixed,
                 PaymentSchedule = paymentSchedule,
                 ContractTerms = contractTerms,
                 StartDate = DateTime.UtcNow,
+                ProposalId = proposalId,
                 EndDate = endDate,
                 Status = ContractStatus.PendingApproval, 
                 JobId = jobId, 
@@ -88,10 +92,11 @@ namespace Flsurf.Domain.Freelance.Entities
         public static ContractEntity CreateHourly(
             Guid employerId,
             Guid freelancerId,
-            decimal costPerHour,
+            Money costPerHour,
             PaymentScheduleType paymentSchedule,
             string contractTerms,
             Guid jobId, 
+            Guid proposalId, 
             DateTime? endDate)
         {
             return new ContractEntity
@@ -99,11 +104,12 @@ namespace Flsurf.Domain.Freelance.Entities
                 EmployerId = employerId,
                 FreelancerId = freelancerId,
                 Budget = Money.Null(),
-                CostPerHour = new Money(costPerHour),
+                CostPerHour = costPerHour,
                 BudgetType = BudgetType.Hourly,
                 PaymentSchedule = paymentSchedule,
                 ContractTerms = contractTerms,
                 StartDate = DateTime.UtcNow,
+                ProposalId = proposalId,
                 EndDate = endDate,
                 Status = ContractStatus.PendingApproval, 
                 JobId = jobId, 

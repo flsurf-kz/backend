@@ -2,11 +2,11 @@
 using Flsurf.Application.Common.Extensions;
 using Flsurf.Application.Common.Models;
 using Flsurf.Application.User.Commands;
-using Flsurf.Application.User.Dto;
 using Flsurf.Application.User.Interfaces;
 using Flsurf.Application.User.Queries;
 using Flsurf.Domain.User.Entities;
 using Flsurf.Presentation.Web.ExceptionHandlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -16,6 +16,7 @@ namespace Flsurf.Presentation.Web.Controllers
     [Route("api/notification")]
     [ApiController]
     [TypeFilter(typeof(GuardClauseExceptionFilter))]
+    [Authorize]
     public class NotificationController : ControllerBase
     {
         private readonly IUserService _userService;

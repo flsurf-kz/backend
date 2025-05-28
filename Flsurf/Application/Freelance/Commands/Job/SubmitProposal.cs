@@ -1,22 +1,32 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
+using Flsurf.Application.Files.Dto;
 using Flsurf.Application.Freelance.Permissions;
 using Flsurf.Application.User.Permissions;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Freelance.Enums;
+using Flsurf.Domain.Payment.ValueObjects;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Flsurf.Application.Freelance.Commands.Job
 {
     public class SubmitProposalCommand : BaseCommand
     {
+        [Required]
         public Guid JobId { get; set; }
+        [Required]
         public string CoverLetter { get; set; } = string.Empty;
+        [Required]
+        public BudgetType BudgetType { get; set; }
         public decimal? ProposedRate { get; set; }
+        public ICollection<CreateFileDto>? Files { get; set; }
+        public int EstimatedDurationDays { get; set; }
+        public string? SimilarExpirence { get; set; }
+        public ICollection<Guid>? PortfolioProjectsIds { get; set; }
     }
 
-    // TODO FIX THIS
     public class SubmitProposalHandler(IApplicationDbContext dbContext, IPermissionService permService) : ICommandHandler<SubmitProposalCommand>
     {
         private readonly IApplicationDbContext _dbContext = dbContext;
@@ -59,8 +69,14 @@ namespace Flsurf.Application.Freelance.Commands.Job
                 JobId = job.Id,
                 Job = job,
                 CoverLetter = command.CoverLetter,
-                ProposedRate = command.ProposedRate ?? 0,
-                Status = ProposalStatus.Pending
+                ProposedRate = new Money(command.ProposedRate ?? 0),
+                BudgetType = command.BudgetType, 
+                Status = ProposalStatus.Pending, 
+                EsitimatedDurationDays = command.EstimatedDurationDays, 
+                SimilarExpriences = command.SimilarExpirence, 
+                PortfolioProjects = command.PortfolioProjectsIds != null 
+                    ? await _dbContext.PortfolioProjects.Where(x => command.PortfolioProjectsIds.Contains(x.Id)).ToListAsync() 
+                    : null,
             };
 
             _dbContext.Proposals.Add(proposal);

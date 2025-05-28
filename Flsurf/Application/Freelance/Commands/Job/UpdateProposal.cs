@@ -1,6 +1,7 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
 using Flsurf.Domain.Freelance.Enums;
+using Flsurf.Domain.Payment.ValueObjects;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,7 +46,7 @@ namespace Flsurf.Application.Freelance.Commands.Job
             }
 
             proposal.CoverLetter = command.CoverLetter;
-            proposal.ProposedRate = command.ProposedRate ?? 0;
+            proposal.ProposedRate = new Money(command.ProposedRate ?? 0);
 
             await _dbContext.SaveChangesAsync();
 

@@ -9,114 +9,108 @@ using Flsurf.Domain.Payment.ValueObjects;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Contracts;
 
 namespace Flsurf.Application.Freelance.Commands.Contract
 {
     public class CreateContractCommand : BaseCommand
     {
-        public Guid FreelancerId { get; set; }
-        public Guid JobId { get; set; }
-        public decimal? Budget { get; set; }
-        public decimal? CostPerHour { get; set; }
-        public BudgetType BudgetType { get; set; }
+        [Required]
+        public Guid ProposalId { get; set; }
+
+        // эти поля в Proposal’е не хранятся, их заполняет клиент-сервис при найме
+        [Required]
         public PaymentScheduleType PaymentSchedule { get; set; }
+        [Required]
         public string ContractTerms { get; set; } = string.Empty;
         public DateTime? EndDate { get; set; }
     }
 
     public class CreateContractHandler(
         IApplicationDbContext dbContext,
-        IPermissionService permService)
-        : ICommandHandler<CreateContractCommand>
+        IPermissionService permService)          // ReBAC / SpiceDB
+            : ICommandHandler<CreateContractCommand>
     {
-        private readonly IApplicationDbContext _dbContext = dbContext;
-        private readonly IPermissionService _permService = permService;
+        private readonly IApplicationDbContext _db = dbContext;
+        private readonly IPermissionService _perm = permService;
 
-        public async Task<CommandResult> Handle(CreateContractCommand command)
+        public async Task<CommandResult> Handle(CreateContractCommand cmd)
         {
-            var employer = await _permService.GetCurrentUser();
-
+            /* 1. Автор   — только клиент */
+            var employer = await _perm.GetCurrentUser();
             if (employer.Type != UserTypes.Client)
                 return CommandResult.Forbidden("Только клиенты могут создавать контракты.");
 
-            var freelancer = await _dbContext.Users
-                .FirstOrDefaultAsync(x => x.Id == command.FreelancerId && x.Type == UserTypes.Freelancer);
+            /* 2. Тянем Proposal + Job + Freelancer */
+            var proposal = await _db.Proposals
+                .Include(p => p.Job)
+                .FirstOrDefaultAsync(p => p.Id == cmd.ProposalId);
 
-            if (freelancer == null)
-                return CommandResult.NotFound("Фрилансер не найден.", command.FreelancerId);
+            if (proposal is null)
+                return CommandResult.NotFound("Оффер не найден.", cmd.ProposalId);
 
-            var job = await _dbContext.Jobs
-                .Include(j => j.Contract)
-                .FirstOrDefaultAsync(x => x.Id == command.JobId && x.EmployerId == employer.Id);
+            var job = proposal.Job!;                    // благодаря Include
+            var freelancerId = proposal.FreelancerId;
 
-            if (job == null)
-                return CommandResult.NotFound("Вакансия не найдена или недоступна.", command.JobId);
+            /* 3. Проверки владельца и статусов */
+            if (job.EmployerId != employer.Id)
+                return CommandResult.Forbidden("Вы не владелец этой вакансии.");
 
-            if (job.Contract != null)
-                return CommandResult.BadRequest("У этой вакансии уже есть контракт.");
+            if (proposal.Status != ProposalStatus.Accepted)
+                return CommandResult.BadRequest("Оффер должен быть в статусе Accepted.");
+
+            if (job.Contract is not null)
+                return CommandResult.BadRequest("Для этой вакансии уже есть контракт.");
 
             if (job.Status != JobStatus.Open)
-                return CommandResult.BadRequest("Работа не открыта"); 
+                return CommandResult.BadRequest("Вакансия должна быть открыта.");
 
-            ContractEntity contract;
-
-            if (command.BudgetType == BudgetType.Fixed)
+            /* 4. Единственная точка создания */
+            ContractEntity contract = proposal.BudgetType switch
             {
-                if (command.Budget == null)
-                    return CommandResult.BadRequest("Не указан бюджет для фиксированного контракта.");
-
-                contract = ContractEntity.CreateFixed(
+                BudgetType.Fixed => ContractEntity.CreateFixed(
+                    proposalId: proposal.Id,                 // 🔸
+                    jobId: job.Id,
                     employerId: employer.Id,
-                    freelancerId: freelancer.Id,
-                    budget: command.Budget,
-                    paymentSchedule: command.PaymentSchedule,
-                    contractTerms: command.ContractTerms,
-                    endDate: command.EndDate, 
-                    jobId: job.Id
-                );
-            }
-            else if (command.BudgetType == BudgetType.Hourly)
-            {
-                if (command.CostPerHour == null)
-                    return CommandResult.BadRequest("Не указана ставка для почасового контракта.");
+                    freelancerId: freelancerId,
+                    budget: proposal.ProposedRate,       // 🔸
+                    paymentSchedule: cmd.PaymentSchedule,
+                    contractTerms: cmd.ContractTerms,
+                    endDate: cmd.EndDate
+                ),
 
-                contract = ContractEntity.CreateHourly(
+                BudgetType.Hourly => ContractEntity.CreateHourly(
+                    proposalId: proposal.Id,                 // 🔸
+                    jobId: job.Id,
                     employerId: employer.Id,
-                    freelancerId: freelancer.Id,
-                    costPerHour: (decimal)command.CostPerHour,
-                    paymentSchedule: command.PaymentSchedule,
-                    contractTerms: command.ContractTerms,
-                    endDate: command.EndDate, 
-                    jobId: job.Id 
-                );
-            }
-            else
-            {
-                return CommandResult.BadRequest("Неизвестный тип бюджета.");
-            }
+                    freelancerId: freelancerId,
+                    costPerHour: proposal.ProposedRate,       // 🔸
+                    paymentSchedule: cmd.PaymentSchedule,
+                    contractTerms: cmd.ContractTerms,
+                    endDate: cmd.EndDate
+                ),
 
-            _dbContext.Contracts.Add(contract);
+                _ => throw new ArgumentOutOfRangeException(nameof(proposal.BudgetType))
+            };
 
-            // 2. Изменение состояния JobEntity
+            /* 5. Сохранение и изменение состояний */
+            _db.Contracts.Add(contract);
+
             job.Contract = contract;
             job.Status = JobStatus.WaitingFreelancerApproval;
+            proposal.Status = ProposalStatus.Accepted;         // новый статус
 
-            // 3. Отправляем контракт на подтверждение фрилансеру
             contract.AddDomainEvent(new ContractWasCreated(contract, job));
+            await _db.SaveChangesAsync();
 
-            await _dbContext.SaveChangesAsync();
-
-            // Авторизация через ReBAC/AuthZed
-            await _permService.AddRelationship(
+            /* 6. ReBAC-отношения */
+            await _perm.AddRelationship(
                 ZedContract.WithId(contract.Id).Client(ZedFreelancerUser.WithId(employer.Id)));
-            await _permService.AddRelationship(
-                ZedContract.WithId(contract.Id).Freelancer(ZedFreelancerUser.WithId(freelancer.Id)));
-
-            // Остальные операции (оплаты и заморозки) произойдут после подтверждения фрилансером.
+            await _perm.AddRelationship(
+                ZedContract.WithId(contract.Id).Freelancer(ZedFreelancerUser.WithId(freelancerId)));
 
             return CommandResult.Success(contract.Id);
         }
     }
-
 }
