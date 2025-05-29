@@ -7,6 +7,7 @@ using Flsurf.Domain.Payment.Enums;
 using Flsurf.Domain.Payment.ValueObjects;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Flsurf.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Freelance.Commands.Contract
@@ -18,88 +19,90 @@ namespace Flsurf.Application.Freelance.Commands.Contract
 
 
     public class FreelancerAcceptContractHandler(
-        IApplicationDbContext dbContext,
-        IPermissionService permService,
-        TransactionInnerService transactionService)
+            ApplicationDbContext db,
+            IPermissionService perm,
+            TransactionInnerService txService)
         : ICommandHandler<FreelancerAcceptContractCommand>
     {
-        private readonly IApplicationDbContext _dbContext = dbContext;
-        private readonly IPermissionService _permService = permService;
-        private readonly TransactionInnerService _transactionService = transactionService;
-
-        public async Task<CommandResult> Handle(FreelancerAcceptContractCommand command)
+        public async Task<CommandResult> Handle(FreelancerAcceptContractCommand cmd)
         {
-            var freelancer = await _permService.GetCurrentUser();
-
+            /*───────── автор   ───────────────────────────────────────────*/
+            var freelancer = await perm.GetCurrentUser();
             if (freelancer.Type != UserTypes.Freelancer)
                 return CommandResult.Forbidden("Только фрилансер может принять контракт.");
 
-            var contract = await _dbContext.Contracts
+            /*───────── загрузка сущностей ───────────────────────────────*/
+            var contract = await db.Contracts
                 .Include(c => c.Employer)
                 .Include(c => c.Freelancer)
-                .FirstOrDefaultAsync(c => c.Id == command.ContractId && c.FreelancerId == freelancer.Id);
+                .FirstOrDefaultAsync(c => c.Id == cmd.ContractId &&
+                                          c.FreelancerId == freelancer.Id);
 
-            if (contract == null)
-                return CommandResult.NotFound("Контракт не найден или недоступен.", command.ContractId);
+            if (contract is null)
+                return CommandResult.NotFound("Контракт не найден или недоступен.", cmd.ContractId);
 
             if (contract.Status != ContractStatus.PendingApproval)
                 return CommandResult.Conflict("Контракт уже принят или неактуален.");
 
-            var clientWallet = await _dbContext.Wallets.FirstOrDefaultAsync(w => w.UserId == contract.EmployerId);
-            var freelancerWallet = await _dbContext.Wallets.FirstOrDefaultAsync(w => w.UserId == freelancer.Id);
+            var clientWallet = await db.Wallets.FirstOrDefaultAsync(w => w.UserId == contract.EmployerId);
+            var freelancerWallet = await db.Wallets.FirstOrDefaultAsync(w => w.UserId == freelancer.Id);
 
-            if (clientWallet == null || freelancerWallet == null)
+            if (clientWallet is null || freelancerWallet is null)
                 return CommandResult.NotFound("Кошельки не найдены.", contract.EmployerId);
 
+            /*───────── расчёт суммы и периода заморозки ─────────────────*/
             Money transferAmount;
             int? freezeDays;
 
-            if (contract.BudgetType == BudgetType.Fixed)
+            switch (contract.BudgetType)
             {
-                if (contract.Budget == Money.Null())
-                    return CommandResult.BadRequest("Не указана сумма фиксированного бюджета.");
+                case BudgetType.Fixed:
+                    if (contract.Budget == Money.Null())
+                        return CommandResult.BadRequest("Не указана сумма фиксированного бюджета.");
 
-                transferAmount = new Money(contract.Budget);
-                freezeDays = null; // бессрочно до завершения контракта
-            }
-            else if (contract.BudgetType == BudgetType.Hourly)
-            {
-                if (contract.CostPerHour is null)
-                    return CommandResult.BadRequest("Не указана почасовая ставка.");
+                    transferAmount = new Money(contract.Budget); // полная сумма в резерв
+                    freezeDays = null;                       // до закрытия контракта
+                    break;
 
-                transferAmount = new Money(contract.CostPerHour * 2);
-                freezeDays = 14; // замораживаем на 14 дней
-            }
-            else
-            {
-                return CommandResult.BadRequest("Неизвестный тип бюджета.");
+                case BudgetType.Hourly:
+                    transferAmount = new Money(contract.CostPerHour * 2); // гарантия на 2 часа
+                    freezeDays = 14;                                   // разморозка через 14 дней
+                    break;
+
+                default:
+                    return CommandResult.BadRequest("Неизвестный тип бюджета.");
             }
 
-            // Проводим внутренний перевод с заморозкой денег у фрилансера
-            var transferResult = await _transactionService.Transfer(
+            /*───────── атомарная транзакция ─────────────────────────────*/
+            await using var trx = await db.Database.BeginTransactionAsync();
+
+            /* 1) Перевод средств в кошельке фрилансера (замороженная часть) */
+            var transfer = await txService.Transfer(
                 transferAmount,
                 recieverWalletId: freelancerWallet.Id,
                 senderWalletId: clientWallet.Id,
-                feePolicy: null, // без комиссии для внутреннего перевода
+                feePolicy: null,      // комиссия 0
                 freezeForDays: freezeDays);
 
-            if (!transferResult.IsSuccess)
-                return transferResult; // если ошибка при переводе, возвращаем ошибку
+            if (!transfer.IsSuccess)
+            {
+                await trx.RollbackAsync();
+                return transfer;
+            }
 
-            // Обновляем статус контракта и Job
+            /* 2) Активируем контракт и работу */
             contract.Status = ContractStatus.Active;
             contract.StartDate = DateTime.UtcNow;
 
-            var job = await _dbContext.Jobs.FirstOrDefaultAsync(j => j.ContractId == contract.Id);
-            if (job != null)
-            {
+            var job = await db.Jobs.FirstOrDefaultAsync(j => j.ContractId == contract.Id);
+            if (job is not null)
                 job.Status = JobStatus.InContract;
-            }
 
-            // Событие подписания контракта
             contract.AddDomainEvent(new ContractSignedEvent(contract, freelancer));
 
-            await _dbContext.SaveChangesAsync();
+            /* 3) Коммит всех изменений разом */
+            await db.SaveChangesAsync();
+            await trx.CommitAsync();
 
             return CommandResult.Success(contract.Id);
         }
