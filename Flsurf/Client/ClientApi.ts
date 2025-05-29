@@ -321,6 +321,12 @@ export interface IClient {
     getBonuses(contractId: string): Promise<BonusEntity[]>;
 
     /**
+     * @param body (optional) 
+     * @return OK
+     */
+    updateContract(contractId: string, body?: UpdateContractCommand | undefined): Promise<CommandResult>;
+
+    /**
      * @param file (optional) 
      * @return OK
      */
@@ -3150,6 +3156,51 @@ export class Client implements IClient {
             });
         }
         return Promise.resolve<BonusEntity[]>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    updateContract(contractId: string, body?: UpdateContractCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/contract/{contractId}";
+        if (contractId === undefined || contractId === null)
+            throw new Error("The parameter 'contractId' must be defined.");
+        url_ = url_.replace("{contractId}", encodeURIComponent("" + contractId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateContract(_response);
+        });
+    }
+
+    protected processUpdateContract(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
     }
 
     /**
@@ -8922,6 +8973,7 @@ export class ContractEntity implements IContractEntity {
     disputeId?: string | undefined;
     job?: JobEntity;
     jobId?: string;
+    files?: FileEntity[] | undefined;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
@@ -8976,6 +9028,11 @@ export class ContractEntity implements IContractEntity {
             this.disputeId = _data["disputeId"];
             this.job = _data["job"] ? JobEntity.fromJS(_data["job"]) : <any>undefined;
             this.jobId = _data["jobId"];
+            if (Array.isArray(_data["files"])) {
+                this.files = [] as any;
+                for (let item of _data["files"])
+                    this.files!.push(FileEntity.fromJS(item));
+            }
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
@@ -9030,6 +9087,11 @@ export class ContractEntity implements IContractEntity {
         data["disputeId"] = this.disputeId;
         data["job"] = this.job ? this.job.toJSON() : <any>undefined;
         data["jobId"] = this.jobId;
+        if (Array.isArray(this.files)) {
+            data["files"] = [];
+            for (let item of this.files)
+                data["files"].push(item.toJSON());
+        }
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["lastModifiedById"] = this.lastModifiedById;
@@ -9065,6 +9127,7 @@ export interface IContractEntity {
     disputeId?: string | undefined;
     job?: JobEntity;
     jobId?: string;
+    files?: FileEntity[] | undefined;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;
@@ -15490,6 +15553,78 @@ export interface IUpdateContestCommand {
     prizePool?: number | undefined;
 }
 
+export class UpdateContractCommand implements IUpdateContractCommand {
+    contractId!: string;
+    paymentSchedule?: UpdateContractCommandPaymentSchedule | undefined;
+    contractTerms?: string | undefined;
+    endDate?: Date | undefined;
+    addFileIds?: string[] | undefined;
+    removeFileIds?: string[] | undefined;
+
+    constructor(data?: IUpdateContractCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.contractId = _data["contractId"];
+            this.paymentSchedule = _data["paymentSchedule"];
+            this.contractTerms = _data["contractTerms"];
+            this.endDate = _data["endDate"] ? new Date(_data["endDate"].toString()) : <any>undefined;
+            if (Array.isArray(_data["addFileIds"])) {
+                this.addFileIds = [] as any;
+                for (let item of _data["addFileIds"])
+                    this.addFileIds!.push(item);
+            }
+            if (Array.isArray(_data["removeFileIds"])) {
+                this.removeFileIds = [] as any;
+                for (let item of _data["removeFileIds"])
+                    this.removeFileIds!.push(item);
+            }
+        }
+    }
+
+    static fromJS(data: any): UpdateContractCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateContractCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["contractId"] = this.contractId;
+        data["paymentSchedule"] = this.paymentSchedule;
+        data["contractTerms"] = this.contractTerms;
+        data["endDate"] = this.endDate ? this.endDate.toISOString() : <any>undefined;
+        if (Array.isArray(this.addFileIds)) {
+            data["addFileIds"] = [];
+            for (let item of this.addFileIds)
+                data["addFileIds"].push(item);
+        }
+        if (Array.isArray(this.removeFileIds)) {
+            data["removeFileIds"] = [];
+            for (let item of this.removeFileIds)
+                data["removeFileIds"].push(item);
+        }
+        return data;
+    }
+}
+
+export interface IUpdateContractCommand {
+    contractId: string;
+    paymentSchedule?: UpdateContractCommandPaymentSchedule | undefined;
+    contractTerms?: string | undefined;
+    endDate?: Date | undefined;
+    addFileIds?: string[] | undefined;
+    removeFileIds?: string[] | undefined;
+}
+
 export class UpdateFreelancerProfileCommand implements IUpdateFreelancerProfileCommand {
     skills?: string[] | undefined;
     experience?: string | undefined;
@@ -17146,6 +17281,13 @@ export enum TransactionEntityFlow {
 export enum UpdateClientProfileCommandEmployerType {
     Company = "Company",
     Indivdual = "Indivdual",
+}
+
+export enum UpdateContractCommandPaymentSchedule {
+    Milestone = "Milestone",
+    Weekly = "Weekly",
+    Monthly = "Monthly",
+    OnCompletion = "OnCompletion",
 }
 
 export enum UpdateFreelancerProfileCommandAvailability {

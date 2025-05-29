@@ -17,7 +17,7 @@ namespace Flsurf.Application.Freelance.Interfaces
         FreelancerFinishContractHandler FreelancerFinishContract();
         InitiateDisputeHandler InitiateDispute();
         ResolveDisputeHandler ResolveDispute();
-        //UpdateContractHandler UpdateContract();
+        UpdateContractHandler UpdateContract();
 
         // New Bonus Command Handler
         AddBonusToContractHandler AddBonusToContract(); // << NEW

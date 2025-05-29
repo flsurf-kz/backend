@@ -36,6 +36,8 @@ namespace Flsurf.Application.Freelance.Commands.Job
 
             proposal.AddDomainEvent(new ReactedToProposal(proposal.Id));
 
+            await dbContext.SaveChangesAsync(); 
+
             return CommandResult.Success(proposal.Id); 
         }
     }

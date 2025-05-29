@@ -50,7 +50,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             if (proposal is null)
                 return CommandResult.NotFound("Оффер не найден.", cmd.ProposalId);
 
-            var job = proposal.Job!;                    // благодаря Include
+            var job = proposal.Job;                    // благодаря Include
             var freelancerId = proposal.FreelancerId;
 
             /* 3. Проверки владельца и статусов */
@@ -101,7 +101,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             job.Status = JobStatus.WaitingFreelancerApproval;
             proposal.Status = ProposalStatus.Accepted;         // новый статус
 
-            contract.AddDomainEvent(new ContractWasCreated(contract, job));
+            contract.AddDomainEvent(new ContractWasCreated(contract.Id, job.Id));
             await _db.SaveChangesAsync();
 
             /* 6. ReBAC-отношения */

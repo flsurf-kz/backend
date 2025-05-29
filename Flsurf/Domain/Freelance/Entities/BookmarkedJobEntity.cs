@@ -24,7 +24,7 @@ namespace Flsurf.Domain.Freelance.Entities
                 User = user,
 
             };
-            bookmark.AddDomainEvent(new JobWasBookmarked(bookmark));
+            bookmark.AddDomainEvent(new JobWasBookmarked(bookmark.Id));
 
             return bookmark; 
         }

@@ -143,6 +143,14 @@ namespace Flsurf.Application.Freelance.Queries
 
         private static (DateTime start, DateTime end) GetMonthBounds(int m, int y)
         {
+            if (m is < 1 or > 12)
+                throw new ArgumentOutOfRangeException(nameof(m), "Month must be 1-12.");
+
+            // «Здравый» диапазон ваших отчётов
+            if (y is < 2000 or > 2100)
+                throw new ArgumentOutOfRangeException(nameof(y),
+                    "Year must be a four-digit year between 2000 and 2100.");
+
             var s = new DateTime(y, m, 1, 0, 0, 0, DateTimeKind.Utc);
             return (s, s.AddMonths(1));
         }

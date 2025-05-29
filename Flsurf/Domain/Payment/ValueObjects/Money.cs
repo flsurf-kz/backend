@@ -15,6 +15,8 @@ namespace Flsurf.Domain.Payment.ValueObjects
         [Required]
         public CurrencyEnum Currency { get; init; }
 
+        private Money() { }
+
         public Money(decimal amount, CurrencyEnum currency = CurrencyEnum.RUB)
         {
             if (amount < 0)
@@ -31,7 +33,7 @@ namespace Flsurf.Domain.Payment.ValueObjects
             Currency = currency;
         }
 
-        public static Money Null() => new Money(-99999999999, CurrencyEnum.RUB, true);
+        public static Money Null() => new Money(0, CurrencyEnum.RUB, true);
 
         // huinay
         public Money(Money money)

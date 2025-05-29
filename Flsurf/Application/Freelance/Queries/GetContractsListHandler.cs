@@ -8,44 +8,45 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Freelance.Queries
 {
-    public class GetContractsListHandler(IApplicationDbContext dbContext, IPermissionService permService)
+    public class GetContractsListHandler(
+            IApplicationDbContext dbContext,
+            IPermissionService permService)
         : IQueryHandler<GetContractsListQuery, List<ContractEntity>>
     {
-        private readonly IApplicationDbContext _dbContext = dbContext;
-        private readonly IPermissionService _permService = permService;
+        private readonly IApplicationDbContext _db = dbContext;
+        private readonly IPermissionService _ps = permService;
 
-        public async Task<List<ContractEntity>> Handle(GetContractsListQuery query)
+        public async Task<List<ContractEntity>> Handle(GetContractsListQuery q)
         {
-            var userId = query.UserId ?? (await _permService.GetCurrentUser()).Id; 
+            /* ---- текущий пользователь ------------------------------------ */
+            Guid userId = q.UserId ?? (await _ps.GetCurrentUser()).Id;
 
-            // 🔥 Получаем контракты, к которым пользователь имеет доступ
-            var perms = _permService.LookupSubjects(
-                ZedFreelancerUser.WithId(userId),
-                "read",
-                "contract");
+            /* ---- 1. ReBAC: контракт-иды, на которые есть право read ------ */
+            HashSet<Guid> allowed = new();
 
-            List<Guid> contractIds = [];
-            Guid contractId;
-
-            await foreach (var perm in perms)
+            await foreach (var rel in _ps.LookupSubjects(
+                               ZedFreelancerUser.WithId(userId),
+                               "read", "contract"))
             {
-                if (Guid.TryParse(perm.Subject.Id, out contractId))
-                {
-                    contractIds.Add(contractId);
-                }
+                if (Guid.TryParse(rel.Subject.Id, out var cid))
+                    allowed.Add(cid);
             }
 
-            if (!contractIds.Any())
-                return [];
+            /* ---- 2. Прямые отношения Employer / Freelancer --------------- */
+            IQueryable<ContractEntity> baseQuery = _db.Contracts
+                                                      .IncludeStandard()
+                                                      .Where(c =>
+                                                             c.EmployerId == userId ||
+                                                             c.FreelancerId == userId);
 
-            var contractsQuery = _dbContext.Contracts
-                .IncludeStandard() // Загружаем все необходимые данные
-                .Where(c => contractIds.Contains(c.Id)) // Фильтруем по доступным контрактам
-                .OrderByDescending(c => c.CreatedAt) // Новые контракты первыми
-                .Skip(query.Start)
-                .Take(query.Ends);
+            /* ---- 3. Пагинация, сортировка -------------------------------- */
+            var list = await baseQuery
+                .OrderByDescending(c => c.CreatedAt)
+                .Skip(q.Start)
+                .Take(q.Ends - q.Start)
+                .ToListAsync();
 
-            return await contractsQuery.ToListAsync();
+            return list;
         }
     }
 

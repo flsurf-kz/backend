@@ -1,4 +1,5 @@
-﻿using Flsurf.Domain.Freelance.Entities;
+﻿using Flsurf.Domain.Common;
+using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.User.Entities;
 
 namespace Flsurf.Domain.Freelance.Events
@@ -102,5 +103,9 @@ namespace Flsurf.Domain.Freelance.Events
     {
         public Guid ContractId { get; } = contract.Id;
         public string Reason { get; } = reason;
+    }
+
+    public class ContractUpdated(Guid contractId) : DomainEvent {
+        public Guid ContractId { get; } = contractId;
     }
 }

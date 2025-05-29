@@ -144,5 +144,13 @@ namespace Flsurf.Presentation.Web.Controllers
                 .Handle(new GetBonusesForContractQuery() { ContractId = contractId });
             return Ok(result); 
         }
+
+        [HttpPatch("{contractId}", Name = "UpdateContract")]
+        public async Task<ActionResult<CommandResult>> UpdateContract([FromBody] UpdateContractCommand cmd)
+        {
+            var result = await _contractService.UpdateContract().Handle(cmd);
+
+            return result.MapResult(this);
+        }
     }
 }

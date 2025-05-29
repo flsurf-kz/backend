@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Flsurf.Application.Common.Exceptions;
 using Flsurf.Domain.Payment.ValueObjects;
 using System.Text.Json.Serialization;
+using Flsurf.Domain.Files.Entities;
 
 namespace Flsurf.Domain.Freelance.Entities
 {
@@ -58,20 +59,18 @@ namespace Flsurf.Domain.Freelance.Entities
         public JobEntity Job { get; set; } = null!; 
         [ForeignKey("Job")]
         public Guid JobId { get; set; }
+        public List<FileEntity> Files { get; set; } = []; 
 
         public static ContractEntity CreateFixed(
             Guid employerId,
             Guid freelancerId,
-            Money? budget,
+            Money budget,
             PaymentScheduleType paymentSchedule,
             string contractTerms,
             Guid jobId,
             Guid proposalId,
             DateTime? endDate)
         {
-            if (budget == null)
-                throw new ArgumentException("Для фиксированного контракта необходимо указать бюджет.");
-
             return new ContractEntity
             {
                 EmployerId = employerId,

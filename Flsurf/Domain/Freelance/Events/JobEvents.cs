@@ -2,14 +2,14 @@
 
 namespace Flsurf.Domain.Freelance.Events
 {
-    public class JobWasBookmarked(BookmarkedJobEntity bookmark) : BaseEvent
+    public class JobWasBookmarked(Guid bookmarkId) : BaseEvent
     {
-        public Guid BookmarkId { get; } = bookmark.Id;
+        public Guid BookmarkId { get; } = bookmarkId;
     }
 
-    public class ContractWasCreated(ContractEntity contract, JobEntity job) : BaseEvent
+    public class ContractWasCreated(Guid contractId, Guid jobId) : BaseEvent
     {
-        public Guid ContractId { get; } = contract.Id;
-        public Guid JobId { get; } = job.Id;
+        public Guid ContractId { get; } = contractId;
+        public Guid JobId { get; } = jobId;
     }
 }

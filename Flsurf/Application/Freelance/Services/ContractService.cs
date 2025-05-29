@@ -44,8 +44,8 @@ namespace Flsurf.Application.Freelance.Services
         public ResolveDisputeHandler ResolveDispute() =>
             _serviceProvider.GetRequiredService<ResolveDisputeHandler>();
 
-        //public UpdateContractHandler UpdateContract() =>
-        //    _serviceProvider.GetRequiredService<UpdateContractHandler>();
+        public UpdateContractHandler UpdateContract() =>
+            _serviceProvider.GetRequiredService<UpdateContractHandler>();
 
         // New Bonus Command Handler
         public AddBonusToContractHandler AddBonusToContract() =>             // << NEW
