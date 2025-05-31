@@ -7,16 +7,25 @@
 
 Сперва загрузите репозитории с помощью команды: 
 ```shell
-$ git clone https://github.com/pikoUsername/SparkOfMind-LMS.git
+$ git clone https://github.com/flsurf/backend.git
 ```
 После откройте Visual studio, и откройте проект в которую скопировали проект. 
 
 Третьим шагом выступает сам запуск приложения, просто запустив команды в директории проекта с именем приложения: 
 ```
-$ dotnet restore 
-$ dotnet ef database update --context EventStoreContext
-$ dotnet ef database update --context ApplicationDbContext 
-$ dotnet run 
+# 1. Перейти в папку проекта 
+cd backend/
+
+# 2. доверенный dev-сертификат
+dotnet dev-certs https --trust
+
+# 3. восстановить пакеты и накатить миграции
+dotnet restore
+dotnet ef database update --context EventStoreContext --project flsurf
+dotnet ef database update --context ApplicationDbContext --project flsurf
+
+# 4. запустить
+dotnet run --launch-profile https   # http :8001 / https :8000
 ```
 
 ### Контрибуции 
@@ -59,3 +68,7 @@ $ git checkout {имя ветки}
 
 Примичание. 
 Главная и dev ветки защещины от слияния без разрешения владельца репозитория
+
+### Лицензия 
+
+Смотреть файл LICENSE в репозитории 
