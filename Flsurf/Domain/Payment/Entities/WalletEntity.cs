@@ -43,7 +43,7 @@ namespace Flsurf.Domain.Payment.Entities
         public ICollection<TransactionEntity> Transactions { get; private set; } = new List<TransactionEntity>();
 
         [Timestamp]
-        public byte[]? RowVersion { get; set; }
+        public byte[]? RowVersion { get; private set; } = default; 
 
 
         public static WalletEntity Create(UserEntity user)

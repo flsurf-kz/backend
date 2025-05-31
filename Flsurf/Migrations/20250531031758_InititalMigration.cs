@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Flsurf.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigrationsv6 : Migration
+    public partial class InititalMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -249,6 +249,7 @@ namespace Flsurf.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FreelancerId = table.Column<Guid>(type: "uuid", nullable: false),
                     EmployerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProposalId = table.Column<Guid>(type: "uuid", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Budget_Amount = table.Column<decimal>(type: "numeric", nullable: false),
@@ -377,6 +378,7 @@ namespace Flsurf.Migrations
                     Size = table.Column<long>(type: "bigint", nullable: false),
                     ContestEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     ContestEntryEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ContractEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     JobEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     MessageEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     NewsEntityId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -398,6 +400,11 @@ namespace Flsurf.Migrations
                         name: "FK_Files_Contests_ContestEntityId",
                         column: x => x.ContestEntityId,
                         principalTable: "Contests",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Files_Contracts_ContractEntityId",
+                        column: x => x.ContractEntityId,
+                        principalTable: "Contracts",
                         principalColumn: "Id");
                 });
 
@@ -672,6 +679,7 @@ namespace Flsurf.Migrations
                     PaymentVerified = table.Column<bool>(type: "boolean", nullable: false),
                     ContractId = table.Column<Guid>(type: "uuid", nullable: true),
                     IsHidden = table.Column<bool>(type: "boolean", nullable: false),
+                    DislikesCount = table.Column<int>(type: "integer", nullable: false),
                     ClientProfileEntityId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -826,38 +834,6 @@ namespace Flsurf.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PaymentMethods_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PortfolioProjects",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    UserRole = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    Hidden = table.Column<bool>(type: "boolean", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    FreelancerProfileEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PortfolioProjects", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PortfolioProjects_FreelancerProfiles_FreelancerProfileEntit~",
-                        column: x => x.FreelancerProfileEntityId,
-                        principalTable: "FreelancerProfiles",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_PortfolioProjects_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -1053,9 +1029,13 @@ namespace Flsurf.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     JobId = table.Column<Guid>(type: "uuid", nullable: false),
                     FreelancerId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProposedRate = table.Column<decimal>(type: "numeric", nullable: false),
+                    ProposedRate_Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    ProposedRate_Currency = table.Column<int>(type: "integer", nullable: false),
+                    BudgetType = table.Column<string>(type: "text", nullable: false),
                     CoverLetter = table.Column<string>(type: "text", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
+                    EsitimatedDurationDays = table.Column<int>(type: "integer", nullable: false),
+                    SimilarExpriences = table.Column<string>(type: "text", nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -1121,34 +1101,6 @@ namespace Flsurf.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Skills",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    FreelancerProfileEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PortfolioProjectEntityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Skills", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Skills_FreelancerProfiles_FreelancerProfileEntityId",
-                        column: x => x.FreelancerProfileEntityId,
-                        principalTable: "FreelancerProfiles",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Skills_PortfolioProjects_PortfolioProjectEntityId",
-                        column: x => x.PortfolioProjectEntityId,
-                        principalTable: "PortfolioProjects",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -1226,6 +1178,72 @@ namespace Flsurf.Migrations
                         name: "FK_Transactions_Wallets_WalletEntityId",
                         column: x => x.WalletEntityId,
                         principalTable: "Wallets",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PortfolioProjects",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    UserRole = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Hidden = table.Column<bool>(type: "boolean", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    FreelancerProfileEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ProposalEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PortfolioProjects", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PortfolioProjects_FreelancerProfiles_FreelancerProfileEntit~",
+                        column: x => x.FreelancerProfileEntityId,
+                        principalTable: "FreelancerProfiles",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PortfolioProjects_Proposals_ProposalEntityId",
+                        column: x => x.ProposalEntityId,
+                        principalTable: "Proposals",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_PortfolioProjects_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Skills",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    FreelancerProfileEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    PortfolioProjectEntityId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    LastModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Skills", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Skills_FreelancerProfiles_FreelancerProfileEntityId",
+                        column: x => x.FreelancerProfileEntityId,
+                        principalTable: "FreelancerProfiles",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Skills_PortfolioProjects_PortfolioProjectEntityId",
+                        column: x => x.PortfolioProjectEntityId,
+                        principalTable: "PortfolioProjects",
                         principalColumn: "Id");
                 });
 
@@ -1362,6 +1380,11 @@ namespace Flsurf.Migrations
                 name: "IX_Files_ContestEntryEntityId",
                 table: "Files",
                 column: "ContestEntryEntityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Files_ContractEntityId",
+                table: "Files",
+                column: "ContractEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Files_JobEntityId",
@@ -1517,6 +1540,11 @@ namespace Flsurf.Migrations
                 name: "IX_PortfolioProjects_FreelancerProfileEntityId",
                 table: "PortfolioProjects",
                 column: "FreelancerProfileEntityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PortfolioProjects_ProposalEntityId",
+                table: "PortfolioProjects",
+                column: "ProposalEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PortfolioProjects_UserId",
@@ -1877,6 +1905,10 @@ namespace Flsurf.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
+                name: "FK_Files_Contracts_ContractEntityId",
+                table: "Files");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_Jobs_Contracts_ContractId",
                 table: "Jobs");
 
@@ -2053,9 +2085,6 @@ namespace Flsurf.Migrations
                 name: "PortfolioProjects");
 
             migrationBuilder.DropTable(
-                name: "Proposals");
-
-            migrationBuilder.DropTable(
                 name: "TicketComments");
 
             migrationBuilder.DropTable(
@@ -2069,6 +2098,9 @@ namespace Flsurf.Migrations
 
             migrationBuilder.DropTable(
                 name: "FreelancerProfiles");
+
+            migrationBuilder.DropTable(
+                name: "Proposals");
 
             migrationBuilder.DropTable(
                 name: "Tickets");

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Flsurf.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250528134236_PorposalUpdateForContract")]
-    partial class PorposalUpdateForContract
+    [Migration("20250531031758_InititalMigration")]
+    partial class InititalMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,9 @@ namespace Flsurf.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("ContestEntryEntityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ContractEntityId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -104,6 +107,8 @@ namespace Flsurf.Migrations
                     b.HasIndex("ContestEntityId");
 
                     b.HasIndex("ContestEntryEntityId");
+
+                    b.HasIndex("ContractEntityId");
 
                     b.HasIndex("JobEntityId");
 
@@ -749,6 +754,9 @@ namespace Flsurf.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("DislikesCount")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("Duration")
                         .HasColumnType("integer");
@@ -2015,6 +2023,10 @@ namespace Flsurf.Migrations
                         .WithMany("Files")
                         .HasForeignKey("ContestEntryEntityId");
 
+                    b.HasOne("Flsurf.Domain.Freelance.Entities.ContractEntity", null)
+                        .WithMany("Files")
+                        .HasForeignKey("ContractEntityId");
+
                     b.HasOne("Flsurf.Domain.Freelance.Entities.JobEntity", null)
                         .WithMany("Files")
                         .HasForeignKey("JobEntityId");
@@ -3115,6 +3127,8 @@ namespace Flsurf.Migrations
             modelBuilder.Entity("Flsurf.Domain.Freelance.Entities.ContractEntity", b =>
                 {
                     b.Navigation("Bonuses");
+
+                    b.Navigation("Files");
 
                     b.Navigation("Tasks");
 

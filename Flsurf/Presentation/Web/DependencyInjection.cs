@@ -152,6 +152,11 @@ namespace Flsurf.Presentation.Web
                 options.ClientId = configuration["Authentication:Google:ClientId"];
                 options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
                 options.CallbackPath = "/signin-google";
+
+                options.CorrelationCookie.SameSite = SameSiteMode.None;
+                options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.NonceCookie.SameSite = SameSiteMode.None;
+                options.NonceCookie.SecurePolicy = CookieSecurePolicy.Always;
             }); 
             services.AddScoped<IPasswordHasher<UserEntity>, PasswordHasher<UserEntity>>();
             services.AddRouting();
@@ -203,6 +208,24 @@ namespace Flsurf.Presentation.Web
 
             services.AddSignalR();                // <-- SignalR
             services.AddScoped<GeneralHub>();     // DI для HubContext
+            if (environment.IsProduction())
+            {
+                services.AddHsts(options =>
+                {
+                    options.Preload = true;
+                    options.IncludeSubDomains = true;
+                    options.MaxAge = TimeSpan.FromDays(60);
+                    options.ExcludedHosts.Add("localhost:8000");
+                    options.ExcludedHosts.Add("localhost:5173");
+                    options.ExcludedHosts.Add("localhost:8001");
+                });
+            }
+
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                options.HttpsPort = 8001;
+            });
 
             return services;
         }

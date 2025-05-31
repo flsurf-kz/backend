@@ -26,5 +26,9 @@ namespace Flsurf.Infrastructure.EventStore
         /// асинхронным воркером (true - да, false - нет).
         /// </summary>
         public bool Processed { get; set; } = false;
+        public bool ProcessError { get; set; } = false;
+        [Column(TypeName = "jsonb")]
+        public string? ErrorData { get; set; } 
+        public int FailedCounter { get; set; } = 0; 
     }
 }

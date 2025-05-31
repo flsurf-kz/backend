@@ -15,6 +15,12 @@ builder.Services.AddDomainServices();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddWebServices(builder.Configuration, builder.Environment, builder.Logging);
 
+builder.WebHost.ConfigureKestrel(opt =>
+{
+    opt.ListenLocalhost(8000);
+    opt.ListenLocalhost(8001, lo => lo.UseHttps());
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,7 +40,12 @@ app.UseEventDispatcher();
 app.UseStaticFiles();
 
 if (app.Environment.IsProduction())
-    app.UseResponseCompression(); 
+    app.UseResponseCompression();
+
+if (app.Environment.IsProduction())
+    app.UseHsts();                // всегда перед HTTPS-redirect
+
+app.UseHttpsRedirection();        // до CORS / Auth
 
 app.UseRouting();
 
@@ -47,7 +58,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseHealthChecks("/health");
-app.UseHttpsRedirection();
 
 if (app.Environment.IsProduction())
 {

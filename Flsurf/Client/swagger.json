@@ -113842,7 +113842,7 @@
             "Pattern": null,
             "MultipleOf": null,
             "Default": null,
-            "ReadOnly": false,
+            "ReadOnly": true,
             "WriteOnly": false,
             "AllOf": [],
             "OneOf": [],
@@ -115720,6 +115720,6 @@
   ],
   "ExternalDocs": null,
   "Extensions": {},
-  "HashCode": "1BB30BF47B9FFB554B7831429A22986E886D5DB9F7B15562886B857DE87C7D821579A9A557E8F3050DE7F0474463E8F18953DE0C75D447123B1BC768B1324300",
+  "HashCode": "8160FE9EA4E18E1D616097D97DC30D9BBD7E0D04B85C4CBE745A652EBA4178B7B112CAF1A18A915AFBCE1091E98957BF14BB8993F3BE21B674EA75CB624F4E44",
   "Annotations": null
 }

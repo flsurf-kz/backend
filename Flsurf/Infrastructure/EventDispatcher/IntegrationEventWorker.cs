@@ -1,5 +1,6 @@
 ﻿using Flsurf.Application.Common.Events;
 using Flsurf.Infrastructure.EventStore;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -7,6 +8,7 @@ namespace Flsurf.Infrastructure.EventDispatcher
 {
     public class IntegrationEventWorker : BackgroundService
     {
+        public static int MAX_FAILED_COUNTER = 3; 
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<IntegrationEventWorker> _logger;
         // Вам нужен EventDispatcher, чтобы вызывать хендлеры
@@ -35,8 +37,7 @@ namespace Flsurf.Infrastructure.EventDispatcher
                     _logger.LogError(ex, "Ошибка в ProcessIntegrationEventsAsync");
                 }
 
-                // Ждём 5 секунд
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                await Task.Delay(TimeSpan.FromMilliseconds(500), stoppingToken);
             }
         }
 
@@ -48,7 +49,7 @@ namespace Flsurf.Infrastructure.EventDispatcher
 
             // Получаем все не обработанные интеграционные события
             var storedIntegrationEvents = await eventStoreContext.Events
-                .Where(e => e.IsIntegrationEvent && !e.Processed) // Ваша логика
+                .Where(e => e.IsIntegrationEvent && !e.Processed && !e.ProcessError) // Ваша логика
                 .OrderBy(e => e.Timestamp)
                 .Take(50)
                 .ToListAsync(stoppingToken);
@@ -88,6 +89,20 @@ namespace Flsurf.Infrastructure.EventDispatcher
                 {
                     // Логируем ошибку, можно сделать Retries++
                     _logger.LogError(ex, "Ошибка при обработке события {EventId}", storedEvent.EventId);
+                    if (storedEvent.FailedCounter > MAX_FAILED_COUNTER) { 
+                        // WHY? we need to filter out events that can not be executed 
+                        var settings = new JsonSerializerSettings
+                        {
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        };
+                        var log = ErrorLogEntry.FromException(ex);
+                        var json = JsonConvert.SerializeObject(log, settings);
+                        storedEvent.ProcessError = true;
+                        storedEvent.Data = json;
+                    } else
+                    {
+                        storedEvent.FailedCounter += 1; 
+                    }
                     SentrySdk.CaptureException(ex);
                 }
             }
