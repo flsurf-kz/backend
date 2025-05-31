@@ -57,7 +57,7 @@ namespace Flsurf.Infrastructure.Adapters.FileStorage
         }
 
         /// <summary>Запись файла — с DoS-поток-лимитом, без symlink-escape, с проверкой сигнатуры.</summary>
-        public async Task UploadFileAsync(string relativePath, Stream fileStream)
+        public async Task UploadFileAsync(string relativePath, Stream fileStream, bool trusted = false)
         {
             if (fileStream == null) throw new ArgumentNullException(nameof(fileStream));
             if (string.IsNullOrWhiteSpace(relativePath)) throw new ArgumentException("Relative path cannot be null or whitespace.", nameof(relativePath));
@@ -68,7 +68,7 @@ namespace Flsurf.Infrastructure.Adapters.FileStorage
             string fullPath = GetSafePath(sanitizedRelativePath);
             _logger.LogDebug("LocalFileStorageAdapter: Calculated full path for upload: {FullPath}", fullPath);
 
-            string directoryName = Path.GetDirectoryName(fullPath);
+            string? directoryName = Path.GetDirectoryName(fullPath);
             if (directoryName == null)
             {
                 _logger.LogError("LocalFileStorageAdapter: Could not determine directory name from full path: {FullPath}", fullPath);
@@ -87,7 +87,7 @@ namespace Flsurf.Infrastructure.Adapters.FileStorage
                 fileStream.Position = 0; // Убедимся, что читаем с начала
             }
 
-            FileStream fs = null;
+            FileStream? fs = null;
             try
             {
                 fs = new FileStream(
@@ -239,9 +239,12 @@ namespace Flsurf.Infrastructure.Adapters.FileStorage
                 return Task.FromResult(Enumerable.Empty<string>());
             }
 
-            var names = Directory.EnumerateFiles(fullPath)
+            var rawNames = Directory.EnumerateFiles(fullPath)
                                  .Select(Path.GetFileName);
-            return Task.FromResult(names!); // Path.GetFileName не возвращает null для EnumerateFiles
+            if (rawNames == null)
+                return Task.FromResult(Enumerable.Empty<string>());
+            var names = rawNames.Select(x => string.IsNullOrEmpty(x) ? "NOT FOUND" : x);
+            return Task.FromResult(names); // Path.GetFileName не возвращает null для EnumerateFiles
         }
 
         public Task Configure()

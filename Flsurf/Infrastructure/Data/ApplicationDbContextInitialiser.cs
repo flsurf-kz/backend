@@ -132,7 +132,8 @@ namespace Flsurf.Infrastructure.Data
                         {
                             DownloadUrl = providerImages[provider.Name], 
                             Name = providerImages[provider.Name], 
-                            MimeType = "image/png"
+                            MimeType = "image/png", 
+                            Trusted = true, // скорее всего эти пидоры закинут zip бомбу 
                         });
                 }
 

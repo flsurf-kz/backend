@@ -12,8 +12,9 @@ namespace Flsurf.Infrastructure.EventDispatcher
         public IDictionary? Data { get; set; } // Или более типизированный словарь
         public ErrorLogEntry? InnerError { get; set; } // Для InnerException
 
-        public static ErrorLogEntry FromException(Exception ex)
+        public static ErrorLogEntry? FromException(Exception? ex)
         {
+            if (ex == null) return null; 
             return new ErrorLogEntry
             {
                 ExceptionType = ex.GetType().FullName,
@@ -21,7 +22,7 @@ namespace Flsurf.Infrastructure.EventDispatcher
                 StackTrace = ex.StackTrace, // Может быть урезан для краткости
                 Source = ex.Source,
                 TargetSiteName = ex.TargetSite?.ToString(), // Упрощенно
-                Data = ex.Data.Count > 0 ? new Dictionary<object, object>(ex.Data.Cast<DictionaryEntry>().ToDictionary(de => de.Key, de => de.Value)) : null, // Копируем, чтобы избежать проблем с несериализуемыми типами словаря
+                Data = ex.Data.Count > 0 ? new Dictionary<object, object>(ex.Data.Cast<DictionaryEntry>().ToDictionary(de => de.Key, de => de.Value)) : null,
                 InnerError = FromException(ex.InnerException)
             };
         }

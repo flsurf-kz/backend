@@ -103,7 +103,7 @@ namespace Flsurf.Presentation.Web.Controllers
         public async Task<ActionResult<int>> GetUnreadCounter()
         {
             var handler = _chat.GetUnreadCounter();
-            var result = await handler.Execute(null);
+            var result = await handler.Execute(new GetUnreadCounterDto() { });
             return Ok(result);
         }
     }

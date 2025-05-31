@@ -57,7 +57,7 @@
     {
         public Guid UserId { get; init; }
         public string? CustomerIdInProvider { get; init; } // ID клиента на стороне платежного провайдера (Stripe Customer ID)
-        public string ReturnUrl { get; init; } // URL, куда пользователь вернется после завершения на стороне провайдера (если применимо) или после виджета
+        public string ReturnUrl { get; init; } = string.Empty; // URL, куда пользователь вернется после завершения на стороне провайдера (если применимо) или после виджета
         public Dictionary<string, string>? Metadata { get; init; }
     }
 
@@ -78,11 +78,11 @@
         public Guid UserId { get; init; }
         public string? CustomerIdInProvider { get; init; } // ID клиента на стороне провайдера
         public decimal Amount { get; init; }
-        public string Currency { get; init; } // ISO 4217 код
-        public string InternalTransactionId { get; init; } // ID вашей внутренней транзакции/заказа
-        public string Description { get; init; }
-        public string SuccessReturnUrl { get; init; } // URL для возврата после успешной оплаты
-        public string CancelReturnUrl { get; init; }  // URL для возврата при отмене
+        public string Currency { get; init; } = string.Empty; // ISO 4217 код
+        public string InternalTransactionId { get; init; } = string.Empty; // ID вашей внутренней транзакции/заказа
+        public string Description { get; init; } = string.Empty;
+        public string SuccessReturnUrl { get; init; } = string.Empty; // URL для возврата после успешной оплаты
+        public string CancelReturnUrl { get; init; } = string.Empty;  // URL для возврата при отмене
         public string? PaymentMethodToken { get; init; } // Токен сохраненного способа оплаты (pm_... для Stripe)
         public bool SetupFutureUsage { get; init; } = false; // Пытаться ли сохранить способ оплаты для будущих использований (если новый)
         public Dictionary<string, string>? Metadata { get; init; }

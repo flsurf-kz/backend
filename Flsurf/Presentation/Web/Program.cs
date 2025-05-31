@@ -15,12 +15,6 @@ builder.Services.AddDomainServices();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddWebServices(builder.Configuration, builder.Environment, builder.Logging);
 
-builder.WebHost.ConfigureKestrel(opt =>
-{
-    opt.ListenLocalhost(8001);
-    opt.ListenLocalhost(8000, lo => lo.UseHttps());
-});
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,6 +24,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
+        options.RoutePrefix = "api/swagger";
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "Flsurf API");
         options.DefaultModelsExpandDepth(-1);
     });
@@ -42,11 +37,6 @@ app.UseStaticFiles();
 if (app.Environment.IsProduction())
     app.UseResponseCompression();
 
-if (app.Environment.IsProduction())
-    app.UseHsts();                // всегда перед HTTPS-redirect
-
-app.UseHttpsRedirection();        // до CORS / Auth
-
 app.UseRouting();
 
 app.UseCors("FLsurf");
@@ -57,17 +47,17 @@ app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHealthChecks("/health");
+app.UseHealthChecks("/api/health");
 
 if (app.Environment.IsProduction())
 {
-    app.UseHangfireDashboard("/hangfire", new DashboardOptions
+    app.UseHangfireDashboard("/api/hangfire", new DashboardOptions
     {
         Authorization = new[] { new CookieDashboardAuthorization() }
     });
 } else
 {
-    app.UseHangfireDashboard("/hangfire"); 
+    app.UseHangfireDashboard("/api/hangfire"); 
 }
 BackgroundJobsRegister.RegisterInfrastructureBGJobs();
 

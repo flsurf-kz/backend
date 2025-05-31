@@ -43,8 +43,8 @@ namespace Flsurf.Presentation.Web
             {
                 var info = new OpenApiInfo { Title = "SpakOfMind Flsurf", Version = "v1" };
                 options.SwaggerDoc(name: "v1", info: info);
-                options.AddServer(new() { Url = "https://localhost:8000", Description = "Продакшн" });
-                options.AddServer(new() { Url = "https://localhost:8001", Description = "Для тестов" });
+                options.AddServer(new() { Url = "http://localhost:8000", Description = "Продакшн" });
+                options.AddServer(new() { Url = "http://localhost:8001", Description = "Для тестов" });
                 options.EnableAnnotations();
                 options.AddSecurityDefinition("session", new OpenApiSecurityScheme
                 {
@@ -155,6 +155,12 @@ namespace Flsurf.Presentation.Web
                 options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
                 options.CallbackPath = "/signin-google";
 
+                options.Scope.Add("openid"); // Стандартный и обязательный
+                options.Scope.Add("profile"); // Этот scope обычно включает: name, family_name, given_name, middle_name, nickname, preferred_username, profile, picture, website, gender, birthdate, zoneinfo, locale, updated_at
+                options.Scope.Add("email");   // Для получения email
+
+                options.GetClaimsFromUserInfoEndpoint = true;
+
                 options.CorrelationCookie.SameSite = SameSiteMode.None;
                 options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.NonceCookie.SameSite = SameSiteMode.None;
@@ -210,24 +216,6 @@ namespace Flsurf.Presentation.Web
 
             services.AddSignalR();                // <-- SignalR
             services.AddScoped<GeneralHub>();     // DI для HubContext
-            if (environment.IsProduction())
-            {
-                services.AddHsts(options =>
-                {
-                    options.Preload = true;
-                    options.IncludeSubDomains = true;
-                    options.MaxAge = TimeSpan.FromDays(60);
-                    options.ExcludedHosts.Add("localhost:8000");
-                    options.ExcludedHosts.Add("localhost:5173");
-                    options.ExcludedHosts.Add("localhost:8001");
-                });
-            }
-
-            services.AddHttpsRedirection(options =>
-            {
-                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-                options.HttpsPort = 8000;
-            });
 
             return services;
         }

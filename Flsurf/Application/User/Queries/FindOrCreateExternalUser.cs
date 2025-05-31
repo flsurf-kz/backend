@@ -55,7 +55,8 @@ namespace Flsurf.Application.User.Queries
             // Обновляем аватар
             if (!string.IsNullOrEmpty(dto.AvatarUrl) && (user.Avatar == null || user.Avatar.FilePath != dto.AvatarUrl))
             {
-                user.Avatar = await _uploadFile.Execute(new CreateFileDto() { DownloadUrl = dto.AvatarUrl });
+                // trusted bc from google or vk 
+                user.Avatar = await _uploadFile.Execute(new CreateFileDto() { DownloadUrl = dto.AvatarUrl, Trusted = true });
                 needsUpdate = true;
             }
 

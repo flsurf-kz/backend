@@ -78,27 +78,48 @@ namespace Flsurf.Application.Files.UseCases
 
 
             /*─ 3. определяем и сверяем MIME ──────────────────────────────*/
-            _log.LogDebug("Detecting MIME for stream...");
-            //string detectedMime = await DetectMimeAsync(stream);
-            string detectedMime = "image/png"; 
-            _log.LogInformation("Detected MIME: {DetectedMime} for DTO Name: {DtoName}", detectedMime, dto.Name);
+            _log.LogDebug("Detecting MIME for stream..."); // Ваш оригинальный лог
+            string detectedMime = await DetectMimeAsync(stream); // Ваш оригинальный вызов
+            //string detectedMime = "image/png";  // Ваша закомментированная строка
+            _log.LogInformation("Detected MIME: {DetectedMime} for DTO Name: {DtoName}", detectedMime, dto.Name); // Ваш оригинальный лог
             string mimeToStore;
 
-            if (!string.IsNullOrWhiteSpace(dto.MimeType))
+            if (dto.Trusted) // <--- ИЗМЕНЕННАЯ ЛОГИКА ЗДЕСЬ
             {
-                if (!detectedMime.Equals(dto.MimeType, StringComparison.OrdinalIgnoreCase))
+                // Если это внутренний/доверенный вызов (BypassExternalChecks = true)
+                if (!string.IsNullOrWhiteSpace(dto.MimeType))
                 {
-                    _log.LogWarning("Declared MIME '{DeclaredMime}' does not match detected MIME '{DetectedMime}' for file (DTO Name: {DtoName})", dto.MimeType, detectedMime, dto.Name);
-                    throw new InvalidOperationException($"Declared MIME '{dto.MimeType}' " +
-                                                        $"does not match real detected MIME '{detectedMime}'.");
+                    // Используем предоставленный MimeType без строгой сверки с detectedMime
+                    mimeToStore = dto.MimeType;
+                    _log.LogInformation("[BypassActive] Using provided MimeType '{MimeType}' for file (DTO Name: {DtoName}). Strict MIME validation skipped.", mimeToStore, dto.Name);
                 }
-                mimeToStore = dto.MimeType;
-                _log.LogInformation("Using declared MIME '{MimeType}' for file (DTO Name: {DtoName}) after successful validation against detected '{DetectedMime}'", mimeToStore, dto.Name, detectedMime);
+                else
+                {
+                    // Если MimeType не предоставлен даже для внутреннего вызова, используем определенный.
+                    // Строгая сверка не производится.
+                    mimeToStore = detectedMime; 
+                    _log.LogInformation("[BypassActive] MimeType not provided in DTO. Using detected/defaulted MimeType '{MimeType}' for file (DTO Name: {DtoName}). Strict MIME validation skipped.", mimeToStore, dto.Name);
+                }
             }
-            else
+            else // Стандартная логика для внешних вызовов (dto.BypassExternalChecks == false)
             {
-                mimeToStore = detectedMime;
-                _log.LogInformation("Using detected MIME '{MimeType}' for file (DTO Name: {DtoName})", mimeToStore, dto.Name);
+                // Эта часть соответствует вашей оригинальной логике
+                if (!string.IsNullOrWhiteSpace(dto.MimeType))
+                {
+                    if (!detectedMime.Equals(dto.MimeType, StringComparison.OrdinalIgnoreCase))
+                    {
+                        _log.LogWarning("Declared MIME '{DeclaredMime}' does not match detected MIME '{DetectedMime}' for file (DTO Name: {DtoName})", dto.MimeType, detectedMime, dto.Name);
+                        throw new InvalidOperationException($"Declared MIME '{dto.MimeType}' " +
+                                                            $"does not match real detected MIME '{detectedMime}'.");
+                    }
+                    mimeToStore = dto.MimeType;
+                    _log.LogInformation("Using declared MIME '{MimeType}' for file (DTO Name: {DtoName}) after successful validation against detected '{DetectedMime}'", mimeToStore, dto.Name, detectedMime);
+                }
+                else
+                {
+                    mimeToStore = detectedMime; 
+                    _log.LogInformation("Using detected MIME '{MimeType}' for file (DTO Name: {DtoName})", mimeToStore, dto.Name);
+                }
             }
 
             if (stream.CanSeek)
@@ -109,8 +130,8 @@ namespace Flsurf.Application.Files.UseCases
 
             /*─ 4. сохраняем в хранилище ─────────────────────────────────*/
             var originalName = string.IsNullOrWhiteSpace(dto.Name)
-                                ? Guid.NewGuid().ToString()
-                                : Path.GetFileName(dto.Name!); // Используем только имя файла
+                                 ? Guid.NewGuid().ToString()
+                                 : Path.GetFileName(dto.Name!); // Используем только имя файла
 
             var fileExtension = Path.GetExtension(originalName);
             // Логика для добавления расширения на основе MIME, если необходимо, может быть здесь.
@@ -137,17 +158,16 @@ namespace Flsurf.Application.Files.UseCases
 
 
             var entity = new FileEntity(Guid.NewGuid(),
-                                        originalName,
-                                        relativePath,
-                                        mimeToStore,
-                                        fileSize);
+                                         originalName,
+                                         relativePath,
+                                         mimeToStore,
+                                         fileSize);
 
             _db.Files.Add(entity);
             await _db.SaveChangesAsync();
             _log.LogInformation("File entity {FileId} created for {OriginalName} with MIME {MimeType}, Size: {FileSize}", entity.Id, originalName, mimeToStore, fileSize);
             return entity;
         }
-
 
         /// <summary>
         /// Копирует <paramref name="src"/> в MemoryStream и возвращает его. Позиция в MemoryStream будет 0.

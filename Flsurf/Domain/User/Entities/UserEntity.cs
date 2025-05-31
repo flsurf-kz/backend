@@ -32,11 +32,15 @@ namespace Flsurf.Domain.User.Entities
                     Surname = parts[0];
                     Name = parts[1];
                 }
-                else
+                else if (parts.Length < 2)
                 {
                     // В этом случае можно выбросить исключение, 
                     // или выполнить другие действия в зависимости от логики приложения.
-                    throw new ArgumentException("Неверный формат Fullname. Имя и фамилия должны быть разделены пробелом.");
+                    Surname = parts[0];
+                    Name = "Без имени"; 
+                } else if (parts.Length == 0)
+                {
+                    throw new DomainException("Нельзя такое ставить, нету имени и фамилии от слова вообще");
                 }
             }
         }
@@ -45,7 +49,7 @@ namespace Flsurf.Domain.User.Entities
         [Required]
         public UserRoles Role { get; set; } = UserRoles.User;
         [Required]
-        public UserTypes Type { get; private set; } = UserTypes.NonUser; 
+        public UserTypes Type { get; set; } = UserTypes.NonUser; 
         [Required]
         [EmailAddress(ErrorMessage = "Email address is not correct")]
         public string Email { get; set; } = null!;
@@ -126,6 +130,7 @@ namespace Flsurf.Domain.User.Entities
                 Fullname = fullname,
                 Email = email,
                 IsExternalUser = true,
+                NotificationSettings = NotificationSettings.CreateDefault(), 
             };
             user.HashedPassword = passwordService.HashPassword(user, Guid.NewGuid().ToString()); // Генерируем случайный пароль
 

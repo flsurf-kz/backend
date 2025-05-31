@@ -29,7 +29,7 @@ namespace Flsurf.Infrastructure.Adapters.FileStorage
             }
         }
 
-        public async Task UploadFileAsync(string path, Stream fileStream)
+        public async Task UploadFileAsync(string path, Stream fileStream, bool trusted = false)
         {
             try
             {

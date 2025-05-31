@@ -3,7 +3,7 @@
     public interface IFileStorageAdapter
     {
         // Загружает файл в хранилище
-        Task UploadFileAsync(string path, Stream fileStream);
+        Task UploadFileAsync(string path, Stream fileStream, bool trusted = false);
 
         // Скачивает файл из хранилища
         Task<Stream> DownloadFileAsync(string path);

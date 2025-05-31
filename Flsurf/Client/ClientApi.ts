@@ -28,9 +28,10 @@ export interface IClient {
     register(body?: RegisterUserSchema | undefined): Promise<CommandResult>;
 
     /**
+     * @param returnUrl (optional) 
      * @return OK
      */
-    externalLogin(provider: string): Promise<void>;
+    externalLogin(provider: string, returnUrl?: string | undefined): Promise<void>;
 
     /**
      * @return OK
@@ -902,7 +903,7 @@ export class Client implements IClient {
 
     constructor(baseUrl?: string, http?: { fetch(url: RequestInfo, init?: RequestInit): Promise<Response> }) {
         this.http = http ? http : window as any;
-        this.baseUrl = baseUrl ?? "";
+        this.baseUrl = baseUrl ?? "http://localhost:8000";
     }
 
     /**
@@ -1023,13 +1024,18 @@ export class Client implements IClient {
     }
 
     /**
+     * @param returnUrl (optional) 
      * @return OK
      */
-    externalLogin(provider: string): Promise<void> {
-        let url_ = this.baseUrl + "/api/auth/external-login/{provider}";
+    externalLogin(provider: string, returnUrl?: string | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/auth/external-login/{provider}?";
         if (provider === undefined || provider === null)
             throw new Error("The parameter 'provider' must be defined.");
         url_ = url_.replace("{provider}", encodeURIComponent("" + provider));
+        if (returnUrl === null)
+            throw new Error("The parameter 'returnUrl' cannot be null.");
+        else if (returnUrl !== undefined)
+            url_ += "returnUrl=" + encodeURIComponent("" + returnUrl) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -9449,6 +9455,7 @@ export class CreateFileDto implements ICreateFileDto {
     name?: string | undefined;
     mimeType?: string | undefined;
     stream?: string | undefined;
+    readonly trusted?: boolean;
 
     constructor(data?: ICreateFileDto) {
         if (data) {
@@ -9466,6 +9473,7 @@ export class CreateFileDto implements ICreateFileDto {
             this.name = _data["name"];
             this.mimeType = _data["mimeType"];
             this.stream = _data["stream"];
+            (<any>this).trusted = _data["trusted"];
         }
     }
 
@@ -9483,6 +9491,7 @@ export class CreateFileDto implements ICreateFileDto {
         data["name"] = this.name;
         data["mimeType"] = this.mimeType;
         data["stream"] = this.stream;
+        data["trusted"] = this.trusted;
         return data;
     }
 }
@@ -9493,6 +9502,7 @@ export interface ICreateFileDto {
     name?: string | undefined;
     mimeType?: string | undefined;
     stream?: string | undefined;
+    trusted?: boolean;
 }
 
 export class CreateFreelancerProfileCommand implements ICreateFreelancerProfileCommand {
@@ -16346,7 +16356,7 @@ export class UserEntity implements IUserEntity {
     surname!: string;
     fullname!: string;
     role!: UserEntityRole;
-    readonly type!: UserEntityType;
+    type!: UserEntityType;
     email!: string;
     avatar?: FileEntity;
     isOnline!: boolean;
@@ -16379,7 +16389,7 @@ export class UserEntity implements IUserEntity {
             this.surname = _data["surname"];
             this.fullname = _data["fullname"];
             this.role = _data["role"];
-            (<any>this).type = _data["type"];
+            this.type = _data["type"];
             this.email = _data["email"];
             this.avatar = _data["avatar"] ? FileEntity.fromJS(_data["avatar"]) : <any>undefined;
             this.isOnline = _data["isOnline"];
@@ -16466,7 +16476,7 @@ export class WalletEntity implements IWalletEntity {
     pendingIncome!: Money;
     readonly blocked!: boolean;
     readonly blockReason?: WalletEntityBlockReason;
-    rowVersion?: string | undefined;
+    readonly rowVersion?: string | undefined;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
@@ -16498,7 +16508,7 @@ export class WalletEntity implements IWalletEntity {
             this.pendingIncome = _data["pendingIncome"] ? Money.fromJS(_data["pendingIncome"]) : new Money();
             (<any>this).blocked = _data["blocked"];
             (<any>this).blockReason = _data["blockReason"];
-            this.rowVersion = _data["rowVersion"];
+            (<any>this).rowVersion = _data["rowVersion"];
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
