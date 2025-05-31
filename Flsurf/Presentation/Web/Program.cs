@@ -17,8 +17,8 @@ builder.Services.AddWebServices(builder.Configuration, builder.Environment, buil
 
 builder.WebHost.ConfigureKestrel(opt =>
 {
-    opt.ListenLocalhost(8000);
-    opt.ListenLocalhost(8001, lo => lo.UseHttps());
+    opt.ListenLocalhost(8001);
+    opt.ListenLocalhost(8000, lo => lo.UseHttps());
 });
 
 var app = builder.Build();

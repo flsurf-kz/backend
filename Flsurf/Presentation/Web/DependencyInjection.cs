@@ -43,6 +43,8 @@ namespace Flsurf.Presentation.Web
             {
                 var info = new OpenApiInfo { Title = "SpakOfMind Flsurf", Version = "v1" };
                 options.SwaggerDoc(name: "v1", info: info);
+                options.AddServer(new() { Url = "https://localhost:8000", Description = "Продакшн" });
+                options.AddServer(new() { Url = "https://localhost:8001", Description = "Для тестов" });
                 options.EnableAnnotations();
                 options.AddSecurityDefinition("session", new OpenApiSecurityScheme
                 {
@@ -224,7 +226,7 @@ namespace Flsurf.Presentation.Web
             services.AddHttpsRedirection(options =>
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-                options.HttpsPort = 8001;
+                options.HttpsPort = 8000;
             });
 
             return services;

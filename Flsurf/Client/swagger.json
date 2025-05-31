@@ -9,7 +9,20 @@
     "License": null,
     "Extensions": {}
   },
-  "Servers": [],
+  "Servers": [
+    {
+      "Description": "Продакшн",
+      "Url": "https://localhost:8000",
+      "Variables": {},
+      "Extensions": {}
+    },
+    {
+      "Description": "Для тестов",
+      "Url": "https://localhost:8001",
+      "Variables": {},
+      "Extensions": {}
+    }
+  ],
   "Paths": {
     "/api/auth/login": {
       "Summary": null,
@@ -115720,6 +115733,6 @@
   ],
   "ExternalDocs": null,
   "Extensions": {},
-  "HashCode": "8160FE9EA4E18E1D616097D97DC30D9BBD7E0D04B85C4CBE745A652EBA4178B7B112CAF1A18A915AFBCE1091E98957BF14BB8993F3BE21B674EA75CB624F4E44",
+  "HashCode": "562A50E110A5330C2541B17FB93482FA7C16739A97D78ADFE6616CE4E2F49988B01FB00339CB0218BE00934BC9F1A80544A9D221BB2D183B4B64445F096DAFAC",
   "Annotations": null
 }
