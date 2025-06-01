@@ -36,7 +36,10 @@ namespace Flsurf.Presentation.Web
         {
 
             services.AddEndpointsApiExplorer();
-            services.AddMvc().AddJsonOptions(c =>
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<AccessDeniedExceptionFilter>(); 
+            }).AddJsonOptions(c =>
                         c.JsonSerializerOptions.PropertyNamingPolicy
                             = JsonNamingPolicy.CamelCase);
             services.AddSwaggerGen(options =>
