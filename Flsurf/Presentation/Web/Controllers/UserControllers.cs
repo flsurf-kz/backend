@@ -50,8 +50,10 @@ namespace Flsurf.Presentation.Web.Controllers
         public async Task<ActionResult<UserEntity?>> GetMe()
         {
             var result = await UserService
-                .GetUser().Handle(new GetUserQuery() { UserId = _user.Id });
+                .GetUser().Handle(new GetUserQuery() {  });
 
+            if (result == null)
+                return NoContent(); 
             return result;
         }
 

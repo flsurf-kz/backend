@@ -1,8 +1,10 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
 using Flsurf.Domain.User.Entities;
+using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
+using System.Security;
 
 namespace Flsurf.Application.User.Queries
 {
@@ -19,18 +21,21 @@ namespace Flsurf.Application.User.Queries
         public string? Email { get; set; }
     }
 
-    public class GetUserHandler : IQueryHandler<GetUserQuery, UserEntity?>
+    public class GetUserHandler(IApplicationDbContext context, IPermissionService permService) : IQueryHandler<GetUserQuery, UserEntity?>
     {
-        private readonly IApplicationDbContext _context;
-
-        public GetUserHandler(IApplicationDbContext context)
-        {
-            _context = context;
-        }
 
         public async Task<UserEntity?> Handle(GetUserQuery query)
         {
-            var userQuery = _context.Users
+            if (query.UserId == null)
+            {
+                try
+                {
+                    query.UserId = (await permService.GetCurrentUser()).Id;
+                }
+                catch (AccessDenied) { }
+            }
+
+            var userQuery = context.Users
                 .IncludeStandard()
                 .AsNoTracking()
                 .AsQueryable();

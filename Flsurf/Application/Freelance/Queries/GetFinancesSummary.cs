@@ -12,9 +12,9 @@ namespace Flsurf.Application.Freelance.Queries
 {
     public class GetFinanceSummaryQuery : BaseQuery
     {
-        public int Month { get; }
-        public int Year { get; }
-        public Guid? UserId { get; }
+        public int Month { get; set;  }
+        public int Year { get; set; }
+        public Guid? UserId { get; set; }
     }
 
 
@@ -144,7 +144,7 @@ namespace Flsurf.Application.Freelance.Queries
         private static (DateTime start, DateTime end) GetMonthBounds(int m, int y)
         {
             if (m is < 1 or > 12)
-                throw new ArgumentOutOfRangeException(nameof(m), "Month must be 1-12.");
+                throw new ArgumentOutOfRangeException(nameof(m), $"Month must be 1-12. and the value: {m}");
 
             // «Здравый» диапазон ваших отчётов
             if (y is < 2000 or > 2100)

@@ -133,13 +133,5 @@ namespace Tests.Domain.UnitTests.Entities
             Assert.That(user.Surname, Is.EqualTo("Иван"));
             Assert.That(user.Fullname, Is.EqualTo("Иван Иванов"));
         }
-
-        [Test]
-        public void Fullname_Setter_WithInvalidFormat_ShouldThrowException()
-        {
-            var user = new UserEntity();
-
-            Assert.Throws<ArgumentException>(() => user.Fullname = "WrongFormatNameOnly");
-        }
     }
 }

@@ -152,6 +152,7 @@ namespace Flsurf.Presentation.Web
                     }
                 };
             })
+            .AddCookie("External")
             .AddGoogleOpenIdConnect(options =>
             {
                 options.ClientId = configuration["Authentication:Google:ClientId"];
@@ -163,7 +164,8 @@ namespace Flsurf.Presentation.Web
                 options.Scope.Add("email");   // Для получения email
 
                 options.GetClaimsFromUserInfoEndpoint = true;
-
+                
+                options.SignInScheme = "External";
                 options.CorrelationCookie.SameSite = SameSiteMode.None;
                 options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.NonceCookie.SameSite = SameSiteMode.None;

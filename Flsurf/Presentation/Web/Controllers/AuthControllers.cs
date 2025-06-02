@@ -160,103 +160,65 @@ namespace Flsurf.Presentation.Web.Controllers
         [HttpGet("external-login-callback", Name = "ExternalLoginCallback")]
         public async Task<IActionResult> ExternalLoginCallback()
         {
-            // 1. Аутентификация с использованием внешней схемы (схемы OIDC провайдера)
-            // Эта схема временно хранит информацию от внешнего провайдера (например, в куке).
-            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            if (result?.Succeeded != true)
-                return BadRequest("Error loading external login");
+            /* 1. Читаем временную cookie, куда OIDC-провайдер (Google) положил claims.
+             *    Схема указана в AddGoogleOpenIdConnect(…). */
+            var extResult = await HttpContext.AuthenticateAsync("External");
+            if (!extResult.Succeeded || extResult.Principal == null)
+                return BadRequest("Ошибка при загрузке данных внешнего входа.");
 
-            var authenticateResult = result;
-
-            if (authenticateResult?.Succeeded != true)
-            {
-                string failureMessage = authenticateResult?.Failure?.Message ?? "Unknown external authentication error.";
-                // Здесь можно добавить логирование ошибки: _logger.LogError("External login failed: {failureMessage}", failureMessage);
-                return BadRequest($"Ошибка при загрузке данных внешнего входа: {failureMessage}");
-            }
-
-            // 2. Извлечение Claims от внешнего провайдера
-            var externalPrincipal = authenticateResult.Principal;
-            if (externalPrincipal == null)
-            {
-                return BadRequest("Не удалось получить данные пользователя от внешнего провайдера.");
-            }
-
-            var email = externalPrincipal.FindFirstValue(ClaimTypes.Email);
-            var name = externalPrincipal.FindFirstValue(ClaimTypes.Name) ?? ""; // Может быть полным именем
-            var givenName = externalPrincipal.FindFirstValue(ClaimTypes.GivenName); // Имя
-            var surname = externalPrincipal.FindFirstValue(ClaimTypes.Surname); // Фамилия
-
-            // ---> ВОТ ЗДЕСЬ МЫ ПОЛУЧАЕМ URL АВАТАРА ОТ OIDC ПРОВАЙДЕРА <---
-            var pictureClaimValue = externalPrincipal.FindFirstValue("picture"); // Стандартный OIDC claim
-                                                                                 // Некоторые провайдеры могут использовать другие claims, например:
-                                                                                 // var pictureClaimValue = externalPrincipal.FindFirstValue("urn:google:picture") ?? externalPrincipal.FindFirstValue("picture");
-
-            // Если хотите проверить, что приходит от провайдера, можно раскомментировать:
-            // var allClaims = externalPrincipal.Claims.Select(c => $"{c.Type}: {c.Value}").ToList();
-            // throw new Exception("Claims от провайдера: " + string.Join(", ", allClaims));
+            /* 2. Берём данные пользователя от провайдера */
+            var extPrincipal = extResult.Principal;
+            var email = extPrincipal.FindFirstValue(ClaimTypes.Email);
+            var fullNameRaw = extPrincipal.FindFirstValue(ClaimTypes.Name);
+            var givenName = extPrincipal.FindFirstValue(ClaimTypes.GivenName);
+            var surname = extPrincipal.FindFirstValue(ClaimTypes.Surname);
+            var avatarUrl = extPrincipal.FindFirstValue("picture");
 
             if (string.IsNullOrEmpty(email))
-            {
-                return BadRequest("Email не предоставлен внешним провайдером. Регистрация невозможна.");
-            }
+                return BadRequest("Провайдер не вернул email.");
 
-            // Формируем полное имя, если оно разделено
-            string fullName = name;
-            if (string.IsNullOrEmpty(fullName) && (!string.IsNullOrEmpty(givenName) || !string.IsNullOrEmpty(surname)))
-            {
-                fullName = $"{givenName} {surname}".Trim();
-            }
-            if (string.IsNullOrEmpty(fullName)) // Если имя все еще пустое, можно использовать часть email или другое значение по умолчанию
-            {
-                fullName = email.Split('@')[0];
-            }
+            string fullName = fullNameRaw ??
+                              $"{givenName} {surname}".Trim() ??
+                              email.Split('@')[0];
 
-            // 3. Создание DTO для передачи в ваш сервис пользователей
-            var userDto = new ExternalUserDto
+            /* 3. Создаём / ищем пользователя в нашей БД */
+            var externalDto = new ExternalUserDto
             {
                 Email = email,
                 FullName = fullName,
-                Provider = authenticateResult.Properties?.Items?[".AuthScheme"] ?? "UnknownProvider",
-                AvatarUrl = pictureClaimValue ?? "" // <--- Передаем полученный URL аватара
+                Provider = extResult.Properties?.Items[".AuthScheme"] ?? "Google",
+                AvatarUrl = avatarUrl ?? ""
             };
 
-            // 4. Поиск или создание пользователя в вашей системе
-            // Ваш сервис _userService.FindOrCreateExternalUser().Execute(userDto)
-            // ДОЛЖЕН ОБНОВИТЬ ИЛИ СОЗДАТЬ UserEntity С ПОЛУЧЕННЫМ AvatarUrl.
-            // Например, userEntity.Avatar.FilePath = userDto.AvatarUrl; (или как у вас устроено хранение)
             UserEntity user = await _userService
                 .FindOrCreateExternalUser()
-                .Execute(userDto);
+                .Execute(externalDto);
 
-            if (user == null)
-            {
-                return BadRequest("Не удалось создать или найти пользователя в системе.");
-            }
+            /* 4. Чистим временную cookie (схема "External") */
+            await HttpContext.SignOutAsync("External");
 
-            // 6. Создание ClaimsPrincipal для вашего приложения, включая AvatarUrl из вашей UserEntity
-            // Метод CreatePrincipal должен брать AvatarUrl из user.Avatar.FilePath (который был обновлен на шаге 4)
+            /* 5. Формируем ClaimsPrincipal приложения и логиним пользователя */
             var appPrincipal = CreatePrincipal(user);
-
-            // 7. Вход пользователя в ваше приложение (установка основной сессионной куки)
             await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme, // Ваша основная схема аутентификации
+                CookieAuthenticationDefaults.AuthenticationScheme,
                 appPrincipal,
-                new AuthenticationProperties { IsPersistent = true }); // или настройте IsPersistent по вашему желанию
+                new AuthenticationProperties {
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMonths(1), 
+                    IsPersistent = true 
+                }
+            );
 
-            // Получаем сохраненный URL для редиректа на фронтенд
-            string? finalRedirectUrl = authenticateResult.Properties?.Items["LoginRedirectUrl"];
+            /* 6. Берём сохранённый URL для редиректа на фронт */
+            string redirect =
+                extResult.Properties?.Items["LoginRedirectUrl"]
+                ?? "http://localhost:5173/";
 
-            // Снова валидация URL для безопасности (на случай, если AuthenticationProperties были как-то изменены)
-            if (string.IsNullOrEmpty(finalRedirectUrl) ||
-                !Uri.TryCreate(finalRedirectUrl, UriKind.Absolute, out var uriResult) ||
-                !(uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps) ||
-                !(uriResult.Host == "localhost" && uriResult.Port == 5173) /* В продакшене: uriResult.Host != "yourfrontend.com" */ )
-            {
-                finalRedirectUrl = "http://localhost:5173/"; // URL по умолчанию
-            }
+            // Базовая валидация, чтобы не было open-redirect
+            if (!Uri.TryCreate(redirect, UriKind.Absolute, out var uri) ||
+                (uri.Host != "localhost" || uri.Port != 5173))
+                redirect = "http://localhost:5173/";
 
-            return Redirect(finalRedirectUrl); // Редирект на фронтенд
+            return Redirect(redirect);
         }
 
         private ClaimsPrincipal CreatePrincipal(UserEntity user)
