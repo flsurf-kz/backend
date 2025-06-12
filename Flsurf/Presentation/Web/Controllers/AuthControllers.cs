@@ -292,5 +292,20 @@ namespace Flsurf.Presentation.Web.Controllers
 
             return CommandResult.Success().MapResult(this);
         }
+
+        [HttpPatch("security-answer", Name = "AddSecurityAnswer")]
+        public async Task<ActionResult<CommandResult>> AddSecurityAnswer([FromBody] AddSecurityQuestionCommand cmd)
+        {
+            return await _userService.AddSecurityQuestion().Handle(cmd); 
+        }
+
+        [HttpPost("security-answer", Name = "AuthWithSecurityAnswer")]
+        public async Task<ActionResult<SecurityAnswerDto?>> AuthiticateWithSecurityAnswer([FromBody] AuthticateWithSecurityAnswerQuery query)
+        {
+            var result = await _userService.AuthticateWithSecretAnswer().Handle(query);
+            if (result == null)
+                return NoContent(); 
+            return result; 
+        }
     }
 }

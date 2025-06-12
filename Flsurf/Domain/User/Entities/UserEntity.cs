@@ -8,6 +8,7 @@ using Flsurf.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Flsurf.Domain.User.Entities
 {
@@ -49,7 +50,15 @@ namespace Flsurf.Domain.User.Entities
         [Required]
         public UserRoles Role { get; set; } = UserRoles.User;
         [Required]
-        public UserTypes Type { get; set; } = UserTypes.NonUser; 
+        public UserTypes Type { get; set; } = UserTypes.NonUser;
+        [NotMapped, Required]
+        public bool Protected { get {
+                if (!string.IsNullOrWhiteSpace(SecurityQuestionAnswerHashed)) { return true; } return false; 
+            } 
+        }
+        public SecurityQuestionTypes? SecurityPhraseType { get; private set; }
+        [JsonIgnore]
+        public string? SecurityQuestionAnswerHashed { get; private set; } 
         [Required]
         [EmailAddress(ErrorMessage = "Email address is not correct")]
         public string Email { get; set; } = null!;
@@ -118,6 +127,19 @@ namespace Flsurf.Domain.User.Entities
             user.AddDomainEvent(new UserCreated(user.Id));
 
             return user;
+        }
+
+        public void AddSecretPhrase(string securityAnswer, SecurityQuestionTypes type, PasswordService hasherService)
+        {
+            SecurityPhraseType = type; 
+            SecurityQuestionAnswerHashed = hasherService.HashPassword(this, securityAnswer);
+        }
+
+        public bool ValidateSecretPhrase(string securityAnswer, SecurityQuestionTypes type, PasswordService hasherService)
+        {
+            if (type != SecurityPhraseType) return false;
+            var hashed = hasherService.HashPassword(this, securityAnswer);
+            return hashed == SecurityQuestionAnswerHashed;  
         }
 
         public static UserEntity CreateExternal(

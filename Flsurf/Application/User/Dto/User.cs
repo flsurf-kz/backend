@@ -16,4 +16,10 @@ namespace Flsurf.Application.User.Dto
         [Required]
         public string Provider { get; set; } = string.Empty; // Google, VK и т.д.
     }
+
+    public class SecurityAnswerDto
+    {
+        [Required]
+        public string Token { get; set; } = null!; 
+    }
 }

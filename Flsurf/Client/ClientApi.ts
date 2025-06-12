@@ -54,6 +54,18 @@ export interface IClient {
      * @param body (optional) 
      * @return OK
      */
+    addSecurityAnswer(body?: AddSecurityQuestionCommand | undefined): Promise<CommandResult>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    authWithSecurityAnswer(body?: AuthticateWithSecurityAnswerQuery | undefined): Promise<SecurityAnswerDto>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
     createCategory(body?: CreateCategoryCommand | undefined): Promise<CommandResult>;
 
     /**
@@ -1179,6 +1191,90 @@ export class Client implements IClient {
             });
         }
         return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    addSecurityAnswer(body?: AddSecurityQuestionCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/auth/security-answer";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAddSecurityAnswer(_response);
+        });
+    }
+
+    protected processAddSecurityAnswer(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    authWithSecurityAnswer(body?: AuthticateWithSecurityAnswerQuery | undefined): Promise<SecurityAnswerDto> {
+        let url_ = this.baseUrl + "/api/auth/security-answer";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processAuthWithSecurityAnswer(_response);
+        });
+    }
+
+    protected processAuthWithSecurityAnswer(response: Response): Promise<SecurityAnswerDto> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SecurityAnswerDto.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<SecurityAnswerDto>(null as any);
     }
 
     /**
@@ -7678,6 +7774,50 @@ export interface IAddPortfolioProjectCommand {
     files?: CreateFileDto[] | undefined;
 }
 
+export class AddSecurityQuestionCommand implements IAddSecurityQuestionCommand {
+    userId!: string;
+    securityAnswer!: string | undefined;
+    type!: AddSecurityQuestionCommandType;
+
+    constructor(data?: IAddSecurityQuestionCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.securityAnswer = _data["securityAnswer"];
+            this.type = _data["type"];
+        }
+    }
+
+    static fromJS(data: any): AddSecurityQuestionCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new AddSecurityQuestionCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["securityAnswer"] = this.securityAnswer;
+        data["type"] = this.type;
+        return data;
+    }
+}
+
+export interface IAddSecurityQuestionCommand {
+    userId: string;
+    securityAnswer: string | undefined;
+    type: AddSecurityQuestionCommandType;
+}
+
 export class ApproveContestCommand implements IApproveContestCommand {
     contestId?: string;
 
@@ -7748,6 +7888,50 @@ export class ApproveWorkSessionCommand implements IApproveWorkSessionCommand {
 
 export interface IApproveWorkSessionCommand {
     sessionId?: string;
+}
+
+export class AuthticateWithSecurityAnswerQuery implements IAuthticateWithSecurityAnswerQuery {
+    userId?: string | undefined;
+    answerForQuestion!: string | undefined;
+    questionType!: AuthticateWithSecurityAnswerQueryQuestionType;
+
+    constructor(data?: IAuthticateWithSecurityAnswerQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.answerForQuestion = _data["answerForQuestion"];
+            this.questionType = _data["questionType"];
+        }
+    }
+
+    static fromJS(data: any): AuthticateWithSecurityAnswerQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new AuthticateWithSecurityAnswerQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["answerForQuestion"] = this.answerForQuestion;
+        data["questionType"] = this.questionType;
+        return data;
+    }
+}
+
+export interface IAuthticateWithSecurityAnswerQuery {
+    userId?: string | undefined;
+    answerForQuestion: string | undefined;
+    questionType: AuthticateWithSecurityAnswerQueryQuestionType;
 }
 
 export class BalanceOperationCommand implements IBalanceOperationCommand {
@@ -11304,9 +11488,9 @@ export interface IGetContractsListQuery {
 }
 
 export class GetFinanceSummaryQuery implements IGetFinanceSummaryQuery {
-    readonly month?: number;
-    readonly year?: number;
-    readonly userId?: string | undefined;
+    month?: number;
+    year?: number;
+    userId?: string | undefined;
 
     constructor(data?: IGetFinanceSummaryQuery) {
         if (data) {
@@ -11319,9 +11503,9 @@ export class GetFinanceSummaryQuery implements IGetFinanceSummaryQuery {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).month = _data["month"];
-            (<any>this).year = _data["year"];
-            (<any>this).userId = _data["userId"];
+            this.month = _data["month"];
+            this.year = _data["year"];
+            this.userId = _data["userId"];
         }
     }
 
@@ -14064,6 +14248,42 @@ export interface IResolveDisputeCommand {
     blockUntil?: Date | undefined;
 }
 
+export class SecurityAnswerDto implements ISecurityAnswerDto {
+    token!: string;
+
+    constructor(data?: ISecurityAnswerDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.token = _data["token"];
+        }
+    }
+
+    static fromJS(data: any): SecurityAnswerDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SecurityAnswerDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["token"] = this.token;
+        return data;
+    }
+}
+
+export interface ISecurityAnswerDto {
+    token: string;
+}
+
 export class SelectContestWinnerCommand implements ISelectContestWinnerCommand {
     contestId!: string;
     entryId!: string;
@@ -16357,6 +16577,9 @@ export class UserEntity implements IUserEntity {
     fullname!: string;
     role!: UserEntityRole;
     type!: UserEntityType;
+    readonly protected!: boolean;
+    readonly securityPhraseType?: UserEntitySecurityPhraseType | undefined;
+    readonly securityQuestionAnswerHashed?: string | undefined;
     email!: string;
     avatar?: FileEntity;
     isOnline!: boolean;
@@ -16390,6 +16613,9 @@ export class UserEntity implements IUserEntity {
             this.fullname = _data["fullname"];
             this.role = _data["role"];
             this.type = _data["type"];
+            (<any>this).protected = _data["protected"];
+            (<any>this).securityPhraseType = _data["securityPhraseType"];
+            (<any>this).securityQuestionAnswerHashed = _data["securityQuestionAnswerHashed"];
             this.email = _data["email"];
             this.avatar = _data["avatar"] ? FileEntity.fromJS(_data["avatar"]) : <any>undefined;
             this.isOnline = _data["isOnline"];
@@ -16423,6 +16649,9 @@ export class UserEntity implements IUserEntity {
         data["fullname"] = this.fullname;
         data["role"] = this.role;
         data["type"] = this.type;
+        data["protected"] = this.protected;
+        data["securityPhraseType"] = this.securityPhraseType;
+        data["securityQuestionAnswerHashed"] = this.securityQuestionAnswerHashed;
         data["email"] = this.email;
         data["avatar"] = this.avatar ? this.avatar.toJSON() : <any>undefined;
         data["isOnline"] = this.isOnline;
@@ -16449,6 +16678,9 @@ export interface IUserEntity {
     fullname: string;
     role: UserEntityRole;
     type: UserEntityType;
+    protected: boolean;
+    securityPhraseType?: UserEntitySecurityPhraseType | undefined;
+    securityQuestionAnswerHashed?: string | undefined;
     email: string;
     avatar?: FileEntity;
     isOnline: boolean;
@@ -16839,6 +17071,14 @@ export enum AddBonusToContractCommandType {
     Performance = "Performance",
     Discretionary = "Discretionary",
     Tip = "Tip",
+}
+
+export enum AddSecurityQuestionCommandType {
+    School = "School",
+}
+
+export enum AuthticateWithSecurityAnswerQueryQuestionType {
+    School = "School",
 }
 
 export enum BalanceOperationCommandBalanceOperationType {
@@ -17341,6 +17581,10 @@ export enum UserEntityType {
     Other = "Other",
     NonUser = "NonUser",
     Staff = "Staff",
+}
+
+export enum UserEntitySecurityPhraseType {
+    School = "School",
 }
 
 export enum UserEntityLocation {

@@ -76,5 +76,15 @@ namespace Flsurf.Application.User
         {
             return ServiceProvider.GetRequiredService<UpdateTaxSettingsHandler>(); 
         }
+
+        public AuthticateWithSecretAnswerHandler AuthticateWithSecretAnswer()
+        {
+            return ServiceProvider.GetRequiredService<AuthticateWithSecretAnswerHandler>();
+        }
+
+        public AddSecurityQuestionHandler AddSecurityQuestion()
+        {
+            return ServiceProvider.GetRequiredService<AddSecurityQuestionHandler>(); 
+        }
     }
 }

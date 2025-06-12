@@ -16,6 +16,7 @@ using System.ComponentModel;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Flsurf.Infrastructure.EventDispatcher;
 using Microsoft.Extensions.Logging.Abstractions;
+using Flsurf.Application.User.Interfaces;
 
 namespace Flsurf.Infrastructure
 {
@@ -157,6 +158,7 @@ namespace Flsurf.Infrastructure
             }
             services.AddScoped<ITicketStore, DatabaseTicketStore>();
             services.AddAuthorizationBuilder();
+            services.AddScoped<ITokenService, SecurityAnswerTokenService>(); 
 
             return services;
         }
