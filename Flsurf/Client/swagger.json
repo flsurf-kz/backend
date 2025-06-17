@@ -71092,7 +71092,7 @@
             "Reference": null,
             "Annotations": null
           },
-          "freelancerName": {
+          "clientName": {
             "Title": null,
             "Type": "string",
             "Format": null,
@@ -71134,7 +71134,7 @@
             "Reference": null,
             "Annotations": null
           },
-          "freelancerAvatar": {
+          "clientAvatar": {
             "Title": null,
             "Type": null,
             "Format": null,
@@ -71186,7 +71186,7 @@
             },
             "Annotations": null
           },
-          "amountPaid": {
+          "amountEarned": {
             "Title": null,
             "Type": "number",
             "Format": "double",
@@ -86291,7 +86291,7 @@
         "MinItems": null,
         "UniqueItems": null,
         "Properties": {
-          "rangeOfJobs": {
+          "rangeOfContracts": {
             "Title": null,
             "Type": "array",
             "Format": null,
@@ -86374,7 +86374,7 @@
             "Reference": null,
             "Annotations": null
           },
-          "freelancerId": {
+          "clientId": {
             "Title": null,
             "Type": "string",
             "Format": "uuid",
@@ -86416,7 +86416,7 @@
             "Reference": null,
             "Annotations": null
           },
-          "paidToFreelancer": {
+          "earnedRange": {
             "Title": null,
             "Type": "array",
             "Format": null,
@@ -86545,6 +86545,48 @@
             "Title": null,
             "Type": "string",
             "Format": "date-time",
+            "Description": null,
+            "Maximum": null,
+            "ExclusiveMaximum": null,
+            "Minimum": null,
+            "ExclusiveMinimum": null,
+            "MaxLength": null,
+            "MinLength": null,
+            "Pattern": null,
+            "MultipleOf": null,
+            "Default": null,
+            "ReadOnly": false,
+            "WriteOnly": false,
+            "AllOf": [],
+            "OneOf": [],
+            "AnyOf": [],
+            "Not": null,
+            "Required": [],
+            "Items": null,
+            "MaxItems": null,
+            "MinItems": null,
+            "UniqueItems": null,
+            "Properties": {},
+            "MaxProperties": null,
+            "MinProperties": null,
+            "AdditionalPropertiesAllowed": true,
+            "AdditionalProperties": null,
+            "Discriminator": null,
+            "Example": null,
+            "Enum": [],
+            "Nullable": true,
+            "ExternalDocs": null,
+            "Deprecated": false,
+            "Xml": null,
+            "Extensions": {},
+            "UnresolvedReference": false,
+            "Reference": null,
+            "Annotations": null
+          },
+          "freelancerId": {
+            "Title": null,
+            "Type": "string",
+            "Format": "uuid",
             "Description": null,
             "Maximum": null,
             "ExclusiveMaximum": null,
@@ -118547,6 +118589,6 @@
   ],
   "ExternalDocs": null,
   "Extensions": {},
-  "HashCode": "0EF70859716F59703790691466D42CAD0929C857EAAFA5468991971496CD7DB4FEEFD0DE52CCDF4FFAF163A965281B8FD4D047C6EA4F1872659B085CD9D62E8C",
+  "HashCode": "7627705670DC806D29F40CA6E683E550DA5DECBF2E2252504898A61F49B0E3630DA36798D74944FD815E62EE5C77D3166F3BCDC45D432901F0DAB308D1CD5853",
   "Annotations": null
 }

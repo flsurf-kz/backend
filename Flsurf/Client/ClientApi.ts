@@ -8704,9 +8704,9 @@ export class ClientHistoryDto implements IClientHistoryDto {
     contractId?: string;
     jobTitle?: string | undefined;
     completedAt?: Date;
-    freelancerName?: string | undefined;
-    freelancerAvatar?: FileEntity;
-    amountPaid?: number;
+    clientName?: string | undefined;
+    clientAvatar?: FileEntity;
+    amountEarned?: number;
 
     constructor(data?: IClientHistoryDto) {
         if (data) {
@@ -8722,9 +8722,9 @@ export class ClientHistoryDto implements IClientHistoryDto {
             this.contractId = _data["contractId"];
             this.jobTitle = _data["jobTitle"];
             this.completedAt = _data["completedAt"] ? new Date(_data["completedAt"].toString()) : <any>undefined;
-            this.freelancerName = _data["freelancerName"];
-            this.freelancerAvatar = _data["freelancerAvatar"] ? FileEntity.fromJS(_data["freelancerAvatar"]) : <any>undefined;
-            this.amountPaid = _data["amountPaid"];
+            this.clientName = _data["clientName"];
+            this.clientAvatar = _data["clientAvatar"] ? FileEntity.fromJS(_data["clientAvatar"]) : <any>undefined;
+            this.amountEarned = _data["amountEarned"];
         }
     }
 
@@ -8740,9 +8740,9 @@ export class ClientHistoryDto implements IClientHistoryDto {
         data["contractId"] = this.contractId;
         data["jobTitle"] = this.jobTitle;
         data["completedAt"] = this.completedAt ? this.completedAt.toISOString() : <any>undefined;
-        data["freelancerName"] = this.freelancerName;
-        data["freelancerAvatar"] = this.freelancerAvatar ? this.freelancerAvatar.toJSON() : <any>undefined;
-        data["amountPaid"] = this.amountPaid;
+        data["clientName"] = this.clientName;
+        data["clientAvatar"] = this.clientAvatar ? this.clientAvatar.toJSON() : <any>undefined;
+        data["amountEarned"] = this.amountEarned;
         return data;
     }
 }
@@ -8751,9 +8751,9 @@ export interface IClientHistoryDto {
     contractId?: string;
     jobTitle?: string | undefined;
     completedAt?: Date;
-    freelancerName?: string | undefined;
-    freelancerAvatar?: FileEntity;
-    amountPaid?: number;
+    clientName?: string | undefined;
+    clientAvatar?: FileEntity;
+    amountEarned?: number;
 }
 
 export class ClientJobInfo implements IClientJobInfo {
@@ -11547,11 +11547,12 @@ export interface IGatewayResultCommand {
 }
 
 export class GetClientHistoryQuery implements IGetClientHistoryQuery {
-    rangeOfJobs?: number[] | undefined;
-    freelancerId?: string | undefined;
-    paidToFreelancer?: number[] | undefined;
+    rangeOfContracts?: number[] | undefined;
+    clientId?: string | undefined;
+    earnedRange?: number[] | undefined;
     completedAfter?: Date | undefined;
     completedBefore?: Date | undefined;
+    freelancerId?: string | undefined;
 
     constructor(data?: IGetClientHistoryQuery) {
         if (data) {
@@ -11564,19 +11565,20 @@ export class GetClientHistoryQuery implements IGetClientHistoryQuery {
 
     init(_data?: any) {
         if (_data) {
-            if (Array.isArray(_data["rangeOfJobs"])) {
-                this.rangeOfJobs = [] as any;
-                for (let item of _data["rangeOfJobs"])
-                    this.rangeOfJobs!.push(item);
+            if (Array.isArray(_data["rangeOfContracts"])) {
+                this.rangeOfContracts = [] as any;
+                for (let item of _data["rangeOfContracts"])
+                    this.rangeOfContracts!.push(item);
             }
-            this.freelancerId = _data["freelancerId"];
-            if (Array.isArray(_data["paidToFreelancer"])) {
-                this.paidToFreelancer = [] as any;
-                for (let item of _data["paidToFreelancer"])
-                    this.paidToFreelancer!.push(item);
+            this.clientId = _data["clientId"];
+            if (Array.isArray(_data["earnedRange"])) {
+                this.earnedRange = [] as any;
+                for (let item of _data["earnedRange"])
+                    this.earnedRange!.push(item);
             }
             this.completedAfter = _data["completedAfter"] ? new Date(_data["completedAfter"].toString()) : <any>undefined;
             this.completedBefore = _data["completedBefore"] ? new Date(_data["completedBefore"].toString()) : <any>undefined;
+            this.freelancerId = _data["freelancerId"];
         }
     }
 
@@ -11589,29 +11591,31 @@ export class GetClientHistoryQuery implements IGetClientHistoryQuery {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.rangeOfJobs)) {
-            data["rangeOfJobs"] = [];
-            for (let item of this.rangeOfJobs)
-                data["rangeOfJobs"].push(item);
+        if (Array.isArray(this.rangeOfContracts)) {
+            data["rangeOfContracts"] = [];
+            for (let item of this.rangeOfContracts)
+                data["rangeOfContracts"].push(item);
         }
-        data["freelancerId"] = this.freelancerId;
-        if (Array.isArray(this.paidToFreelancer)) {
-            data["paidToFreelancer"] = [];
-            for (let item of this.paidToFreelancer)
-                data["paidToFreelancer"].push(item);
+        data["clientId"] = this.clientId;
+        if (Array.isArray(this.earnedRange)) {
+            data["earnedRange"] = [];
+            for (let item of this.earnedRange)
+                data["earnedRange"].push(item);
         }
         data["completedAfter"] = this.completedAfter ? this.completedAfter.toISOString() : <any>undefined;
         data["completedBefore"] = this.completedBefore ? this.completedBefore.toISOString() : <any>undefined;
+        data["freelancerId"] = this.freelancerId;
         return data;
     }
 }
 
 export interface IGetClientHistoryQuery {
-    rangeOfJobs?: number[] | undefined;
-    freelancerId?: string | undefined;
-    paidToFreelancer?: number[] | undefined;
+    rangeOfContracts?: number[] | undefined;
+    clientId?: string | undefined;
+    earnedRange?: number[] | undefined;
     completedAfter?: Date | undefined;
     completedBefore?: Date | undefined;
+    freelancerId?: string | undefined;
 }
 
 export class GetContractsListQuery implements IGetContractsListQuery {
