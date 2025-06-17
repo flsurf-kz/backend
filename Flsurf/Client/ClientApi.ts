@@ -189,6 +189,12 @@ export interface IClient {
      * @param body (optional) 
      * @return OK
      */
+    getClientHistory(body?: GetClientHistoryQuery | undefined): Promise<ClientHistoryDto[]>;
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
     createContest(body?: CreateContestCommand | undefined): Promise<CommandResult>;
 
     /**
@@ -2188,6 +2194,55 @@ export class Client implements IClient {
             });
         }
         return Promise.resolve<CommandResult>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    getClientHistory(body?: GetClientHistoryQuery | undefined): Promise<ClientHistoryDto[]> {
+        let url_ = this.baseUrl + "/api/client-profile/client-history";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processGetClientHistory(_response);
+        });
+    }
+
+    protected processGetClientHistory(response: Response): Promise<ClientHistoryDto[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(ClientHistoryDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<ClientHistoryDto[]>(null as any);
     }
 
     /**
@@ -8645,6 +8700,62 @@ export interface IClientCloseContractCommand {
     reason?: string | undefined;
 }
 
+export class ClientHistoryDto implements IClientHistoryDto {
+    contractId?: string;
+    jobTitle?: string | undefined;
+    completedAt?: Date;
+    freelancerName?: string | undefined;
+    freelancerAvatar?: FileEntity;
+    amountPaid?: number;
+
+    constructor(data?: IClientHistoryDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.contractId = _data["contractId"];
+            this.jobTitle = _data["jobTitle"];
+            this.completedAt = _data["completedAt"] ? new Date(_data["completedAt"].toString()) : <any>undefined;
+            this.freelancerName = _data["freelancerName"];
+            this.freelancerAvatar = _data["freelancerAvatar"] ? FileEntity.fromJS(_data["freelancerAvatar"]) : <any>undefined;
+            this.amountPaid = _data["amountPaid"];
+        }
+    }
+
+    static fromJS(data: any): ClientHistoryDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClientHistoryDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["contractId"] = this.contractId;
+        data["jobTitle"] = this.jobTitle;
+        data["completedAt"] = this.completedAt ? this.completedAt.toISOString() : <any>undefined;
+        data["freelancerName"] = this.freelancerName;
+        data["freelancerAvatar"] = this.freelancerAvatar ? this.freelancerAvatar.toJSON() : <any>undefined;
+        data["amountPaid"] = this.amountPaid;
+        return data;
+    }
+}
+
+export interface IClientHistoryDto {
+    contractId?: string;
+    jobTitle?: string | undefined;
+    completedAt?: Date;
+    freelancerName?: string | undefined;
+    freelancerAvatar?: FileEntity;
+    amountPaid?: number;
+}
+
 export class ClientJobInfo implements IClientJobInfo {
     userId?: string;
     name?: string | undefined;
@@ -11433,6 +11544,74 @@ export interface IGatewayResultCommand {
     status?: string | undefined;
     failureReason?: string | undefined;
     metadata?: { [key: string]: string; } | undefined;
+}
+
+export class GetClientHistoryQuery implements IGetClientHistoryQuery {
+    rangeOfJobs?: number[] | undefined;
+    freelancerId?: string | undefined;
+    paidToFreelancer?: number[] | undefined;
+    completedAfter?: Date | undefined;
+    completedBefore?: Date | undefined;
+
+    constructor(data?: IGetClientHistoryQuery) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["rangeOfJobs"])) {
+                this.rangeOfJobs = [] as any;
+                for (let item of _data["rangeOfJobs"])
+                    this.rangeOfJobs!.push(item);
+            }
+            this.freelancerId = _data["freelancerId"];
+            if (Array.isArray(_data["paidToFreelancer"])) {
+                this.paidToFreelancer = [] as any;
+                for (let item of _data["paidToFreelancer"])
+                    this.paidToFreelancer!.push(item);
+            }
+            this.completedAfter = _data["completedAfter"] ? new Date(_data["completedAfter"].toString()) : <any>undefined;
+            this.completedBefore = _data["completedBefore"] ? new Date(_data["completedBefore"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): GetClientHistoryQuery {
+        data = typeof data === 'object' ? data : {};
+        let result = new GetClientHistoryQuery();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.rangeOfJobs)) {
+            data["rangeOfJobs"] = [];
+            for (let item of this.rangeOfJobs)
+                data["rangeOfJobs"].push(item);
+        }
+        data["freelancerId"] = this.freelancerId;
+        if (Array.isArray(this.paidToFreelancer)) {
+            data["paidToFreelancer"] = [];
+            for (let item of this.paidToFreelancer)
+                data["paidToFreelancer"].push(item);
+        }
+        data["completedAfter"] = this.completedAfter ? this.completedAfter.toISOString() : <any>undefined;
+        data["completedBefore"] = this.completedBefore ? this.completedBefore.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IGetClientHistoryQuery {
+    rangeOfJobs?: number[] | undefined;
+    freelancerId?: string | undefined;
+    paidToFreelancer?: number[] | undefined;
+    completedAfter?: Date | undefined;
+    completedBefore?: Date | undefined;
 }
 
 export class GetContractsListQuery implements IGetContractsListQuery {

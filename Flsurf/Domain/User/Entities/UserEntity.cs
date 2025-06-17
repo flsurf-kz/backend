@@ -56,6 +56,7 @@ namespace Flsurf.Domain.User.Entities
                 if (!string.IsNullOrWhiteSpace(SecurityQuestionAnswerHashed)) { return true; } return false; 
             } 
         }
+        [JsonIgnore]
         public SecurityQuestionTypes? SecurityPhraseType { get; private set; }
         [JsonIgnore]
         public string? SecurityQuestionAnswerHashed { get; private set; } 

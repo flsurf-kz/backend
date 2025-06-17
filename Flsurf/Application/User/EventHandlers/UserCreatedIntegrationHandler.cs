@@ -42,8 +42,12 @@ namespace Flsurf.Application.User.EventHandlers
                                     });
                     if (!result.IsSuccess)
                     {
-                        logger.LogError(result.Message + "Status" + result.Status.ToString());
-                        throw new Exception(result.Message); 
+                        // it means freelancer profile was created 
+                        if (result.Status != System.Net.HttpStatusCode.Conflict && result.Status != System.Net.HttpStatusCode.Forbidden)
+                        {
+                            logger.LogError(result.Message + "Status" + result.Status.ToString());
+                            throw new Exception(result.Message);
+                        }
                     }
                     logger.LogInformation("INTEGRATION‑handler → freelancer profile created for {Id}", user.Id);
                     break;
@@ -61,8 +65,11 @@ namespace Flsurf.Application.User.EventHandlers
 
                     if (!result.IsSuccess)
                     {
-                        logger.LogError(result.Message + "Status" + result.Status.ToString());
-                        throw new Exception(result.Message);
+                        if (result.Status != System.Net.HttpStatusCode.Conflict && result.Status != System.Net.HttpStatusCode.Forbidden)
+                        {
+                            logger.LogError(result.Message + "Status" + result.Status.ToString());
+                            throw new Exception(result.Message);
+                        }
                     }
                     logger.LogInformation("INTEGRATION‑handler → client profile created for {Id}", user.Id);
                     break;

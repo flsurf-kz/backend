@@ -44,7 +44,7 @@ namespace Flsurf.Application.Freelance.Commands.FreelancerProfile
 
             if (user.Type != Domain.User.Enums.UserTypes.NonUser)
             {
-                return CommandResult.Conflict("You are freelancer"); 
+                return CommandResult.Forbidden("You are freelancer"); 
             }
 
             // Проверяем, что профиль еще не создан

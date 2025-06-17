@@ -27,5 +27,8 @@ namespace Flsurf.Application.Freelance.Services
 
         public UpdateClientProfileHandler UpdateClientProfile() =>
             _serviceProvider.GetRequiredService<UpdateClientProfileHandler>();
+
+        public GetClientHistoryHandler GetClientHistory() => 
+            _serviceProvider.GetRequiredService<GetClientHistoryHandler>();
     }
 }

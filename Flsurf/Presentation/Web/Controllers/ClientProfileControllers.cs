@@ -101,6 +101,16 @@ namespace Flsurf.Presentation.Web.Controllers
             var result = await handler.Handle(command);
             return result.MapResult(this);
         }
+
+        [HttpPost("client-history", Name = "GetClientHistory")]
+        [Authorize]
+        public async Task<ActionResult<ICollection<ClientHistoryDto>>> GetClientHistory([FromBody] GetClientHistoryQuery query)
+        {
+            var result = await _clientProfileService.GetClientHistory().Handle(query);
+            if (result == null)
+                return NoContent(); 
+            return Ok(result); 
+        }
     }
 
 }

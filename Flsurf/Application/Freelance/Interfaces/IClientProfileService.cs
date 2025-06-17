@@ -10,5 +10,6 @@ namespace Flsurf.Application.Freelance.Interfaces
         CreateClientProfileHandler CreateClientProfile();
         SuspendClientProfileHandler SuspendClientProfile();
         UpdateClientProfileHandler UpdateClientProfile();
+        GetClientHistoryHandler GetClientHistory(); 
     }
 }
