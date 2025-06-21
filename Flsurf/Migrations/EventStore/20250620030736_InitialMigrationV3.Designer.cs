@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Flsurf.Migrations.EventStore
 {
     [DbContext(typeof(EventStoreContext))]
-    [Migration("20250520121223_InitialMigrationsv6")]
-    partial class InitialMigrationsv6
+    [Migration("20250620030736_InitialMigrationV3")]
+    partial class InitialMigrationV3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,11 +38,20 @@ namespace Flsurf.Migrations.EventStore
                         .IsRequired()
                         .HasColumnType("jsonb");
 
+                    b.Property<string>("ErrorData")
+                        .HasColumnType("jsonb");
+
                     b.Property<string>("EventType")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("FailedCounter")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("IsIntegrationEvent")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("ProcessError")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("Processed")

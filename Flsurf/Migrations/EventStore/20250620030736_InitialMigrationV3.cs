@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Flsurf.Migrations.EventStore
 {
     /// <inheritdoc />
-    public partial class InitialMigrationsv6 : Migration
+    public partial class InitialMigrationV3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,10 @@ namespace Flsurf.Migrations.EventStore
                     EventType = table.Column<string>(type: "text", nullable: false),
                     Data = table.Column<string>(type: "jsonb", nullable: false),
                     IsIntegrationEvent = table.Column<bool>(type: "boolean", nullable: false),
-                    Processed = table.Column<bool>(type: "boolean", nullable: false)
+                    Processed = table.Column<bool>(type: "boolean", nullable: false),
+                    ProcessError = table.Column<bool>(type: "boolean", nullable: false),
+                    ErrorData = table.Column<string>(type: "jsonb", nullable: true),
+                    FailedCounter = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

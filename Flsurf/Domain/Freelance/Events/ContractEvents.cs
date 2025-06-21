@@ -4,23 +4,23 @@ using Flsurf.Domain.User.Entities;
 
 namespace Flsurf.Domain.Freelance.Events
 {
-    public class DeadLineChanged(ContractEntity contract, DateTime endTime) : DomainEvent
+    public class DeadLineChanged(Guid contractId, DateTime endTime) : DomainEvent
     {
-        public Guid ContractId { get; } = contract.Id;
+        public Guid ContractId { get; } = contractId;
         public DateTime DeadLine { get; } = endTime;
     }
 
     // notifies freelancer about task was added
-    public class ContractTaskAdded(ContractEntity contract, TaskEntity task) : DomainEvent
+    public class ContractTaskAdded(Guid contractId, Guid taskId) : DomainEvent
     {
-        public Guid ContractId { get; } = contract.Id;
-        public Guid TaskId { get; } = task.Id;
+        public Guid ContractId { get; } = contractId;
+        public Guid TaskId { get; } = taskId;
     }
 
-    public class ContractSignedEvent(ContractEntity contract, UserEntity freelancer) : DomainEvent
+    public class ContractSignedEvent(Guid contractId, Guid freelancerId) : DomainEvent
     {
-        public Guid ContractId { get; } = contract.Id;
-        public Guid FreelancerId { get; } = freelancer.Id;
+        public Guid ContractId { get; } = contractId;
+        public Guid FreelancerId { get; } = freelancerId;
     }
 
     public class ContractSentToFreelancer : DomainEvent

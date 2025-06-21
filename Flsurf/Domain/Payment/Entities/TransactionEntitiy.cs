@@ -13,9 +13,9 @@ namespace Flsurf.Domain.Payment.Entities
 
         public Guid? AntoganistTransactionId { get; set; }
 
-        public Money RawAmount { get; private set; } = null!;
-        public Money NetAmount { get; private set; } = null!;
-        public Money AppliedFee { get; private set; } = null!;
+        public Money RawAmount { get; set; } = null!;
+        public Money NetAmount { get; set; } = null!;
+        public Money AppliedFee { get; set; } = null!;
 
         public TransactionStatus Status { get; private set; } = TransactionStatus.Pending;
         public TransactionType Type { get; private set; }
@@ -39,17 +39,24 @@ namespace Flsurf.Domain.Payment.Entities
             TransactionFlow flow, 
             string? comment)
         {
-            var tx = new TransactionEntity
+            if (amount is null || amount == Money.Null())
+            {
+                throw new DomainException("TOo bad"); 
+            }
+
+            var tx = new TransactionEntity()
             {
                 WalletId = walletId,
                 RawAmount = amount,
+                NetAmount = amount - feePolicy.CalculateFee(amount, type, null), 
                 AppliedFee = feePolicy.CalculateFee(amount, type, null),
                 Type = type,
                 Flow = flow,
                 Status = TransactionStatus.Pending,
+                Comment = comment, 
+                FrozenUntil = null, 
             };
 
-            tx.NetAmount = tx.RawAmount - tx.AppliedFee;
             return tx;
         }
 
@@ -75,7 +82,7 @@ namespace Flsurf.Domain.Payment.Entities
             TransactionProviderEntity provider,
             IFeePolicy? feePolicy)
         {
-            var tx = new TransactionEntity
+            var tx = new TransactionEntity()
             {
                 WalletId = walletId,
                 RawAmount = amount,

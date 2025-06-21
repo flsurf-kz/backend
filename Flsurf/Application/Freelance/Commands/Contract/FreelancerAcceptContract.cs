@@ -3,12 +3,14 @@ using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Payment.InnerServices;
 using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.Freelance.Events;
+using Flsurf.Domain.Payment.Entities;
 using Flsurf.Domain.Payment.Enums;
 using Flsurf.Domain.Payment.ValueObjects;
 using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Flsurf.Application.Freelance.Commands.Contract
 {
@@ -19,7 +21,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
 
 
     public class FreelancerAcceptContractHandler(
-            ApplicationDbContext db,
+            IApplicationDbContext db,
             IPermissionService perm,
             TransactionInnerService txService)
         : ICommandHandler<FreelancerAcceptContractCommand>
@@ -44,8 +46,12 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             if (contract.Status != ContractStatus.PendingApproval)
                 return CommandResult.Conflict("Контракт уже принят или неактуален.");
 
-            var clientWallet = await db.Wallets.FirstOrDefaultAsync(w => w.UserId == contract.EmployerId);
-            var freelancerWallet = await db.Wallets.FirstOrDefaultAsync(w => w.UserId == freelancer.Id);
+            var clientWallet = await db.Wallets
+                //.Include(x => x.Transactions)
+                .FirstOrDefaultAsync(w => w.UserId == contract.EmployerId);
+            var freelancerWallet = await db.Wallets
+                //.Include(x => x.Transactions)
+                .FirstOrDefaultAsync(w => w.UserId == freelancer.Id);
 
             if (clientWallet is null || freelancerWallet is null)
                 return CommandResult.NotFound("Кошельки не найдены.", contract.EmployerId);
@@ -74,22 +80,27 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             }
 
             /*───────── атомарная транзакция ─────────────────────────────*/
-            await using var trx = await db.Database.BeginTransactionAsync();
+            //await using var trx = await db.Database.BeginTransactionAsync();
 
             /* 1) Перевод средств в кошельке фрилансера (замороженная часть) */
-            var transfer = await txService.Transfer(
-                transferAmount,
-                recieverWalletId: freelancerWallet.Id,
-                senderWalletId: clientWallet.Id,
-                feePolicy: null,      // комиссия 0
-                freezeForDays: freezeDays);
+            //var transfer = await txService.Transfer(
+            //    transferAmount,
+            //    recieverWallet: freelancerWallet,
+            //    senderWallet: clientWallet,
+            //    feePolicy: null,      // комиссия 0
+            //    freezeForDays: freezeDays);
 
-            if (!transfer.IsSuccess)
-            {
-                await trx.RollbackAsync();
-                return transfer;
-            }
 
+            var txs = clientWallet.Transfer(transferAmount, clientWallet, null, freezeDays);
+            //txs.Item1.RawAmount = new Money(transferAmount);
+            //txs.Item2.RawAmount = new Money(transferAmount);
+            db.Transactions.AddRange(txs.Item1, txs.Item2);
+
+            //if (!transfer.IsSuccess)
+            //{
+            //    //await trx.RollbackAsync();
+            //    return transfer;
+            //}
             /* 2) Активируем контракт и работу */
             contract.Status = ContractStatus.Active;
             contract.StartDate = DateTime.UtcNow;
@@ -98,11 +109,11 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             if (job is not null)
                 job.Status = JobStatus.InContract;
 
-            contract.AddDomainEvent(new ContractSignedEvent(contract, freelancer));
+            contract.AddDomainEvent(new ContractSignedEvent(contract.Id, freelancer.Id));
 
             /* 3) Коммит всех изменений разом */
             await db.SaveChangesAsync();
-            await trx.CommitAsync();
+            //await trx.CommitAsync();
 
             return CommandResult.Success(contract.Id);
         }

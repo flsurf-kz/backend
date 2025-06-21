@@ -42,8 +42,8 @@ namespace Flsurf.Domain.Payment.Entities
         [Newtonsoft.Json.JsonIgnore]
         public ICollection<TransactionEntity> Transactions { get; private set; } = new List<TransactionEntity>();
 
-        [Timestamp]
-        public byte[]? RowVersion { get; private set; } = default; 
+        //[Timestamp]
+        //public byte[]? RowVersion { get; private set; } = default; 
 
 
         public static WalletEntity Create(UserEntity user)
@@ -62,7 +62,7 @@ namespace Flsurf.Domain.Payment.Entities
                 Blocked = false, 
             };
 
-            wallet.AddDomainEvent(new WalletCreated(wallet));
+            wallet.AddDomainEvent(new WalletCreated(wallet.Id));
             return wallet;
         }
 
@@ -81,7 +81,7 @@ namespace Flsurf.Domain.Payment.Entities
                 return;  // игнорировтаь 
 
             Transactions.Add(transaction);
-            AddDomainEvent(new TransactionAddedEvent(transaction));
+            AddDomainEvent(new TransactionAddedEvent(transaction.WalletId, transaction.Id, transaction.RawAmount, transaction.Flow));
         }
 
         public void AcceptTransaction(TransactionEntity transaction)
@@ -96,6 +96,7 @@ namespace Flsurf.Domain.Payment.Entities
 
             if (transaction.Flow == TransactionFlow.Incoming)
             {
+
                 if (transaction.FrozenUntil != null)
                 {
                     FreezeAmount(transaction.NetAmount, (DateTime)transaction.FrozenUntil);
@@ -106,13 +107,13 @@ namespace Flsurf.Domain.Payment.Entities
                 }
             }
 
-            transaction.Complete(); 
+            transaction.Complete();
 
             AddTransaction(transaction); 
         }
 
         // ✅ Подтверждение двухсторонней транзакции
-        public void Transfer(
+        public Tuple<TransactionEntity, TransactionEntity> Transfer(
             Money transferMoney, 
             WalletEntity recieverWallet,
             IFeePolicy? feePolicy, 
@@ -122,7 +123,7 @@ namespace Flsurf.Domain.Payment.Entities
 
             var thisWalletTx = TransactionEntity.Create(
                 Id,
-                transferMoney,
+                transferMoney - 0,
                 feePolicy ?? new NoFeePolicy(),
                 TransactionType.Transfer,
                 TransactionFlow.Outgoing, 
@@ -130,7 +131,7 @@ namespace Flsurf.Domain.Payment.Entities
 
             var recieverTx = TransactionEntity.CreateFrozen(
                 recieverWallet.Id,
-                transferMoney,
+                transferMoney - 0,
                 feePolicy ?? new NoFeePolicy(),
                 TransactionType.Transfer,
                 TransactionFlow.Incoming,
@@ -143,9 +144,11 @@ namespace Flsurf.Domain.Payment.Entities
             AcceptTransaction(thisWalletTx);
 
             recieverWallet.AcceptTransaction(recieverTx); 
+
+            return new(thisWalletTx, recieverTx); 
         }
 
-        public void BalanceOperation(Money amount, BalanceOperationType type)
+        public TransactionEntity? BalanceOperation(Money amount, BalanceOperationType type)
         {
             EnsureNotBlocked();
 
@@ -163,15 +166,19 @@ namespace Flsurf.Domain.Payment.Entities
             }
             else
             {
-                // admin balance change! 
-                AcceptTransaction(TransactionEntity.Create(
+                var tx = TransactionEntity.Create(
                     walletId: Id,
                     amount: amount,
                     feePolicy: new NoFeePolicy(),
                     type: TransactionType.Transfer,
                     flow: type == BalanceOperationType.Deposit ? TransactionFlow.Incoming : TransactionFlow.Outgoing,
-                    comment: "Пополнение баланса"));
+                    comment: "Пополнение баланса"); 
+
+                // admin balance change! 
+                AcceptTransaction(tx);
+                return tx;
             }
+            return null; 
         }
 
         // ✅ Пополнение счета
@@ -179,7 +186,7 @@ namespace Flsurf.Domain.Payment.Entities
         {
             EnsureNotBlocked();
             AvailableBalance += amount;
-            AddDomainEvent(new WalletBalanceIncreased(this, amount));
+            AddDomainEvent(new WalletBalanceIncreased(this.Id, amount));
         }
 
         // ✅ Списание средств
@@ -190,7 +197,7 @@ namespace Flsurf.Domain.Payment.Entities
                 throw new NotEnoughMoneyException(Id);
 
             AvailableBalance -= amount;
-            AddDomainEvent(new WalletBalanceDecreased(this, amount));
+            AddDomainEvent(new WalletBalanceDecreased(this.Id, amount));
         }
 
         // 🔒 Заморозка средств
@@ -198,12 +205,13 @@ namespace Flsurf.Domain.Payment.Entities
         {
             EnsureNotBlocked();
             if (AvailableBalance < amount)
-                throw new NotEnoughMoneyException(Id);
+                // морозится все деньги
+                amount = AvailableBalance; 
 
             Frozen += amount;
             AvailableBalance -= amount;
             // добавить потом таску которая размараживает деньги 
-            AddDomainEvent(new WalletAmountFrozen(this, amount, frozenUntil));
+            AddDomainEvent(new WalletAmountFrozen(this.Id, amount, frozenUntil));
         }
 
         // ❄️ Размораживание средств без контекста  
@@ -212,11 +220,11 @@ namespace Flsurf.Domain.Payment.Entities
             EnsureNotBlocked();
 
             if (Frozen < amount)
-                throw new ArgumentException("Нельзя разморозить больше средств, чем было заморожено");
+                amount = AvailableBalance; 
 
             Frozen -= amount;
             AvailableBalance += amount;
-            AddDomainEvent(new WalletUnfrozenAmount(this, amount));
+            AddDomainEvent(new WalletUnfrozenAmount(this.Id, amount));
         }
 
         public void UnfreezeByTransaction(TransactionEntity transaction, bool adminOverride = false)
@@ -247,11 +255,11 @@ namespace Flsurf.Domain.Payment.Entities
 
             Blocked = true;
             BlockReason = reason;
-            AddDomainEvent(new WalletBlocked(this, reason.ToString()));
+            AddDomainEvent(new WalletBlocked(this.Id, reason.ToString()));
         }
 
         // ❌ Откат транзакции создает еще одну двух сторонную транзакцию которая берет деньги из другого кошелка и сует в другой 
-        public void RefundTransaction(TransactionEntity transaction, WalletEntity returnTo)
+        public Tuple<TransactionEntity, TransactionEntity> RefundTransaction(TransactionEntity transaction, WalletEntity returnTo)
         {
             EnsureNotBlocked();
 
@@ -279,10 +287,12 @@ namespace Flsurf.Domain.Payment.Entities
             AcceptTransaction(outgoingTx);
             returnTo.AcceptTransaction(incomingTx);
 
-            AddDomainEvent(new TransactionRolledBack(this, transaction));
+            AddDomainEvent(new TransactionRolledBack(this.Id, transaction.Id, transaction.RawAmount, transaction.Flow));
+
+            return new(outgoingTx, incomingTx); 
         }
 
-        public void RefundTransactionWithoutReceiver(TransactionEntity transaction, IFeePolicy feePolicy)
+        public TransactionEntity RefundTransactionWithoutReceiver(TransactionEntity transaction, IFeePolicy feePolicy)
         {
             EnsureNotBlocked();
 
@@ -300,6 +310,8 @@ namespace Flsurf.Domain.Payment.Entities
             AcceptTransaction(refundTx);
 
             AddDomainEvent(new TransactionRefundedWithoutReceiver(this, refundTx));
+
+            return refundTx; 
         }
 
 

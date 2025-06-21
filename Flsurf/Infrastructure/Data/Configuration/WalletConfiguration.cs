@@ -9,7 +9,7 @@ namespace Flsurf.Infrastructure.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<WalletEntity> builder)
         {
-            builder.Property(t => t.RowVersion).IsRowVersion(); 
+            //builder.Property(t => t.RowVersion).IsRowVersion(); 
         }
     }
 }

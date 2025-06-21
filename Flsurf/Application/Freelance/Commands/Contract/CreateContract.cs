@@ -94,6 +94,17 @@ namespace Flsurf.Application.Freelance.Commands.Contract
                 _ => throw new ArgumentOutOfRangeException(nameof(proposal.BudgetType))
             };
 
+            var wallet = await _db.Wallets.FirstOrDefaultAsync(x => x.UserId == employer.Id); 
+            if (wallet == null)
+            {
+                return CommandResult.NotFound("Кошелек не найден", employer.Id); 
+            }
+
+            if ((contract.CostPerHour * 3) > wallet.AvailableBalance || contract.Budget > wallet.AvailableBalance)
+            {
+                return CommandResult.Conflict("Не хватает денег"); 
+            } 
+
             /* 5. Сохранение и изменение состояний */
             _db.Contracts.Add(contract);
 

@@ -56,7 +56,7 @@ namespace Flsurf.Application.Payment.Commands
             var provider = await _db.TransactionProviders
                 .Include(p => p.Systems)
                 .FirstAsync(p => p.Id == c.ProviderId);
-            var system = provider.GetActiveSystems().First()
+            var system = provider.GetActiveSystems().FirstOrDefault()
                            ?? throw new DomainException("ПС неактивна");
 
             var adapter = _adapters.GetPaymentAdapter(system.Name);

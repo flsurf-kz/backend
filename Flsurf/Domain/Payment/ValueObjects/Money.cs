@@ -10,10 +10,10 @@ namespace Flsurf.Domain.Payment.ValueObjects
     public class Money : ValueObject
     {
         [Required]
-        public decimal Amount { get; init; }
+        public decimal Amount { get; set; }
 
         [Required]
-        public CurrencyEnum Currency { get; init; }
+        public CurrencyEnum Currency { get; set; }
 
         private Money() { }
 

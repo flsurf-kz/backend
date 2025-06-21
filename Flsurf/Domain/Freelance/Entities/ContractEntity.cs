@@ -118,13 +118,13 @@ namespace Flsurf.Domain.Freelance.Entities
         public void ChangeDeadline(DateTime endTime)
         {
             EndDate = endTime;
-            AddDomainEvent(new DeadLineChanged(this, endTime));
+            AddDomainEvent(new DeadLineChanged(Id, endTime));
         }
 
         public void AddTask(TaskEntity task)
         {
             Tasks.Add(task);
-            AddDomainEvent(new ContractTaskAdded(this, task));
+            AddDomainEvent(new ContractTaskAdded(Id, task.Id));
         }
 
         public void PauseContract(string reason)

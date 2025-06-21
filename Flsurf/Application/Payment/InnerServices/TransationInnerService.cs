@@ -38,8 +38,14 @@ namespace Flsurf.Application.Payment.InnerServices
                 return CommandResult.NotFound("Не найден кошелек получателя или начальный кошелёк", recieverWalletId); 
             }
 
-            senderWallet.Transfer(transferAmount, recieverWallet, feePolicy, freezeForDays); 
+            if (transferAmount == Money.Null())
+            {
+                return CommandResult.Conflict("Нулл значение"); 
+            }
 
+            var txs = senderWallet.Transfer(transferAmount, recieverWallet, feePolicy, freezeForDays);
+
+            _dbContext.Transactions.AddRange(txs.Item1, txs.Item2);
             return CommandResult.Success(); 
         }
 
@@ -50,16 +56,17 @@ namespace Flsurf.Application.Payment.InnerServices
              IFeePolicy? feePolicy,
              int? freezeForDays)
         {
-            await _dbContext.Entry(recieverWallet).Collection(x => x.Transactions).LoadAsync();
-            await _dbContext.Entry(senderWallet).Collection(x => x.Transactions).LoadAsync();
+            //await _dbContext.Entry(recieverWallet).Collection(x => x.Transactions).LoadAsync();
+            //await _dbContext.Entry(senderWallet).Collection(x => x.Transactions).LoadAsync();
 
             if (recieverWallet == null || senderWallet == null)
             {
                 return CommandResult.NotFound("Не найден кошелек получателя или начальный кошелёк", Guid.Empty);
             }
 
-            senderWallet.Transfer(transferAmount, recieverWallet, feePolicy, freezeForDays);
-
+            var txs = senderWallet.Transfer(transferAmount, recieverWallet, feePolicy, freezeForDays);
+            
+            dbContext.AddRange(txs.Item1, txs.Item2); 
             return CommandResult.Success();
         }
 
@@ -96,8 +103,8 @@ namespace Flsurf.Application.Payment.InnerServices
                 return CommandResult.NotFound("Кошёлек не найден", antoganistTx.WalletId);
 
             // может просто упасть и все
-            fromWallet.RefundTransaction(transaction, returnToWallet);
-
+            var txs = fromWallet.RefundTransaction(transaction, returnToWallet);
+            _dbContext.Transactions.AddRange(txs.Item1, txs.Item2);
             return CommandResult.Success(fromWallet.Id); 
         }
 
@@ -111,7 +118,9 @@ namespace Flsurf.Application.Payment.InnerServices
             if (wallet == null)
                 return CommandResult.NotFound("Кошёлек не найден", walletId);
 
-            wallet.BalanceOperation(amount, operation); 
+            var tx = wallet.BalanceOperation(amount, operation);
+            if (tx != null)
+                _dbContext.Transactions.Add(tx);
 
             return CommandResult.Success(walletId);
         }

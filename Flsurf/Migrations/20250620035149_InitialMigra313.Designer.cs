@@ -3,6 +3,7 @@ using System;
 using Flsurf.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Flsurf.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250620035149_InitialMigra313")]
+    partial class InitialMigra313
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2675,7 +2678,7 @@ namespace Flsurf.Migrations
                                 .HasForeignKey("TransactionEntityId");
                         });
 
-                    b.OwnsOne("Flsurf.Domain.Payment.ValueObjects.Money", "NetAmount", b1 =>
+                    b.OwnsOne("Flsurf.Domain.Payment.ValueObjects.Money", "NetSum", b1 =>
                         {
                             b1.Property<Guid>("TransactionEntityId")
                                 .HasColumnType("uuid");
@@ -2694,18 +2697,16 @@ namespace Flsurf.Migrations
                                 .HasForeignKey("TransactionEntityId");
                         });
 
-                    b.OwnsOne("Flsurf.Domain.Payment.ValueObjects.Money", "RawAmount", b1 =>
+                    b.OwnsOne("Flsurf.Domain.Payment.ValueObjects.Money", "RawSum", b1 =>
                         {
                             b1.Property<Guid>("TransactionEntityId")
                                 .HasColumnType("uuid");
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("numeric")
-                                .HasColumnName("RawAmount_Amount");
+                                .HasColumnType("numeric");
 
                             b1.Property<int>("Currency")
-                                .HasColumnType("integer")
-                                .HasColumnName("RawAmount_Currency");
+                                .HasColumnType("integer");
 
                             b1.HasKey("TransactionEntityId");
 
@@ -2769,14 +2770,14 @@ namespace Flsurf.Migrations
                     b.Navigation("AppliedFee")
                         .IsRequired();
 
-                    b.Navigation("NetAmount")
+                    b.Navigation("NetSum")
                         .IsRequired();
 
                     b.Navigation("Props");
 
                     b.Navigation("Provider");
 
-                    b.Navigation("RawAmount")
+                    b.Navigation("RawSum")
                         .IsRequired();
                 });
 

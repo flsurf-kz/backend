@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Flsurf.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250617043446_SecretShit")]
-    partial class SecretShit
+    [Migration("20250620030711_InitialMigrationsV12")]
+    partial class InitialMigrationsV12
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1567,11 +1567,6 @@ namespace Flsurf.Migrations
 
                     b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bytea");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");

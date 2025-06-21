@@ -24,12 +24,12 @@ namespace Flsurf.Domain.Payment.Events
         public TransactionFlow Flow { get; }
         public DateTime OccurredOn { get; }
 
-        public TransactionRolledBack(WalletEntity wallet, TransactionEntity transaction)
+        public TransactionRolledBack(Guid walletId, Guid txId, Money amount, TransactionFlow flow)
         {
-            WalletId = wallet.Id;
-            TransactionId = transaction.Id;
-            Amount = transaction.RawAmount;
-            Flow = transaction.Flow;
+            WalletId = walletId;  
+            TransactionId = txId;
+            Amount = amount;
+            Flow = flow;
             OccurredOn = DateTime.UtcNow;
         }
 
@@ -45,12 +45,12 @@ namespace Flsurf.Domain.Payment.Events
         public TransactionFlow Flow { get; }
         public DateTime OccurredOn { get; }
 
-        public TransactionAddedEvent(TransactionEntity transaction)
+        public TransactionAddedEvent(Guid walletId, Guid txId, Money rawAmount, TransactionFlow flow)
         {
-            WalletId = transaction.WalletId;
-            TransactionId = transaction.Id;
-            Amount = transaction.RawAmount;
-            Flow = transaction.Flow;
+            WalletId = walletId;
+            TransactionId = txId;
+            Amount = rawAmount;
+            Flow = flow;
             OccurredOn = DateTime.UtcNow;
         }
 

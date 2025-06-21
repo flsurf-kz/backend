@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Flsurf.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250611084846_SecretPhrase")]
-    partial class SecretPhrase
+    [Migration("20250620045942_InitiHUHUUH")]
+    partial class InitiHUHUUH
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1568,11 +1568,6 @@ namespace Flsurf.Migrations
                     b.Property<Guid?>("LastModifiedById")
                         .HasColumnType("uuid");
 
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bytea");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
@@ -1920,7 +1915,7 @@ namespace Flsurf.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("SecurityPhraseTypes")
+                    b.Property<string>("SecurityPhraseType")
                         .HasColumnType("text");
 
                     b.Property<string>("SecurityQuestionAnswerHashed")
@@ -2708,10 +2703,12 @@ namespace Flsurf.Migrations
                                 .HasColumnType("uuid");
 
                             b1.Property<decimal>("Amount")
-                                .HasColumnType("numeric");
+                                .HasColumnType("numeric")
+                                .HasColumnName("RawAmount_Amount");
 
                             b1.Property<int>("Currency")
-                                .HasColumnType("integer");
+                                .HasColumnType("integer")
+                                .HasColumnName("RawAmount_Currency");
 
                             b1.HasKey("TransactionEntityId");
 

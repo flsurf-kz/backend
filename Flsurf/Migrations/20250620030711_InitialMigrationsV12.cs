@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Flsurf.Migrations
 {
     /// <inheritdoc />
-    public partial class InititalMigration : Migration
+    public partial class InitialMigrationsV12 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -559,6 +559,8 @@ namespace Flsurf.Migrations
                     HashedPassword = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<string>(type: "text", nullable: false),
                     Type = table.Column<string>(type: "text", nullable: false),
+                    SecurityPhraseType = table.Column<string>(type: "text", nullable: true),
+                    SecurityQuestionAnswerHashed = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: false),
                     AvatarId = table.Column<Guid>(type: "uuid", nullable: true),
                     IsOnline = table.Column<bool>(type: "boolean", nullable: false),
@@ -967,7 +969,6 @@ namespace Flsurf.Migrations
                     PendingIncome_Currency = table.Column<int>(type: "integer", nullable: false),
                     Blocked = table.Column<bool>(type: "boolean", nullable: false),
                     BlockReason = table.Column<string>(type: "text", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "bytea", rowVersion: true, nullable: true),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastModifiedById = table.Column<Guid>(type: "uuid", nullable: true),
