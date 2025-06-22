@@ -97,7 +97,7 @@ ClientBin/
 *~
 *.dbmdl
 *.[Pp]ublish.xml
-LMS/Data
+Flsurf/Data
 LMS/appsettings.json
 
 *.publishsettings

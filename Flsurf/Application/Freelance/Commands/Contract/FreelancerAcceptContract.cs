@@ -83,24 +83,18 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             //await using var trx = await db.Database.BeginTransactionAsync();
 
             /* 1) Перевод средств в кошельке фрилансера (замороженная часть) */
-            //var transfer = await txService.Transfer(
-            //    transferAmount,
-            //    recieverWallet: freelancerWallet,
-            //    senderWallet: clientWallet,
-            //    feePolicy: null,      // комиссия 0
-            //    freezeForDays: freezeDays);
+            var transferResult = await txService.Transfer(
+                transferAmount,
+                recieverWallet: freelancerWallet,
+                senderWallet: clientWallet,
+                feePolicy: null,      // комиссия 0
+                freezeForDays: freezeDays);
 
-
-            var txs = clientWallet.Transfer(transferAmount, clientWallet, null, freezeDays);
-            //txs.Item1.RawAmount = new Money(transferAmount);
-            //txs.Item2.RawAmount = new Money(transferAmount);
-            db.Transactions.AddRange(txs.Item1, txs.Item2);
-
-            //if (!transfer.IsSuccess)
-            //{
-            //    //await trx.RollbackAsync();
-            //    return transfer;
-            //}
+            if (!transferResult.IsSuccess)
+            {
+                //await trx.RollbackAsync();
+                return CommandResult.Conflict("Транзакция не произошло успешно");
+            }
             /* 2) Активируем контракт и работу */
             contract.Status = ContractStatus.Active;
             contract.StartDate = DateTime.UtcNow;

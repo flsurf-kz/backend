@@ -34,15 +34,18 @@ namespace Flsurf.Application.Files.UseCases
         private readonly HttpClient _http;
         private readonly ILogger<UploadFile> _log;
         private readonly IHostEnvironment _env;
+        private readonly IWebHostEnvironment  _envWeb;
 
         public UploadFile(
             IApplicationDbContext db,
             IFileStorageAdapter storage,
             IHttpClientFactory httpFactory,
             ILogger<UploadFile> logger,
-            IHostEnvironment env)
+            IHostEnvironment env, 
+            IWebHostEnvironment hostEnvironment)
         {
             _db = db;
+            _envWeb = hostEnvironment; 
             _storage = storage;
             _http = httpFactory.CreateClient("Default_Timeout_Increased"); // Рекомендуется использовать именованный клиент с настроенным таймаутом
             _log = logger;
@@ -84,7 +87,7 @@ namespace Flsurf.Application.Files.UseCases
             _log.LogInformation("Detected MIME: {DetectedMime} for DTO Name: {DtoName}", detectedMime, dto.Name); // Ваш оригинальный лог
             string mimeToStore;
 
-            if (dto.Trusted) // <--- ИЗМЕНЕННАЯ ЛОГИКА ЗДЕСЬ
+            if (dto.Trusted || _envWeb.IsDevelopment()) // <--- ИЗМЕНЕННАЯ ЛОГИКА ЗДЕСЬ
             {
                 // Если это внутренний/доверенный вызов (BypassExternalChecks = true)
                 if (!string.IsNullOrWhiteSpace(dto.MimeType))

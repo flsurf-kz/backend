@@ -41,7 +41,7 @@ namespace Flsurf.Domain.Payment.ValueObjects
             if (money.Amount < 0)
                 throw new ArgumentException("Amount cannot be negative.");
 
-            Amount = money.Amount; 
+            Amount = money.Amount * 1; 
             Currency = money.Currency;
         }
 
