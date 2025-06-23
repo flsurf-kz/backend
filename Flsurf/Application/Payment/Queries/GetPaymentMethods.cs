@@ -31,14 +31,17 @@ namespace Flsurf.Application.Payment.Queries
 
                 var ok = await permService.CheckPermission(ZedPaymentUser
                     .WithId(currentUser.Id)
-                    .CanReadWallet(ZedWallet.WithId(wallet.Id))); 
+                    .CanReadWallet(ZedWallet.WithId(wallet.Id)));
                 if (!ok)
-                    throw new AccessDenied("NOT OK"); 
+                    throw new AccessDenied("NOT OK");
+                userId = wallet.UserId;
             }
+            else { userId = Guid.Empty; }
+            
 
             return await dbContext.PaymentMethods
                 .AsNoTracking()
-                .Where(pm => pm.UserId == req.UserId && pm.IsActive)
+                .Where(pm => pm.UserId == (req.UserId ?? userId) && pm.IsActive)
                 .Select(pm => new PaymentMethodDto(
                     pm.Id,
                     pm.ProviderId,

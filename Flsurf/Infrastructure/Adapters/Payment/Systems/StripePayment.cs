@@ -39,9 +39,11 @@ namespace Flsurf.Infrastructure.Adapters.Payment.Systems
     {
         private readonly HttpClient _http;
         private readonly StripeConfig _cfg;
-
-        public StripePaymentAdapter(HttpClient http, StripeConfig cfg)
+        private readonly ILogger _logger;   
+        
+        public StripePaymentAdapter(HttpClient http, StripeConfig cfg, ILogger<StripePaymentAdapter> logger)
         {
+            _logger = logger;
             _http = http;
             _cfg = cfg;
             _http.DefaultRequestHeaders.Authorization =
@@ -54,16 +56,19 @@ namespace Flsurf.Infrastructure.Adapters.Payment.Systems
             var r = await _http.GetAsync($"https://api.stripe.com/v1/payment_methods/{token}");
             if (!r.IsSuccessStatusCode)
             {
-                Console.WriteLine($"Stripe API Error FetchCardMetaAsync: {await r.Content.ReadAsStringAsync()}");
+                _logger.LogInformation($"Stripe API Error FetchCardMetaAsync: {await r.Content.ReadAsStringAsync()}, StatusCode: {r.StatusCode}");
                 return null;
             }
 
-            var jsonDoc = JsonDocument.Parse(await r.Content.ReadAsStringAsync());
+            var body = await r.Content.ReadAsStringAsync(); 
+            var jsonDoc = JsonDocument.Parse(body);
             if (!jsonDoc.RootElement.TryGetProperty("card", out var cardElement))
             {
-                Console.WriteLine($"Stripe API Error FetchCardMetaAsync: 'card' property not found in response for token {token}.");
+                _logger.LogInformation($"Stripe API Error FetchCardMetaAsync: 'card' property not found in response for token {token}, body: {jsonDoc.RootElement.ToString()}");
                 return null;
             }
+            
+            _logger.LogInformation("Stripe card metadata checked.");
 
             return new CardMeta(
                 cardElement.TryGetProperty("brand", out var brand) ? brand.GetString()! : "unknown",
@@ -116,7 +121,7 @@ namespace Flsurf.Infrastructure.Adapters.Payment.Systems
 
             if (!resp.IsSuccessStatusCode)
             {
-                Console.WriteLine($"Stripe API Error InitPayment: {responseContent}");
+                _logger.LogInformation($"Stripe API Error InitPayment: {responseContent}");
                 // Попытаться извлечь сообщение об ошибке из ответа Stripe
                 string errorMessage = "Ошибка платежного шлюза.";
                 if (root.TryGetProperty("error", out var errorElement) && errorElement.TryGetProperty("message", out var msgElement))
@@ -186,14 +191,14 @@ namespace Flsurf.Infrastructure.Adapters.Payment.Systems
 
                         if (!customerResp.IsSuccessStatusCode)
                         {
-                            Console.WriteLine($"Stripe API Error Creating Customer: {customerRespContent}");
+                            _logger.LogInformation($"Stripe API Error Creating Customer: {customerRespContent}");
                             return new CardSetupDetails { Success = false, ErrorMessage = "Не удалось создать клиента в Stripe." };
                         }
                         stripeCustomerId = customerRoot.GetProperty("id").GetString();
                         // Сохраните этот stripeCustomerId для вашего UserEntity в БД!
                         // user.StripeCustomerId = stripeCustomerId;
                         // await _dbContext.SaveChangesAsync();
-                        Console.WriteLine($"Created new Stripe Customer: {stripeCustomerId} for user {request.UserId}");
+                        _logger.LogInformation($"Created new Stripe Customer: {stripeCustomerId} for user {request.UserId}");
                     }
                 }
 
@@ -201,9 +206,9 @@ namespace Flsurf.Infrastructure.Adapters.Payment.Systems
                 var setupIntentData = new Dictionary<string, string>
                 {
                     ["customer"] = stripeCustomerId!,
-                    ["automatic_payment_methods[enabled]"] = "true",
+                    // ["automatic_payment_methods[enabled]"] = "true",
                     // ["usage"] = "on_session", // или "off_session"
-                    // ["payment_method_types[]"] = "card", // Можно явно указать, но automatic_payment_methods обычно достаточно
+                    ["payment_method_types[]"] = "card", // Можно явно указать, но automatic_payment_methods обычно достаточно
                 };
                 if (request.Metadata != null)
                 {
@@ -223,7 +228,7 @@ namespace Flsurf.Infrastructure.Adapters.Payment.Systems
 
                 if (!siResp.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"Stripe API Error Creating SetupIntent: {siRespContent}");
+                    _logger.LogInformation($"Stripe API Error Creating SetupIntent: {siRespContent}");
                     string errorMessage = "Ошибка при создании SetupIntent в Stripe.";
                     if (siRoot.TryGetProperty("error", out var errorElement) && errorElement.TryGetProperty("message", out var msgElement))
                     {
@@ -243,17 +248,17 @@ namespace Flsurf.Infrastructure.Adapters.Payment.Systems
             }
             catch (JsonException jsonEx)
             {
-                Console.WriteLine($"JSON Parsing Error in PrepareCardSetupAsync: {jsonEx.Message}");
+                _logger.LogInformation($"JSON Parsing Error in PrepareCardSetupAsync: {jsonEx.Message}");
                 return new CardSetupDetails { Success = false, ErrorMessage = "Ошибка обработки ответа от Stripe." };
             }
             catch (HttpRequestException httpEx)
             {
-                Console.WriteLine($"HTTP Request Error in PrepareCardSetupAsync: {httpEx.Message}");
+                _logger.LogInformation($"HTTP Request Error in PrepareCardSetupAsync: {httpEx.Message}");
                 return new CardSetupDetails { Success = false, ErrorMessage = "Ошибка сети при обращении к Stripe." };
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Generic Error in PrepareCardSetupAsync: {e.ToString()}"); // Логируем полный стектрейс
+                _logger.LogInformation($"Generic Error in PrepareCardSetupAsync: {e.ToString()}"); // Логируем полный стектрейс
                 return new CardSetupDetails { Success = false, ErrorMessage = "Внутренняя ошибка сервера при подготовке настройки карты." };
             }
         }
@@ -273,7 +278,7 @@ namespace Flsurf.Infrastructure.Adapters.Payment.Systems
 
             if (!r.IsSuccessStatusCode)
             {
-                Console.WriteLine($"Stripe API Error GetStatusAsync for {pid}: {responseContent}");
+                _logger.LogInformation($"Stripe API Error GetStatusAsync for {pid}: {responseContent}");
                 return PaymentStatus.Failed;
             }
 
@@ -319,7 +324,7 @@ namespace Flsurf.Infrastructure.Adapters.Payment.Systems
             var responseContent = await r.Content.ReadAsStringAsync();
             if (!r.IsSuccessStatusCode)
             {
-                Console.WriteLine($"Stripe API Error RefundAsync: {responseContent}");
+                _logger.LogInformation($"Stripe API Error RefundAsync: {responseContent}");
                 // Попытка извлечь сообщение об ошибке из ответа Stripe
                 string errorMessage = "Ошибка при возврате.";
                 try

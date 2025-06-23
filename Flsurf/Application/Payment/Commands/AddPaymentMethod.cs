@@ -25,12 +25,22 @@ namespace Flsurf.Application.Payment.Commands
             var provider = await dbContext.TransactionProviders
                                     .FirstAsync(p => p.Id == command.ProviderId);
 
-            var adapter = factory.GetPaymentAdapter(provider.Name);
+            var adapter = factory.GetPaymentAdapter(provider.Name); 
 
             // ①  берём метаданные
             var meta = await adapter.FetchCardMetaAsync(command.PaymentMethodToken)
                        ?? throw new DomainException("Adapter did not return metadata");
-
+            
+            var existingPaymentMethod = await dbContext.PaymentMethods.FirstOrDefaultAsync(
+                x => x.Brand == meta.Brand
+                     && x.ExpMonth == meta.ExpMonth 
+                     && x.ExpYear == meta.ExpYear 
+                     && x.Last4 == meta.Last4);
+            if (existingPaymentMethod != null)
+            {
+                return CommandResult.Success(existingPaymentMethod.Id);
+            }
+            
             // ②  сбрасываем старый default если нужно
             if (command.MakeDefault)
                 await dbContext.PaymentMethods

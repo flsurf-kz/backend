@@ -93,5 +93,14 @@ namespace Flsurf.Presentation.Web.Controllers
 
             return result; 
         }
+
+        [HttpDelete("payment-methods", Name = "RemovePaymentMethod")]
+        public async Task<ActionResult<CommandResult>> RemovePaymentMethod(
+            [FromBody] RemovePaymentMethodCommand command)
+        {
+            var result = await _walletService.RemovePaymentMethod().Handle(command);
+            
+            return result;
+        }
     }
 }

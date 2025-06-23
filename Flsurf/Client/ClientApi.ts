@@ -862,6 +862,12 @@ export interface IClient {
     getPaymentMethods(): Promise<PaymentMethodDto[]>;
 
     /**
+     * @param body (optional) 
+     * @return OK
+     */
+    removePaymentMethod(body?: RemovePaymentMethodCommand | undefined): Promise<CommandResult>;
+
+    /**
      * @return OK
      */
     getPaymentMethodsByUser(userId: string): Promise<PaymentMethodDto[]>;
@@ -7194,6 +7200,48 @@ export class Client implements IClient {
             });
         }
         return Promise.resolve<PaymentMethodDto[]>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    removePaymentMethod(body?: RemovePaymentMethodCommand | undefined): Promise<CommandResult> {
+        let url_ = this.baseUrl + "/api/wallet/payment-methods";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processRemovePaymentMethod(_response);
+        });
+    }
+
+    protected processRemovePaymentMethod(response: Response): Promise<CommandResult> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CommandResult.fromJS(resultData200);
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<CommandResult>(null as any);
     }
 
     /**
@@ -14327,6 +14375,42 @@ export interface IRegisterUserSchema {
     rememberMe?: boolean;
 }
 
+export class RemovePaymentMethodCommand implements IRemovePaymentMethodCommand {
+    methId?: string;
+
+    constructor(data?: IRemovePaymentMethodCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.methId = _data["methId"];
+        }
+    }
+
+    static fromJS(data: any): RemovePaymentMethodCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new RemovePaymentMethodCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["methId"] = this.methId;
+        return data;
+    }
+}
+
+export interface IRemovePaymentMethodCommand {
+    methId?: string;
+}
+
 export class ResetPasswordCommand implements IResetPasswordCommand {
     code!: string;
     email!: string;
@@ -16891,7 +16975,6 @@ export class WalletEntity implements IWalletEntity {
     pendingIncome!: Money;
     readonly blocked!: boolean;
     readonly blockReason?: WalletEntityBlockReason;
-    readonly rowVersion?: string | undefined;
     createdById?: string | undefined;
     createdAt!: Date;
     lastModifiedById?: string | undefined;
@@ -16923,7 +17006,6 @@ export class WalletEntity implements IWalletEntity {
             this.pendingIncome = _data["pendingIncome"] ? Money.fromJS(_data["pendingIncome"]) : new Money();
             (<any>this).blocked = _data["blocked"];
             (<any>this).blockReason = _data["blockReason"];
-            (<any>this).rowVersion = _data["rowVersion"];
             this.createdById = _data["createdById"];
             this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
             this.lastModifiedById = _data["lastModifiedById"];
@@ -16949,7 +17031,6 @@ export class WalletEntity implements IWalletEntity {
         data["pendingIncome"] = this.pendingIncome ? this.pendingIncome.toJSON() : <any>undefined;
         data["blocked"] = this.blocked;
         data["blockReason"] = this.blockReason;
-        data["rowVersion"] = this.rowVersion;
         data["createdById"] = this.createdById;
         data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
         data["lastModifiedById"] = this.lastModifiedById;
@@ -16968,7 +17049,6 @@ export interface IWalletEntity {
     pendingIncome: Money;
     blocked: boolean;
     blockReason?: WalletEntityBlockReason;
-    rowVersion?: string | undefined;
     createdById?: string | undefined;
     createdAt: Date;
     lastModifiedById?: string | undefined;

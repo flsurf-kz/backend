@@ -6,7 +6,7 @@ namespace Flsurf.Infrastructure.Adapters.Payment
     {
         private readonly Dictionary<PaymentProviders, IPaymentAdapter> Adapters = new();
 
-        public PaymentAdapterFactory(IHttpClientFactory httpClient, IConfiguration config)
+        public PaymentAdapterFactory(IHttpClientFactory httpClient, IConfiguration config, ILogger<StripePaymentAdapter> logger)
         {
             Adapters.Add(
                 PaymentProviders.BankCardRu,
@@ -15,7 +15,8 @@ namespace Flsurf.Infrastructure.Adapters.Payment
                     new StripeConfig() { 
                         SecretKey = config["Payments:Stripe:SecretKey"] 
                             ?? throw new NullReferenceException("Нету secretkey для страйпа")
-                    }
+                    }, 
+                    logger
                 )
             ); 
             Adapters.Add(PaymentProviders.Test, new TestPaymentAdapter());
