@@ -26,11 +26,11 @@ namespace Flsurf.Presentation.Web.Controllers
             _staffService = staffService;
         }
 
-        [HttpPost("user/{userId}/block", Name = "BlockUser")]
-        public async Task<ActionResult<bool>> BlockUser(Guid userId)
+        [HttpPost("user/block", Name = "BlockUser")]
+        public async Task<ActionResult<bool>> BlockUser([FromBody] BlockUserCommand command)
         {
             await _userService.BlockUser()
-                .Handle(new BlockUserCommand { UserId = userId, Blocked = true });
+                .Handle(command);
             return Ok(true);
         }
 
