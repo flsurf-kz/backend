@@ -9,7 +9,7 @@
         // специфичные для каждой платежной системы.
         public Task<InitPaymentResult> InitPayment(PaymentInitRequest req)
         {
-            return Task.FromResult(new InitPaymentResult(true, "", null, null, null) { }); 
+            return Task.FromResult(new InitPaymentResult(true, "", "", null, null, null) { }); 
         }
 
 
@@ -20,6 +20,11 @@
             return Task.FromResult(PaymentStatus.Pending); 
         }
 
+        public Task<PayoutInitResult> InitPayoutAsync(PayoutInitRequest req)
+        {
+            return Task.FromResult(new PayoutInitResult(Success: true, ProviderPayoutId: req.ExternalAccountId) { });
+        }
+        
         // Опциональный метод для возврата средств, если такая возможность поддерживается платежной системой.
         // Возвращает результат операции возврата.
         public Task<RefundResult> RefundAsync(string providerPaymentId,

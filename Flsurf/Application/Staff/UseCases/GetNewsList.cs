@@ -45,7 +45,7 @@ namespace Flsurf.Application.Staff.UseCases
             }
             q = q.Paginate(dto.Start, dto.Ends);
 
-            return await q.AsNoTracking().ToListAsync();
+            return await q.ToListAsync();
         }
     }
 

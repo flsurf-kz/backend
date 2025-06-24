@@ -7,11 +7,12 @@ namespace Flsurf.Domain.Payment.Entities
     [Owned]
     public class TransactionPropsEntity : ValueObject
     {
-        public string PaymentUrl { get; private set; } = string.Empty;
-        public string SuccessUrl { get; private set; } = string.Empty;
-        public string PaymentGateway { get; private set; } = string.Empty;
-        public string ProviderPaymentId { get; private set; } = string.Empty; 
-        public FeeContext FeeContext { get; private set; } = default!; 
+        public string? PaymentUrl { get; set; } = string.Empty;
+        public string? SuccessUrl { get; set; } = string.Empty;
+        public string PaymentGateway { get; set; } = string.Empty;
+        public string ProviderPaymentId { get; set; } = string.Empty; 
+        public string? ClientSecret { get; set; } = string.Empty;
+        public FeeContext FeeContext { get; set; } = default!; 
 
         public TransactionPropsEntity() { }  // Для EF CORE 
 

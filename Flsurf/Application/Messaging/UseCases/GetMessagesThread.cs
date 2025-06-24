@@ -38,7 +38,6 @@ namespace Flsurf.Application.Messaging.UseCases
             {
                 // Берём только нужные поля: Id и ссылку на родительское сообщение
                 var msg = await _dbContext.Messages
-                    .AsNoTracking()
                     .Where(m => m.Id == currentId)
                     .Select(m => new { m.Id, m.ReplyedToMessageId })
                     .FirstOrDefaultAsync();

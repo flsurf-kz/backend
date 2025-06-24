@@ -22,6 +22,7 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using Microsoft.Extensions.Options;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json;
 
 namespace Flsurf.Presentation.Web
@@ -149,6 +150,18 @@ namespace Flsurf.Presentation.Web
                     {
                         context.Response.StatusCode = StatusCodes.Status403Forbidden;
                         return Task.CompletedTask;
+                    },
+                    // ▸ главное: “если тикет невалиден — выlogивай”
+                    OnValidatePrincipal = async ctx =>
+                    {
+                        // тикет отсутствует (RetrieveAsync ⇒ null)  ИЛИ  просрочен
+                        var exp = ctx.Properties?.ExpiresUtc;
+                        if (ctx.Principal == null || (exp.HasValue && exp <= DateTimeOffset.UtcNow))
+                        {
+                            ctx.RejectPrincipal();                                   // забудь principal
+                            await ctx.HttpContext.SignOutAsync(                       // убери куку
+                                CookieAuthenticationDefaults.AuthenticationScheme);
+                        }
                     }
                 };
             })

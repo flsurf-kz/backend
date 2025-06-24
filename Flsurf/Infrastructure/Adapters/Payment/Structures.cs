@@ -13,10 +13,25 @@
     public record InitPaymentResult(
         bool Success,
         string ProviderPaymentId,
+        string? ErrorMessage, 
         string? RedirectUrl,
         string? QrUrl,
         string? ClientSecret);
 
+    public record PayoutInitResult(
+        bool Success,
+        string ProviderPayoutId,    // po_... в Stripe
+        string? FailureMessage = null
+    );
+    
+    public record PayoutInitRequest(
+        string ConnectedAccountId,
+        string ExternalAccountId,   // card_... или ba_...
+        decimal Amount,
+        string CurrencyIso,
+        string Description
+    );
+    
     public record PaymentInitRequest(
         string ProviderPaymentMethodToken,
         decimal Amount,

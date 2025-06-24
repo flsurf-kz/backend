@@ -23,7 +23,7 @@ namespace Flsurf.Domain.Payment.Entities
 
         public TransactionPropsEntity? Props { get; set; }
         public DateTime? FrozenUntil { get; private set; }
-        public string? Comment { get; private set; }
+        public string? Comment { get; set; }
         public DateTime? CompletedAt { get; set; }
 
         public TransactionProviderEntity? Provider { get; set; }

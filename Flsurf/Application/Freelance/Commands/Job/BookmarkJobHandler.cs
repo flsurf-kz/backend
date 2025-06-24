@@ -27,7 +27,10 @@ namespace Flsurf.Application.Freelance.Commands.Job
             }
 
             var user = await _permissionService.GetCurrentUser();
-
+            
+            var existing = await _dbContext.BookmarkedJobs.FirstOrDefaultAsync(x => x.JobId == job.Id && x.UserId == user.Id);
+            if (existing != null) 
+                return CommandResult.Success(existing.Id);
             var bookmark = BookmarkedJobEntity.Create(job, user);
 
             _dbContext.BookmarkedJobs.Add(bookmark);

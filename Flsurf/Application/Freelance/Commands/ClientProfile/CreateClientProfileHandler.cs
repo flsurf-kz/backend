@@ -6,6 +6,7 @@ using Flsurf.Domain.Files.Entities;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Domain.User.Entities;
+using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
@@ -41,10 +42,8 @@ namespace Flsurf.Application.Freelance.Commands.ClientProfile
             if (user == null)
                 return CommandResult.NotFound("Пользватель не найден", command.UserId); 
 
-            if (user.Type != Domain.User.Enums.UserTypes.NonUser)
-            {
-                return CommandResult.Forbidden("You are client.");
-            }
+            if (user.Type is not (UserTypes.NonUser or UserTypes.Client))
+                return CommandResult.Forbidden("Профиль могут иметь только клиенты.");
 
             // Проверяем, что профиль еще не создан
             var existingProfile = await dbContext.ClientProfiles

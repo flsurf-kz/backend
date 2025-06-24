@@ -11,6 +11,7 @@ namespace Flsurf.Application.Common.cqrs
         public List<string>? Ids { get; }
         [Required]
         public HttpStatusCode Status { get; }
+        public object? Data { get; set; }
 
         public bool IsSuccess => Status == HttpStatusCode.OK;
 
@@ -85,5 +86,10 @@ namespace Flsurf.Application.Common.cqrs
         // Ошибка: конфликт данных
         public static CommandResult Conflict(string message) =>
             new CommandResult(message, null, null, HttpStatusCode.Conflict);
+        
+        public static CommandResult Success<T>(T payload) =>
+            new(payload is string ? payload.ToString()! : string.Empty,
+                    null, null, HttpStatusCode.OK)
+                { Data = payload };           // добавьте Data {get;} в класс
     }
 }

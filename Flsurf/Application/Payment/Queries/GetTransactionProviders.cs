@@ -26,7 +26,6 @@ namespace Flsurf.Application.Payment.Queries
             return await _context.TransactionProviders
                 .Include(x => x.Systems)
                 .Include(x => x.Logo)
-                .AsNoTracking()
                 .ToListAsync();
         }
     }

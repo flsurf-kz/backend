@@ -793,7 +793,7 @@ export interface IClient {
      * @param body (optional) 
      * @return OK
      */
-    startPaymentFlow(body?: StartPaymentFlowCommand | undefined): Promise<CommandResult>;
+    startPaymentFlow(body?: StartPaymentFlowCommand | undefined): Promise<StartPaymentFlowResult>;
 
     /**
      * @param body (optional) 
@@ -6660,7 +6660,7 @@ export class Client implements IClient {
      * @param body (optional) 
      * @return OK
      */
-    startPaymentFlow(body?: StartPaymentFlowCommand | undefined): Promise<CommandResult> {
+    startPaymentFlow(body?: StartPaymentFlowCommand | undefined): Promise<StartPaymentFlowResult> {
         let url_ = this.baseUrl + "/api/transaction/start";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -6680,14 +6680,14 @@ export class Client implements IClient {
         });
     }
 
-    protected processStartPaymentFlow(response: Response): Promise<CommandResult> {
+    protected processStartPaymentFlow(response: Response): Promise<StartPaymentFlowResult> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = CommandResult.fromJS(resultData200);
+            result200 = StartPaymentFlowResult.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -6695,7 +6695,7 @@ export class Client implements IClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<CommandResult>(null as any);
+        return Promise.resolve<StartPaymentFlowResult>(null as any);
     }
 
     /**
@@ -8716,7 +8716,7 @@ export interface IChatEntity {
 }
 
 export class ClientAcceptFinishContractCommand implements IClientAcceptFinishContractCommand {
-    readonly contractId?: string;
+    contractId?: string;
 
     constructor(data?: IClientAcceptFinishContractCommand) {
         if (data) {
@@ -8729,7 +8729,7 @@ export class ClientAcceptFinishContractCommand implements IClientAcceptFinishCon
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).contractId = _data["contractId"];
+            this.contractId = _data["contractId"];
         }
     }
 
@@ -9140,6 +9140,7 @@ export class CommandResult implements ICommandResult {
     readonly id!: string;
     readonly ids?: string[] | undefined;
     readonly status!: CommandResultStatus;
+    data?: any | undefined;
     readonly isSuccess?: boolean;
 
     constructor(data?: ICommandResult) {
@@ -9161,6 +9162,7 @@ export class CommandResult implements ICommandResult {
                     (<any>this).ids!.push(item);
             }
             (<any>this).status = _data["status"];
+            this.data = _data["data"];
             (<any>this).isSuccess = _data["isSuccess"];
         }
     }
@@ -9182,6 +9184,7 @@ export class CommandResult implements ICommandResult {
                 data["ids"].push(item);
         }
         data["status"] = this.status;
+        data["data"] = this.data;
         data["isSuccess"] = this.isSuccess;
         return data;
     }
@@ -9192,6 +9195,7 @@ export interface ICommandResult {
     id: string;
     ids?: string[] | undefined;
     status: CommandResultStatus;
+    data?: any | undefined;
     isSuccess?: boolean;
 }
 
@@ -11715,7 +11719,7 @@ export class GetContractsListQuery implements IGetContractsListQuery {
     status?: GetContractsListQueryStatus | undefined;
     start?: number;
     ends?: number;
-    inDispute?: boolean | undefined;
+    inDispute?: boolean;
 
     constructor(data?: IGetContractsListQuery) {
         if (data) {
@@ -11762,7 +11766,7 @@ export interface IGetContractsListQuery {
     status?: GetContractsListQueryStatus | undefined;
     start?: number;
     ends?: number;
-    inDispute?: boolean | undefined;
+    inDispute?: boolean;
 }
 
 export class GetFinanceSummaryQuery implements IGetFinanceSummaryQuery {
@@ -15010,6 +15014,54 @@ export interface IStartPaymentFlowCommand {
     oneTimeToken?: string | undefined;
 }
 
+export class StartPaymentFlowResult implements IStartPaymentFlowResult {
+    internalTransactionId?: string;
+    providerPaymentId?: string | undefined;
+    clientSecret?: string | undefined;
+    redirectUrl?: string | undefined;
+
+    constructor(data?: IStartPaymentFlowResult) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.internalTransactionId = _data["internalTransactionId"];
+            this.providerPaymentId = _data["providerPaymentId"];
+            this.clientSecret = _data["clientSecret"];
+            this.redirectUrl = _data["redirectUrl"];
+        }
+    }
+
+    static fromJS(data: any): StartPaymentFlowResult {
+        data = typeof data === 'object' ? data : {};
+        let result = new StartPaymentFlowResult();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["internalTransactionId"] = this.internalTransactionId;
+        data["providerPaymentId"] = this.providerPaymentId;
+        data["clientSecret"] = this.clientSecret;
+        data["redirectUrl"] = this.redirectUrl;
+        return data;
+    }
+}
+
+export interface IStartPaymentFlowResult {
+    internalTransactionId?: string;
+    providerPaymentId?: string | undefined;
+    clientSecret?: string | undefined;
+    redirectUrl?: string | undefined;
+}
+
 export class StartWorkSessionCommand implements IStartWorkSessionCommand {
     contractId?: string;
 
@@ -15676,7 +15728,7 @@ export class TransactionEntity implements ITransactionEntity {
     readonly flow?: TransactionEntityFlow;
     props?: TransactionPropsEntity;
     readonly frozenUntil?: Date | undefined;
-    readonly comment?: string | undefined;
+    comment?: string | undefined;
     completedAt?: Date | undefined;
     provider?: TransactionProviderEntity;
     createdById?: string | undefined;
@@ -15706,7 +15758,7 @@ export class TransactionEntity implements ITransactionEntity {
             (<any>this).flow = _data["flow"];
             this.props = _data["props"] ? TransactionPropsEntity.fromJS(_data["props"]) : <any>undefined;
             (<any>this).frozenUntil = _data["frozenUntil"] ? new Date(_data["frozenUntil"].toString()) : <any>undefined;
-            (<any>this).comment = _data["comment"];
+            this.comment = _data["comment"];
             this.completedAt = _data["completedAt"] ? new Date(_data["completedAt"].toString()) : <any>undefined;
             this.provider = _data["provider"] ? TransactionProviderEntity.fromJS(_data["provider"]) : <any>undefined;
             this.createdById = _data["createdById"];
@@ -15770,10 +15822,11 @@ export interface ITransactionEntity {
 }
 
 export class TransactionPropsEntity implements ITransactionPropsEntity {
-    readonly paymentUrl?: string | undefined;
-    readonly successUrl?: string | undefined;
-    readonly paymentGateway?: string | undefined;
-    readonly providerPaymentId?: string | undefined;
+    paymentUrl?: string | undefined;
+    successUrl?: string | undefined;
+    paymentGateway?: string | undefined;
+    providerPaymentId?: string | undefined;
+    clientSecret?: string | undefined;
     feeContext?: FeeContext;
 
     constructor(data?: ITransactionPropsEntity) {
@@ -15787,10 +15840,11 @@ export class TransactionPropsEntity implements ITransactionPropsEntity {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).paymentUrl = _data["paymentUrl"];
-            (<any>this).successUrl = _data["successUrl"];
-            (<any>this).paymentGateway = _data["paymentGateway"];
-            (<any>this).providerPaymentId = _data["providerPaymentId"];
+            this.paymentUrl = _data["paymentUrl"];
+            this.successUrl = _data["successUrl"];
+            this.paymentGateway = _data["paymentGateway"];
+            this.providerPaymentId = _data["providerPaymentId"];
+            this.clientSecret = _data["clientSecret"];
             this.feeContext = _data["feeContext"] ? FeeContext.fromJS(_data["feeContext"]) : <any>undefined;
         }
     }
@@ -15808,6 +15862,7 @@ export class TransactionPropsEntity implements ITransactionPropsEntity {
         data["successUrl"] = this.successUrl;
         data["paymentGateway"] = this.paymentGateway;
         data["providerPaymentId"] = this.providerPaymentId;
+        data["clientSecret"] = this.clientSecret;
         data["feeContext"] = this.feeContext ? this.feeContext.toJSON() : <any>undefined;
         return data;
     }
@@ -15818,6 +15873,7 @@ export interface ITransactionPropsEntity {
     successUrl?: string | undefined;
     paymentGateway?: string | undefined;
     providerPaymentId?: string | undefined;
+    clientSecret?: string | undefined;
     feeContext?: FeeContext;
 }
 

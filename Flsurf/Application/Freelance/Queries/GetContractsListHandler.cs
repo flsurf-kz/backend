@@ -4,6 +4,7 @@ using Flsurf.Application.Freelance.Permissions;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Flsurf.Infrastructure.Data.Extensions;
 using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,15 +39,20 @@ namespace Flsurf.Application.Freelance.Queries
                                                              c.EmployerId == userId ||
                                                              c.FreelancerId == userId);
 
-            if (q.InDispute != null)
+            if (q.InDispute == true)                       // ищем ТОЛЬКО спорные
             {
-                baseQuery = baseQuery.Where(x => x.IsPaused && x.Status == ContractStatus.Paused); 
+                baseQuery = baseQuery.Where(x => x.IsPaused &&
+                                                 x.Status == ContractStatus.Paused);
+            }
+            else if (q.InDispute == false)                 // явно НЕ хотим спорные
+            {
+                baseQuery = baseQuery.Where(x => !x.IsPaused ||
+                                                 x.Status != ContractStatus.Paused);
             }
             /* ---- 3. Пагинация, сортировка -------------------------------- */
             var list = await baseQuery
                 .OrderByDescending(c => c.CreatedAt)
-                .Skip(q.Start)
-                .Take(q.Ends - q.Start)
+                .Paginate(q.Start, q.Ends)
                 .ToListAsync();
 
             return list;

@@ -50,7 +50,7 @@ namespace Flsurf.Application.Staff.UseCases
             query = query.Paginate(dto.Start, dto.Ends);
 
             // Возвращаем результат
-            return await query.AsNoTracking().ToListAsync();
+            return await query.ToListAsync();
         }
     }
 

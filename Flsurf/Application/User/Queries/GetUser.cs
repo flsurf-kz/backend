@@ -37,7 +37,6 @@ namespace Flsurf.Application.User.Queries
 
             var userQuery = context.Users
                 .IncludeStandard()
-                .AsNoTracking()
                 .AsQueryable();
 
             if (query.UserId != null)

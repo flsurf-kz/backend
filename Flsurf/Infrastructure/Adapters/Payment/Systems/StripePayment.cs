@@ -84,75 +84,120 @@ namespace Flsurf.Infrastructure.Adapters.Payment.Systems
         {
             var data = new Dictionary<string, string>
             {
-                ["amount"] = ((int)(r.Amount * 100)).ToString(),
-                ["currency"] = r.Currency.ToLower(),
+                ["amount"]      = ((long)(r.Amount * 100)).ToString(),
+                ["currency"]    = r.Currency.ToLower(),
                 ["metadata[order_id]"] = r.OrderId,
                 ["description"] = r.Description
-                // Важно: для InitPayment тоже нужен Customer ID, если используется сохраненный ProviderPaymentMethodToken
-                // или если вы хотите автоматически привязывать новые карты к клиенту Stripe
-                // data["customer"] = "cus_xxxxxxxxxxxxxx"; // ID клиента Stripe
             };
 
             if (!string.IsNullOrEmpty(r.ProviderPaymentMethodToken))
             {
-                data["payment_method"] = r.ProviderPaymentMethodToken;
-                data["confirmation_method"] = "automatic"; // или manual, если вы подтверждаете позже
-                data["confirm"] = "true"; // Попытаться списать сразу
-                // Если карта может потребовать 3DS, Stripe вернет статус "requires_action"
-                // и client_secret для обработки на фронте.
-                // data["return_url"] = r.SuccessReturnUrl; // Для сценариев с 3DS
+                /* платёж через сохранённую карту ― сразу confirm */
+                data["payment_method"]      = r.ProviderPaymentMethodToken;
+                data["confirmation_method"] = "automatic";
+                data["confirm"]             = "true";
+                data["return_url"]          = r.SuccessReturnUrl;      // теперь допустимо
             }
             else
             {
-                // Этот блок больше похож на Stripe Checkout Session или Payment Link,
-                // а не на прямое создание PaymentIntent для Stripe Elements без токена.
-                // Для PaymentElement нужен client_secret, даже если карта новая.
-                // Для этого обычно создают PaymentIntent без payment_method, но с automatic_payment_methods[enabled]=true
+                /* Payment Element: только client_secret для фронта */
                 data["automatic_payment_methods[enabled]"] = "true";
-                data["return_url"] = r.SuccessReturnUrl; // Для редиректов после оплаты или 3DS
+                /* return_url НЕЛЬЗЯ добавлять без confirm=true  */
             }
 
             var resp = await _http.PostAsync(
                 "https://api.stripe.com/v1/payment_intents",
                 new FormUrlEncodedContent(data));
 
-            var responseContent = await resp.Content.ReadAsStringAsync();
-            var root = JsonDocument.Parse(responseContent).RootElement;
+            var body  = await resp.Content.ReadAsStringAsync();
+            var root  = JsonDocument.Parse(body).RootElement;
 
             if (!resp.IsSuccessStatusCode)
             {
-                _logger.LogInformation($"Stripe API Error InitPayment: {responseContent}");
-                // Попытаться извлечь сообщение об ошибке из ответа Stripe
-                string errorMessage = "Ошибка платежного шлюза.";
-                if (root.TryGetProperty("error", out var errorElement) && errorElement.TryGetProperty("message", out var msgElement))
-                {
-                    errorMessage = msgElement.GetString() ?? errorMessage;
-                }
-                // ID может быть даже при ошибке, если PaymentIntent был создан, но не прошел
-                var errorId = root.TryGetProperty("id", out var idOnError) ? idOnError.GetString() : string.Empty;
-                return new InitPaymentResult(false, errorId!, null, null, null);
+                var msg = root.TryGetProperty("error", out var e) &&
+                          e.TryGetProperty("message", out var m)
+                                ? m.GetString()
+                                : "Stripe error";
+                var errId = root.TryGetProperty("id", out var idEl)
+                                ? idEl.GetString()
+                                : string.Empty;
+
+                return new InitPaymentResult(Success: false, ProviderPaymentId: errId!, ErrorMessage: msg, RedirectUrl: null, QrUrl: null, ClientSecret: "");
             }
 
+            var id           = root.GetProperty("id").GetString()!;
+            var clientSecret = root.GetProperty("client_secret").GetString()!;
 
-            var id = root.GetProperty("id").GetString()!;
-            var ok = resp.IsSuccessStatusCode; // Уже проверили выше
-
-            string? redirectUrl = null;
-            if (root.TryGetProperty("next_action", out var actElement) &&
-                actElement.TryGetProperty("type", out var typeElement) && typeElement.GetString() == "redirect_to_url" &&
-                actElement.TryGetProperty("redirect_to_url", out var redirectToUrlElement) &&
-                redirectToUrlElement.TryGetProperty("url", out var urlElement))
+            string? redirect = null;
+            if (root.TryGetProperty("next_action", out var na) &&
+                na.ValueKind == JsonValueKind.Object &&                // ← важно!
+                na.TryGetProperty("type", out var t) &&
+                t.ValueEquals("redirect_to_url") &&                    // .NET 8+
+                na.TryGetProperty("redirect_to_url", out var ru) &&
+                ru.TryGetProperty("url", out var u))
             {
-                redirectUrl = urlElement.GetString();
+                redirect = u.GetString();
             }
-
-            var clientSecret = root.TryGetProperty("client_secret", out var cs) ? cs.GetString() : null;
 
             return new InitPaymentResult(
-                ok, id,
-                RedirectUrl: redirectUrl,
-                QrUrl: null, // Stripe card payments typically don't use QR codes this way
-                ClientSecret: clientSecret);
+                Success: true, ProviderPaymentId: id, ErrorMessage: null, RedirectUrl: redirect, ClientSecret: clientSecret, QrUrl: "");
+        }
+        
+        /// <summary>Переводим средства и инициируем payout.</summary>
+        public async Task<PayoutInitResult> InitPayoutAsync(PayoutInitRequest r)
+        {
+            /*-----------------------------------------------------------*
+             * 1) Transfer с платформы на connected-account              *
+             *-----------------------------------------------------------*/
+            var transferBody = new Dictionary<string, string>
+            {
+                ["amount"]      = ((long)(r.Amount * 100)).ToString(),
+                ["currency"]    = r.CurrencyIso.ToLower(),
+                ["destination"] = r.ConnectedAccountId,
+                ["description"] = r.Description
+            };
+
+            var trResp = await _http.PostAsync(
+                "https://api.stripe.com/v1/transfers",
+                new FormUrlEncodedContent(transferBody));
+
+            if (!trResp.IsSuccessStatusCode)
+            {
+                _logger.LogWarning("Stripe transfer error: {body}",
+                    await trResp.Content.ReadAsStringAsync());
+                return new(false, "", "Transfer failed");
+            }
+
+            /*-----------------------------------------------------------*
+             * 2) Payout из connected-аккаунта                           *
+             *    NB: header  Stripe-Account: acct_…                     *
+             *-----------------------------------------------------------*/
+            using var req = new HttpRequestMessage(HttpMethod.Post,
+                "https://api.stripe.com/v1/payouts")
+            {
+                Content = new FormUrlEncodedContent(new Dictionary<string, string>
+                {
+                    ["amount"]   = ((long)(r.Amount * 100)).ToString(),
+                    ["currency"] = r.CurrencyIso.ToLower(),
+                    ["method"]   = "instant",             // или  "standard"
+                    ["destination"] = r.ExternalAccountId // card_…/ba_…
+                })
+            };
+            req.Headers.Add("Stripe-Account", r.ConnectedAccountId);
+
+            var poResp = await _http.SendAsync(req);
+            var poBody = await poResp.Content.ReadAsStringAsync();
+
+            if (!poResp.IsSuccessStatusCode)
+            {
+                _logger.LogWarning("Stripe payout error: {body}", poBody);
+                return new(false, "", "Payout failed");
+            }
+
+            var payoutId = JsonDocument.Parse(poBody)
+                         .RootElement.GetProperty("id").GetString()!; // po_…
+
+            return new(true, payoutId, null);
         }
 
 

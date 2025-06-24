@@ -38,7 +38,6 @@ namespace Flsurf.Infrastructure.Data
                 return null;
 
             var session = await _context.SessionTickets
-                .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.Id == keyId);
 
             if (session == null) return null;

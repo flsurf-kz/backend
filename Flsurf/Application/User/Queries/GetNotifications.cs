@@ -69,7 +69,7 @@ namespace Flsurf.Application.User.Queries
             notificationsQuery = notificationsQuery.Paginate(query.Start, query.Ends);
 
             // Выполняем запрос без отслеживания изменений
-            return await notificationsQuery.AsNoTracking().ToListAsync();
+            return await notificationsQuery.ToListAsync();
         }
     }
 }

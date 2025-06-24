@@ -10,6 +10,6 @@ namespace Flsurf.Application.Freelance.Queries
         public ContractStatus? Status { get; set; }
         public int Start { get; set; } = 0; // Пагинация
         public int Ends { get; set; } = 10; // Пагинация
-        public bool? InDispute { get; set; } = false; 
+        public bool InDispute { get; set; } = false; 
     }
 }

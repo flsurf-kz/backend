@@ -55,14 +55,12 @@ namespace Flsurf.Application.User.Commands
                 }
 
                 users = await _context.Users
-                    .AsNoTracking()
                     .Where(x => x.Role == command.Role)
                     .ToListAsync();
             }
             else if (command.UserId != null)
             {
                 users = await _context.Users
-                    .AsNoTracking()
                     .Where(x => x.Id == command.UserId)
                     .ToListAsync();
             }

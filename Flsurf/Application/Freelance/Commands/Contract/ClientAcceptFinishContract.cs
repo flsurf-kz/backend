@@ -10,7 +10,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
 {
     public class ClientAcceptFinishContractCommand : BaseCommand
     { 
-        public Guid ContractId { get; }
+        public Guid ContractId { get; set; }
     }
 
 
@@ -30,13 +30,13 @@ namespace Flsurf.Application.Freelance.Commands.Contract
             var contract = await _dbContext.Contracts.FirstOrDefaultAsync(x => x.Id == command.ContractId);
 
             if (contract == null)
-                return CommandResult.NotFound("", command.ContractId);
+                return CommandResult.NotFound("Не найден контракт", command.ContractId);
 
             var freelancerWallet = await _dbContext.Wallets.FirstOrDefaultAsync(x => x.UserId == contract.FreelancerId); 
             var clientWallet = await _dbContext.Wallets.FirstOrDefaultAsync(x => x.UserId == contract.EmployerId);
 
             if (freelancerWallet == null || clientWallet == null)
-                return CommandResult.NotFound("", contract.FreelancerId);
+                return CommandResult.NotFound("Один из кошелков не был найден! ОШИБКА", contract.FreelancerId);
 
             if (contract.BudgetType == BudgetType.Fixed)
             {

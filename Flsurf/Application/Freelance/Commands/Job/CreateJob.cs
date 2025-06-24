@@ -63,7 +63,7 @@ namespace Flsurf.Application.Freelance.Commands.Job
 
             if (category == null)
             {
-                return CommandResult.NotFound("", command.CategoryId);
+                return CommandResult.NotFound("Категория не найдена", command.CategoryId);
             }
 
             var files = await _uploadFiles.Execute(command.Files);

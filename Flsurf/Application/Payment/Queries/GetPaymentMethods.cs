@@ -40,7 +40,6 @@ namespace Flsurf.Application.Payment.Queries
             
 
             return await dbContext.PaymentMethods
-                .AsNoTracking()
                 .Where(pm => pm.UserId == (req.UserId ?? userId) && pm.IsActive)
                 .Select(pm => new PaymentMethodDto(
                     pm.Id,

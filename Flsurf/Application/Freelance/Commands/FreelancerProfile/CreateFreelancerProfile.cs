@@ -2,6 +2,7 @@
 using Flsurf.Application.Common.Interfaces;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.User.Entities;
+using Flsurf.Domain.User.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
@@ -42,10 +43,8 @@ namespace Flsurf.Application.Freelance.Commands.FreelancerProfile
             if (user == null)
                 return CommandResult.NotFound("ПОшел нахуй отсюда", command.UserId ?? Guid.Empty);
 
-            if (user.Type != Domain.User.Enums.UserTypes.NonUser)
-            {
-                return CommandResult.Forbidden("You are freelancer"); 
-            }
+            if (user.Type is not (UserTypes.NonUser or UserTypes.Freelancer))
+                return CommandResult.Forbidden("Профиль могут иметь только фрилансеры.");
 
             // Проверяем, что профиль еще не создан
             var existingProfile = await _dbContext.FreelancerProfiles
@@ -58,7 +57,7 @@ namespace Flsurf.Application.Freelance.Commands.FreelancerProfile
 
             // Создаем новый профиль
             var profile = FreelancerProfileEntity.Create(user.Id, command.Experience, command.HourlyRate, command.Resume);
-            user.ChangeUserType(Domain.User.Enums.UserTypes.Freelancer); 
+            user.ChangeUserType(UserTypes.Freelancer); 
 
             _dbContext.FreelancerProfiles.Add(profile);
             await _dbContext.SaveChangesAsync();

@@ -76,11 +76,13 @@ namespace Flsurf.Presentation.Web.Controllers
         // Запуск потока оплаты
         [HttpPost("start", Name = "StartPaymentFlow")]
         [Authorize]
-        public async Task<ActionResult<CommandResult>> StartPaymentFlow([FromBody] StartPaymentFlowCommand command)
+        public async Task<ActionResult<StartPaymentFlowResult>> StartPaymentFlow([FromBody] StartPaymentFlowCommand command)
         {
             var handler = _transactionService.StartPaymentFlow();
             var result = await handler.Handle(command);
-            return result.MapResult(this);
+            if (!result.IsSuccess) return result.MapResult(this);
+            
+            return Ok(result.Data! as StartPaymentFlowResult);
         }
 
         [HttpPost("setup-intent", Name = "CreateSetupIntent")]

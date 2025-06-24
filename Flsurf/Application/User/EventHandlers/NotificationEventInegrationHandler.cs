@@ -29,7 +29,6 @@ namespace Flsurf.Application.User.EventHandlers
         {
             // 1) Достать только что созданное уведомление из БД
             var notification = await _context.Notifications
-                .AsNoTracking()
                 .FirstOrDefaultAsync(n => n.Id == evt.NotificationId);
 
             if (notification == null)

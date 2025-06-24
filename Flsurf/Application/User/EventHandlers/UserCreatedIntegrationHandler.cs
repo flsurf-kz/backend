@@ -67,7 +67,7 @@ namespace Flsurf.Application.User.EventHandlers
                     {
                         if (result.Status != System.Net.HttpStatusCode.Conflict && result.Status != System.Net.HttpStatusCode.Forbidden)
                         {
-                            logger.LogError(result.Message + "Status" + result.Status.ToString());
+                            logger.LogError(result.Message + ",[Critical]Status:" + result.Status.ToString());
                             throw new Exception(result.Message);
                         }
                     }

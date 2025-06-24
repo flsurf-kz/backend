@@ -131,14 +131,14 @@ namespace Flsurf.Domain.Freelance.Entities
         {
             IsPaused = true;
             PauseReason = reason;
-            AddDomainEvent(new ContractPaused(this, reason));
+            AddDomainEvent(new ContractPaused(this.Id, reason));
         }
 
         public void ResumeContract()
         {
             IsPaused = false;
             PauseReason = null;
-            AddDomainEvent(new ContractResumed(this));
+            AddDomainEvent(new ContractResumed(this.Id));
         }
 
         public void StartDispute()
@@ -168,7 +168,7 @@ namespace Flsurf.Domain.Freelance.Entities
             IsPaused = true;
             PauseReason = "Контракт завершен";
 
-            AddDomainEvent(new ContractFinished(this)); 
+            AddDomainEvent(new ContractFinished(this.Id)); 
         }
     }
 
