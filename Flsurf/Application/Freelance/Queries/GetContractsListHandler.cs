@@ -2,6 +2,7 @@
 using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Freelance.Permissions;
 using Flsurf.Domain.Freelance.Entities;
+using Flsurf.Domain.Freelance.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
@@ -13,18 +14,16 @@ namespace Flsurf.Application.Freelance.Queries
             IPermissionService permService)
         : IQueryHandler<GetContractsListQuery, List<ContractEntity>>
     {
-        private readonly IApplicationDbContext _db = dbContext;
-        private readonly IPermissionService _ps = permService;
 
         public async Task<List<ContractEntity>> Handle(GetContractsListQuery q)
         {
             /* ---- текущий пользователь ------------------------------------ */
-            Guid userId = q.UserId ?? (await _ps.GetCurrentUser()).Id;
+            Guid userId = q.UserId ?? (await permService.GetCurrentUser()).Id;
 
             /* ---- 1. ReBAC: контракт-иды, на которые есть право read ------ */
             HashSet<Guid> allowed = new();
 
-            await foreach (var rel in _ps.LookupSubjects(
+            await foreach (var rel in permService.LookupSubjects(
                                ZedFreelancerUser.WithId(userId),
                                "read", "contract"))
             {
@@ -33,12 +32,16 @@ namespace Flsurf.Application.Freelance.Queries
             }
 
             /* ---- 2. Прямые отношения Employer / Freelancer --------------- */
-            IQueryable<ContractEntity> baseQuery = _db.Contracts
+            IQueryable<ContractEntity> baseQuery = dbContext.Contracts
                                                       .IncludeStandard()
                                                       .Where(c =>
                                                              c.EmployerId == userId ||
                                                              c.FreelancerId == userId);
 
+            if (q.InDispute != null)
+            {
+                baseQuery = baseQuery.Where(x => x.IsPaused && x.Status == ContractStatus.Paused); 
+            }
             /* ---- 3. Пагинация, сортировка -------------------------------- */
             var list = await baseQuery
                 .OrderByDescending(c => c.CreatedAt)

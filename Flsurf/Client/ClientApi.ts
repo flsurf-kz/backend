@@ -11672,6 +11672,7 @@ export class GetContractsListQuery implements IGetContractsListQuery {
     status?: GetContractsListQueryStatus | undefined;
     start?: number;
     ends?: number;
+    inDispute?: boolean | undefined;
 
     constructor(data?: IGetContractsListQuery) {
         if (data) {
@@ -11689,6 +11690,7 @@ export class GetContractsListQuery implements IGetContractsListQuery {
             this.status = _data["status"];
             this.start = _data["start"];
             this.ends = _data["ends"];
+            this.inDispute = _data["inDispute"];
         }
     }
 
@@ -11706,6 +11708,7 @@ export class GetContractsListQuery implements IGetContractsListQuery {
         data["status"] = this.status;
         data["start"] = this.start;
         data["ends"] = this.ends;
+        data["inDispute"] = this.inDispute;
         return data;
     }
 }
@@ -11716,6 +11719,7 @@ export interface IGetContractsListQuery {
     status?: GetContractsListQueryStatus | undefined;
     start?: number;
     ends?: number;
+    inDispute?: boolean | undefined;
 }
 
 export class GetFinanceSummaryQuery implements IGetFinanceSummaryQuery {
@@ -12041,6 +12045,7 @@ export class GetTransactionsListQuery implements IGetTransactionsListQuery {
     walletId?: string | undefined;
     priceRange?: number[] | undefined;
     status?: GetTransactionsListQueryStatus | undefined;
+    userId?: string;
 
     constructor(data?: IGetTransactionsListQuery) {
         if (data) {
@@ -12067,6 +12072,7 @@ export class GetTransactionsListQuery implements IGetTransactionsListQuery {
                     this.priceRange!.push(item);
             }
             this.status = _data["status"];
+            this.userId = _data["userId"];
         }
     }
 
@@ -12093,6 +12099,7 @@ export class GetTransactionsListQuery implements IGetTransactionsListQuery {
                 data["priceRange"].push(item);
         }
         data["status"] = this.status;
+        data["userId"] = this.userId;
         return data;
     }
 }
@@ -12108,6 +12115,7 @@ export interface IGetTransactionsListQuery {
     walletId?: string | undefined;
     priceRange?: number[] | undefined;
     status?: GetTransactionsListQueryStatus | undefined;
+    userId?: string;
 }
 
 export class GetUsersListQuery implements IGetUsersListQuery {

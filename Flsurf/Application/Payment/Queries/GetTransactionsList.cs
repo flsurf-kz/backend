@@ -5,6 +5,7 @@ using Flsurf.Application.Payment.Permissions;
 using Flsurf.Domain.Payment.Entities;
 using Flsurf.Domain.Payment.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
+using Flsurf.Infrastructure.Data.Extensions;
 using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -23,6 +24,7 @@ namespace Flsurf.Application.Payment.Queries
         public Guid? WalletId { get; set; }
         public decimal[]? PriceRange { get; set; }
         public TransactionStatus? Status { get; set; }
+        public Guid UserId { get; set; }
     }
 
     public class GetTransactionsList : IQueryHandler<GetTransactionsListQuery, ICollection<TransactionEntity>>
@@ -38,14 +40,17 @@ namespace Flsurf.Application.Payment.Queries
 
         public async Task<ICollection<TransactionEntity>> Handle(GetTransactionsListQuery dto)
         {
-            var owner = await _permService.GetCurrentUser();
-
+            Guid ownerId; 
+            if (dto.UserId == null)
+                ownerId = (await _permService.GetCurrentUser()).Id;
+            else 
+                ownerId = dto.UserId;
             var query = _context.Wallets
                 .Include(x => x.User)
                 .AsQueryable();
 
             if (dto.WalletId == null)
-                query = query.Where(x => x.UserId == owner.Id);
+                query = query.Where(x => x.UserId == ownerId);
             else
                 query = query.Where(x => x.Id == dto.WalletId); 
 
@@ -56,7 +61,7 @@ namespace Flsurf.Application.Payment.Queries
 
             await _permService.EnforceCheckPermission(
                 ZedPaymentUser
-                    .WithId(owner.Id)
+                    .WithId(ownerId)
                     .CanReadWallet(ZedWallet.WithId(wallet.Id)));
 
             var result = await _context.Transactions
@@ -69,6 +74,7 @@ namespace Flsurf.Application.Payment.Queries
                     pricesRange: dto.PriceRange, 
                     flow: dto.Flow, 
                     status: dto.Status)
+                .Paginate(dto.Start, dto.Ends)
                 .ToListAsync();
 
             return result;
