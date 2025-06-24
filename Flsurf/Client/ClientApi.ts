@@ -662,9 +662,10 @@ export interface IClient {
     getSkill(skillId: string): Promise<SkillModel>;
 
     /**
+     * @param body (optional) 
      * @return OK
      */
-    blockUser(userId: string): Promise<boolean>;
+    blockUser(body?: BlockUserCommand | undefined): Promise<boolean>;
 
     /**
      * @param body (optional) 
@@ -5706,18 +5707,20 @@ export class Client implements IClient {
     }
 
     /**
+     * @param body (optional) 
      * @return OK
      */
-    blockUser(userId: string): Promise<boolean> {
-        let url_ = this.baseUrl + "/api/stuff/user/{userId}/block";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined.");
-        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+    blockUser(body?: BlockUserCommand | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/api/stuff/user/block";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_: RequestInit = {
+            body: content_,
             method: "POST",
             headers: {
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             }
         };
@@ -8126,6 +8129,46 @@ export interface IBankDetails {
     bic: string;
     accountNumber: string;
     bankName: string;
+}
+
+export class BlockUserCommand implements IBlockUserCommand {
+    userId!: string;
+    blocked?: boolean | undefined;
+
+    constructor(data?: IBlockUserCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.userId = _data["userId"];
+            this.blocked = _data["blocked"];
+        }
+    }
+
+    static fromJS(data: any): BlockUserCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new BlockUserCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["userId"] = this.userId;
+        data["blocked"] = this.blocked;
+        return data;
+    }
+}
+
+export interface IBlockUserCommand {
+    userId: string;
+    blocked?: boolean | undefined;
 }
 
 export class BlockWalletCommand implements IBlockWalletCommand {
