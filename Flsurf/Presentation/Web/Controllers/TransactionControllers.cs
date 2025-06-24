@@ -81,7 +81,7 @@ namespace Flsurf.Presentation.Web.Controllers
             var handler = _transactionService.StartPaymentFlow();
             var result = await handler.Handle(command);
             if (!result.IsSuccess) return result.MapResult(this);
-            
+            Console.WriteLine(result.Data);
             return Ok(result.Data! as StartPaymentFlowResult);
         }
 

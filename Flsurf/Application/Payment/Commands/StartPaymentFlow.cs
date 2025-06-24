@@ -52,10 +52,10 @@ namespace Flsurf.Application.Payment.Commands
 
             /* 1. Платёжный провайдер / система / адаптер */
             var provider = await db.TransactionProviders
-                                   .Include(p => p.Systems)
-                                   .FirstAsync(p => p.Id == c.ProviderId);
+                .Include(x => x.Systems)
+                .FirstAsync(p => p.Id == c.ProviderId);
             
-            Console.WriteLine($"Активные системы {provider.GetActiveSystems()}");
+            Console.WriteLine($"Активные системы {provider.Systems.Count}");
             var system = provider.GetActiveSystems().FirstOrDefault()
                          ?? throw new DomainException("Нет активной платёжной системы");
             var adapter = adapters.GetPaymentAdapter(provider.Name);
@@ -116,7 +116,12 @@ namespace Flsurf.Application.Payment.Commands
                 
                 
                 await db.SaveChangesAsync();
-                return CommandResult.Success();
+                return CommandResult.Success(new StartPaymentFlowResult() { 
+                    InternalTransactionId = tx.Id,
+                    ProviderPaymentId = init.ProviderPaymentId ?? "",
+                    ClientSecret = init.ClientSecret,
+                    RedirectUrl = init.RedirectUrl, 
+                });
             }
             /* 5. Ветка WITHDRAW --------------------------------------------------*/
             if (c.Flow == TransactionFlow.Outgoing &&

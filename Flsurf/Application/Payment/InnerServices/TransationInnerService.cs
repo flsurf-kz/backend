@@ -113,7 +113,7 @@ namespace Flsurf.Application.Payment.InnerServices
             // просто добавляет или убавляет деньги через транзакцию 
             var wallet = await _dbContext.Wallets
                 .Include(x => x.Transactions)
-                .FirstOrDefaultAsync(x => x.Id == walletId);
+                .FirstOrDefaultAsync(x => x.Id == walletId || x.UserId == walletId);
 
             if (wallet == null)
                 return CommandResult.NotFound("Кошёлек не найден", walletId);

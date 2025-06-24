@@ -13,10 +13,10 @@ namespace Flsurf.Application.Payment.UseCases
     public class BalanceOperationCommand : BaseCommand
     {
         [Required]
-        public Guid WalletId { get; }
+        public Guid WalletId { get; set; }
         [Required]
-        public Money Balance { get; } = new(0);
-        public BalanceOperationType BalanceOperationType { get; } = BalanceOperationType.Deposit; 
+        public Money Balance { get; set; } = new(0);
+        public BalanceOperationType BalanceOperationType { get; set; } = BalanceOperationType.Deposit; 
     }
 
     public class BalanceOperation : ICommandHandler<BalanceOperationCommand>
@@ -39,7 +39,7 @@ namespace Flsurf.Application.Payment.UseCases
                 ZedPaymentUser
                     .WithId(owner.Id)
                     .CanAddBalance(ZedWallet.WithId(dto.WalletId)));
-
+            
             var result = await _innerService.BalanceOperation(dto.Balance, dto.WalletId, dto.BalanceOperationType);
             if (!result.IsSuccess)
                 return result; 
