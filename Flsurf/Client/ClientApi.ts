@@ -528,9 +528,10 @@ export interface IClient {
     /**
      * @param jobId (optional) 
      * @param status (optional) 
+     * @param userId (optional) 
      * @return OK
      */
-    getProposalsList(jobId?: string | undefined, status?: Status | undefined): Promise<ProposalEntity[]>;
+    getProposalsList(jobId?: string | undefined, status?: Status | undefined, userId?: string | undefined): Promise<ProposalEntity[]>;
 
     /**
      * @param body (optional) 
@@ -4684,9 +4685,10 @@ export class Client implements IClient {
     /**
      * @param jobId (optional) 
      * @param status (optional) 
+     * @param userId (optional) 
      * @return OK
      */
-    getProposalsList(jobId?: string | undefined, status?: Status | undefined): Promise<ProposalEntity[]> {
+    getProposalsList(jobId?: string | undefined, status?: Status | undefined, userId?: string | undefined): Promise<ProposalEntity[]> {
         let url_ = this.baseUrl + "/api/job/proposals?";
         if (jobId === null)
             throw new Error("The parameter 'jobId' cannot be null.");
@@ -4696,6 +4698,10 @@ export class Client implements IClient {
             throw new Error("The parameter 'status' cannot be null.");
         else if (status !== undefined)
             url_ += "Status=" + encodeURIComponent("" + status) + "&";
+        if (userId === null)
+            throw new Error("The parameter 'userId' cannot be null.");
+        else if (userId !== undefined)
+            url_ += "UserId=" + encodeURIComponent("" + userId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_: RequestInit = {
@@ -8041,9 +8047,9 @@ export interface IAuthticateWithSecurityAnswerQuery {
 }
 
 export class BalanceOperationCommand implements IBalanceOperationCommand {
-    readonly walletId!: string;
+    walletId!: string;
     balance!: Money;
-    readonly balanceOperationType?: BalanceOperationCommandBalanceOperationType;
+    balanceOperationType?: BalanceOperationCommandBalanceOperationType;
 
     constructor(data?: IBalanceOperationCommand) {
         if (data) {
@@ -8059,9 +8065,9 @@ export class BalanceOperationCommand implements IBalanceOperationCommand {
 
     init(_data?: any) {
         if (_data) {
-            (<any>this).walletId = _data["walletId"];
+            this.walletId = _data["walletId"];
             this.balance = _data["balance"] ? Money.fromJS(_data["balance"]) : new Money();
-            (<any>this).balanceOperationType = _data["balanceOperationType"];
+            this.balanceOperationType = _data["balanceOperationType"];
         }
     }
 

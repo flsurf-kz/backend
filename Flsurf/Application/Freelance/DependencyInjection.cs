@@ -1,4 +1,5 @@
-﻿using Flsurf.Application.Freelance.Interfaces;
+﻿using Flsurf.Application.Freelance.EventHandlers;
+using Flsurf.Application.Freelance.Interfaces;
 using Flsurf.Application.Freelance.Services;
 
 namespace Flsurf.Application.Freelance
@@ -18,8 +19,13 @@ namespace Flsurf.Application.Freelance
             services.AddScoped<ITaskService, TaskService>();
             services.AddScoped<IClientProfileService, ClientProfileService>(); 
             services.AddScoped<IWorkSessionService, WorkSessionService>();
-            services.AddScoped<IReportsService, ReportsService>(); 
-
+            services.AddScoped<IReportsService, ReportsService>();
+            services.AddScoped<ContractSentToFreelancerNotificationHandler>(); 
+            services.AddScoped<ContractWasCreatedNotificationHandler>(); 
+            services.AddScoped<ReactedToProposalNotificationHandler>(); 
+            services.AddScoped<FreelancerFinishedContractNotificationHandler>(); 
+            services.AddScoped<ContractFinishedNotificationHandler>(); 
+            
             return services;
         }
     }

@@ -10,6 +10,7 @@ namespace Flsurf.Application.Freelance.Queries
     {
         public Guid? JobId { get; set; }
         public ProposalStatus Status { get; set; }
+        public Guid? UserId { get; set; }
     }
 
     public class GetProposalsListHandler(IApplicationDbContext dbContext) : IQueryHandler<GetProposalsListQuery, ICollection<ProposalEntity>>
@@ -21,7 +22,12 @@ namespace Flsurf.Application.Freelance.Queries
                 .Include(x => x.Job)
                 .Include(x => x.Files)
                 .Where(x => x.Status == queryDto.Status)
-                .AsQueryable(); 
+                .AsQueryable();
+
+            if (queryDto.UserId != null)
+            {
+                query = query.Where(x => x.FreelancerId == queryDto.UserId);
+            }
 
             if (queryDto.JobId != null)
             {
