@@ -36,7 +36,7 @@ namespace Flsurf.Application.Freelance.Commands.Contract
                 return CommandResult.NotFound("Контракт не найден или недоступен.", command.ContractId);
 
             if (contract.Status != ContractStatus.PendingFinishApproval)
-                return CommandResult.Conflict("Контракт не ожидает подтверждения завершения.");
+                return CommandResult.Conflict($"Контракт не ожидает подтверждения завершения. текущий статус: {contract.Status}");
 
             // Возвращаем в активный статус и записываем причину
             contract.Status = ContractStatus.Active;

@@ -9634,6 +9634,7 @@ export class CreateChatDto implements ICreateChatDto {
     description?: string | undefined;
     userIds?: string[] | undefined;
     type?: CreateChatDtoType;
+    contractId?: string | undefined;
 
     constructor(data?: ICreateChatDto) {
         if (data) {
@@ -9654,6 +9655,7 @@ export class CreateChatDto implements ICreateChatDto {
                     this.userIds!.push(item);
             }
             this.type = _data["type"];
+            this.contractId = _data["contractId"];
         }
     }
 
@@ -9674,6 +9676,7 @@ export class CreateChatDto implements ICreateChatDto {
                 data["userIds"].push(item);
         }
         data["type"] = this.type;
+        data["contractId"] = this.contractId;
         return data;
     }
 }
@@ -9683,6 +9686,7 @@ export interface ICreateChatDto {
     description?: string | undefined;
     userIds?: string[] | undefined;
     type?: CreateChatDtoType;
+    contractId?: string | undefined;
 }
 
 export class CreateClientProfileCommand implements ICreateClientProfileCommand {

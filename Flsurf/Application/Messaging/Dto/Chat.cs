@@ -15,6 +15,7 @@ namespace Flsurf.Application.Messaging.Dto
         public string Description { get; set; } = null!;
         public List<Guid> UserIds { get; set; } = [];
         public ChatTypes type { get; set; }
+        public Guid? ContractId { get; set; }
     }
 
     public class CloseChatDto

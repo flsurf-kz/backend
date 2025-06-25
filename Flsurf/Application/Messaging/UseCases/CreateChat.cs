@@ -2,6 +2,7 @@
 using Flsurf.Application.Common.UseCases;
 using Flsurf.Application.Messaging.Dto;
 using Flsurf.Application.Messaging.Permissions;
+using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Messanging.Entities;
 using Flsurf.Domain.Messanging.Enums;
 using Flsurf.Infrastructure.Adapters.Permissions;
@@ -32,9 +33,15 @@ namespace Flsurf.Application.Messaging.UseCases
                 .IncludeStandard()
                 .Where(x => dto.UserIds.Contains(x.Id))
                 .ToListAsync();
+            ContractEntity? contract = null; 
+            if (dto.ContractId != null) 
+                contract = await _context.Contracts.FirstOrDefaultAsync(x => x.Id == dto.ContractId);
 
             var chat = ChatEntity.Create(name: dto.Name, owner, users, true, ChatTypes.Group);
-
+            if (contract != null)
+            {
+                chat.Contracts.Add(contract); 
+            }
             await _permService.AddRelationships(
                 ZedChat
                     .WithId(chat.Id)
