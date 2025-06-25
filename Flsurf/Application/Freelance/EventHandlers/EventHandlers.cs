@@ -32,7 +32,8 @@ public sealed class ContractSentToFreelancerNotificationHandler(
                 Title  = "Новый контракт",
                 Text   = $"Вам отправлен контракт «{title}». Ознакомьтесь и подпишите.",
                 UserId = evt.FreelancerId,
-                Data   = new() { ["contractId"] = evt.ContractId.ToString() }
+                Data   = new() { ["contractId"] = evt.ContractId.ToString() }, 
+                Internal = true, 
             });
 
         log.LogInformation("Notification sent to freelancer {F} about contract {C}",
@@ -95,7 +96,8 @@ public sealed class ReactedToProposalNotificationHandler(
                 {
                     ["jobId"]      = proposal.JobId.ToString(),
                     ["proposalId"] = proposal.Id.ToString()
-                }
+                }, 
+                Internal = true, 
             });
 
         log.LogInformation("Notify client {C} about proposal {P}",
@@ -124,7 +126,8 @@ public sealed class FreelancerFinishedContractNotificationHandler(
                 Text   = $"Фрилансер сообщил о завершении контракта «{contract.Job.Title}». " +
                          $"Проверьте и подтвердите результат.",
                 UserId = contract.EmployerId,
-                Data   = new() { ["contractId"] = contract.Id.ToString() }
+                Data   = new() { ["contractId"] = contract.Id.ToString() }, 
+                Internal = true, 
             });
 
         log.LogInformation("Notify client {C} that freelancer finished contract {Id}",

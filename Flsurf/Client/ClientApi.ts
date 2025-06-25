@@ -8723,6 +8723,8 @@ export interface IChatEntity {
 
 export class ClientAcceptFinishContractCommand implements IClientAcceptFinishContractCommand {
     contractId?: string;
+    rating?: number;
+    comment?: string | undefined;
 
     constructor(data?: IClientAcceptFinishContractCommand) {
         if (data) {
@@ -8736,6 +8738,8 @@ export class ClientAcceptFinishContractCommand implements IClientAcceptFinishCon
     init(_data?: any) {
         if (_data) {
             this.contractId = _data["contractId"];
+            this.rating = _data["rating"];
+            this.comment = _data["comment"];
         }
     }
 
@@ -8749,12 +8753,16 @@ export class ClientAcceptFinishContractCommand implements IClientAcceptFinishCon
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["contractId"] = this.contractId;
+        data["rating"] = this.rating;
+        data["comment"] = this.comment;
         return data;
     }
 }
 
 export interface IClientAcceptFinishContractCommand {
     contractId?: string;
+    rating?: number;
+    comment?: string | undefined;
 }
 
 export class ClientCloseContractCommand implements IClientCloseContractCommand {
@@ -10152,6 +10160,7 @@ export class CreateNotificationCommand implements ICreateNotificationCommand {
     userId?: string | undefined;
     role?: CreateNotificationCommandRole | undefined;
     type?: CreateNotificationCommandType | undefined;
+    readonly internal?: boolean;
 
     constructor(data?: ICreateNotificationCommand) {
         if (data) {
@@ -10179,6 +10188,7 @@ export class CreateNotificationCommand implements ICreateNotificationCommand {
             this.userId = _data["userId"];
             this.role = _data["role"];
             this.type = _data["type"];
+            (<any>this).internal = _data["internal"];
         }
     }
 
@@ -10203,6 +10213,7 @@ export class CreateNotificationCommand implements ICreateNotificationCommand {
         data["userId"] = this.userId;
         data["role"] = this.role;
         data["type"] = this.type;
+        data["internal"] = this.internal;
         return data;
     }
 }
@@ -10214,6 +10225,7 @@ export interface ICreateNotificationCommand {
     userId?: string | undefined;
     role?: CreateNotificationCommandRole | undefined;
     type?: CreateNotificationCommandType | undefined;
+    internal?: boolean;
 }
 
 export class CreateSetupIntentCommand implements ICreateSetupIntentCommand {
@@ -11480,7 +11492,7 @@ export class FreelancerTeamEntity implements IFreelancerTeamEntity {
     participants?: UserEntity[] | undefined;
     readonly closed?: boolean;
     readonly closedReason?: string | undefined;
-    avatarId?: string;
+    avatarId?: string | undefined;
     avatar?: FileEntity;
     owner?: UserEntity;
     ownerId?: string;
@@ -11556,7 +11568,7 @@ export interface IFreelancerTeamEntity {
     participants?: UserEntity[] | undefined;
     closed?: boolean;
     closedReason?: string | undefined;
-    avatarId?: string;
+    avatarId?: string | undefined;
     avatar?: FileEntity;
     owner?: UserEntity;
     ownerId?: string;

@@ -22,6 +22,7 @@ namespace Flsurf.Application.User.Commands
         public Guid? UserId { get; set; }
         public UserRoles? Role { get; set; }
         public UserTypes? Type { get; set; }
+        public bool Internal { get; internal set; }
     }
 
     public class CreateNotificationHandler : ICommandHandler<CreateNotificationCommand>
@@ -37,12 +38,15 @@ namespace Flsurf.Application.User.Commands
 
         public async Task<CommandResult> Handle(CreateNotificationCommand command)
         {
-            // Проверяем, имеет ли текущий пользователь право создавать предупреждения
-            await _permService.CheckPermission(
-                ZedUser
-                    .WithId((await _permService.GetCurrentUser()).Id)
-                    .CanCreateWarnings()
-            );
+            if (!command.Internal)
+            {
+                // Проверяем, имеет ли текущий пользователь право создавать предупреждения
+                await _permService.CheckPermission(
+                    ZedUser
+                        .WithId((await _permService.GetCurrentUser()).Id)
+                        .CanCreateWarnings()
+                );
+            }
 
             List<UserEntity> users = new List<UserEntity>();
 

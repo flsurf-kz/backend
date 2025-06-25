@@ -1,57 +1,60 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
 using Flsurf.Application.Payment.InnerServices;
+using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Domain.Freelance.Enums;
-using Flsurf.Domain.Payment.ValueObjects; 
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Flsurf.Application.Freelance.Commands.Contract
 {
     public class ClientAcceptFinishContractCommand : BaseCommand
-    { 
+    {
         public Guid ContractId { get; set; }
+        public int  Rating     { get; set; }
+        public string Comment  { get; set; } = string.Empty;
     }
 
 
     public class ClientAcceptFinishContractHandler(
-        IApplicationDbContext dbContext, 
-        IPermissionService permService, 
-        TransactionInnerService innerService) : ICommandHandler<ClientAcceptFinishContractCommand>
+        IApplicationDbContext db,
+        IPermissionService perm,
+        TransactionInnerService tx) 
+        : ICommandHandler<ClientAcceptFinishContractCommand>
     {
-        private readonly TransactionInnerService _txService = innerService; 
-        private readonly IPermissionService _permissionService = permService;
-        private readonly IApplicationDbContext _dbContext = dbContext;
-
-        public async Task<CommandResult> Handle(ClientAcceptFinishContractCommand command)
+        public async Task<CommandResult> Handle(ClientAcceptFinishContractCommand cmd)
         {
-            var user = await _permissionService.GetCurrentUser();
+            var user = await perm.GetCurrentUser();
 
-            var contract = await _dbContext.Contracts.FirstOrDefaultAsync(x => x.Id == command.ContractId);
-
+            var contract = await db.Contracts
+                .Include(c => c.Job)
+                .FirstOrDefaultAsync(c => c.Id == cmd.ContractId);
             if (contract == null)
-                return CommandResult.NotFound("Не найден контракт", command.ContractId);
+                return CommandResult.NotFound("Контракт не найден", cmd.ContractId);
 
-            var freelancerWallet = await _dbContext.Wallets.FirstOrDefaultAsync(x => x.UserId == contract.FreelancerId); 
-            var clientWallet = await _dbContext.Wallets.FirstOrDefaultAsync(x => x.UserId == contract.EmployerId);
-
-            if (freelancerWallet == null || clientWallet == null)
-                return CommandResult.NotFound("Один из кошелков не был найден! ОШИБКА", contract.FreelancerId);
-
+            /* ---------- финансовая часть (как было) ---------- */
+            var freelancerWallet = await db.Wallets.FirstAsync(w => w.UserId == contract.FreelancerId);
             if (contract.BudgetType == BudgetType.Fixed)
             {
-                await _txService.UnfreezeAmount(contract.Budget, freelancerWallet.Id);
-                await _txService.FreezeAmount(contract.Budget, freelancerWallet.Id, 14);
-            } else if (contract.BudgetType == BudgetType.Hourly)
-            {
-                // хуйня все вырубай
+                await tx.UnfreezeAmount(contract.Budget, freelancerWallet.Id);
+                await tx.FreezeAmount  (contract.Budget, freelancerWallet.Id, 14);
             }
 
             contract.Finish();
 
-            await _dbContext.SaveChangesAsync(); 
+            /* ---------- создаём отзыв ---------- */
+            var review = JobReviewEntity.Create(
+                reviewerId : user.Id,
+                targetId   : contract.FreelancerId,
+                job        : contract.Job,
+                rating     : cmd.Rating,
+                comment    : cmd.Comment,
+                reviewDate : DateTime.UtcNow);
 
-            return CommandResult.Success(); 
+            db.Reviews.Add(review);
+
+            await db.SaveChangesAsync();
+            return CommandResult.Success();
         }
     }
 }

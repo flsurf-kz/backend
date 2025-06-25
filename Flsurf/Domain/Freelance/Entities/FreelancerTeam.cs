@@ -16,8 +16,8 @@ namespace Flsurf.Domain.Freelance.Entities
         public string? ClosedReason { get; private set; } = null;
 
         [ForeignKey("Avatar")]
-        public Guid AvatarId { get; set; }
-        public FileEntity Avatar { get; set; } = null!;
+        public Guid? AvatarId { get; set; }
+        public FileEntity? Avatar { get; set; } = null!;
 
         public UserEntity Owner { get; set; } = null!;
         [ForeignKey("Owner")]

@@ -1,46 +1,48 @@
 ﻿using Flsurf.Application.Common.cqrs;
 using Flsurf.Application.Common.Interfaces;
-using Flsurf.Application.Freelance.Permissions;
 using Flsurf.Domain.Freelance.Entities;
 using Flsurf.Infrastructure.Adapters.Permissions;
 using Flsurf.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 
-namespace Flsurf.Application.Freelance.Queries
+namespace Flsurf.Application.Freelance.Queries;
+
+/// <summary>Возвращает команды, участником или владельцем которых является текущий пользователь.</summary>
+public sealed class GetFreelancerTeamsListQuery : BaseQuery
 {
-    public class GetFreelancerTeamsListQuery : BaseQuery
+    /// <param name="start">Смещение в списке (по умолчанию 0).</param>
+    /// <param name="take">Сколько записей вернуть (по умолчанию 10).</param>
+    public GetFreelancerTeamsListQuery(int start = 0, int take = 10)
     {
-        public int Start { get; } = 0;
-        public int Ends { get; } = 10; 
+        Start = start;
+        Take  = take;
     }
 
-    public class GetFreelancerTeamsHandler(
-        IApplicationDbContext _dbContext, 
-        IPermissionService _permService
-    ) : IQueryHandler<GetFreelancerTeamsListQuery, List<FreelancerTeamEntity>>
+    public int Start { get; }
+    public int Take  { get; }
+}
+
+public sealed class GetFreelancerTeamsHandler(
+    IApplicationDbContext db,
+    IPermissionService   perm)
+    : IQueryHandler<GetFreelancerTeamsListQuery, List<FreelancerTeamEntity>>
+{
+    public async Task<List<FreelancerTeamEntity>> Handle(GetFreelancerTeamsListQuery q)
     {
-        private IApplicationDbContext dbContext = _dbContext; 
-        private IPermissionService permissionService = _permService;
+        var user  = await perm.GetCurrentUser();
+        var uid   = user.Id;
 
-        public async Task<List<FreelancerTeamEntity>> Handle(GetFreelancerTeamsListQuery query)
-        {
-            var user = await permissionService.GetCurrentUser(); 
+        /*  Берём те команды, где пользователь = владелец
+            ИЛИ числится в списке participants                                     */
+        var teams = await db.FreelancerTeams
+            .IncludeStandard()                         // Avatar, participants, owner и т.п.
+            .Where(t => t.OwnerId == uid ||
+                        t.Participants.Any(p => p.Id == uid))
+            .OrderBy(t => t.Name)                      // произвольная сортировка
+            .Skip(q.Start)
+            .Take(q.Take)
+            .ToListAsync();
 
-            // should return flsurf freelancer teams ids 
-            var subjects = permissionService.LookupSubjects(ZedFreelancerUser.WithId(user.Id), "read", "flsurf/team");
-
-            List<Guid> ids = []; 
-
-            await foreach (var subject in subjects)
-            {
-                ids.Add(Guid.Parse(subject.Subject.Id)); 
-            }
-
-            var teams = await dbContext.FreelancerTeams
-                .IncludeStandard()
-                .Where(x => ids.Contains(x.Id)).ToListAsync();
-
-            return teams; 
-        }
+        return teams;
     }
 }

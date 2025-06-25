@@ -35,7 +35,8 @@ namespace Flsurf.Application.Payment.Commands
                 x => x.Brand == meta.Brand
                      && x.ExpMonth == meta.ExpMonth 
                      && x.ExpYear == meta.ExpYear 
-                     && x.Last4 == meta.Last4);
+                     && x.Last4 == meta.Last4
+                     && x.UserId == currentUser.Id);
             if (existingPaymentMethod != null)
             {
                 return CommandResult.Success(existingPaymentMethod.Id);
@@ -43,9 +44,11 @@ namespace Flsurf.Application.Payment.Commands
             
             // ②  сбрасываем старый default если нужно
             if (command.MakeDefault)
+            { 
                 await dbContext.PaymentMethods
                     .Where(x => x.UserId == currentUser.Id && x.IsDefault)
                     .ExecuteUpdateAsync(s => s.SetProperty(pm => pm.IsDefault, false));
+            }
 
             var pm = PaymentMethodEntity.Create(
                 currentUser.Id, provider,
